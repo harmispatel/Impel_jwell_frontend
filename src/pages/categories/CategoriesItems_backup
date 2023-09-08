@@ -1,0 +1,162 @@
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import categoryDetail from "../../services/Shop";
+import homeService from "../../services/Home";
+
+const CategoriesItems = () => {
+  const paramId = useParams();
+
+  const [selectedCategory, setselectedCategory] = useState(0);
+  const [category, SetCategory] = useState([]);
+  const [categories, setCategories] = useState([]);
+
+  const Category = () => {
+    homeService
+      .category()
+      .then((res) => {
+        SetCategory(res.data);
+        if (selectedCategory === 0) {
+          res.data.map((i) => {
+            if (i.id === Number(paramId.id)) {
+              setselectedCategory(i.child_categories[0].id);
+            }
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  
+  const CategoriesData = () => {
+    categoryDetail
+      .related_products({ categoryId: selectedCategory })
+      .then((res) => {
+        setCategories(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleDifferentFunction = (selectedId) => {
+    setselectedCategory(selectedId);
+  };
+
+  useEffect(() => {
+    Category();
+    CategoriesData();
+  }, [selectedCategory]);
+
+  return (
+    <section className="categories">
+      <div className="container">
+        <div className="filters">
+          <div className="row">
+            <div className="col-md-3">
+              <div className="sidebar">
+                {category.map((data, index) => {
+                  return (
+                    <>
+                      <h3 key={index}>{data.name}</h3>
+                      <div>
+                        <ul>
+                          <>
+                            {data.child_categories.map((subCategory, index) => {
+                              return (
+                                <li>
+                                  {data.id === Number(paramId.id) &&
+                                  index === 0 ? (
+                                    <div className="form-check">
+                                      <input
+                                        className="form-check-input"
+                                        type="radio"
+                                        name="exampleRadios"
+                                        id={`exampleRadios${subCategory.id}`}
+                                        defaultChecked={subCategory.id}
+                                        onChange={() =>
+                                          handleDifferentFunction(
+                                            subCategory.id
+                                          )
+                                        }
+                                        value={subCategory.id}
+                                      />
+
+                                      <label
+                                        className="form-check-label"
+                                        htmlFor={`exampleRadios${subCategory.id}`}
+                                      >
+                                        {subCategory.name}
+                                      </label>
+                                    </div>
+                                  ) : (
+                                    <div className="form-check">
+                                      <input
+                                        className="form-check-input"
+                                        type="radio"
+                                        name="exampleRadios"
+                                        id={`exampleRadios${subCategory.id}`}
+                                        onChange={() =>
+                                          handleDifferentFunction(
+                                            subCategory.id
+                                          )
+                                        }
+                                        value={subCategory.id}
+                                      />
+                                      <label
+                                        className="form-check-label"
+                                        htmlFor={`exampleRadios${subCategory.id}`}
+                                      >
+                                        {subCategory.name}
+                                      </label>
+                                    </div>
+                                  )}
+                                </li>
+                              );
+                            })}
+                          </>
+                        </ul>
+                      </div>
+                    </>
+                  );
+                })}
+                <div className="pb-2"></div>
+              </div>
+            </div>
+            <div className="col-md-9">
+              <div className="categories_data">
+                <div className="row">
+                  {categories.length === 0 ? (
+                    <p>No Data Available</p>
+                  ) : (
+                    <>
+                      {categories.map((data) => {
+                        return (
+                          <div className="col-md-4">
+                            <Link
+                              to={`/shop_details/${data.id}`}
+                              className="text-decoration-none"
+                              style={{ color: "#000" }}
+                            >
+                              <div className="category_data py-2">
+                                <img src={data.image} className="w-100" />
+                                <div className="product_details">
+                                  <h4>{data.name}</h4>
+                                </div>
+                              </div>
+                            </Link>
+                          </div>
+                        );
+                      })}
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+export default CategoriesItems;
