@@ -6,6 +6,7 @@ import Logo from "../assets/images/logo.png";
 
 const Navbar = () => {
   const [colorChange, setColorchange] = useState(false);
+  const [isLoggedOut, setIsLoggedOut] = useState(false);
   const location = useLocation();
   const currentRoute = location.pathname;
 
@@ -19,6 +20,24 @@ const Navbar = () => {
   window.addEventListener("scroll", changeNavbarColor);
 
   const CartCounts = JSON.parse(sessionStorage.getItem("cartItems"));
+
+  const Dealer = localStorage.getItem('token')
+  const Phone = localStorage.getItem('phone')
+
+  const handleLogout = () => {
+
+    if (Dealer) {
+      localStorage.removeItem('isLogin');
+      localStorage.removeItem('token');
+      setIsLoggedOut(true);
+    } else {
+      localStorage.removeItem('_grecaptcha');
+      localStorage.removeItem('phone');
+      setIsLoggedOut(true);
+    }
+    
+  };
+
   
   return (
     <header className={colorChange ? "header colorChange" : "header"}>
@@ -38,41 +57,22 @@ const Navbar = () => {
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav mb-2 mb-lg-0">
               <li className="nav-item">
-                <Link
-                  className={currentRoute === "/" ? "nav-link active" : "nav-link"}
-                  aria-current="page"
-                  to="/"
-                >
+                <Link className={currentRoute === "/" ? "nav-link active" : "nav-link"} aria-current="page" to="/">
                   Home
                 </Link>
               </li>
               <li className="nav-item">
-                <Link
-                  className={
-                    currentRoute === "/shop" ? "nav-link active" : "nav-link"
-                  }
-                  to="/shop"
-                >
+                <Link className={currentRoute === "/shop" ? "nav-link active" : "nav-link"} to="/shop">
                   Shop
                 </Link>
               </li>
               <li className="nav-item">
-                <Link
-                  className={
-                    currentRoute === "#" ? "nav-link active" : "nav-link"
-                  }
-                  to="#"
-                >
+                <Link className={ currentRoute === "#" ? "nav-link active" : "nav-link"} to="#">
                   About
                 </Link>
               </li>
               <li className="nav-item">
-                <Link
-                  className={
-                    currentRoute === "/#" ? "nav-link active" : "nav-link"
-                  }
-                  to="#"
-                >
+                <Link className={currentRoute === "/#" ? "nav-link active" : "nav-link"} to="#">
                   Contact
                 </Link>
               </li>
@@ -81,21 +81,64 @@ const Navbar = () => {
           <Link className="navbar-brand m-0" to="#">
             <img src={Logo} alt="logo" width={100} />
           </Link>
+
           <div className="header_icon">
             <ul>
+              {Dealer  && 
+                <li>
+                  <button type="submit" className="btn btn-outline-dark">Hello! Dealer</button>
+                </li>
+              }
+
+              {Phone  && 
+                <li>
+                  <button type="submit" className="btn btn-outline-dark">Hello! User</button>
+                </li>
+              }
+           
               <li className="login_user">
                 <Link className="icon" to="/login">
                   <FaUserAlt />
                 </Link>
-                {localStorage.getItem('token') && 
+                
+                {Dealer && 
+                  <div className="login_dropdown">
+                    <ul>
+                      <li><Link to="/profile">Profile</Link></li>
+                      <li><Link to="#">WishList</Link></li>
+                      <li><a href="#" onClick={handleLogout}>LogOut</a></li>
+                    </ul>
+                  </div>
+                }
+
+                {Phone && 
+                  <div className="login_dropdown">
+                    <ul>
+                      <li><Link to="/profile">Profile</Link></li>
+                      <li><Link to="#">My Orders</Link></li>
+                      <li><a href="#" onClick={handleLogout}>LogOut</a></li>
+                    </ul>
+                  </div>
+                }
+                {/* {(sessionStorage.getItem('token')) && 
                   <div className="login_dropdown">
                     <ul>
                       <li><Link to="/login">Profile</Link></li>
                       <li><Link to="#">My Orders</Link></li>
-                      <li><Link to="/login" onClick={localStorage.removeItem("token")} >LogOut</Link></li>
+                      <li><Link to="/login" onClick={sessionStorage.removeItem('token')}>LogOut</Link></li>
                     </ul>
                   </div>
                 }
+                {(localStorage.getItem('_grecaptcha')) &&
+                  <div className="login_dropdown">
+                  <ul>
+                    <li><Link to="/login">Profile</Link></li>
+                    <li><Link to="#">My Orders</Link></li>
+                    <li><Link to="/login" onClick={localStorage.removeItem('_grecaptcha')}>LogOut</Link></li>
+                  </ul>
+                </div>
+                } */}
+
               </li>
               <li>
                 <Link className="icon" to="/wishlist">

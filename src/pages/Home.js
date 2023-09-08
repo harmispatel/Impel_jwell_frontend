@@ -15,10 +15,9 @@ import Ring from "../assets/images/ring.png";
 import Kada from "../assets/images/kada.jpg";
 import Gold_Ring from "../assets/images/gold_ring.png";
 import homeService from "../services/Home";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Home = () => {
-  const navigate = useNavigate()
 
   const [bannerSlider, SetBannerSlider] = useState([]);
   const [category, SetCategory] = useState([]);

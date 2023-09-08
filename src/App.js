@@ -17,6 +17,8 @@ import CategoriesDetail from "./pages/categories/CategoriesDetail";
 import { useState } from "react";
 import { useEffect } from "react";
 import ProtectedRoute from "./utils/ProtectedRoute";
+import DealerLogIN from "./pages/auth/DealerLogin";
+import Profile from "./pages/Profile";
 
 function App() {
 
@@ -45,10 +47,13 @@ function App() {
             <Route path="categories/:id" element={<CategoriesItems />} />
             <Route path="categoryDetail/:id" element={<CategoriesDetail />} />
             <Route path="cart" element={<Cart />} />
+
             <Route path="wishlist" element={ <ProtectedRoute><WishList /></ProtectedRoute> } />
+            <Route path="profile" element={ <ProtectedRoute><Profile /></ProtectedRoute> } />
           </Route>
 
           <Route path="/login" element={<Login />} />
+          <Route path="/Dealer_login" element={<DealerLogIN />} />
         </Routes>
 
       <ToastContainer />

@@ -17,26 +17,32 @@ const Shop = () => {
   const [tag, setTag] = useState([]);
   const [allData, setAllData] = useState([]);
   const [filterData, setFilterData] = useState([]);
-  const [data, setData] = useState(allData.slice(0, 20));
-  const [hasMore, setHasMore] = useState(allData.length > 20);
-  const [page, setPage] = useState(2);
+  const [displayedItems, setDisplayedItems] = useState([]);
+  const [hasMore, setHasMore] = useState(true);
+  // const [page, setPage] = useState(2);
   const [pageLoading, setPageLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [searchInput, setSearchInput] = useState([]);
-  const [selectedOption, setSelectedOption] = useState("");
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [PriceRange, setPriceRange] = useState({
+    minprice: null,
+    maxprice: null,
+  });
   const [cartItems, setCartItems] = useState(
     JSON.parse(sessionStorage.getItem('cartItems')) || []
   );
+  const [loadMore, setLoadMore] = useState(9);
 
   useEffect(() => {
     FilterData();
-  }, [category, metal,tag,gender, searchInput, selectedOption]);
+  }, [category, metal,tag,gender, searchInput, selectedOption, PriceRange]);
 
   const AllData = () => {
     ShopServices.alldesigns()
       .then((res) => {
         setIsLoading(false);
         setAllData(res.data);
+        setDisplayedItems(res.data.slice(0, loadMore))
       })
       .catch((err) => {
         console.log(err);
@@ -45,6 +51,7 @@ const Shop = () => {
   };
 
   const handleCategory = (e) => {
+    setIsLoading(true);
     if (e.target.checked) {
       setCategory([...category, e.target.value]);
     } else {
@@ -53,6 +60,7 @@ const Shop = () => {
   };
 
   const handleTag = (e) => {
+    setIsLoading(true);
     if (e.target.checked) {
       setTag([...tag, e.target.value]);
     } else {
@@ -61,11 +69,17 @@ const Shop = () => {
   };
 
   const handleGender = (e) => {
+    setIsLoading(true);
     if (e.target.checked) {
       setGender([...gender, e.target.value]);
     } else {
       setGender(gender.filter((item) => item !== e.target.value));
     }
+  };
+
+  const handleSliderChange = (e) => {
+    setIsLoading(true);
+    setPriceRange({ minprice: e[0], maxprice: e[1] });
   };
 
   const FilterData = () => {
@@ -75,7 +89,9 @@ const Shop = () => {
       TagIds:tag,
       MetalIds: metal,
       search: searchInput,
-      sort_by: selectedOption?.value
+      sort_by: selectedOption?.value,
+      MinPrice: PriceRange?.minprice,
+      MaxPrice: PriceRange?.maxprice
     };
 
     ShopServices.allfilterdesigns(userData)
@@ -90,26 +106,10 @@ const Shop = () => {
   };
 
   const FetchMoreData = async () => {
-    if (pageLoading) return;
-    setPageLoading(true);
-
     setTimeout(() => {
-      const newData = Array.from({ length: 10 }, (_, index) => ({
-        id: data.length + index, // Replace with your actual id logic
-        image: 'https://example.com/image-url.jpg', // Replace with your image logic
-        name: `Product ${data.length + index}`,
-        price: Math.floor(Math.random() * 1000), // Replace with your price logic
-      }));
-
-      // Update state with new data
-      setData(prevData => [...prevData, ...newData]);
-
-      // Update page and hasMore
-      setPage(prevPage => prevPage + 1);
-      setHasMore(page < 5); // Stop loading after 4 pages
-
-      setPageLoading(false); // Hide loader
-    }, 1000);
+      setDisplayedItems((prevItems) => [...prevItems, ...allData.slice(loadMore, loadMore + 9)]);
+      setLoadMore(loadMore + 9)
+    }, 200)
   }
 
   const options = [
@@ -143,7 +143,6 @@ const Shop = () => {
 
   useEffect(() => {
     AllData();
-    FetchMoreData()
   }, []);
 
   return (
@@ -186,6 +185,7 @@ const Shop = () => {
                   onCategoryChange={(e) => handleCategory(e)}
                   onGenderChange={(e) => handleGender(e)}
                   onTagChange={(e)=>handleTag(e)}
+                  onHandleSliderChange={(e)=>handleSliderChange(e)}
                 />
               </div>
             </div>
@@ -202,21 +202,23 @@ const Shop = () => {
                   />
                 </div>
               ) : (
-                <div className="row">
+                <>
                   {category.length === 0 &&
                     gender.length === 0 &&
                     metal.length === 0 &&
                     searchInput.length === 0 &&
+                    PriceRange.minprice === null &&
                     selectedOption === null ? (
-                    <div id="scrollableDiv" style={{ height: '400px', overflow: 'auto' }}>
+                    
                       <InfiniteScroll
-                        dataLength={data.length}
+                        dataLength={displayedItems.length}
                         next={FetchMoreData}
-                        hasMore={hasMore}
+                        hasMore={true}
+                        style={{ overflow:"hidden" }}
                         loader={pageLoading ? <h4>Loading...</h4> : null}
-
                       >
-                        {data.map(product => (
+                        <div className="row">
+                        {displayedItems.map(product => (
                           <div key={product.id} className="col-md-4">
                             <Link to={`/shopdetails/${product.id}`} className="product_data">
                               {product.image ? (
@@ -248,10 +250,11 @@ const Shop = () => {
                             </Link>
                           </div>
                         ))}
+                        </div>
                       </InfiniteScroll>
-                    </div>
                   ) : (
                     <>
+                    <div className="row">
                       {filterData.map((data) => {
                         return (
                           <div className="col-md-4">
@@ -289,9 +292,10 @@ const Shop = () => {
                           </div>
                         );
                       })}
+                      </div>
                     </>
                   )}
-                </div>
+                </>
               )}
             </div>
           </div>

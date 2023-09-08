@@ -159,22 +159,11 @@ const ShopDetails = () => {
                     <div className="buttons pt-4 d-flex">
                       <div className="quantity">
                         {productQuantity === 0 ? (
-                          <button
-                            className="btn"
-                            onClick={() =>
-                              setProductQuantity(productQuantity - 1)
-                            }
-                            disabled
-                          >
+                          <button className="btn" onClick={() => setProductQuantity(productQuantity - 1)} disabled>
                             -
                           </button>
                         ) : (
-                          <button
-                            className="btn"
-                            onClick={() =>
-                              setProductQuantity(productQuantity - 1)
-                            }
-                          >
+                          <button className="btn" onClick={() =>setProductQuantity(productQuantity - 1)}>
                             -
                           </button>
                         )}

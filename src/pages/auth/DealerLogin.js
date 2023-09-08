@@ -1,0 +1,141 @@
+import React, { useState } from "react";
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import Logo from "../../assets/images/logo.png";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
+
+const DealerLogIN = () => {
+  const navigate = useNavigate();
+  const [loginData, setLoginData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const [user,setUser] = useState([])
+  const [error, setError] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleChange = (e) => {
+    setLoginData({ ...loginData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    setError(null);
+    setIsSubmitting(true);
+
+    if (!loginData.email) {
+      setError("Please enter your email.");
+      return;
+    }
+
+    if (!loginData.password) {
+      setError("Please enter your password.");
+      return;
+    }
+    setIsSubmitting(true);
+
+    let formdata = new FormData();
+    formdata.append("email", loginData.email);
+    formdata.append("password", loginData.password);
+
+    const userData = {
+      email: loginData.email,
+      password: loginData.password,
+    };
+
+    axios
+      .post("https://harmistechnology.com/admin.indianjewelley/api/user-login",userData)
+      .then((response) => {
+        console.log(response.data.data.token);
+        if (response.data.success === true) {
+          toast.success("Login Successfully...");
+          setUser(response.data)
+          localStorage.setItem("isLogin", true);
+          localStorage.setItem('token', response.data.data.token);
+          navigate("/");
+        } else {
+          toast.error("Something went wrong!");
+          navigate("/login");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  return (
+    <section className="login">
+      <div className="login_main">
+        <div className="container">
+          <div className="row justify-content-center">
+            <div className="col-md-9">
+              <div className="login_inr">
+                <div className="row justify-content-center">
+                  <div className="col-md-8">
+                    <div className="login_info">
+                      <div className="login_info_inr">
+                        <div className="login_header">
+                          <Link to="#">
+                            <img src={Logo} height="80" alt="logo" />
+                          </Link>
+                        </div>
+                        <div className="login_info_inr_title">
+                          <h3>Welcome</h3>
+                        </div>
+                        <form onSubmit={handleSubmit}>
+                          <div className="form-group my-3">
+                            <input
+                              className="form-control"
+                              type="text"
+                              name="email"
+                              onChange={(e) => handleChange(e)}
+                              placeholder="Registered Email ID"
+                            />
+                            {error && error === "Please enter your email." && (
+                              <p className="text-danger">{error}</p>
+                            )}
+                          </div>
+                          <div className="form-group my-3">
+                            <input
+                              className="form-control"
+                              type="password"
+                              name="password"
+                              onChange={(e) => handleChange(e)}
+                              placeholder="Password"
+                            />
+                            {error &&
+                              error === "Please enter your password." && (
+                                <p className="text-danger">{error}</p>
+                              )}
+                          </div>
+
+                          <div className="form-group mt-4 mb-0">
+                            <button
+                              type="submit"
+                              className="btn login_bt"
+                            >
+                              Login
+                            </button>
+                            <p>
+                              <Link to="/forget-password">
+                                Forgot Credentials?
+                              </Link>
+                            </p>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+export default DealerLogIN;

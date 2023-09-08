@@ -10,8 +10,8 @@ const SidebarFilter = (props) => {
   const [genderData, setGenderData] = useState([]);
   const [TagData, setTagData] = useState([]);
   const [PriceRange, setPriceRange] = useState({
-    minprice: "",
-    maxprice: "",
+    minprice: 0,
+    maxprice: 0,
   });
 
   useEffect(() => {
@@ -56,12 +56,8 @@ const SidebarFilter = (props) => {
   };
 
   const handleSliderChange = (values) => {
-    console.log(values);
+    // console.log(values);
   };
-
-  // console.log(typeof(PriceRange.minprice));
-
-  console.log(PriceRange.minprice);
   
   return (
     <>
@@ -130,15 +126,17 @@ const SidebarFilter = (props) => {
         <Accordion.Item eventKey="3" className="my-2">
           <Accordion.Header>{props.Priceheader}</Accordion.Header>
           <Accordion.Body className="p-4 mb-2">
-            {/* <Slider
+            <Slider
+              range
+              allowCross={false}
               min={PriceRange.minprice}
               max={PriceRange.maxprice}
               marks={{
                 [PriceRange?.minprice]: "Min",
                 [PriceRange?.maxprice]: "Max",
               }}
-              onChange={handleSliderChange}
-            /> */}
+              onAfterChange={props.onHandleSliderChange}
+            />
           </Accordion.Body>
         </Accordion.Item>
       </Accordion>
