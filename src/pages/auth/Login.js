@@ -78,11 +78,11 @@ const Login = () => {
                   <div className="col-md-8">
                     <div className="login_info">
                       <div className="login_info_inr">
-                        <div className="login_header">
+                        {/* <div className="login_header">
                           <Link to="#">
                             <img src={Logo} height="80" alt="logo" />
                           </Link>
-                        </div>
+                        </div> */}
                         <div className="login_info_inr_title">
                           <h3>Welcome</h3>
                         </div>
@@ -112,7 +112,7 @@ const Login = () => {
                           {show === true && (
                             <>
                               <form onSubmit={handleOtpVerification}>
-                                <div className="form-group my-3">
+                                <div className="form-group my-3 otp_box">
                                   <OTPInput
                                     value={otp}
                                     className="form-control"

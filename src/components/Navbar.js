@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaUserAlt } from "react-icons/fa";
 import { BsHandbag, BsHeart } from "react-icons/bs";
 import Logo from "../assets/images/logo.png";
@@ -9,6 +9,7 @@ const Navbar = () => {
   const [isLoggedOut, setIsLoggedOut] = useState(false);
   const location = useLocation();
   const currentRoute = location.pathname;
+  const navigate = useNavigate()
 
   const changeNavbarColor = () => {
     if (window.scrollY >= 80) { 
@@ -29,16 +30,18 @@ const Navbar = () => {
     if (Dealer) {
       localStorage.removeItem('isLogin');
       localStorage.removeItem('token');
+      localStorage.removeItem('email');
+      localStorage.removeItem('user_type');
       setIsLoggedOut(true);
+      navigate("/Dealer_login")
     } else {
       localStorage.removeItem('_grecaptcha');
       localStorage.removeItem('phone');
       setIsLoggedOut(true);
-    }
-    
+      navigate("/login")
+    }    
   };
 
-  
   return (
     <header className={colorChange ? "header colorChange" : "header"}>
       <nav className="navbar navbar-expand-lg bg-body-tertiary">
@@ -97,15 +100,21 @@ const Navbar = () => {
               }
            
               <li className="login_user">
-                <Link className="icon" to="/login">
-                  <FaUserAlt />
-                </Link>
+                {Dealer || Phone ? (
+                  <Link className="icon" to="#">
+                    <FaUserAlt />
+                  </Link>
+                ) :(
+                  <Link className="icon" to="/login">
+                    <FaUserAlt />
+                  </Link>
+                )}
                 
                 {Dealer && 
                   <div className="login_dropdown">
                     <ul>
                       <li><Link to="/profile">Profile</Link></li>
-                      <li><Link to="#">WishList</Link></li>
+                      <li><Link to="/wishlist">WishList</Link></li>
                       <li><a href="#" onClick={handleLogout}>LogOut</a></li>
                     </ul>
                   </div>

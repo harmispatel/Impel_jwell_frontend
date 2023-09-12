@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { BsHandbag, BsHeart, BsSearch } from "react-icons/bs";
+import {  BsHandbag, BsHeart, BsHeartFill, BsSearch, BsStar, BsStarFill } from "react-icons/bs";
 import ShopServices from "../../services/Shop";
 import { Link } from "react-router-dom";
 import ReactLoading from "react-loading";
 import Select from "react-select";
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import InfiniteScroll from "react-infinite-scroll-component";
 import SidebarFilter from "../../components/common/SidebarFilter";
+import { useWishList } from "../../context/WishListContext";
 
 const Shop = () => {
-
   const [category, setCategory] = useState([]);
   const [metal, setMetal] = useState([]);
   const [gender, setGender] = useState([]);
@@ -19,7 +19,6 @@ const Shop = () => {
   const [filterData, setFilterData] = useState([]);
   const [displayedItems, setDisplayedItems] = useState([]);
   const [hasMore, setHasMore] = useState(true);
-  // const [page, setPage] = useState(2);
   const [pageLoading, setPageLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [searchInput, setSearchInput] = useState([]);
@@ -29,20 +28,21 @@ const Shop = () => {
     maxprice: null,
   });
   const [cartItems, setCartItems] = useState(
-    JSON.parse(sessionStorage.getItem('cartItems')) || []
+    JSON.parse(sessionStorage.getItem("cartItems")) || []
   );
   const [loadMore, setLoadMore] = useState(9);
+  const { wishList, dispatch } = useWishList();
 
   useEffect(() => {
     FilterData();
-  }, [category, metal,tag,gender, searchInput, selectedOption, PriceRange]);
+  }, [category, metal, tag, gender, searchInput, selectedOption, PriceRange]);
 
   const AllData = () => {
     ShopServices.alldesigns()
       .then((res) => {
         setIsLoading(false);
         setAllData(res.data);
-        setDisplayedItems(res.data.slice(0, loadMore))
+        setDisplayedItems(res.data.slice(0, loadMore));
       })
       .catch((err) => {
         console.log(err);
@@ -85,13 +85,13 @@ const Shop = () => {
   const FilterData = () => {
     const userData = {
       categoryIds: category,
-      GenderIds:gender,
-      TagIds:tag,
+      GenderIds: gender,
+      TagIds: tag,
       MetalIds: metal,
       search: searchInput,
       sort_by: selectedOption?.value,
       MinPrice: PriceRange?.minprice,
-      MaxPrice: PriceRange?.maxprice
+      MaxPrice: PriceRange?.maxprice,
     };
 
     ShopServices.allfilterdesigns(userData)
@@ -107,10 +107,13 @@ const Shop = () => {
 
   const FetchMoreData = async () => {
     setTimeout(() => {
-      setDisplayedItems((prevItems) => [...prevItems, ...allData.slice(loadMore, loadMore + 9)]);
-      setLoadMore(loadMore + 9)
-    }, 200)
-  }
+      setDisplayedItems((prevItems) => [
+        ...prevItems,
+        ...allData.slice(loadMore, loadMore + 9),
+      ]);
+      setLoadMore(loadMore + 9);
+    }, 200);
+  };
 
   const options = [
     { value: "new_added", label: "New Added" },
@@ -130,20 +133,37 @@ const Shop = () => {
       const updatedCart = cartItems.map((item) =>
         item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
       );
-      toast.error('already added');
+      toast.error("already added");
 
       setCartItems(updatedCart);
-      sessionStorage.setItem('cartItems', JSON.stringify(updatedCart));
+      sessionStorage.setItem("cartItems", JSON.stringify(updatedCart));
     } else {
       const updatedCart = [...cartItems, { ...product, quantity: 1 }];
       setCartItems(updatedCart);
-      sessionStorage.setItem('cartItems', JSON.stringify(updatedCart));
+      sessionStorage.setItem("cartItems", JSON.stringify(updatedCart));
     }
   };
 
   useEffect(() => {
     AllData();
   }, []);
+
+  const userType = localStorage.getItem("user_type");
+
+  const isProductInWishList = (product) => {
+    return wishList.some((item) => item.id === product.id);
+  };
+
+  const addToWishList = (product) => {
+    console.log(product.id);
+    if (isProductInWishList(product)) {
+      // Product is in the wishlist, remove it
+      dispatch({ type: 'REMOVE_FROM_WISHLIST', payload: product.id });
+    } else {
+      // Product is not in the wishlist, add it
+      dispatch({ type: 'ADD_TO_WISHLIST', payload: product.id });
+    }
+  };
 
   return (
     <section className="shop">
@@ -181,11 +201,11 @@ const Shop = () => {
                   Categoryheader="Shop by category"
                   Genderheader="Shop by Gender"
                   Tagheader="Shop by Tag"
-                  Priceheader = "Shop by Price"
+                  Priceheader="Shop by Price"
                   onCategoryChange={(e) => handleCategory(e)}
                   onGenderChange={(e) => handleGender(e)}
-                  onTagChange={(e)=>handleTag(e)}
-                  onHandleSliderChange={(e)=>handleSliderChange(e)}
+                  onTagChange={(e) => handleTag(e)}
+                  onHandleSliderChange={(e) => handleSliderChange(e)}
                 />
               </div>
             </div>
@@ -203,95 +223,101 @@ const Shop = () => {
                 </div>
               ) : (
                 <>
-                  {category.length === 0 &&
-                    gender.length === 0 &&
-                    metal.length === 0 &&
-                    searchInput.length === 0 &&
-                    PriceRange.minprice === null &&
-                    selectedOption === null ? (
-                    
+                  { category.length === 0 && gender.length === 0 && metal.length === 0 && 
+                    searchInput.length === 0 && PriceRange.minprice === null && selectedOption === null ? (
                       <InfiniteScroll
                         dataLength={displayedItems.length}
                         next={FetchMoreData}
                         hasMore={true}
-                        style={{ overflow:"hidden" }}
+                        style={{ overflow: "hidden" }}
                         loader={pageLoading ? <h4>Loading...</h4> : null}
                       >
                         <div className="row">
-                        {displayedItems.map(product => (
-                          <div key={product.id} className="col-md-4">
-                            <Link to={`/shopdetails/${product.id}`} className="product_data">
-                              {product.image ? (
-                                <img src={product.image} alt="" className="w-100" />
-                              ) : (
-                                <img
-                                  src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg"
-                                  alt=""
-                                  className="w-100"
-                                />
-                              )}
-                              <div className="edit">
-                                <div>
-                                  <Link to="#" onClick={() => handleAddToCart(product)}>
-                                    <BsHandbag />
-                                  </Link>
+                          {displayedItems.map((product) => (
+                            <div key={product.id} className="col-md-4">
+                              <Link to={`/shopdetails/${product.id}`} className="product_data">
+                                {product.image ? (
+                                  <img src={product.image} alt="" className="w-100" />
+                                ) : (
+                                  <img
+                                    src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg"
+                                    alt="" className="w-100" />
+                                )}
+                                <div className="edit">
+                                  <div>
+                                    <Link to="#" onClick={() => handleAddToCart(product)}>
+                                      <BsHandbag />
+                                    </Link>
+                                  </div>
+                                  <div>
+                                    {userType == 1 ? (
+                                      <Link to="#" onClick={()=>addToWishList(product)}>
+                                        {isProductInWishList(product) ? <BsStarFill /> : <BsStar />}
+                                      </Link>
+                                    ) : (
+                                      <Link to="#"><BsHeart /></Link>
+                                    )}
+                                  </div>
                                 </div>
-                                <div>
-                                  <Link to="#">
-                                    <BsHeart />
-                                  </Link>
+                                <div className="product_details">
+                                  <h4>{product.name}</h4>
+                                  <p>Minola Golden Necklace</p>
+                                  <h5>₹{product.price.toLocaleString("en-US")}</h5>
                                 </div>
-                              </div>
-                              <div className="product_details">
-                                <h4>{product.name}</h4>
-                                <p>Minola Golden Necklace</p>
-                                <h5>₹{product.price.toLocaleString("en-US")}</h5>
-                              </div>
-                            </Link>
-                          </div>
-                        ))}
+                              </Link>
+                            </div>
+                          ))}
                         </div>
                       </InfiniteScroll>
                   ) : (
                     <>
-                    <div className="row">
-                      {filterData.map((data) => {
-                        return (
-                          <div className="col-md-4">
-                            <Link
-                              to={`/shopdetails/${data.id}`}
-                              className="product_data"
-                            >
-                              {data.image ? (
-                                <img src={data.image} alt="" className="w-100" />
-                              ) : (
-                                <img
-                                  src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930"
-                                  alt=""
-                                  className="w-100"
-                                />
-                              )}
-                              <div className="edit">
-                                <div>
-                                  <Link to="#" onClick={() => handleAddToCart(data)}>
-                                    <BsHandbag />
-                                  </Link>
+                      <div className="row">
+                        {filterData.map((data) => {
+                          return (
+                            <div className="col-md-4">
+                              <Link
+                                to={`/shopdetails/${data.id}`}
+                                className="product_data"
+                              >
+                                {data.image ? (
+                                  <img src={data.image} alt="" className="w-100"/>
+                                ) : (
+                                  <img
+                                    src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930"
+                                    alt=""
+                                    className="w-100"
+                                  />
+                                )}
+                                <div className="edit">
+                                  <div>
+                                    <Link
+                                      to="#"
+                                      onClick={() => handleAddToCart(data)}
+                                    >
+                                      <BsHandbag />
+                                    </Link>
+                                  </div>
+                                  <div>
+                                    {userType == 1 ? (
+                                      <Link to="#" onClick={()=>addToWishList(data)}>
+                                        {isProductInWishList(data) ? <BsStarFill /> : <BsStar />}
+                                      </Link>
+                                    ) : (
+                                      <Link to="#">
+                                        <BsHeart />
+                                      </Link>
+                                    )}
+                                  </div>
                                 </div>
-                                <div>
-                                  <Link to="#">
-                                    <BsHeart />
-                                  </Link>
+                                <div className="product_details">
+                                  <h4>{data.name}</h4>
+                                  <p>Minola Golden Necklace</p>
+                                  <h5>₹{data.price.toLocaleString("en-US")}</h5>
                                 </div>
-                              </div>
-                              <div className="product_details">
-                                <h4>{data.name}</h4>
-                                <p>Minola Golden Necklace</p>
-                                <h5>₹{data.price.toLocaleString("en-US")}</h5>
-                              </div>
-                            </Link>
-                          </div>
-                        );
-                      })}
+                              </Link>
+                            </div>
+                          );
+                        })}
                       </div>
                     </>
                   )}

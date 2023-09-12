@@ -19,25 +19,12 @@ import { useEffect } from "react";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import DealerLogIN from "./pages/auth/DealerLogin";
 import Profile from "./pages/Profile";
+import { WishListProvider } from "./context/WishListContext";
 
 function App() {
 
-  // const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  // const checkUserToken = () => {
-  //   const userToken = localStorage.getItem('user-token');
-  //   if (!userToken || userToken === 'undefined') {
-  //       setIsLoggedIn(false);
-  //   }
-  //   setIsLoggedIn(true);
-  // }
-
-  // useEffect(()=>{
-  //   checkUserToken()
-  // },[isLoggedIn])
-
   return (
-    <>
+    <WishListProvider>
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
@@ -50,14 +37,15 @@ function App() {
 
             <Route path="wishlist" element={ <ProtectedRoute><WishList /></ProtectedRoute> } />
             <Route path="profile" element={ <ProtectedRoute><Profile /></ProtectedRoute> } />
+            
+            <Route path="/login" element={<Login />} />
           </Route>
 
-          <Route path="/login" element={<Login />} />
           <Route path="/Dealer_login" element={<DealerLogIN />} />
         </Routes>
 
       <ToastContainer />
-    </>
+    </WishListProvider>
   );
 }
 export default App;

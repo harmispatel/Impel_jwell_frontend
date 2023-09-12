@@ -55,15 +55,19 @@ const SidebarFilter = (props) => {
       });
   };
 
-  const handleSliderChange = (values) => {
-    // console.log(values);
-  };
-  
+  const userType = localStorage.getItem("user_type");
+
   return (
     <>
-      <button className="btn btn-outline-warning w-100 mb-2 p-2">
-        Ready To Dispatch
-      </button>
+      {userType == 1 ? (
+        <button className="btn btn-outline-warning w-100 mb-2 p-2">
+          My Collection
+        </button>
+      ) : (
+        <button className="btn btn-outline-warning w-100 mb-2 p-2">
+          Ready To Dispatch
+        </button>
+      )}
 
       <Accordion>
         <Accordion.Item eventKey="0">
