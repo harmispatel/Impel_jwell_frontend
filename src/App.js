@@ -18,13 +18,16 @@ import { useState } from "react";
 import { useEffect } from "react";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import DealerLogIN from "./pages/auth/DealerLogin";
-import Profile from "./pages/Profile";
 import { WishListProvider } from "./context/WishListContext";
+import Profile from "./pages/user/Profile";
+import Orders from "./pages/user/Orders";
+import ScrollToTop from "./components/ScrollToTop";
 
 function App() {
 
   return (
     <WishListProvider>
+      <ScrollToTop />
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
@@ -37,11 +40,12 @@ function App() {
 
             <Route path="wishlist" element={ <ProtectedRoute><WishList /></ProtectedRoute> } />
             <Route path="profile" element={ <ProtectedRoute><Profile /></ProtectedRoute> } />
+            <Route path="orders" element={ <ProtectedRoute><Orders /></ProtectedRoute> } />
             
             <Route path="/login" element={<Login />} />
+            <Route path="/Dealer_login" element={<DealerLogIN />} />
           </Route>
 
-          <Route path="/Dealer_login" element={<DealerLogIN />} />
         </Routes>
 
       <ToastContainer />

@@ -9,6 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 import InfiniteScroll from "react-infinite-scroll-component";
 import SidebarFilter from "../../components/common/SidebarFilter";
 import { useWishList } from "../../context/WishListContext";
+import DealerWishlist from "../../services/Dealer/Collection"
 
 const Shop = () => {
   const [category, setCategory] = useState([]);
@@ -32,6 +33,7 @@ const Shop = () => {
   );
   const [loadMore, setLoadMore] = useState(9);
   const { wishList, dispatch } = useWishList();
+  const [checkList,setCheckList] = useState([])
 
   useEffect(() => {
     FilterData();
@@ -144,27 +146,51 @@ const Shop = () => {
     }
   };
 
+  const userType = localStorage.getItem("user_type");
+  const DealerEmail = localStorage.getItem("email");
+
+  const collectionCheck = () =>{
+    DealerWishlist.ListCollection({email:DealerEmail})
+    .then(res=>{
+      setCheckList(res.data)
+    }).catch(err=>{
+      console.log(err);
+    })
+  }
+
   useEffect(() => {
     AllData();
+    collectionCheck()
   }, []);
 
-  const userType = localStorage.getItem("user_type");
-
   const isProductInWishList = (product) => {
-    return wishList.some((item) => item.id === product.id);
+    return checkList.some((item) => item.id === product.id);
   };
-
+  
   const addToWishList = (product) => {
-    console.log(product.id);
-    if (isProductInWishList(product)) {
-      // Product is in the wishlist, remove it
-      dispatch({ type: 'REMOVE_FROM_WISHLIST', payload: product.id });
-    } else {
-      // Product is not in the wishlist, add it
-      dispatch({ type: 'ADD_TO_WISHLIST', payload: product.id });
-    }
-  };
 
+    const updatedProduct = { ...product };
+    updatedProduct.isInWishList = !isProductInWishList(product);
+
+    if (updatedProduct.isInWishList) {
+      dispatch({ type: 'ADD_TO_WISHLIST', payload: updatedProduct });
+    } else {
+      dispatch({ type: 'REMOVE_FROM_WISHLIST', payload: updatedProduct.id });
+    }
+    const userData = {
+      design_id: product.id,
+      email: DealerEmail,
+    };
+  
+    DealerWishlist.collectionData(userData)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+   
   return (
     <section className="shop">
       <div className="container">
@@ -239,9 +265,7 @@ const Shop = () => {
                                 {product.image ? (
                                   <img src={product.image} alt="" className="w-100" />
                                 ) : (
-                                  <img
-                                    src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg"
-                                    alt="" className="w-100" />
+                                  <img src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg" alt="" className="w-100" />
                                 )}
                                 <div className="edit">
                                   <div>
@@ -275,10 +299,7 @@ const Shop = () => {
                         {filterData.map((data) => {
                           return (
                             <div className="col-md-4">
-                              <Link
-                                to={`/shopdetails/${data.id}`}
-                                className="product_data"
-                              >
+                              <Link to={`/shopdetails/${data.id}`} className="product_data">
                                 {data.image ? (
                                   <img src={data.image} alt="" className="w-100"/>
                                 ) : (
@@ -290,10 +311,7 @@ const Shop = () => {
                                 )}
                                 <div className="edit">
                                   <div>
-                                    <Link
-                                      to="#"
-                                      onClick={() => handleAddToCart(data)}
-                                    >
+                                    <Link to="#" onClick={() => handleAddToCart(data)}>
                                       <BsHandbag />
                                     </Link>
                                   </div>

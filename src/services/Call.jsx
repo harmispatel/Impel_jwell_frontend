@@ -21,7 +21,6 @@ export default function call({ path, method, data }) {
           let e = err?.response?.data;
           if (!e) return;
           reject(e);
-          // setTimeout(function(){window.location.href = "/login";}, 1000)
         }
       });
     // {

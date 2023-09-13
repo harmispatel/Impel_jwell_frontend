@@ -60,24 +60,16 @@ const Navbar = () => {
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav mb-2 mb-lg-0">
               <li className="nav-item">
-                <Link className={currentRoute === "/" ? "nav-link active" : "nav-link"} aria-current="page" to="/">
-                  Home
-                </Link>
+                <Link className={currentRoute === "/" ? "nav-link active" : "nav-link"} aria-current="page" to="/">Home</Link>
               </li>
               <li className="nav-item">
-                <Link className={currentRoute === "/shop" ? "nav-link active" : "nav-link"} to="/shop">
-                  Shop
-                </Link>
+                <Link className={currentRoute === "/shop" ? "nav-link active" : "nav-link"} to="/shop">Shop</Link>
               </li>
               <li className="nav-item">
-                <Link className={ currentRoute === "#" ? "nav-link active" : "nav-link"} to="#">
-                  About
-                </Link>
+                <Link className={ currentRoute === "#" ? "nav-link active" : "nav-link"} to="#">About</Link>
               </li>
               <li className="nav-item">
-                <Link className={currentRoute === "/#" ? "nav-link active" : "nav-link"} to="#">
-                  Contact
-                </Link>
+                <Link className={currentRoute === "/#" ? "nav-link active" : "nav-link"} to="#">Contact</Link>
               </li>
             </ul>
           </div>
@@ -88,15 +80,11 @@ const Navbar = () => {
           <div className="header_icon">
             <ul>
               {Dealer  && 
-                <li>
-                  <button type="submit" className="btn btn-outline-dark">Hello! Dealer</button>
-                </li>
+                <li><button type="submit" className="btn btn-outline-dark">Hello! Dealer</button></li>
               }
 
               {Phone  && 
-                <li>
-                  <button type="submit" className="btn btn-outline-dark">Hello! User</button>
-                </li>
+                <li><button type="submit" className="btn btn-outline-dark">Hello! User</button></li>
               }
            
               <li className="login_user">
@@ -115,6 +103,7 @@ const Navbar = () => {
                     <ul>
                       <li><Link to="/profile">Profile</Link></li>
                       <li><Link to="/wishlist">WishList</Link></li>
+                      <li><Link to="/orders">My Orders</Link></li>
                       <li><a href="#" onClick={handleLogout}>LogOut</a></li>
                     </ul>
                   </div>
@@ -129,24 +118,6 @@ const Navbar = () => {
                     </ul>
                   </div>
                 }
-                {/* {(sessionStorage.getItem('token')) && 
-                  <div className="login_dropdown">
-                    <ul>
-                      <li><Link to="/login">Profile</Link></li>
-                      <li><Link to="#">My Orders</Link></li>
-                      <li><Link to="/login" onClick={sessionStorage.removeItem('token')}>LogOut</Link></li>
-                    </ul>
-                  </div>
-                }
-                {(localStorage.getItem('_grecaptcha')) &&
-                  <div className="login_dropdown">
-                  <ul>
-                    <li><Link to="/login">Profile</Link></li>
-                    <li><Link to="#">My Orders</Link></li>
-                    <li><Link to="/login" onClick={localStorage.removeItem('_grecaptcha')}>LogOut</Link></li>
-                  </ul>
-                </div>
-                } */}
 
               </li>
               <li>
@@ -154,15 +125,12 @@ const Navbar = () => {
                   <BsHeart />
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link className="icon cart_icon" to="/cart">
                   <BsHandbag />
-
-                  {CartCounts && 
-                                    <div className="cart_count">{CartCounts?.length}</div>
-                  }
+                  {CartCounts && <div className="cart_count">{CartCounts?.length}</div>}
                 </Link>
-              </li>
+              </li> */}
             </ul>
           </div>
         </div>

@@ -9,6 +9,10 @@ const ProtectedRoute = (props) => {
 
   const checkUserToken = () => {
     const userToken = localStorage.getItem("token");
+    const userPhone = localStorage.getItem("phone");
+
+    console.log(userPhone);
+
     if (!userToken || userToken === "undefined") {
       setIsLoggedIn(false);
       return navigate("/login");

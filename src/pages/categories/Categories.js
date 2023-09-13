@@ -43,9 +43,9 @@ const Categories = () => {
         ) : (
           <div className="categories_data">
             <div className="row">
-              {allCategories.map((data) => {
+              {allCategories.map((data,index) => {
                 return (
-                  <div className="col-md-3">
+                  <div className="col-md-3" key={index}>
                     <Link
                       to={`/categories/${data.id}`}
                       className="text-decoration-none"

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import homeService from "../../services/Home";
 import categoryDetail from "../../services/Shop";
+import BreadCrumb from "../../components/common/BreadCrumb";
 
 const CategoriesItems = () => {
   const paramId = useParams();
@@ -50,26 +51,26 @@ const CategoriesItems = () => {
     CategoriesData();
   }, [selectedCategory]);
 
-  console.log(Array.isArray(categoriesData));
-
   return (
     <section className="categories">
       <div className="container">
         <div className="subcategory_filter">
-          {category.map((data) => {
+          {category.map((data, index) => {
             return (
               <>
                 {data.id === Number(paramId.id) && (
-                  <section className="sec_main product_sec">
-                    {/* <div className="sec_title">
-                      <h2>
-                        <span>{data.name}</span>
-                      </h2>
-                    </div> */}
+                  <section className="sec_main product_sec" key={index}>
+                    <BreadCrumb
+                      firstName="Home"
+                      firstUrl="/"
+                      secondName="Categories"
+                      secondUrl="/categories"
+                      thirdName={data.name}
+                    />
                     <ul className="nav nav-tabs">
-                      {data.child_categories.map((item) => {
+                      {data.child_categories.map((item, index) => {
                         return (
-                          <li className="nav-item">
+                          <li className="nav-item" key={index}>
                             <button
                               className={
                                 selectedCategory === item.id
@@ -101,7 +102,7 @@ const CategoriesItems = () => {
         <div>
           <div className="categories_data">
             <div className="row">
-              {Array.isArray(categoriesData) ? (
+              {categoriesData.length > 0 ? (
                 categoriesData.map((data) => {
                   return (
                     <div className="col-md-4" key={data.id}>
@@ -121,7 +122,7 @@ const CategoriesItems = () => {
                   );
                 })
               ) : (
-                <p>categoriesData is not an array</p>
+                <p>categoriesData is not an available</p>
               )}
             </div>
           </div>

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import profileService from "../services/Auth";
+import profileService from "../../services/Auth";
 import { useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { IconName, ImCross } from "react-icons/im";

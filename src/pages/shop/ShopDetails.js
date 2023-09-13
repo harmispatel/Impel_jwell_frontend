@@ -8,6 +8,7 @@ import "swiper/css/navigation";
 // import Magnifier from "react-image-magnify";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { BsFillBagPlusFill, BsFillEyeFill } from "react-icons/bs";
 
 const ShopDetails = () => {
   const { id } = useParams();
@@ -20,11 +21,7 @@ const ShopDetails = () => {
   const [cartItems, setCartItems] = useState(
     JSON.parse(sessionStorage.getItem("cartItems")) || []
   );
-
-  useEffect(() => {
-    productData();
-    Relatedproduct();
-  }, []);
+  const data = {categoryId: product?.category_id?.id};
 
   const productData = async () => {
     const data = {
@@ -44,19 +41,22 @@ const ShopDetails = () => {
       });
   };
 
+  console.log(data);
+  
   const Relatedproduct = async () => {
-    const data = {
-      categoryId: product?.category_id,
-    };
-    await productDetail
-      .related_products(data)
-      .then((res) => {
-        setRelatedProduct(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    try {
+      const response = await productDetail.related_products(data);
+      console.log(response.data); // Log the API response
+      setRelatedProduct(response.data);
+    } catch (err) {
+      console.log(err);
+    }
   };
+
+  useEffect(() => {
+    productData();
+    Relatedproduct();
+  }, []);
 
   const handleAddToCart = (product) => {
 
@@ -81,6 +81,13 @@ const ShopDetails = () => {
         <div className="Shop_product">
           <div className="row justify-content-center">
             <div className="col-md-10">
+              <BreadCrumb
+                firstName="Home"
+                firstUrl="/"
+                secondName="Shop"
+                secondUrl="/shop"
+                thirdName="Shopdetails"
+              />
               <div className="row">
                 <div className="col-md-6">
                   <div>
@@ -103,48 +110,10 @@ const ShopDetails = () => {
                           </div>
                         ))}
                       </Carousel>
-
-                      // <Swiper
-                      //   spaceBetween={30}
-                      //   centeredSlides={true}
-                      //   autoplay={{
-                      //     delay: 2500,
-                      //     disableOnInteraction: false,
-                      //   }}
-                      //   pagination={{
-                      //     clickable: true,
-                      //   }}
-                      //   modules={[Autoplay, Pagination]}
-                      //   className="mySwiper"
-                      // >
-                      //   {productImages.map((data, index) => {
-                      //     return (
-                      //       <>
-                      //         <SwiperSlide key={index}>
-                      //           <div style={{ position: 'relative' }}>
-                      //             <Magnifier
-                      //               imageSrc={data}
-                      //               imageAlt={`Product Image ${index}`}
-                      //               largeImageSrc={data} // Set the same image for large view
-                      //               style={{ width: '100%', height: 'auto' }}
-                      //             />
-                      //           </div>
-                      //         </SwiperSlide>
-                      //       </>
-                      //     );
-                      //   })}
-                      // </Swiper>
                     )}
                   </div>
                 </div>
                 <div className="col-md-6">
-                  <BreadCrumb
-                    firstName="Home"
-                    firstUrl="/"
-                    secondName="Shop"
-                    secondUrl="/shop"
-                    thirdName="Shopdetails"
-                  />
                   <div>
                     <h3>{product?.name}</h3>
                     <p>{product?.category}</p>
@@ -205,7 +174,7 @@ const ShopDetails = () => {
               {/* <div className="related_items">
                 <h3>Related Products</h3>
                 <div className="related_product">
-                  {relatedProduct.slice(0, 4).map((data) => {
+                  {relatedProduct.map((data) => {
                     return (
                       <Link
                         to={`/shopdetails/${data.id}`}

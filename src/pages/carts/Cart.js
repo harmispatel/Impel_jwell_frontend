@@ -36,20 +36,13 @@ const Cart = () => {
                       <>
                         <div className="col-md-3">
                           <div className="d-flex">
-                            <img
-                              src={data.image}
-                              className="border rounded me-3 w-100"
-                            />
+                            <img src={data.image} className="border rounded me-3 w-100"/>
                           </div>
                         </div>
                         <div className="col-md-4">
                           <div className="">
-                            <Link to="#" className="nav-link">
-                              {data.name}
-                            </Link>
-                            <p className="text-muted">
-                              {data.category} - {data.metal}
-                            </p>
+                            <Link to="#" className="nav-link">{data.name}</Link>
+                            <p className="text-muted">{data.category} - {data.metal}</p>
                           </div>
                           <div className="">
                             <text className="h6">₹{dataPrice}</text> <br />
@@ -57,18 +50,10 @@ const Cart = () => {
                         </div>
                         <div className="col-md-2">
                           <div className="quantity">
-                            <button
-                              className="btn"
-                              disabled={data.quantity === 0}
-                            >
+                            <button className="btn" disabled={data.quantity === 0}>
                               -
                             </button>
-                            <input
-                              className="form-control"
-                              type="text"
-                              value={data.quantity}
-                              min={1}
-                            />
+                            <input className="form-control" type="text" value={data.quantity} min={1}/>
                             <button className="btn">
                               +
                             </button>
@@ -76,17 +61,10 @@ const Cart = () => {
                         </div>
                         <div className="col-md-3">
                           <div className="float-md-end">
-                            <Link
-                              to="#!"
-                              className="btn btn-light border px-2 icon-hover-primary me-2"
-                            >
+                            <Link to="#!" className="btn btn-light border px-2 icon-hover-primary me-2">
                               <BsHeart />
                             </Link>
-                            <Link
-                              to="#"
-                              className="btn btn-light border text-danger icon-hover-danger"
-                              onClick={() => Remove(data.id)}
-                            >
+                            <Link to="#" className="btn btn-light border text-danger icon-hover-danger" onClick={() => Remove(data.id)}>
                               Remove
                             </Link>
                           </div>
@@ -95,19 +73,6 @@ const Cart = () => {
                     );
                   })}
                 </div>
-              </div>
-
-              <div className="border-top pt-4 mx-4 mb-4">
-                <p>
-                  <i className="fas fa-truck text-muted fa-lg"></i> Free
-                  Delivery within 1-2 weeks
-                </p>
-                <p className="text-muted">
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                  laboris nisi ut aliquip
-                </p>
               </div>
             </div>
           </div>
@@ -151,12 +116,8 @@ const Cart = () => {
                   <p className="mb-2 fw-bold">₹{totalPrice?.toLocaleString("en-US")}</p>
                 </div>
                 <div className="mt-3">
-                  <a href="#" className="btn btn-success w-100 shadow-0 mb-2">
-                    Make Purchase
-                  </a>
-                  <Link to="/shop" className="btn btn-light w-100 border mt-2">
-                    Back to shop
-                  </Link>
+                  <a href="#" className="btn btn-success w-100 shadow-0 mb-2">Make Purchase</a>
+                  <Link to="/shop" className="btn btn-light w-100 border mt-2">Back to shop</Link>
                 </div>
               </div>
             </div>

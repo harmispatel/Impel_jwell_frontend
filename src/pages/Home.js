@@ -108,9 +108,9 @@ const Home = () => {
             loop={true}
             autoplay={{ delay: 3000 }}
           >
-            {bannerSlider.map((data) => {
+            {bannerSlider.map((data,index) => {
               return (
-                <SwiperSlide>
+                <SwiperSlide key={index} >
                   <img src={data.image} alt="" />
                 </SwiperSlide>
               );
@@ -157,9 +157,9 @@ const Home = () => {
               loop={true}
               autoplay={{ delay: 2500 }}
             >
-              {category.map((data) => {
+              {category.map((data,index) => {
                 return (
-                  <SwiperSlide>
+                  <SwiperSlide key={index}> 
                     <Link
                       to={`/categories/${data.id}`}
                       className="text-decoration-none"
@@ -211,15 +211,6 @@ const Home = () => {
         <div className="container">
           <div className="new_arrival_detail">
             <h3>New Arrivals</h3>
-            {/* <div
-              className="btn text-decoration-none "
-              style={{ color: "#000" }}
-              onClick={handleClick}
-            >
-              <button className="btn">
-                <u>- View All</u>
-              </button>
-            </div> */}
           </div>
           <div className="new_arrival_slide">
             <Swiper
@@ -247,16 +238,18 @@ const Home = () => {
               loop={true}
               autoplay={{ delay: 1700 }}
             >
-              {newAdd.slice(0, 6).map((data) => {
+              {newAdd.slice(0, 6).map((data,index) => {
                 return (
-                  <SwiperSlide>
+                  <SwiperSlide key={index}>
                     <Link
                       to={`/shopdetails/${data.id}`}
                       className="text-decoration-none"
                       style={{ color: "#000" }}
                     >
                       <div className="profile-pic">
-                        <img src={data.image} alt="" />
+                        <div className="profile_img">
+                          <img src={data.image} alt="" />
+                        </div>
                         {/* <div class="edit">
                           <div>
                             <a
@@ -350,9 +343,9 @@ const Home = () => {
               loop={true}
               autoplay={{ delay: 1500 }}
             >
-              {TopSell.slice(0, 6).map((data) => {
+              {TopSell.slice(0, 6).map((data,index) => {
                 return (
-                  <SwiperSlide>
+                  <SwiperSlide key={index}>
                     <Link
                       to={`/shopdetails/${data.id}`}
                       className="text-decoration-none"
@@ -360,23 +353,6 @@ const Home = () => {
                     >
                       <div className="profile-pic">
                         <img src={data.image} alt="" />
-                        {/* <div class="edit">
-                          <div>
-                            <a
-                              href="#"
-                              data-bs-toggle="tooltip"
-                              data-bs-placement="top"
-                              data-bs-title="Add to cart"
-                            >
-                              <BsFillBagPlusFill />
-                            </a>
-                          </div>
-                          <div>
-                            <Link to="#" data-toggle="tooltip" title="Quick View">
-                              <BsHeart />
-                            </Link>
-                          </div>
-                        </div> */}
                         <div className="product_details">
                           <h4>{data.name}</h4>
                           <p>Venus Diamond Earrings</p>
