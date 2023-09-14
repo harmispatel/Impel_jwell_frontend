@@ -7,13 +7,11 @@ const ProtectedRoute = (props) => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const checkUserToken = () => {
-    const userToken = localStorage.getItem("token");
-    const userPhone = localStorage.getItem("phone");
+  const userPhone = localStorage.getItem("phone");
 
-    console.log(userPhone);
+  const checkUser = () => {
 
-    if (!userToken || userToken === "undefined") {
+    if (!userPhone) {
       setIsLoggedIn(false);
       return navigate("/login");
     }
@@ -21,7 +19,7 @@ const ProtectedRoute = (props) => {
   };
 
   useEffect(() => {
-    checkUserToken();
+    checkUser();
   }, [isLoggedIn]);
 
   return <>{isLoggedIn ? props.children : null}</>;

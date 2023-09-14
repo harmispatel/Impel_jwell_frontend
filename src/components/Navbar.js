@@ -3,16 +3,18 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaUserAlt } from "react-icons/fa";
 import { BsHandbag, BsHeart } from "react-icons/bs";
 import Logo from "../assets/images/logo.png";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Navbar = () => {
   const [colorChange, setColorchange] = useState(false);
   const [isLoggedOut, setIsLoggedOut] = useState(false);
   const location = useLocation();
   const currentRoute = location.pathname;
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const changeNavbarColor = () => {
-    if (window.scrollY >= 80) { 
+    if (window.scrollY >= 80) {
       setColorchange(true);
     } else {
       setColorchange(false);
@@ -22,24 +24,25 @@ const Navbar = () => {
 
   const CartCounts = JSON.parse(sessionStorage.getItem("cartItems"));
 
-  const Dealer = localStorage.getItem('token')
-  const Phone = localStorage.getItem('phone')
+  const Dealer = localStorage.getItem("token");
+  const Phone = localStorage.getItem("phone");
 
   const handleLogout = () => {
-
     if (Dealer) {
-      localStorage.removeItem('isLogin');
-      localStorage.removeItem('token');
-      localStorage.removeItem('email');
-      localStorage.removeItem('user_type');
+      localStorage.removeItem("isLogin");
+      localStorage.removeItem("token");
+      localStorage.removeItem("email");
+      localStorage.removeItem("user_type");
       setIsLoggedOut(true);
-      navigate("/Dealer_login")
+      navigate("/Dealer_login");
+      toast.success("Logout Successfully...");
     } else {
-      localStorage.removeItem('_grecaptcha');
-      localStorage.removeItem('phone');
+      localStorage.removeItem("_grecaptcha");
+      localStorage.removeItem("phone");
       setIsLoggedOut(true);
-      navigate("/login")
-    }    
+      navigate("/login");
+      toast.success("Logout Successfully...");
+    }
   };
 
   return (
@@ -60,16 +63,24 @@ const Navbar = () => {
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav mb-2 mb-lg-0">
               <li className="nav-item">
-                <Link className={currentRoute === "/" ? "nav-link active" : "nav-link"} aria-current="page" to="/">Home</Link>
+                <Link className={currentRoute === "/" ? "nav-link active" : "nav-link"} aria-current="page" to="/">
+                  Home
+                </Link>
               </li>
               <li className="nav-item">
-                <Link className={currentRoute === "/shop" ? "nav-link active" : "nav-link"} to="/shop">Shop</Link>
+                <Link className={currentRoute === "/shop" ? "nav-link active" : "nav-link"} to="/shop">
+                  Shop
+                </Link>
               </li>
               <li className="nav-item">
-                <Link className={ currentRoute === "#" ? "nav-link active" : "nav-link"} to="#">About</Link>
+                <Link className={currentRoute === "#" ? "nav-link active" : "nav-link"} to="#">
+                  About
+                </Link>
               </li>
               <li className="nav-item">
-                <Link className={currentRoute === "/#" ? "nav-link active" : "nav-link"} to="#">Contact</Link>
+                <Link className={currentRoute === "/#" ? "nav-link active" : "nav-link"} to="#">
+                  Contact
+                </Link>
               </li>
             </ul>
           </div>
@@ -79,58 +90,75 @@ const Navbar = () => {
 
           <div className="header_icon">
             <ul>
-              {Dealer  && 
-                <li><button type="submit" className="btn btn-outline-dark">Hello! Dealer</button></li>
-              }
+              {Dealer && (
+                <ul>
+                  <li>
+                    <button type="submit" className="btn btn-outline-dark">
+                      Hello! Dealer
+                    </button>
+                  </li>
+                  
+                  <li className="login_user">
+                    <Link className="icon" to="#">
+                      <FaUserAlt />
+                    </Link>
+                    
+                    <div className="login_dropdown">
+                      <ul>
+                        <li><Link to="/dealer_profile">Profile</Link></li>
+                        <li><Link to="/dealer_orders">My Orders</Link></li>
+                        <li><a href="#" onClick={handleLogout}>LogOut</a></li>
+                      </ul>
+                    </div>
+                  </li>
+                </ul>
+              )}
 
-              {Phone  && 
-                <li><button type="submit" className="btn btn-outline-dark">Hello! User</button></li>
-              }
-           
-              <li className="login_user">
-                {Dealer || Phone ? (
-                  <Link className="icon" to="#">
-                    <FaUserAlt />
-                  </Link>
-                ) :(
-                  <Link className="icon" to="/login">
-                    <FaUserAlt />
-                  </Link>
-                )}
-                
-                {Dealer && 
-                  <div className="login_dropdown">
-                    <ul>
-                      <li><Link to="/profile">Profile</Link></li>
-                      <li><Link to="/wishlist">WishList</Link></li>
-                      <li><Link to="/orders">My Orders</Link></li>
-                      <li><a href="#" onClick={handleLogout}>LogOut</a></li>
-                    </ul>
-                  </div>
-                }
+              {Phone && (
+                <ul>
+                  <li>
+                    <button type="submit" className="btn btn-outline-dark">
+                      Hello! User
+                    </button>
+                  </li>
 
-                {Phone && 
-                  <div className="login_dropdown">
-                    <ul>
-                      <li><Link to="/profile">Profile</Link></li>
-                      <li><Link to="#">My Orders</Link></li>
-                      <li><a href="#" onClick={handleLogout}>LogOut</a></li>
-                    </ul>
-                  </div>
-                }
+                  <li className="login_user">
+                    <Link className="icon" to="#">
+                      <FaUserAlt />
+                    </Link>
 
-              </li>
+                    <div className="login_dropdown">
+                      <ul>
+                        <li><Link to="/profile">Profile</Link></li>
+                        <li><Link to="/orders">My Orders</Link></li>
+                        <li><a href="#" onClick={handleLogout}>LogOut</a></li>
+                      </ul>
+                    </div>
+                  </li>
+                </ul>
+              )}
+
+              {!(Dealer || Phone) &&
+                <li className="login_user">
+                    <Link className="icon" to="/login">
+                      <FaUserAlt />
+                    </Link>
+                </li>
+               }
+
               <li>
-                <Link className="icon" to="/wishlist">
+                <Link className="icon"  to={Dealer ? ("/dealer_wishlist"):("/wishlist")}>
                   <BsHeart />
                 </Link>
               </li>
-              {/* <li>
+
+              <li>
                 <Link className="icon cart_icon" to="/cart">
                   <BsHandbag />
                   {CartCounts && <div className="cart_count">{CartCounts?.length}</div>}
                 </Link>
-              </li> */}
+              </li>
+
             </ul>
           </div>
         </div>

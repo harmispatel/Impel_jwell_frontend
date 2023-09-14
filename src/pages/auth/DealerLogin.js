@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Logo from "../../assets/images/logo.png";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -46,13 +46,8 @@ const DealerLogIN = () => {
       password: loginData.password,
     };
 
-    axios
-      .post(
-        "https://harmistechnology.com/admin.indianjewelley/api/user-login",
-        userData
-      )
+    axios.post("https://harmistechnology.com/admin.indianjewelley/api/user-login",userData)
       .then((response) => {
-        console.log(response.data.data.user.user_type);
         if (response.data.success === true) {
           toast.success("Login Successfully...");
           setUser(response.data);
@@ -82,11 +77,11 @@ const DealerLogIN = () => {
                   <div className="col-md-8">
                     <div className="login_info">
                       <div className="delivery_info_inr">
-                        <div className="login_header">
+                        {/* <div className="login_header">
                           <Link to="#">
                             <img src={Logo} height="80" alt="logo" />
                           </Link>
-                        </div>
+                        </div> */}
                         <div className="delivery_login_info_inr_title">
                           <h3>Welcome</h3>
                         </div>
@@ -121,9 +116,14 @@ const DealerLogIN = () => {
                             <button type="submit" className="btn login_bt">
                               Login
                             </button>
-                            <Link to="/forget-password">
-                              Forgot Credentials?
-                            </Link>
+                            <div className="d-flex justify-content-between">
+                              {/* <Link to="/forget-password" className="text-decoration-none">
+                                Forgot Credentials?
+                              </Link> */}
+                              <Link to="/login" className="text-decoration-none">
+                                User Login?
+                              </Link>
+                            </div>
                           </div>
                         </form>
                       </div>

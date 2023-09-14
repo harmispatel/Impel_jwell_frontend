@@ -18,6 +18,8 @@ const ShopDetails = () => {
   const [img,setImg] = useState()
   const [productImages, setProduuctImages] = useState([]);
   const [productQuantity, setProductQuantity] = useState(1);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [cartItems, setCartItems] = useState(
     JSON.parse(sessionStorage.getItem("cartItems")) || []
   );
@@ -75,6 +77,20 @@ const ShopDetails = () => {
     }
   };
 
+  const openLightbox = (index) => {
+    setCurrentImageIndex(index);
+    setLightboxOpen(true);
+  };
+
+  const closeLightbox = () => {
+    setLightboxOpen(false);
+  };
+
+  const navigateLightbox = (step) => {
+    const newIndex = (currentImageIndex + step + productImages.length) % productImages.length;
+    setCurrentImageIndex(newIndex);
+  };
+
   return (
     <section className="shop_details">
       <div className="container">
@@ -98,18 +114,36 @@ const ShopDetails = () => {
                         className="w-100"
                       />
                     ) : (
-                      <Carousel
-                        infiniteLoop
-                        useKeyboardArrows
-                        autoPlay
-                        interval={3000}
-                      >
-                        {productImages.map((image, index) => (
-                          <div key={index}>
-                            <img src={image} alt={`Product Image ${index}`} />
+                      <div>
+                        <Carousel
+                          infiniteLoop
+                          useKeyboardArrows
+                          autoPlay
+                          interval={3000}
+                        >
+                          {productImages.map((image, index) => (
+                            <div key={index} onClick={() => openLightbox(index)}>
+                              <img src={image} alt={`Product Image ${index}`} />
+                            </div>
+                          ))}
+                        </Carousel>
+
+                        {lightboxOpen && (
+                          <div className="custom-lightbox">
+                            <span className="close-button" onClick={closeLightbox}>
+                              &times;
+                            </span>
+                            <img
+                              src={productImages[currentImageIndex]}
+                              alt={`Product Image ${currentImageIndex}`}
+                            />
+                            <div className="lightbox-navigation">
+                              <button onClick={() => navigateLightbox(-1)}>Previous</button>
+                              <button onClick={() => navigateLightbox(1)}>Next</button>
+                            </div>
                           </div>
-                        ))}
-                      </Carousel>
+                        )}
+                      </div>
                     )}
                   </div>
                 </div>

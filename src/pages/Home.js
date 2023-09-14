@@ -1,12 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import {
-  Navigation,
-  Pagination,
-  Scrollbar,
-  A11y,
-  Autoplay,
-} from "swiper/modules";
+import { Navigation,Pagination,Scrollbar,A11y,Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/autoplay";
@@ -16,6 +10,8 @@ import Kada from "../assets/images/kada.jpg";
 import Gold_Ring from "../assets/images/gold_ring.png";
 import homeService from "../services/Home";
 import { Link } from "react-router-dom";
+import banner from "../assets/images/banner.jpg"
+import category_img from "../assets/images/category.jpg"
 
 const Home = () => {
 

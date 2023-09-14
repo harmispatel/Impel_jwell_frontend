@@ -10,6 +10,9 @@ import {
   getAuth,
   signInWithPhoneNumber,
 } from "firebase/auth";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { Spinner } from "react-bootstrap";
 
 const Login = () => {
   const navigate = useNavigate()
@@ -42,6 +45,7 @@ const Login = () => {
       .then((confirmationResult) => {
         window.confirmationResult = confirmationResult;
         setShow(true)
+        toast.success("OTP has been sent");
         console.log("OTP has been sent")
       })
       .catch((err) => {
@@ -56,15 +60,16 @@ const Login = () => {
     console.log("OTP Code:", code);
 
     window.confirmationResult.confirm(code)
-        .then((result) => {
-          if (result) {
-            localStorage.setItem("phone",phoneNumber)
-            navigate('/')
-          }
-        })
-        .catch((error) => {
-          console.error("Verification failed:", error);
-        })
+      .then((result) => {
+        if (result) {
+          localStorage.setItem("phone",phoneNumber)
+          navigate('/')
+          toast.success("Logout Successfully...");
+        }
+      })
+      .catch((error) => {
+        console.error("Verification failed:", error);
+      })
   };
 
   return (
@@ -102,7 +107,13 @@ const Login = () => {
                                   />
                                 </div>
                                 <div className="d-flex justify-content-between text-center align-items-center" >
-                                  <button id="sign-in-button" type="submit" className="btn btn-outline-warning">Send OTP</button>
+                                  {show === true ? (
+                                    <>
+                                      <button id="sign-in-button" type="submit" className="btn btn-outline-warning" disabled>Send OTP</button>
+                                    </>
+                                  ) : (
+                                    <button id="sign-in-button" type="submit" className="btn btn-outline-warning">Send OTP</button>
+                                  )}
                                   <Link to="/Dealer_login" className="text-decoration-none" style={{ "color":"#db9662","font-size":"15px !important"}}>Dealer Login ?</Link>
                                 </div>
                               </form>

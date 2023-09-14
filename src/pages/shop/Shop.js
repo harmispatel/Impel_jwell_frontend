@@ -279,7 +279,7 @@ const Shop = () => {
                                         {isProductInWishList(product) ? <BsStarFill /> : <BsStar />}
                                       </Link>
                                     ) : (
-                                      <Link to="#"><BsHeart /></Link>
+                                      <Link to="/wishlist"><BsHeart /></Link>
                                     )}
                                   </div>
                                 </div>
@@ -321,9 +321,7 @@ const Shop = () => {
                                         {isProductInWishList(data) ? <BsStarFill /> : <BsStar />}
                                       </Link>
                                     ) : (
-                                      <Link to="#">
-                                        <BsHeart />
-                                      </Link>
+                                      <Link to="/wishlist"><BsHeart /></Link>
                                     )}
                                   </div>
                                 </div>
