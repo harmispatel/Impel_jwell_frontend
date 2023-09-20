@@ -130,6 +130,10 @@ const SidebarFilter = (props) => {
         <Accordion.Item eventKey="3" className="my-2">
           <Accordion.Header>{props.Priceheader}</Accordion.Header>
           <Accordion.Body className="p-4 mb-2">
+            <div className="d-flex justify-content-between">
+              <p>From: <strong>₹ {props.minprice?props.minprice:PriceRange.minprice}</strong></p>
+              <p>To: <strong>₹ {props.maxprice?props.maxprice:PriceRange.maxprice}</strong></p>
+            </div>
             <Slider
               range
               allowCross={false}

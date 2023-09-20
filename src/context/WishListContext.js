@@ -1,10 +1,13 @@
 import { createContext, useContext, useReducer } from "react";
-import DealerWishlist from "../services/Dealer/Collection"
+import DealerWishlist from "../services/Dealer/Collection";
+import { useEffect } from "react";
 
 const WishListContext = createContext()
 
 const wishListReducer = (state,action) =>{
+    console.log(action);
     switch (action.type) {
+
         case 'ADD_TO_WISHLIST':
             return [...state,action.payload]
 
@@ -17,10 +20,11 @@ const wishListReducer = (state,action) =>{
 }
 
 const WishListProvider = ({children}) =>{
-    const [wishList,dispatch] = useReducer(wishListReducer,[])
 
+    const [wishListData,dispatch] = useReducer(wishListReducer,[])
+    
     return (
-        <WishListContext.Provider value={{ wishList,dispatch }}>
+        <WishListContext.Provider value={{ wishListData, dispatch }}>
             {children}
         </WishListContext.Provider>
     )

@@ -12,7 +12,8 @@ import {
 } from "firebase/auth";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Spinner } from "react-bootstrap";
+import CheckUser from "../../services/Auth"
+import axios from "axios";
 
 const Login = () => {
   const navigate = useNavigate()
@@ -36,21 +37,26 @@ const Login = () => {
   }
 
   const sendOtp = (e) => {
-    e.preventDefault();
+    e.preventDefault()
+
     const formatPh = `${phoneNumber}`;
     const appVerifier = window.recaptchaVerifier;
 
-    const auth = getAuth();
-    signInWithPhoneNumber(auth, formatPh, appVerifier)
-      .then((confirmationResult) => {
-        window.confirmationResult = confirmationResult;
-        setShow(true)
-        toast.success("OTP has been sent");
-        console.log("OTP has been sent")
-      })
-      .catch((err) => {
-        console.log("SMS not sent", err)
-      });
+     axios.post('https://harmistechnology.com/admin.indianjewelley/api/login',{phone:formatPh}).then(res=>{
+      const auth = getAuth();
+      signInWithPhoneNumber(auth, formatPh, appVerifier)
+        .then((confirmationResult) => {
+          window.confirmationResult = confirmationResult;
+          setShow(true)
+          toast.success("OTP has been sent");
+          console.log("OTP has been sent")
+        })
+        .catch((err) => {
+          console.log("SMS not sent", err)
+        });
+    }).catch(err=>{
+      console.log(err);
+    })
   };
 
   const handleOtpVerification = (e) => {
@@ -64,7 +70,7 @@ const Login = () => {
         if (result) {
           localStorage.setItem("phone",phoneNumber)
           navigate('/')
-          toast.success("Logout Successfully...");
+          toast.success("Login Successfully...");
         }
       })
       .catch((error) => {

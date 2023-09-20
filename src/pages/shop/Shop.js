@@ -1,55 +1,59 @@
-import React, { useEffect, useState } from "react";
-import {  BsHandbag, BsHeart, BsHeartFill, BsSearch, BsStar, BsStarFill } from "react-icons/bs";
+import React , {useEffect, useState} from "react";
+import {   BsHeart,  BsSearch, BsStar, BsStarFill } from "react-icons/bs";
+import Select from "react-select";
+import SidebarFilter from "../../components/common/SidebarFilter";
+import ReactLoading from "react-loading";
+import InfiniteScroll from "react-infinite-scroll-component";
 import ShopServices from "../../services/Shop";
 import { Link } from "react-router-dom";
-import ReactLoading from "react-loading";
-import Select from "react-select";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import InfiniteScroll from "react-infinite-scroll-component";
-import SidebarFilter from "../../components/common/SidebarFilter";
-import { useWishList } from "../../context/WishListContext";
 import DealerWishlist from "../../services/Dealer/Collection"
+import UserWishlist from "../../services/Auth"
+import Userservice from "../../services/Cart"
+import { FcLike } from "react-icons/fc";
 
-const Shop = () => {
+const Shop = ({product}) => {
+  const [searchInput, setSearchInput] = useState([]);
+  const [selectedOption, setSelectedOption] = useState(null);
   const [category, setCategory] = useState([]);
-  const [metal, setMetal] = useState([]);
   const [gender, setGender] = useState([]);
   const [tag, setTag] = useState([]);
   const [allData, setAllData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [filterData, setFilterData] = useState([]);
   const [displayedItems, setDisplayedItems] = useState([]);
-  const [hasMore, setHasMore] = useState(true);
   const [pageLoading, setPageLoading] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [searchInput, setSearchInput] = useState([]);
-  const [selectedOption, setSelectedOption] = useState(null);
+  const [loadMore, setLoadMore] = useState(9);
   const [PriceRange, setPriceRange] = useState({
     minprice: null,
-    maxprice: null,
+    maxprice: null
   });
+  const [checkList,setCheckList] = useState([])
+  const [collection_status,setCollectionStatus] = useState(false)
+  const [userWishlist,setUserWishlist] = useState(false)
+  const [UsercartItems, setUserCartItems] = useState([]);
+  const [DealercartItems, setDealerCartItems] = useState([]);
   const [cartItems, setCartItems] = useState(
     JSON.parse(sessionStorage.getItem("cartItems")) || []
   );
-  const [loadMore, setLoadMore] = useState(9);
-  const { wishList, dispatch } = useWishList();
-  const [checkList,setCheckList] = useState([])
+  const userType = localStorage.getItem("user_type");
+  const DealerEmail = localStorage.getItem("email");
+  const phone = localStorage.getItem("phone");
+
+  const options = [
+    { value: "new_added", label: "New Added" },
+    { value: "low_to_high", label: "Price,low to high" },
+    { value: "high_to_low", label: "Price,high to low" },
+    { value: "best_seller", label: "Top Seller" },
+  ];
 
   useEffect(() => {
     FilterData();
-  }, [category, metal, tag, gender, searchInput, selectedOption, PriceRange]);
+  }, [category, tag, gender, searchInput, selectedOption, PriceRange]);
 
-  const AllData = () => {
-    ShopServices.alldesigns()
-      .then((res) => {
-        setIsLoading(false);
-        setAllData(res.data);
-        setDisplayedItems(res.data.slice(0, loadMore));
-      })
-      .catch((err) => {
-        console.log(err);
-        setIsLoading(false);
-      });
+  const handleSelectChange = (selectedOption) => {
+    setSelectedOption(selectedOption);
   };
 
   const handleCategory = (e) => {
@@ -84,12 +88,24 @@ const Shop = () => {
     setPriceRange({ minprice: e[0], maxprice: e[1] });
   };
 
+  const AllData = () => {
+    ShopServices.alldesigns()
+      .then((res) => {
+        setIsLoading(false);
+        setAllData(res.data);
+        setDisplayedItems(res.data.slice(0, loadMore));
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsLoading(false);
+      });
+  };
+
   const FilterData = () => {
     const userData = {
       categoryIds: category,
       GenderIds: gender,
       TagIds: tag,
-      MetalIds: metal,
       search: searchInput,
       sort_by: selectedOption?.value,
       MinPrice: PriceRange?.minprice,
@@ -98,6 +114,7 @@ const Shop = () => {
 
     ShopServices.allfilterdesigns(userData)
       .then((res) => {
+        
         setIsLoading(false);
         setFilterData(res.data);
       })
@@ -106,48 +123,6 @@ const Shop = () => {
         setIsLoading(false);
       });
   };
-
-  const FetchMoreData = async () => {
-    setTimeout(() => {
-      setDisplayedItems((prevItems) => [
-        ...prevItems,
-        ...allData.slice(loadMore, loadMore + 9),
-      ]);
-      setLoadMore(loadMore + 9);
-    }, 200);
-  };
-
-  const options = [
-    { value: "new_added", label: "New Added" },
-    { value: "low_to_high", label: "Price,low to high" },
-    { value: "high_to_low", label: "Price,high to low" },
-    { value: "best_seller", label: "Top Seller" },
-  ];
-
-  const handleSelectChange = (selectedOption) => {
-    setSelectedOption(selectedOption);
-  };
-
-  const handleAddToCart = (product) => {
-    const existingItem = cartItems.find((item) => item.id === product.id);
-
-    if (existingItem) {
-      const updatedCart = cartItems.map((item) =>
-        item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
-      );
-      toast.error("already added");
-
-      setCartItems(updatedCart);
-      sessionStorage.setItem("cartItems", JSON.stringify(updatedCart));
-    } else {
-      const updatedCart = [...cartItems, { ...product, quantity: 1 }];
-      setCartItems(updatedCart);
-      sessionStorage.setItem("cartItems", JSON.stringify(updatedCart));
-    }
-  };
-
-  const userType = localStorage.getItem("user_type");
-  const DealerEmail = localStorage.getItem("email");
 
   const collectionCheck = () =>{
     DealerWishlist.ListCollection({email:DealerEmail})
@@ -158,40 +133,113 @@ const Shop = () => {
     })
   }
 
+  const GetCarList = async () =>{
+    UserWishlist.userWishlist({phone:phone})
+    .then(res=>{
+      setUserCartItems(res.data)
+    }).catch(err=>{
+      console.log(err);
+    })
+  }
+
+  const DealerList = async () =>{
+    DealerWishlist.ListCollection({email:DealerEmail})
+    .then(res=>{
+      setDealerCartItems(res.data)
+    }).catch(err=>{
+      console.log(err);
+    })
+  }
+
   useEffect(() => {
     AllData();
+    GetCarList()
+    DealerList()
     collectionCheck()
   }, []);
 
-  const isProductInWishList = (product) => {
-    return checkList.some((item) => item.id === product.id);
+  const FetchMoreData = async () => {
+    setTimeout(() => {
+      setDisplayedItems((prevItems) => [
+        ...prevItems,
+        ...allData.slice(loadMore, loadMore + 9)
+      ]);
+      setLoadMore(loadMore + 9);
+    }, 200);
   };
-  
-  const addToWishList = (product) => {
 
-    const updatedProduct = { ...product };
-    updatedProduct.isInWishList = !isProductInWishList(product);
+  // const handleAddToCart = (product) => {
+  //   const existingItem = cartItems.find((item) => item.id === product.id);
 
-    if (updatedProduct.isInWishList) {
-      dispatch({ type: 'ADD_TO_WISHLIST', payload: updatedProduct });
-    } else {
-      dispatch({ type: 'REMOVE_FROM_WISHLIST', payload: updatedProduct.id });
-    }
-    const userData = {
-      design_id: product.id,
-      email: DealerEmail,
-    };
-  
-    DealerWishlist.collectionData(userData)
+  //   if (existingItem) {
+  //     const updatedCart = cartItems.map((item) =>
+  //       item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+  //     );
+  //     toast.error("already added");
+
+  //     setCartItems(updatedCart);
+  //     sessionStorage.setItem("cartItems", JSON.stringify(updatedCart));
+  //   } else {
+  //     const updatedCart = [...cartItems, { ...product, quantity: 1 }];
+  //     setCartItems(updatedCart);
+  //     sessionStorage.setItem("cartItems", JSON.stringify(updatedCart));
+  //   }
+  // };
+
+  // const isProductInWishList = (product) => {
+  //   return checkList.some((item) => item.id === product.id);
+  // };
+
+  const addToWishList = async (product) => {
+    const productId = product.id; 
+    
+    DealerWishlist.addtoWishlist({ email: DealerEmail, design_id: productId })
       .then((res) => {
         console.log(res);
+        if (res.success === true) {
+          setCollectionStatus(true)
+          toast.success(res.message);
+
+          AllData()
+          GetCarList()
+          FilterData()
+          DealerList()
+
+        } else {
+          toast.error(res.message);
+        }
       })
       .catch((err) => {
         console.log(err);
       });
   };
-   
-  return (
+
+  const addToUserWishList = async (product) =>{
+
+    UserWishlist.addtoWishlist({phone:localStorage.getItem("phone"),design_id:product.id})
+      .then(res=>{
+        if (res.success === true) {
+          setUserWishlist(true)
+          toast.success(res.message);
+
+          AllData()
+          DealerList()
+          GetCarList()
+          FilterData()
+        } else {
+          toast.error(res.message);
+        }
+      }).catch(err=>{
+        console.log(err);
+      })
+  }
+
+  useEffect(()=>{
+    GetCarList()
+    DealerList()
+  },[])
+
+  return ( 
     <section className="shop">
       <div className="container">
         <div className="shopping_data">
@@ -205,7 +253,9 @@ const Shop = () => {
                     onChange={(e) => setSearchInput(e.target.value)}
                     type="search"
                   />
-                  <BsSearch className="search-icon" />
+                  {searchInput.length === 0 &&
+                        <BsSearch  className="search-icon" />
+                  }
                 </div>
               </div>
               <div className="col-md-3">
@@ -228,6 +278,8 @@ const Shop = () => {
                   Genderheader="Shop by Gender"
                   Tagheader="Shop by Tag"
                   Priceheader="Shop by Price"
+                  minprice={PriceRange.minprice}
+                  maxprice={PriceRange.maxprice}
                   onCategoryChange={(e) => handleCategory(e)}
                   onGenderChange={(e) => handleGender(e)}
                   onTagChange={(e) => handleTag(e)}
@@ -236,7 +288,7 @@ const Shop = () => {
               </div>
             </div>
             <div className="col-md-9">
-              {isLoading ? (
+            {isLoading ? (
                 <div className="h-100 d-flex justify-content-center">
                   <ReactLoading
                     type={"spinningBubbles"}
@@ -247,9 +299,9 @@ const Shop = () => {
                     className="loader"
                   />
                 </div>
-              ) : (
+              ) : ( 
                 <>
-                  { category.length === 0 && gender.length === 0 && metal.length === 0 && 
+                  {category.length === 0 && gender.length === 0  && 
                     searchInput.length === 0 && PriceRange.minprice === null && selectedOption === null ? (
                       <InfiniteScroll
                         dataLength={displayedItems.length}
@@ -259,38 +311,55 @@ const Shop = () => {
                         loader={pageLoading ? <h4>Loading...</h4> : null}
                       >
                         <div className="row">
-                          {displayedItems.map((product) => (
-                            <div key={product.id} className="col-md-4">
-                              <Link to={`/shopdetails/${product.id}`} className="product_data">
-                                {product.image ? (
-                                  <img src={product.image} alt="" className="w-100" />
-                                ) : (
-                                  <img src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg" alt="" className="w-100" />
-                                )}
-                                <div className="edit">
-                                  <div>
-                                    <Link to="#" onClick={() => handleAddToCart(product)}>
-                                      <BsHandbag />
-                                    </Link>
-                                  </div>
-                                  <div>
-                                    {userType == 1 ? (
-                                      <Link to="#" onClick={()=>addToWishList(product)}>
-                                        {isProductInWishList(product) ? <BsStarFill /> : <BsStar />}
+                          {displayedItems.map((product) =>{
+                            return (
+                              <div key={product.id} className="col-md-4">
+                                <Link to={`/shopdetails/${product.id}`} className="product_data">
+                                  {product.image ? (
+                                    <img src={product.image} alt="" className="w-100" />
+                                  ) : (
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg" alt="" className="w-100" />
+                                  )}
+
+                                  <div className="edit">
+                                    {/* <div>
+                                      <Link to="#" onClick={() => handleAddToCart(product)}>
+                                        <BsHandbag />
                                       </Link>
-                                    ) : (
-                                      <Link to="/wishlist"><BsHeart /></Link>
-                                    )}
+                                    </div> */}
+                                    <div>
+                                      {userType == 1 ? (
+                                        <>
+                                        {DealerEmail ? (
+                                          <Link to="#" onClick={()=>addToWishList(product)}>
+                                            {DealercartItems.find((item)=>item.id === product.id) ? <BsStarFill /> : <BsStar />}
+                                          </Link>
+                                        ):(
+                                          <Link to="/Dealer_login"> <BsStar /></Link>
+                                        )} 
+                                        </>
+                                      ) : (
+                                        <>
+                                         {phone ? (
+                                          <Link to="#" onClick={()=>addToUserWishList(product)}> 
+                                            {UsercartItems?.find((item)=>item.id === product.id) ? (<FcLike />) : (<BsHeart />)}
+                                          </Link>
+                                         ) : (
+                                          <Link to="/login"> <BsHeart /></Link>
+                                         )}
+                                        </>
+                                      )}
+                                    </div>
                                   </div>
-                                </div>
-                                <div className="product_details">
+                                  <div className="product_details">
                                   <h4>{product.name}</h4>
                                   <p>Minola Golden Necklace</p>
                                   <h5>₹{product.price.toLocaleString("en-US")}</h5>
-                                </div>
-                              </Link>
-                            </div>
-                          ))}
+                                </div>  
+                                </Link>
+                              </div>
+                            )
+                          })}
                         </div>
                       </InfiniteScroll>
                   ) : (
@@ -310,19 +379,33 @@ const Shop = () => {
                                   />
                                 )}
                                 <div className="edit">
-                                  <div>
+                                  {/* <div>
                                     <Link to="#" onClick={() => handleAddToCart(data)}>
                                       <BsHandbag />
                                     </Link>
-                                  </div>
+                                  </div> */}
                                   <div>
-                                    {userType == 1 ? (
-                                      <Link to="#" onClick={()=>addToWishList(data)}>
-                                        {isProductInWishList(data) ? <BsStarFill /> : <BsStar />}
-                                      </Link>
-                                    ) : (
-                                      <Link to="/wishlist"><BsHeart /></Link>
-                                    )}
+                                  {userType == 1 ? (
+                                        <>
+                                        {DealerEmail ? (
+                                          <Link to="#" onClick={()=>addToWishList(product)}>
+                                            {DealercartItems.find((item)=>item?.id === product?.id) ? <BsStarFill /> : <BsStar />}
+                                          </Link>
+                                        ):(
+                                          <Link to="/Dealer_login"> <BsStar /></Link>
+                                        )} 
+                                        </>
+                                      ) : (
+                                        <>
+                                        {phone ? (
+                                          <Link to="#" onClick={()=>addToUserWishList(data)}> 
+                                            {UsercartItems?.find((item)=>item.id === data.id) ? (<FcLike />) : (<BsHeart />)}
+                                          </Link>
+                                          ) : (
+                                          <Link to="/login"> <BsHeart /></Link>
+                                        )}
+                                        </>
+                                      )}
                                   </div>
                                 </div>
                                 <div className="product_details">
@@ -341,10 +424,10 @@ const Shop = () => {
               )}
             </div>
           </div>
-          <hr />
         </div>
       </div>
     </section>
   );
 };
+
 export default Shop;

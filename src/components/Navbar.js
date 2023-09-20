@@ -1,17 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaUserAlt } from "react-icons/fa";
 import { BsHandbag, BsHeart } from "react-icons/bs";
 import Logo from "../assets/images/logo.png";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import DealerService from "../services/Dealer/Cart";
+import UserService from "../services/Cart"
 
 const Navbar = () => {
   const [colorChange, setColorchange] = useState(false);
   const [isLoggedOut, setIsLoggedOut] = useState(false);
+  const [dealerCartCounts, setDealerCartCounts] = useState()
+  const [userCartCounts, setUsererCartCounts] = useState()
   const location = useLocation();
   const currentRoute = location.pathname;
   const navigate = useNavigate();
+
+  const Dealer = localStorage.getItem("token");
+  const DealerEmail = localStorage.getItem("email");
+  const Phone = localStorage.getItem("phone");
 
   const changeNavbarColor = () => {
     if (window.scrollY >= 80) {
@@ -24,8 +32,31 @@ const Navbar = () => {
 
   const CartCounts = JSON.parse(sessionStorage.getItem("cartItems"));
 
-  const Dealer = localStorage.getItem("token");
-  const Phone = localStorage.getItem("phone");
+  const DealerCart = () =>{
+    DealerService.CartList({ email: DealerEmail })
+      .then((res) => {
+        setDealerCartCounts(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  const UserCartItems = () => {
+    UserService.CartList({ phone: Phone })
+      .then((res) => {
+        setUsererCartCounts(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(()=>{
+    DealerCart()
+    UserCartItems()
+  },[])
+
 
   const handleLogout = () => {
     if (Dealer) {
@@ -151,14 +182,20 @@ const Navbar = () => {
                   <BsHeart />
                 </Link>
               </li>
-
+               
               <li>
-                <Link className="icon cart_icon" to="/cart">
+                {Dealer ? (
+                  <Link className="icon cart_icon" to="/dealer_cart">
                   <BsHandbag />
-                  {CartCounts && <div className="cart_count">{CartCounts?.length}</div>}
+                  {dealerCartCounts && <div className="cart_count">{dealerCartCounts?.length}</div>}
                 </Link>
+                ):(
+                  <Link className="icon cart_icon" to="/cart">
+                    <BsHandbag />
+                    {userCartCounts && <div className="cart_count">{userCartCounts?.length}</div>}
+                  </Link>
+                )}
               </li>
-
             </ul>
           </div>
         </div>

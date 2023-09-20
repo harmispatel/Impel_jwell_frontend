@@ -2,30 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useWishList } from "../../context/WishListContext";
 import noWishlist from "../../assets/images/wishlist.png";
 import DealerWishlist from "../../services/Dealer/Collection"
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const DealerWishList = () => {
-  const { dispatch } = useWishList();
   const [checkList,setCheckList] = useState([])
 
   const DealerEmail = localStorage.getItem("email");
-
-  const removeFromWishList = (product) => {
-    console.log(product);
-    dispatch({ type: "REMOVE_FROM_WISHLIST", payload: product});
-
-    const userData = {
-      design_id: product,
-      email: DealerEmail,
-    };
-  
-    DealerWishlist.collectionData(userData)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
 
   const collectionCheck = () =>{
     DealerWishlist.ListCollection({email:DealerEmail})
@@ -36,9 +19,22 @@ const DealerWishList = () => {
     })
   }
 
+  const removeFromWishList = (product) => {
+    DealerWishlist.removetoWishlist({email:DealerEmail,design_id:product})
+      .then((res) => {
+        if (res.success === true) {
+          toast.success(res.message)
+          collectionCheck()
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   useEffect(() => {
     collectionCheck()
-  }, [removeFromWishList]);
+  }, []);
 
   return (
     <section className="wishlist">
@@ -67,7 +63,7 @@ const DealerWishList = () => {
                       >
                         Remove
                       </button>
-                      <button className="btn w-100">Move To Bag</button>
+                      {/* <button className="btn w-100">Move To Bag</button> */}
                     </div>
                   </div>
                 );

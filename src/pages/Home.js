@@ -230,7 +230,7 @@ const Home = () => {
               }}
               modules={[Pagination, Scrollbar, A11y, Autoplay]}
               spaceBetween={20}
-              slidesPerView={4}
+              
               loop={true}
               autoplay={{ delay: 1700 }}
             >
@@ -335,7 +335,6 @@ const Home = () => {
               Navigation={true}
               modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
               spaceBetween={20}
-              slidesPerView={4}
               loop={true}
               autoplay={{ delay: 1500 }}
             >

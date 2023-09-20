@@ -1,13 +1,23 @@
 import call from "../Call";
 
-const collectionData = async (data) => {
+const addtoWishlist = async (data) => {
     let d = await call({
-      path: "add-remove-collection-design",
+      path: "add-collection-design",
       method: "POST",
       enctype:"multipart/form-data",
       data,
     });
     return d;
+};
+
+const removetoWishlist = async (data) => {
+  let d = await call({
+    path: "remove-collection-design",
+    method: "POST",
+    enctype:"multipart/form-data",
+    data,
+  });
+  return d;
 };
 
 const ListCollection = async (data) => {
@@ -20,6 +30,6 @@ const ListCollection = async (data) => {
   return d;
 }
 
-const exportObject = { collectionData,ListCollection };
+const exportObject = { addtoWishlist,removetoWishlist,ListCollection };
 
 export default exportObject;
