@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation,Pagination,Scrollbar,A11y,Autoplay } from "swiper/modules";
 import "swiper/css";
@@ -12,6 +12,7 @@ import homeService from "../services/Home";
 import { Link } from "react-router-dom";
 import banner from "../assets/images/banner.jpg"
 import category_img from "../assets/images/category.jpg"
+import introBanner from "../assets/video/intro.mp4"
 
 const Home = () => {
 
@@ -21,12 +22,23 @@ const Home = () => {
   const [Featured, SetFeatured] = useState([]);
   const [TopSell, SetTopSell] = useState([]);
 
+  const videoEl = useRef(null);
+
+  const attemptPlay = () => {
+    videoEl &&
+      videoEl.current &&
+      videoEl.current.play().catch((error) => {
+        console.error("Error attempting to play", error);
+      });
+  };
+
   useEffect(() => {
     banners();
     Category();
     RecentAdd();
     FeaturedProduct();
     HighSell();
+    attemptPlay();
   }, []);
 
   const banners = () => {
@@ -97,7 +109,7 @@ const Home = () => {
           </div>
         </div>
         <div className="banner_slide">
-          <Swiper
+          {/* <Swiper
             modules={[Pagination, Scrollbar, A11y, Autoplay]}
             spaceBetween={50}
             slidesPerView={1}
@@ -111,7 +123,15 @@ const Home = () => {
                 </SwiperSlide>
               );
             })}
-          </Swiper>
+          </Swiper> */}
+
+          <video  
+            playsInline
+            loop
+            muted
+            src={introBanner} 
+            ref={videoEl}
+            className="w-100" />
         </div>
       </section>
 

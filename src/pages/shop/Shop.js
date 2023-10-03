@@ -368,7 +368,7 @@ const Shop = ({product}) => {
                         {filterData.map((data) => {
                           return (
                             <div className="col-md-4">
-                              <Link to={`/shopdetails/${data.id}`} className="product_data">
+                              <Link to={`/shopdetails/${data.id}`} target={"_blank"} className="product_data">
                                 {data.image ? (
                                   <img src={data.image} alt="" className="w-100"/>
                                 ) : (

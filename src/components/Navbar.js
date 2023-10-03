@@ -137,7 +137,7 @@ const Navbar = () => {
                     <div className="login_dropdown">
                       <ul>
                         <li><Link to="/dealer_profile">Profile</Link></li>
-                        <li><Link to="/dealer_orders">My Orders</Link></li>
+                        {/* <li><Link to="/dealer_orders">My Orders</Link></li> */}
                         <li><a href="#" onClick={handleLogout}>LogOut</a></li>
                       </ul>
                     </div>
@@ -161,7 +161,7 @@ const Navbar = () => {
                     <div className="login_dropdown">
                       <ul>
                         <li><Link to="/profile">Profile</Link></li>
-                        <li><Link to="/orders">My Orders</Link></li>
+                        {/* <li><Link to="/orders">My Orders</Link></li> */}
                         <li><a href="#" onClick={handleLogout}>LogOut</a></li>
                       </ul>
                     </div>
@@ -183,7 +183,7 @@ const Navbar = () => {
                 </Link>
               </li>
                
-              <li>
+              {/* <li>
                 {Dealer ? (
                   <Link className="icon cart_icon" to="/dealer_cart">
                   <BsHandbag />
@@ -195,7 +195,7 @@ const Navbar = () => {
                     {userCartCounts && <div className="cart_count">{userCartCounts?.length}</div>}
                   </Link>
                 )}
-              </li>
+              </li> */}
             </ul>
           </div>
         </div>

@@ -279,18 +279,18 @@ const ShopDetails = () => {
                     </h5>
                     <div className="buttons pt-4 d-flex">
                       <div className="quantity">
-                        {productQuantity === 0 ? (
+                        {productQuantity === 1 ? (
                           <button className="btn" onClick={() =>setProductQuantity(productQuantity - 1)} disabled>
                             -
                           </button>
                         ) : (
-                          <button className="btn" onClick={() => setProductQuantity(productQuantity - 1)}>
+                          <button className="btn" onClick={() => setProductQuantity(productQuantity - 1)} >
                             -
                           </button>
                         )}
 
-                        <input className="form-control" type="text" value={productQuantity} min={1} />
-                        <button className="btn" onClick={() =>setProductQuantity(productQuantity + 1)}>
+                        <input className="form-control" type="text" name="productQuantity" onChange={(e)=>setProductQuantity(e.target)} value={productQuantity} min={1} disabled />
+                        <button className="btn" onClick={() =>setProductQuantity(productQuantity + 1)} disabled>
                           +
                         </button>
                       </div>
@@ -304,43 +304,38 @@ const ShopDetails = () => {
                             ) : (
                               <>
                               <div>
-                                <button className="btn btn-outline-dark" onClick={() => handleAddToDealerCart(product)}>
+                                <button className="btn btn-outline-dark" onClick={() => handleAddToDealerCart(product)} disabled>
                                   Add To Cart
                                 </button>
                               </div>
-                              <div>
+                              {/* <div>
                                   <button className="btn btn-outline-dark" onClick={() => addToDealerWishList(product)}>
                                   {DealerWishlistItems?.find((item)=>item?.id === product?.id)?('Wishlisted'):('Wishlist')} 
                                   </button>
-                              </div>
+                              </div> */}
                               </> 
                             )}
                           </>
                         ) : (
-                          <>
-                            {cartItems.find((item) => item.design_name === product?.name) ? (
+                          <>  
+                            {cartItems && cartItems?.find((item) => item.design_name === product?.name) ? (
                               <>
                                 <Link className="btn btn-outline-dark" to="/cart">
                                   Go To Cart
                                 </Link>
-                                {/* <div>
-                                    <button className="btn btn-dark align-items-center" onClick={()=>addToDealerWishList(product)}>
-                                      Wishlisted
-                                    </button>
-                                </div> */}
                               </>
                             ) : (
                               <>
                                 <div>
-                                    <button className="btn btn-outline-dark" onClick={() => handleAddToCart(product)}>
+                                    <button className="btn btn-outline-dark" onClick={() => handleAddToCart(product)} disabled>
                                       Add To Cart
                                     </button>
                                 </div>
-                                <div>
+                                {/* <div>
                                     <button className="btn btn-outline-dark align-items-center" onClick={()=>addToUserWishList(product)}>
                                       {UserWishlistItems?.find((item)=>item?.id === product?.id)?('Wishlisted'):('Wishlist')} 
                                     </button>
-                                </div>
+                                </div> */}
                               </>
                             )}
                           </>
@@ -350,46 +345,6 @@ const ShopDetails = () => {
                   </div>
                 </div>
               </div>
-
-              {/* <div className="related_items">
-                <h3>Related Products</h3>
-                <div className="related_product">
-                  {relatedProduct.map((data) => {
-                    return (
-                      <Link
-                        to={`/shopdetails/${data.id}`}
-                        className="product_data"
-                      >
-                        {data.image ? (
-                          <img src={data.image} className="w-100" />
-                        ) : (
-                          <img
-                            src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930"
-                            className="w-100"
-                          />
-                        )}
-                        <div class="edit">
-                          <div>
-                            <a href="#">
-                              <BsFillBagPlusFill />
-                            </a>
-                          </div>
-                          <div>
-                            <a href="#">
-                              <BsFillEyeFill />
-                            </a>
-                          </div>
-                        </div>
-                        <div className="product_details">
-                          <h4>{data.name}</h4>
-                          <p>Minola Golden Necklace</p>
-                          <h5>${data.price}</h5>
-                        </div>
-                      </Link>
-                    );
-                  })}
-                </div>
-              </div> */}
             </div>
           </div>
         </div>

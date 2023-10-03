@@ -53,6 +53,10 @@ const Login = () => {
         })
         .catch((err) => {
           console.log("SMS not sent", err)
+          toast.error("Something went wrong");
+          setTimeout(() => {
+            window.location.reload(true);
+          }, 2000);
         });
     }).catch(err=>{
       console.log(err);
@@ -75,6 +79,8 @@ const Login = () => {
       })
       .catch((error) => {
         console.error("Verification failed:", error);
+        toast.error("OTP Wrong!!");
+        setOtp('')
       })
   };
 
@@ -142,7 +148,10 @@ const Login = () => {
                                     )}
                                   />
                                 </div>
-                                <button id="sign-in-button" type="submit" className="btn btn-outline-warning">Verfy OTP</button>
+                                <div className="d-flex justify-content-between">
+                                  <button id="sign-in-button" type="submit" className="btn btn-outline-warning">Verfy OTP</button>
+                                  <button  id="sign-in-button" type="button" onClick={sendOtp} className="btn btn-outline-warning">Resend OTP</button>
+                                </div>
                               </form>
                             </>
                           )}
