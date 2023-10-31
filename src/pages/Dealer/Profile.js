@@ -57,107 +57,7 @@ const DealerProfile = () => {
   return (
     <section className="profile">
       <div className="container rounded bg-white mt-5 mb-5">
-        <div className="row">
-          {/* company_info */}
-          <div className="d-flex justify-content-between align-items-center mb-3">
-            <h4 className="text-right">Company Information</h4>
-          </div>
-          <hr />
-
-          <div className="col-md-4 border-right ">
-            <div className="p-3 py-5">
-              <div className="col-md-12">
-                <label className="labels">Company Name</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="first name"
-                  value={profileData.comapany_name}
-                />
-              </div>
-
-              <div className="col-md-12 mt-3">
-                <label className="labels">Company Email</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="enter phone number"
-                  value={profileData.email}
-                />
-              </div>
-
-              <div class="col-md-12 mt-3">
-                <label class="labels">Company Number</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="enter your number"
-                  value={profileData.phone}
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="col-md-4 border-right ">
-            <div className="p-3 py-5">
-              <div class="col-md-12">
-                <label class="labels">Address</label>
-                <textarea
-                  type="text"
-                  className="form-control"
-                  placeholder="enter address line 1"
-                  value={profileData.address}
-                />
-              </div>
-
-              <div className="col-md-12 mt-3">
-                <label className="labels">Postcode</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="enter address line 2"
-                  value={profileData.pincode}
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="col-md-4 border-right ">
-            <div className="p-3 py-5">
-              <div class="col-md-12">
-                <label class="labels">GST No</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="enter gst number"
-                  value={profileData.gst_no}
-                />
-              </div>
-
-              <div className="col-md-12 mt-3">
-                <label className="labels">PanCard</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="enter pancard"
-                  value=""
-                />
-              </div>
-
-              <div className="col-md-12 mt-3">
-                <label className="labels">Order Confirmation Contact No.</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="enter phonenumber"
-                  value={profileData.phone}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="row">
+      <div className="row">
           {/* Owner_info */}
           <div className="d-flex justify-content-between align-items-center mb-3">
             <h4 className="text-right">Owner Information</h4>
@@ -174,6 +74,7 @@ const DealerProfile = () => {
                     className="form-control"
                     placeholder="first name"
                     value={profileData.name}
+                    disabled
                   />
                 </div>
               </div>
@@ -188,6 +89,7 @@ const DealerProfile = () => {
                     className="form-control"
                     placeholder="enter phonenumber"
                     value={profileData.phone}
+                    disabled
                   />
                 </div>
               </div>
@@ -202,12 +104,120 @@ const DealerProfile = () => {
                     className="form-control"
                     placeholder="enter phonenumber"
                     value={profileData.phone}
+                    disabled
                   />
                 </div>
               </div>
             </div>
           </div>
         </div>
+        <div className="row">
+          {/* company_info */}
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <h4 className="text-right">Company Information</h4>
+          </div>
+          <hr />
+
+          <div className="col-md-4 border-right ">
+            <div className="p-3 py-5">
+              <div className="col-md-12">
+                <label className="labels">Company Name</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="first name"
+                  value={profileData.comapany_name}
+                  disabled
+                />
+              </div>
+
+              <div className="col-md-12 mt-3">
+                <label className="labels">Company Email</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="enter phone number"
+                  value={profileData.email}
+                  disabled
+                />
+              </div>
+
+              {/* <div class="col-md-12 mt-3">
+                <label class="labels">Company Number</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="enter your number"
+                  value={profileData.phone}
+                />
+              </div> */}
+            </div>
+          </div>
+
+          <div className="col-md-4 border-right ">
+            <div className="p-3 py-5">
+              <div class="col-md-12">
+                <label class="labels">Address</label>
+                <textarea
+                  type="text"
+                  className="form-control"
+                  placeholder="enter address line 1"
+                  value={profileData.address}
+                  disabled
+                />
+              </div>
+
+              <div className="col-md-12 mt-3">
+                <label className="labels">Postcode</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="enter address line 2"
+                  value={profileData.pincode}
+                  disabled
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="col-md-4 border-right ">
+            <div className="p-3 py-5">
+              <div class="col-md-12">
+                <label class="labels">GST No</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="enter gst number"
+                  value={profileData.gst_no}
+                  disabled
+                />
+              </div>
+
+              <div className="col-md-12 mt-3">
+                <label className="labels">PanCard</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="enter pancard"
+                  value=""
+                  disabled
+                />
+              </div>
+
+              {/* <div className="col-md-12 mt-3">
+                <label className="labels">Order Confirmation Contact No.</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="enter phonenumber"
+                  value={profileData.phone}
+                />
+              </div> */}
+            </div>
+          </div>
+        </div>
+
+        
 
         <div className="row">
           {/* Owner_info */}
@@ -226,6 +236,7 @@ const DealerProfile = () => {
                     className="form-control"
                     placeholder="first name"
                     value=""
+                    disabled
                   />
                   <img src={profileData.logo} className="w-100 mt-3" height={250} alt=""/>
                 </div>
@@ -236,7 +247,7 @@ const DealerProfile = () => {
               <div className="p-3 py-5">
                 <div className="col-md-12">
                   <label className="labels"><strong>Your Documents</strong></label>
-                  <div {...getRootProps()} className="dropzone">
+                  <div {...getRootProps()} className="dropzone" disabled>
                     <input {...getInputProps()} />
                     <p>Drag & drop some files here, or click to select files</p>
                   </div>
@@ -270,11 +281,11 @@ const DealerProfile = () => {
           </div>
         </div>
 
-        <div className="mt-5 text-center">
+        {/* <div className="mt-5 text-center">
           <button className="btn btn-primary profile-button" type="button" disabled>
             Save Profile
           </button>
-        </div>
+        </div> */}
       </div>
     </section>
   );

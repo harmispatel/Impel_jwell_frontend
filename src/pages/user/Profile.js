@@ -11,30 +11,49 @@ const Profile = () => {
   const phone = localStorage.getItem("phone");
   const [showEdit, setShowEdit] = useState(false);
   const [show, setShow] = useState(false);
-  const [selectedData,setSelectedData] = useState([])
+  const [selectedData, setSelectedData] = useState([]);
   const [profileImg, setProfileImg] = useState({ preview: "", raw: "" });
-  const [profileData,setProfileData] = useState([])
+  const [profileData, setProfileData] = useState([]);
   const [userData, setUserData] = useState({
     name: "",
     email: "",
     phone: "",
     address: "",
     pincode: "",
+    state: "",
+    city: "",
+    pancard: "",
+    gst: "",
   });
+  const [error, setError] = useState({
+    nameErr: "",
+    emailErr: "",
+    phoneErr: "",
+    addressErr: "",
+    pincodeErr: "",
+    stateErr: "",
+    cityErr: "",
+    pancardErr: "",
+    gstErr: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleClose = () => {
     setShow(false);
     setShowEdit(false);
   };
 
-  const getProfile = async () =>{
-   await profileService.getProfile({phone:phone}).then(res=>{
-    console.log(res.data);
-      setProfileData(res.data)
-    }).catch(err=>{
-      console.log(err);
-    })
-  }
+  const getProfile = async () => {
+    await profileService
+      .getProfile({ phone: phone })
+      .then((res) => {
+        console.log(res.data);
+        setProfileData(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const handleEditChange = (e) => {
     console.log(e.target.value);
@@ -49,37 +68,79 @@ const Profile = () => {
 
   const handleEdit = async (data) => {
     setShowEdit(true);
-    setSelectedData(data)
+    setSelectedData(data);
   };
 
-  const handleUpdate = async (e) =>{
-    e.preventDefault()
+  const handleUpdate = async (e) => {
+    e.preventDefault();
 
+    if (
+      !userData.name ||
+      !userData.email ||
+      !userData.phone ||
+      !userData.address ||
+      !userData.gst ||
+      !userData.pincode ||
+      !userData.pancard ||
+      !userData.state ||
+      !userData.city
+    ) {
+      setError({
+        
+      })
+    }
     const formData = new FormData();
-    
-    formData.append("id",selectedData.id)
-    formData.append("name",userData.name ? userData.name : selectedData.name)
-    formData.append("email",userData.email ? userData.email : selectedData.email)
-    formData.append("phone",userData.phone? userData.phone : selectedData.phone)
-    formData.append("address",userData.address ? userData.address : selectedData.address)
-    formData.append("pincode",userData.pincode ? userData.pincode : selectedData.pincode)
 
-    profileService.updateProfile(formData).then(res=>{
-      console.log(res.status);
-      if (res.status === true) {
-        setShowEdit(false);
-        getProfile()
-        toast.success("Profile Updated Successfully...");
-      }
-    }).catch(err=>{
-      console.log(err);
-    })
-  }
+    formData.append("id", selectedData.id);
+    formData.append("name", userData.name ? userData.name : selectedData.name);
+    formData.append(
+      "email",
+      userData.email ? userData.email : selectedData.email
+    );
+    formData.append(
+      "phone",
+      userData.phone ? userData.phone : selectedData.phone
+    );
+    formData.append(
+      "address",
+      userData.address ? userData.address : selectedData.address
+    );
+    formData.append(
+      "pincode",
+      userData.pincode ? userData.pincode : selectedData.pincode
+    );
+    formData.append(
+      "pancard",
+      userData.pincode ? userData.pancard : selectedData.pancard
+    );
+    formData.append("gst", userData.pincode ? userData.gst : selectedData.gst);
+    formData.append(
+      "state",
+      userData.pincode ? userData.state : selectedData.state
+    );
+    formData.append(
+      "city",
+      userData.pincode ? userData.city : selectedData.city
+    );
 
-  useEffect(()=>{
-    getProfile()
-  },[])
+    profileService
+      .updateProfile(formData)
+      .then((res) => {
+        console.log(res.status);
+        if (res.status === true) {
+          setShowEdit(false);
+          getProfile();
+          // toast.success("Profile Updated Successfully...");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
+  useEffect(() => {
+    getProfile();
+  }, []);
 
   return (
     <section className="profile">
@@ -91,14 +152,14 @@ const Profile = () => {
             </div>
             <hr />
             <div className="row justify-content-center">
-            <div className="col-md-3">
-              <input
-                type="file"
-                id="upload-button"
-                style={{ display: "none" }}
-                onChange={handleEditChange}
-              />
-            </div>
+              <div className="col-md-3">
+                <input
+                  type="file"
+                  id="upload-button"
+                  style={{ display: "none" }}
+                  onChange={handleEditChange}
+                />
+              </div>
               <div className="col-md-9">
                 <div className="profile_card">
                   <div className="row justify-content-center">
@@ -126,10 +187,26 @@ const Profile = () => {
                             <td>{profileData.pincode}</td>
                           </tr>
                           <tr>
+                            <td>State</td>
+                            <td>{profileData.state}</td>
+                          </tr>
+                          <tr>
+                            <td>City</td>
+                            <td>{profileData.city}</td>
+                          </tr>
+                          <tr>
+                            <td>GST Number</td>
+                            <td>{profileData.gst}</td>
+                          </tr>
+                          <tr>
+                            <td>Pan number</td>
+                            <td>{profileData.pancard}</td>
+                          </tr>
+                          <tr>
                             <td colSpan={2}>
                               <button
                                 className="w-100 profile_edit_btn border-0"
-                                onClick={()=>handleEdit(profileData)}
+                                onClick={() => handleEdit(profileData)}
                               >
                                 Edit
                               </button>
@@ -147,7 +224,7 @@ const Profile = () => {
       </div>
 
       <Modal
-        className="form_intent"
+        className="form_intent profile_model"
         centered
         show={showEdit}
         onHide={handleClose}
@@ -157,56 +234,112 @@ const Profile = () => {
         </Modal.Header>
 
         <Modal.Body>
-          <Form onSubmit={(e)=>handleUpdate(e,selectedData)}>
-            <Form.Group as={Col} className="mb-2" controlId="formGridState">
-              <Form.Label>Name</Form.Label>
-              <Form.Control
-                name="name"
-                defaultValue={selectedData.name}
-                onChange={(e) => handleEditChange(e)}
-                placeholder="Enter Your Name"
-              />
-            </Form.Group>
+          <Form onSubmit={(e) => handleUpdate(e, selectedData)}>
+            <div className="row">
+              <div className="col-md-6">
+                <Form.Group as={Col} className="mb-2" controlId="formGridState">
+                  <Form.Label>Name</Form.Label>
+                  <Form.Control
+                    name="name"
+                    defaultValue={selectedData.name}
+                    onChange={(e) => handleEditChange(e)}
+                    placeholder="Enter Your Name"
+                  />
+                </Form.Group>
+              </div>
+              <div className="col-md-6">
+                <Form.Group as={Col} className="mb-2" controlId="formGridState">
+                  <Form.Label>Email</Form.Label>
+                  <Form.Control
+                    name="email"
+                    defaultValue={selectedData.email}
+                    onChange={(e) => handleEditChange(e)}
+                    placeholder="Enter Your Email"
+                  />
+                </Form.Group>
+              </div>
+              <div className="col-md-6">
+                <Form.Group as={Col} className="mb-2" controlId="formGridState">
+                  <Form.Label>Phone</Form.Label>
+                  <Form.Control
+                    name="phone"
+                    defaultValue={selectedData.phone}
+                    disabled
+                    onChange={(e) => handleEditChange(e)}
+                    placeholder="Enter Your Phone"
+                  />
+                </Form.Group>
+              </div>
 
-            <Form.Group as={Col} className="mb-2" controlId="formGridState">
-              <Form.Label>Email</Form.Label>
-              <Form.Control
-                name="email"
-                defaultValue={selectedData.email}
-                onChange={(e) => handleEditChange(e)}
-                placeholder="Enter Your Email"
-              />
-            </Form.Group>
+              <div className="col-md-6">
+                <Form.Group className="mb-2" controlId="formGridAddress1">
+                  <Form.Label>Pincode</Form.Label>
+                  <Form.Control
+                    name="pincode"
+                    defaultValue={selectedData.pincode}
+                    onChange={(e) => handleEditChange(e)}
+                    placeholder="Enter Your Pincode"
+                  />
+                </Form.Group>
+              </div>
+              <div className="col-md-6">
+                <Form.Group className="mb-2" controlId="formGridAddress1">
+                  <Form.Label>Pan-card</Form.Label>
+                  <Form.Control
+                    name="pancard"
+                    defaultValue={selectedData.pancard}
+                    onChange={(e) => handleEditChange(e)}
+                    placeholder="Enter Your Pancard number"
+                  />
+                </Form.Group>
+              </div>
+              <div className="col-md-6">
+                <Form.Group className="mb-2" controlId="formGridAddress1">
+                  <Form.Label>GST-number</Form.Label>
+                  <Form.Control
+                    name="gst"
+                    defaultValue={selectedData.gst}
+                    onChange={(e) => handleEditChange(e)}
+                    placeholder="Enter Your GST number"
+                  />
+                </Form.Group>
+              </div>
+              <div className="col-md-6">
+                <Form.Group className="mb-2" controlId="formGridAddress1">
+                  <Form.Label>State</Form.Label>
+                  <Form.Control
+                    name="state"
+                    defaultValue={selectedData.state}
+                    onChange={(e) => handleEditChange(e)}
+                    placeholder="Enter Your State"
+                  />
+                </Form.Group>
+              </div>
+              <div className="col-md-6">
+                <Form.Group className="mb-2" controlId="formGridAddress1">
+                  <Form.Label>City</Form.Label>
+                  <Form.Control
+                    name="city"
+                    defaultValue={selectedData.city}
+                    onChange={(e) => handleEditChange(e)}
+                    placeholder="Enter Your City"
+                  />
+                </Form.Group>
+              </div>
+              <div className="col-md-12">
+                <Form.Group as={Col} className="mb-2" controlId="formGridZip">
+                  <Form.Label>Address</Form.Label>
 
-            <Form.Group as={Col} className="mb-2" controlId="formGridState">
-              <Form.Label>Phone</Form.Label>
-              <Form.Control
-                name="phone"
-                defaultValue={selectedData.phone}
-                disabled
-                onChange={(e) => handleEditChange(e)}
-                placeholder="Enter Your Phone"
-              />
-            </Form.Group>
-
-            <Form.Group as={Col} className="mb-2" controlId="formGridZip">
-              <Form.Label>Address</Form.Label>
-              <Form.Control
-                name="address"
-                defaultValue={selectedData.address}
-                onChange={(e) => handleEditChange(e)}
-                placeholder="Enter Your Address"
-              />
-            </Form.Group>
-            <Form.Group className="mb-2" controlId="formGridAddress1">
-              <Form.Label>Pincode</Form.Label>
-              <Form.Control
-                name="pincode"
-                defaultValue={selectedData.pincode}
-                onChange={(e) => handleEditChange(e)}
-                placeholder="Enter Your Pincode"
-              />
-            </Form.Group>
+                  <textarea
+                    name="address"
+                    className="form-control"
+                    defaultValue={selectedData.address}
+                    onChange={(e) => handleEditChange(e)}
+                    placeholder="Enter Your Address"
+                  />
+                </Form.Group>
+              </div>
+            </div>
 
             <div className="text-center">
               <Button variant="primary" type="submit">

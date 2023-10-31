@@ -60,11 +60,11 @@ const SidebarFilter = (props) => {
   return (
     <>
       {userType == 1 ? (
-        <button className="btn btn-outline-warning w-100 mb-2 p-2">
-          My Collection
+        <button className="btn dispatch_btn w-100 mb-2 p-2">
+          Ready To Dispatch
         </button>
       ) : (
-        <button className="btn btn-outline-warning w-100 mb-2 p-2">
+        <button className="btn dispatch_btn w-100 mb-2 p-2">
           Ready To Dispatch
         </button>
       )}
@@ -131,8 +131,18 @@ const SidebarFilter = (props) => {
           <Accordion.Header>{props.Priceheader}</Accordion.Header>
           <Accordion.Body className="p-4 mb-2">
             <div className="d-flex justify-content-between">
-              <p>From: <strong>₹ {props.minprice?props.minprice:PriceRange.minprice}</strong></p>
-              <p>To: <strong>₹ {props.maxprice?props.maxprice:PriceRange.maxprice}</strong></p>
+              <p>
+                From:{" "}
+                <strong>
+                  ₹ {props.minprice ? props.minprice : PriceRange.minprice}
+                </strong>
+              </p>
+              <p>
+                To:{" "}
+                <strong>
+                  ₹ {props.maxprice ? props.maxprice : PriceRange.maxprice}
+                </strong>
+              </p>
             </div>
             <Slider
               range

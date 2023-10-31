@@ -8,12 +8,17 @@ import "swiper/css/navigation";
 // import Magnifier from "react-image-magnify";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { BsFillBagPlusFill, BsFillEyeFill, BsHeart, BsStar } from "react-icons/bs";
+import {
+  BsFillBagPlusFill,
+  BsFillEyeFill,
+  BsHeart,
+  BsStar,
+} from "react-icons/bs";
 import { RxChevronLeft, RxChevronRight, RxCross1 } from "react-icons/rx";
-import DealeCartService from "../../services/Dealer/Cart"
-import UserCartService from "../../services/Cart"
-import Userservice from "../../services/Auth"
-import DealerWishlist from "../../services/Dealer/Collection"
+import DealeCartService from "../../services/Dealer/Cart";
+import UserCartService from "../../services/Cart";
+import Userservice from "../../services/Auth";
+import DealerWishlist from "../../services/Dealer/Collection";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -29,13 +34,13 @@ const ShopDetails = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [cartItems, setCartItems] = useState([]);
   const [DealercartItems, setDealerCartItems] = useState([]);
-  const [userWishlist,setUserWishlist] = useState(false)
-  const [dealerWishlist,setDealerWishlist] = useState(false)
+  const [userWishlist, setUserWishlist] = useState(false);
+  const [dealerWishlist, setDealerWishlist] = useState(false);
   const [UserWishlistItems, setUserWishlistItems] = useState([]);
   const [DealerWishlistItems, setDealerWishlistItems] = useState([]);
   const data = { categoryId: product?.category_id?.id };
-  const Dealer = localStorage.getItem("email")
-  const Phone = localStorage.getItem("phone")
+  const Dealer = localStorage.getItem("email");
+  const Phone = localStorage.getItem("phone");
 
   const productData = async () => {
     const data = {
@@ -64,126 +69,134 @@ const ShopDetails = () => {
     }
   };
 
-  const GetCarList = async () =>{
-    DealeCartService.CartList({email:Dealer})
-    .then(res=>{
-      setDealerCartItems(res.data)
-    }).catch(err=>{
-      console.log(err);
-    })
-  }
-
-  const GetUserCartList = async () =>{
-    UserCartService.CartList({phone:Phone})
-    .then(res=>{
-      setCartItems(res.data)
-    }).catch(err=>{
-      console.log(err);
-    })
-  }
-
-  const GetUserWishList = async () =>{
-    Userservice.userWishlist({phone:Phone})
-      .then(res=>{
-        setUserWishlistItems(res.data);
-      }).catch(err=>{
-        console.log(err);
+  const GetCarList = async () => {
+    DealeCartService.CartList({ email: Dealer })
+      .then((res) => {
+        setDealerCartItems(res.data);
       })
-  }
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
-  const GetDealerWishList = async () =>{
-    DealerWishlist.ListCollection({email:Dealer})
-      .then(res=>{
+  const GetUserCartList = async () => {
+    UserCartService.CartList({ phone: Phone })
+      .then((res) => {
+        setCartItems(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const GetUserWishList = async () => {
+    Userservice.userWishlist({ phone: Phone })
+      .then((res) => {
+        setUserWishlistItems(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const GetDealerWishList = async () => {
+    DealerWishlist.ListCollection({ email: Dealer })
+      .then((res) => {
         console.log(res);
         setDealerWishlistItems(res.data);
-      }).catch(err=>{
-        console.log(err);
       })
-  }
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   useEffect(() => {
     productData();
     Relatedproduct();
-    GetUserCartList()
-    GetCarList()
-    GetUserWishList()
-    GetDealerWishList()
+    GetUserCartList();
+    GetCarList();
+    GetUserWishList();
+    GetDealerWishList();
   }, []);
 
   const handleAddToCart = (product) => {
-    
     const CartData = {
-      phone:Phone,
-      design_name:product.name,
-      design_id:product.id,
-      quantity:productQuantity
-    }
+      phone: Phone,
+      design_name: product.name,
+      design_id: product.id,
+      quantity: productQuantity,
+    };
 
-    UserCartService.AddtoCart(CartData).then(res=>{
-      if (res.status === true) {
-        toast.success(res.message)
-        GetUserCartList()
-      }
-    })
-    .catch(err=>{
-      console.log(err);
-    })
-  };
-
-  const handleAddToDealerCart = (product) => {
-      
-      const CartData = {
-        email:Dealer,
-        quantity:productQuantity,
-        design_id:product.id,
-        design_name:product.name
-      }
-  
-      DealeCartService.AddtoCart(CartData).then(res=>{
-        console.log(res);
-        if (res.status === true) {
-          toast.success(res.message)
-          GetCarList()
-        }
-
-      }).catch(err=>{
-        console.log(err);
-      })
-  };
-
-  const addToUserWishList = async (product) =>{
-
-    Userservice.addtoWishlist({phone:localStorage.getItem("phone"),design_id:product.id})
-      .then(res=>{
-        if (res.success === true) {
-          setUserWishlist(true)
-          toast.success(res.message);
-          GetUserWishList()
-
-        } else {
-          toast.error(res.message);
-        }
-      }).catch(err=>{
-        console.log(err);
-      })
-  }
-
-  const addToDealerWishList = async (product) =>{
-    DealerWishlist.addtoWishlist({ email: localStorage.getItem('email'), design_id: product.id })
+    UserCartService.AddtoCart(CartData)
       .then((res) => {
-        if (res.success === true) {
-          setDealerWishlist(true)
-          toast.success(res.message);
-          GetDealerWishList()
-
-        } else {
-          toast.error(res.message);
+        if (res.status === true) {
+          // toast.success(res.message);
+          GetUserCartList();
         }
       })
       .catch((err) => {
         console.log(err);
       });
-  }
+  };
+
+  const handleAddToDealerCart = (product) => {
+    const CartData = {
+      email: Dealer,
+      quantity: productQuantity,
+      design_id: product.id,
+      design_name: product.name,
+    };
+
+    DealeCartService.AddtoCart(CartData)
+      .then((res) => {
+        console.log(res);
+        if (res.status === true) {
+          // toast.success(res.message);
+          GetCarList();
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const addToUserWishList = async (product) => {
+    Userservice.addtoWishlist({
+      phone: localStorage.getItem("phone"),
+      design_id: product.id,
+    })
+      .then((res) => {
+        if (res.success === true) {
+          setUserWishlist(true);
+          // toast.success(res.message);
+          GetUserWishList();
+        } else {
+          // toast.error(res.message);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const addToDealerWishList = async (product) => {
+    DealerWishlist.addtoWishlist({
+      email: localStorage.getItem("email"),
+      design_id: product.id,
+    })
+      .then((res) => {
+        if (res.success === true) {
+          setDealerWishlist(true);
+          // toast.success(res.message);
+          GetDealerWishList();
+        } else {
+          // toast.error(res.message);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const openLightbox = (index) => {
     setCurrentImageIndex(index);
@@ -251,10 +264,16 @@ const ShopDetails = () => {
                                 alt={`Product Image ${currentImageIndex}`}
                               />
                               <div className="lightbox-navigation">
-                                <button className="btn" onClick={() => navigateLightbox(-1)}>
+                                <button
+                                  className="btn"
+                                  onClick={() => navigateLightbox(-1)}
+                                >
                                   <RxChevronLeft />
                                 </button>
-                                <button className="btn" onClick={() => navigateLightbox(1)}>
+                                <button
+                                  className="btn"
+                                  onClick={() => navigateLightbox(1)}
+                                >
                                   <RxChevronRight />
                                 </button>
                               </div>
@@ -269,7 +288,9 @@ const ShopDetails = () => {
                   <div>
                     <h3>{product?.name}</h3>
                     <p>{product?.category}</p>
-                    <p><strong>₹{product?.price.toLocaleString("en-US")}</strong></p>
+                    <p>
+                      <strong>₹{product?.price.toLocaleString("en-US")}</strong>
+                    </p>
                     <h5>
                       Lorem ipsum dolor sit amet, consectetur adipisicing elit,
                       sed do eiusmod tempor incididunt ut labore et dolore magna
@@ -280,21 +301,46 @@ const ShopDetails = () => {
                     <div className="buttons pt-4 d-flex">
                       <div className="quantity">
                         {productQuantity === 1 ? (
-                          <button className="btn" onClick={() =>setProductQuantity(productQuantity - 1)} disabled>
+                          <button
+                            className="btn"
+                            onClick={() =>
+                              setProductQuantity(productQuantity - 1)
+                            }
+                            disabled={productQuantity === 1}
+                          >
                             -
                           </button>
                         ) : (
-                          <button className="btn" onClick={() => setProductQuantity(productQuantity - 1)} >
+                          <button
+                            className="btn"
+                            onClick={() =>
+                              setProductQuantity(productQuantity - 1)
+                            }
+                            disabled={productQuantity === 1}
+                          >
                             -
                           </button>
                         )}
 
-                        <input className="form-control" type="text" name="productQuantity" onChange={(e)=>setProductQuantity(e.target)} value={productQuantity} min={1} disabled />
-                        <button className="btn" onClick={() =>setProductQuantity(productQuantity + 1)} disabled>
+                        <input
+                          className="form-control"
+                          type="text"
+                          name="productQuantity"
+                          onChange={(e) => setProductQuantity(e.target)}
+                          value={productQuantity}
+                          min={1}
+                          disabled
+                        />
+                        <button
+                          className="btn"
+                          onClick={() =>
+                            setProductQuantity(productQuantity + 1)
+                          }
+                        >
                           +
                         </button>
                       </div>
-                      <div className="add_cart align-items-center d-flex">
+                      {/* <div className="add_cart align-items-center d-flex">
                         {Dealer ? (
                           <>
                             {DealercartItems.find((item) => item?.design_name === product?.name) ? (
@@ -304,15 +350,15 @@ const ShopDetails = () => {
                             ) : (
                               <>
                               <div>
-                                <button className="btn btn-outline-dark" onClick={() => handleAddToDealerCart(product)} disabled>
+                                <button className="btn btn-outline-dark" onClick={() => handleAddToDealerCart(product)}>
                                   Add To Cart
                                 </button>
                               </div>
-                              {/* <div>
+                              <div>
                                   <button className="btn btn-outline-dark" onClick={() => addToDealerWishList(product)}>
                                   {DealerWishlistItems?.find((item)=>item?.id === product?.id)?('Wishlisted'):('Wishlist')} 
                                   </button>
-                              </div> */}
+                              </div>
                               </> 
                             )}
                           </>
@@ -327,18 +373,62 @@ const ShopDetails = () => {
                             ) : (
                               <>
                                 <div>
-                                    <button className="btn btn-outline-dark" onClick={() => handleAddToCart(product)} disabled>
+                                    <button className="btn btn-outline-dark" onClick={() => handleAddToCart(product)}>
                                       Add To Cart
                                     </button>
                                 </div>
-                                {/* <div>
+                                <div>
                                     <button className="btn btn-outline-dark align-items-center" onClick={()=>addToUserWishList(product)}>
                                       {UserWishlistItems?.find((item)=>item?.id === product?.id)?('Wishlisted'):('Wishlist')} 
                                     </button>
-                                </div> */}
+                                </div>
                               </>
                             )}
                           </>
+                        )}
+                      </div> */}
+                      <div className="add_cart align-items-center d-flex">
+                        {Phone ? (
+                          <>
+                            {cartItems &&
+                            cartItems?.find(
+                              (item) => item.design_name === product?.name
+                            ) ? (
+                              <>
+                                <Link
+                                  className="btn btn-outline-dark"
+                                  to="/cart"
+                                >
+                                  Go To Cart
+                                </Link>
+                              </>
+                            ) : (
+                              <>
+                                <div>
+                                  <button
+                                    className="btn btn-outline-dark"
+                                    onClick={() => handleAddToCart(product)}
+                                  >
+                                    Add To Cart
+                                  </button>
+                                </div>
+                                <div>
+                                  <button
+                                    className="btn btn-outline-dark align-items-center"
+                                    onClick={() => addToUserWishList(product)}
+                                  >
+                                    {UserWishlistItems?.find(
+                                      (item) => item?.id === product?.id
+                                    )
+                                      ? "Wishlisted"
+                                      : "Wishlist"}
+                                  </button>
+                                </div>
+                              </>
+                            )}
+                          </>
+                        ) : (
+                          <></>
                         )}
                       </div>
                     </div>

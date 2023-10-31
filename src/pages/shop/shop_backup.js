@@ -136,7 +136,7 @@ const Shop = () => {
       const updatedCart = cartItems.map((item) =>
         item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
       );
-      toast.error("already added");
+      // toast.error("already added");
 
       setCartItems(updatedCart);
       sessionStorage.setItem("cartItems", JSON.stringify(updatedCart));
@@ -330,7 +330,7 @@ const Shop = () => {
                                 <div className="product_details">
                                   <h4>{data.name}</h4>
                                   <p>Minola Golden Necklace</p>
-                                  <h5>₹{data.price.toLocaleString("en-US")}</h5>
+                                  <h5>₹{data.price}</h5>
                                 </div>
                               </Link>
                             </div>

@@ -290,7 +290,7 @@ const Home = () => {
                         <div className="product_details">
                           <h4>{data.name}</h4>
                           <p>Minola Golden Earrings</p>
-                          <h5>₹{data.price.toLocaleString("en-US")}</h5>
+                          <h5>₹{data.price}</h5>
                         </div>
                       </div>
                     </Link>
@@ -371,7 +371,7 @@ const Home = () => {
                         <div className="product_details">
                           <h4>{data.name}</h4>
                           <p>Venus Diamond Earrings</p>
-                          <h5>₹{data.price.toLocaleString("en-US")}</h5>
+                          <h5>₹{data.price}</h5>
                         </div>
                       </div>
                     </Link>

@@ -48,12 +48,12 @@ const Login = () => {
         .then((confirmationResult) => {
           window.confirmationResult = confirmationResult;
           setShow(true)
-          toast.success("OTP has been sent");
+          // toast.success("OTP has been sent");
           console.log("OTP has been sent")
         })
         .catch((err) => {
           console.log("SMS not sent", err)
-          toast.error("Something went wrong");
+          // toast.error("Something went wrong");
           setTimeout(() => {
             window.location.reload(true);
           }, 2000);
@@ -74,12 +74,12 @@ const Login = () => {
         if (result) {
           localStorage.setItem("phone",phoneNumber)
           navigate('/')
-          toast.success("Login Successfully...");
+          // toast.success("Login Successfully...");
         }
       })
       .catch((error) => {
         console.error("Verification failed:", error);
-        toast.error("OTP Wrong!!");
+        // toast.error("OTP Wrong!!");
         setOtp('')
       })
   };

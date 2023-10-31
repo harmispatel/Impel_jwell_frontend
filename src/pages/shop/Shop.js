@@ -1,5 +1,11 @@
-import React , {useEffect, useState} from "react";
-import {   BsHeart,  BsSearch, BsStar, BsStarFill } from "react-icons/bs";
+import React, { useEffect, useState } from "react";
+import {
+  BsHandbag,
+  BsHeart,
+  BsSearch,
+  BsStar,
+  BsStarFill,
+} from "react-icons/bs";
 import Select from "react-select";
 import SidebarFilter from "../../components/common/SidebarFilter";
 import ReactLoading from "react-loading";
@@ -8,12 +14,12 @@ import ShopServices from "../../services/Shop";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import DealerWishlist from "../../services/Dealer/Collection"
-import UserWishlist from "../../services/Auth"
-import Userservice from "../../services/Cart"
+import DealerWishlist from "../../services/Dealer/Collection";
+import UserWishlist from "../../services/Auth";
+import Userservice from "../../services/Cart";
 import { FcLike } from "react-icons/fc";
 
-const Shop = ({product}) => {
+const Shop = ({ product }) => {
   const [searchInput, setSearchInput] = useState([]);
   const [selectedOption, setSelectedOption] = useState(null);
   const [category, setCategory] = useState([]);
@@ -27,11 +33,11 @@ const Shop = ({product}) => {
   const [loadMore, setLoadMore] = useState(9);
   const [PriceRange, setPriceRange] = useState({
     minprice: null,
-    maxprice: null
+    maxprice: null,
   });
-  const [checkList,setCheckList] = useState([])
-  const [collection_status,setCollectionStatus] = useState(false)
-  const [userWishlist,setUserWishlist] = useState(false)
+  const [checkList, setCheckList] = useState([]);
+  const [collection_status, setCollectionStatus] = useState(false);
+  const [userWishlist, setUserWishlist] = useState(false);
   const [UsercartItems, setUserCartItems] = useState([]);
   const [DealercartItems, setDealerCartItems] = useState([]);
   const [cartItems, setCartItems] = useState(
@@ -114,7 +120,6 @@ const Shop = ({product}) => {
 
     ShopServices.allfilterdesigns(userData)
       .then((res) => {
-        
         setIsLoading(false);
         setFilterData(res.data);
       })
@@ -124,89 +129,91 @@ const Shop = ({product}) => {
       });
   };
 
-  const collectionCheck = () =>{
-    DealerWishlist.ListCollection({email:DealerEmail})
-    .then(res=>{
-      setCheckList(res.data)
-    }).catch(err=>{
-      console.log(err);
-    })
-  }
+  const collectionCheck = () => {
+    DealerWishlist.ListCollection({ email: DealerEmail })
+      .then((res) => {
+        setCheckList(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
-  const GetCarList = async () =>{
-    UserWishlist.userWishlist({phone:phone})
-    .then(res=>{
-      setUserCartItems(res.data)
-    }).catch(err=>{
-      console.log(err);
-    })
-  }
+  const GetCarList = async () => {
+    UserWishlist.userWishlist({ phone: phone })
+      .then((res) => {
+        setUserCartItems(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
-  const DealerList = async () =>{
-    DealerWishlist.ListCollection({email:DealerEmail})
-    .then(res=>{
-      setDealerCartItems(res.data)
-    }).catch(err=>{
-      console.log(err);
-    })
-  }
+  const DealerList = async () => {
+    DealerWishlist.ListCollection({ email: DealerEmail })
+      .then((res) => {
+        setDealerCartItems(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   useEffect(() => {
     AllData();
-    GetCarList()
-    DealerList()
-    collectionCheck()
+    GetCarList();
+    DealerList();
+    collectionCheck();
   }, []);
 
   const FetchMoreData = async () => {
     setTimeout(() => {
       setDisplayedItems((prevItems) => [
         ...prevItems,
-        ...allData.slice(loadMore, loadMore + 9)
+        ...allData.slice(loadMore, loadMore + 9),
       ]);
       setLoadMore(loadMore + 9);
     }, 200);
   };
 
-  // const handleAddToCart = (product) => {
-  //   const existingItem = cartItems.find((item) => item.id === product.id);
+  const handleAddToCart = (product) => {
+    const existingItem = cartItems.find((item) => item.id === product.id);
 
-  //   if (existingItem) {
-  //     const updatedCart = cartItems.map((item) =>
-  //       item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
-  //     );
-  //     toast.error("already added");
+    if (existingItem) {
+      const updatedCart = cartItems.map((item) =>
+        item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+      );
+      // toast.error("already added");
 
-  //     setCartItems(updatedCart);
-  //     sessionStorage.setItem("cartItems", JSON.stringify(updatedCart));
-  //   } else {
-  //     const updatedCart = [...cartItems, { ...product, quantity: 1 }];
-  //     setCartItems(updatedCart);
-  //     sessionStorage.setItem("cartItems", JSON.stringify(updatedCart));
-  //   }
-  // };
+      setCartItems(updatedCart);
+      sessionStorage.setItem("cartItems", JSON.stringify(updatedCart));
+    } else {
+      const updatedCart = [...cartItems, { ...product, quantity: 1 }];
+      setCartItems(updatedCart);
+      sessionStorage.setItem("cartItems", JSON.stringify(updatedCart));
+    }
+  };
 
   // const isProductInWishList = (product) => {
   //   return checkList.some((item) => item.id === product.id);
   // };
 
   const addToWishList = async (product) => {
-    const productId = product.id; 
-    
+    const productId = product.id;
+
     DealerWishlist.addtoWishlist({ email: DealerEmail, design_id: productId })
       .then((res) => {
         console.log(res);
         if (res.success === true) {
-          setCollectionStatus(true)
-          toast.success(res.message);
+          setCollectionStatus(true);
+          // toast.success(res.message);
 
-          AllData()
-          GetCarList()
-          FilterData()
-          DealerList()
-
+          AllData();
+          GetCarList();
+          FilterData();
+          DealerList();
         } else {
-          toast.error(res.message);
+          // toast.error(res.message);
         }
       })
       .catch((err) => {
@@ -214,38 +221,41 @@ const Shop = ({product}) => {
       });
   };
 
-  const addToUserWishList = async (product) =>{
-
-    UserWishlist.addtoWishlist({phone:localStorage.getItem("phone"),design_id:product.id})
-      .then(res=>{
+  const addToUserWishList = async (product) => {
+    UserWishlist.addtoWishlist({
+      phone: localStorage.getItem("phone"),
+      design_id: product.id,
+    })
+      .then((res) => {
         if (res.success === true) {
-          setUserWishlist(true)
-          toast.success(res.message);
+          setUserWishlist(true);
+          // toast.success(res.message);
 
-          AllData()
-          DealerList()
-          GetCarList()
-          FilterData()
+          AllData();
+          DealerList();
+          GetCarList();
+          FilterData();
         } else {
-          toast.error(res.message);
+          // toast.error(res.message);
         }
-      }).catch(err=>{
-        console.log(err);
       })
-  }
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
-  useEffect(()=>{
-    GetCarList()
-    DealerList()
-  },[])
+  useEffect(() => {
+    GetCarList();
+    DealerList();
+  }, []);
 
-  return ( 
+  return (
     <section className="shop">
       <div className="container">
         <div className="shopping_data">
           <div className="filters">
             <div className="row">
-              <div className="col-md-9">
+              <div className="col-md-12">
                 <div className="search_bar">
                   <input
                     className="form-control"
@@ -253,12 +263,12 @@ const Shop = ({product}) => {
                     onChange={(e) => setSearchInput(e.target.value)}
                     type="search"
                   />
-                  {searchInput.length === 0 &&
-                        <BsSearch  className="search-icon" />
-                  }
+                  {searchInput.length === 0 && (
+                    <BsSearch className="search-icon" />
+                  )}
                 </div>
               </div>
-              <div className="col-md-3">
+              {/* <div className="col-md-3">
                 <Select
                   value={selectedOption}
                   onChange={handleSelectChange}
@@ -266,6 +276,59 @@ const Shop = ({product}) => {
                   options={options}
                   placeholder="Sort By"
                 />
+              </div> */}
+              <div className="col-md-12">
+                <div className="row">
+                  <div className="col-md-3">
+                    <div className="csm_sort_btn">
+                      <input
+                        type="radio"
+                        id="a21"
+                        className="d-none"
+                        name="attr_option[0]"
+                      />
+                      <label for="a21" className="">
+                        New Added
+                      </label>
+                    </div>
+                  </div>
+                  <div className="col-md-3">
+                    <div class="csm_sort_btn">
+                      <input
+                        type="radio"
+                        id="low_to_high"
+                        name="attr_option[0]"
+                        class="d-none"
+                        value="2"
+                      />
+                      <label for="low_to_high">Price : low to high</label>
+                    </div>
+                  </div>
+                  <div className="col-md-3">
+                    <div class="csm_sort_btn">
+                      <input
+                        type="radio"
+                        id="high_to_low"
+                        name="attr_option[0]"
+                        class="d-none"
+                        value="2"
+                      />
+                      <label for="high_to_low">Price : high to low</label>
+                    </div>
+                  </div>
+                  <div className="col-md-3">
+                    <div class="csm_sort_btn">
+                      <input
+                        type="radio"
+                        id="top_seller"
+                        name="attr_option[0]"
+                        class="d-none"
+                        value="2"
+                      />
+                      <label for="top_seller">Top Seller</label>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -288,7 +351,7 @@ const Shop = ({product}) => {
               </div>
             </div>
             <div className="col-md-9">
-            {isLoading ? (
+              {isLoading ? (
                 <div className="h-100 d-flex justify-content-center">
                   <ReactLoading
                     type={"spinningBubbles"}
@@ -299,78 +362,139 @@ const Shop = ({product}) => {
                     className="loader"
                   />
                 </div>
-              ) : ( 
+              ) : (
                 <>
-                  {category.length === 0 && gender.length === 0  && 
-                    searchInput.length === 0 && PriceRange.minprice === null && selectedOption === null ? (
-                      <InfiniteScroll
-                        dataLength={displayedItems.length}
-                        next={FetchMoreData}
-                        hasMore={true}
-                        style={{ overflow: "hidden" }}
-                        loader={pageLoading ? <h4>Loading...</h4> : null}
-                      >
-                        <div className="row">
-                          {displayedItems.map((product) =>{
-                            return (
-                              <div key={product.id} className="col-md-4">
-                                <Link to={`/shopdetails/${product.id}`} className="product_data">
-                                  {product.image ? (
-                                    <img src={product.image} alt="" className="w-100" />
-                                  ) : (
-                                    <img src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg" alt="" className="w-100" />
-                                  )}
+                  {category.length === 0 &&
+                  gender.length === 0 &&
+                  searchInput.length === 0 &&
+                  PriceRange.minprice === null &&
+                  selectedOption === null ? (
+                    <InfiniteScroll
+                      dataLength={displayedItems.length}
+                      next={FetchMoreData}
+                      hasMore={true}
+                      style={{ overflow: "hidden" }}
+                      loader={pageLoading ? <h4>Loading...</h4> : null}
+                    >
+                      <div className="row">
+                        {displayedItems.map((product) => {
+                          return (
+                            <div key={product.id} className="col-md-4">
+                              <Link
+                                to={`/shopdetails/${product.id}`}
+                                className="product_data"
+                              >
+                                {product.image ? (
+                                  <img
+                                    src={product.image}
+                                    alt=""
+                                    className="w-100"
+                                  />
+                                ) : (
+                                  <img
+                                    src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg"
+                                    alt=""
+                                    className="w-100"
+                                  />
+                                )}
 
-                                  <div className="edit">
-                                    {/* <div>
-                                      <Link to="#" onClick={() => handleAddToCart(product)}>
+                                <div className="edit">
+                                  <div>
+                                    {phone ? (
+                                      <Link
+                                        to="#"
+                                        onClick={() =>
+                                          handleAddToCart(product.id)
+                                        }
+                                      >
                                         <BsHandbag />
                                       </Link>
-                                    </div> */}
-                                    <div>
-                                      {userType == 1 ? (
-                                        <>
-                                        {DealerEmail ? (
-                                          <Link to="#" onClick={()=>addToWishList(product)}>
-                                            {DealercartItems.find((item)=>item.id === product.id) ? <BsStarFill /> : <BsStar />}
-                                          </Link>
-                                        ):(
-                                          <Link to="/Dealer_login"> <BsStar /></Link>
-                                        )} 
-                                        </>
-                                      ) : (
-                                        <>
-                                         {phone ? (
-                                          <Link to="#" onClick={()=>addToUserWishList(product)}> 
-                                            {UsercartItems?.find((item)=>item.id === product.id) ? (<FcLike />) : (<BsHeart />)}
-                                          </Link>
-                                         ) : (
-                                          <Link to="/login"> <BsHeart /></Link>
-                                         )}
-                                        </>
-                                      )}
-                                    </div>
+                                    ) : (
+                                      ""
+                                    )}
                                   </div>
-                                  <div className="product_details">
+                                  <div>
+                                    {userType == 1 ? (
+                                      <>
+                                        {DealerEmail ? (
+                                          <Link
+                                            to="#"
+                                            onClick={() =>
+                                              addToWishList(product)
+                                            }
+                                          >
+                                            {DealercartItems.find(
+                                              (item) => item.id === product.id
+                                            ) ? (
+                                              <BsStarFill />
+                                            ) : (
+                                              <BsStar />
+                                            )}
+                                          </Link>
+                                        ) : (
+                                          <Link to="/Dealer_login">
+                                            {" "}
+                                            <BsStar />
+                                          </Link>
+                                        )}
+                                      </>
+                                    ) : (
+                                      <>
+                                        {phone ? (
+                                          <Link
+                                            to="#"
+                                            onClick={() =>
+                                              addToUserWishList(product)
+                                            }
+                                          >
+                                            {UsercartItems?.find(
+                                              (item) => item.id === product.id
+                                            ) ? (
+                                              <FcLike />
+                                            ) : (
+                                              <BsHeart />
+                                            )}
+                                          </Link>
+                                        ) : (
+                                          <Link to="/login">
+                                            {" "}
+                                            <BsHeart />
+                                          </Link>
+                                        )}
+                                      </>
+                                    )}
+                                  </div>
+                                </div>
+
+                                <div className="product_details">
                                   <h4>{product.name}</h4>
-                                  <p>Minola Golden Necklace</p>
-                                  <h5>₹{product.price.toLocaleString("en-US")}</h5>
-                                </div>  
-                                </Link>
-                              </div>
-                            )
-                          })}
-                        </div>
-                      </InfiniteScroll>
+                                  <p>{product.category_name}</p>
+                                  <h5>
+                                    ₹{product.price.toLocaleString("en-US")}
+                                  </h5>
+                                </div>
+                              </Link>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </InfiniteScroll>
                   ) : (
                     <>
                       <div className="row">
                         {filterData.map((data) => {
                           return (
                             <div className="col-md-4">
-                              <Link to={`/shopdetails/${data.id}`} target={"_blank"} className="product_data">
+                              <Link
+                                to={`/shopdetails/${data.id}`}
+                                className="product_data"
+                              >
                                 {data.image ? (
-                                  <img src={data.image} alt="" className="w-100"/>
+                                  <img
+                                    src={data.image}
+                                    alt=""
+                                    className="w-100"
+                                  />
                                 ) : (
                                   <img
                                     src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930"
@@ -379,39 +503,74 @@ const Shop = ({product}) => {
                                   />
                                 )}
                                 <div className="edit">
-                                  {/* <div>
-                                    <Link to="#" onClick={() => handleAddToCart(data)}>
-                                      <BsHandbag />
-                                    </Link>
-                                  </div> */}
                                   <div>
-                                  {userType == 1 ? (
-                                        <>
+                                    {phone ? (
+                                      <Link
+                                        to="#"
+                                        onClick={() => handleAddToCart(data)}
+                                      >
+                                        <BsHandbag />
+                                      </Link>
+                                    ) : (
+                                      ""
+                                    )}
+                                  </div>
+                                  <div>
+                                    {userType == 1 ? (
+                                      <>
                                         {DealerEmail ? (
-                                          <Link to="#" onClick={()=>addToWishList(product)}>
-                                            {DealercartItems.find((item)=>item?.id === product?.id) ? <BsStarFill /> : <BsStar />}
+                                          <Link
+                                            to="#"
+                                            onClick={() =>
+                                              addToWishList(product)
+                                            }
+                                          >
+                                            {DealercartItems.find(
+                                              (item) => item?.id === product?.id
+                                            ) ? (
+                                              <BsStarFill />
+                                            ) : (
+                                              <BsStar />
+                                            )}
                                           </Link>
-                                        ):(
-                                          <Link to="/Dealer_login"> <BsStar /></Link>
-                                        )} 
-                                        </>
-                                      ) : (
-                                        <>
-                                        {phone ? (
-                                          <Link to="#" onClick={()=>addToUserWishList(data)}> 
-                                            {UsercartItems?.find((item)=>item.id === data.id) ? (<FcLike />) : (<BsHeart />)}
+                                        ) : (
+                                          <Link to="/Dealer_login">
+                                            {" "}
+                                            <BsStar />
                                           </Link>
-                                          ) : (
-                                          <Link to="/login"> <BsHeart /></Link>
                                         )}
-                                        </>
-                                      )}
+                                      </>
+                                    ) : (
+                                      <>
+                                        {phone ? (
+                                          <Link
+                                            to="#"
+                                            onClick={() =>
+                                              addToUserWishList(data)
+                                            }
+                                          >
+                                            {UsercartItems?.find(
+                                              (item) => item.id === data.id
+                                            ) ? (
+                                              <FcLike />
+                                            ) : (
+                                              <BsHeart />
+                                            )}
+                                          </Link>
+                                        ) : (
+                                          <Link to="/login">
+                                            {" "}
+                                            <BsHeart />
+                                          </Link>
+                                        )}
+                                      </>
+                                    )}
                                   </div>
                                 </div>
                                 <div className="product_details">
                                   <h4>{data.name}</h4>
-                                  <p>Minola Golden Necklace</p>
-                                  <h5>₹{data.price.toLocaleString("en-US")}</h5>
+                                  <p>{data.category_name}</p>
+                                  <h5>₹{data.price}</h5>
                                 </div>
                               </Link>
                             </div>

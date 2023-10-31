@@ -70,26 +70,27 @@ const CategoriesItems = () => {
                     <ul className="nav nav-tabs">
                       {data.child_categories.map((item, index) => {
                         return (
-                          <li className="nav-item" key={index}>
-                            <button
-                              className={
-                                selectedCategory === item.id
-                                  ? "nav-link active"
-                                  : "nav-link"
-                              }
-                              id="novelty-tab"
-                              data-bs-toggle="tab"
-                              data-bs-target="#novelty"
-                              type="button"
-                              onClick={() => handleDifferentFunction(item.id)}
-                              defaultValue={selectedCategory}
-                              role="tab"
-                              aria-controls="novelty"
-                              aria-selected="true"
-                            >
-                              {item.name}
-                            </button>
-                          </li>
+                          <></>
+                          // <li className="nav-item" key={index}>
+                          //   <button
+                          //     className={
+                          //       selectedCategory === item.id
+                          //         ? "nav-link active"
+                          //         : "nav-link"
+                          //     }
+                          //     id="novelty-tab"
+                          //     data-bs-toggle="tab"
+                          //     data-bs-target="#novelty"
+                          //     type="button"
+                          //     onClick={() => handleDifferentFunction(item.id)}
+                          //     defaultValue={selectedCategory}
+                          //     role="tab"
+                          //     aria-controls="novelty"
+                          //     aria-selected="true"
+                          //   >
+                          //     {item.name}
+                          //   </button>
+                          // </li>
                         );
                       })}
                     </ul>

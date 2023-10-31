@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import { BsHeart } from "react-icons/bs";
 import { Link } from "react-router-dom";
-import UserService from "../../services/Cart"
+import UserService from "../../services/Cart";
 import { useEffect } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 
 const Cart = () => {
-  const Phone = localStorage.getItem('phone')
+  const Phone = localStorage.getItem("phone");
   const [Items, setItems] = useState([]);
   const [productQuantity, setProductQuantity] = useState();
-  
+
   const UserCartItems = () => {
     UserService.CartList({ phone: Phone })
       .then((res) => {
@@ -20,23 +20,30 @@ const Cart = () => {
         console.log(err);
       });
   };
+  const TotalPrice = () => {
+    let totalPrice = 0;
+    Items.forEach((item) => {
+      totalPrice += item.price * item.quantity;
+    });
+    return totalPrice;
+  };
 
   const Remove = (id) => {
-    UserService.RemovetoCart({cart_id : id})
-      .then(res=>{
+    UserService.RemovetoCart({ cart_id: id })
+      .then((res) => {
         if (res.status === true) {
-          toast.success(res.message);
+          // toast.success(res.message);
           UserCartItems();
         }
       })
-      .catch(err=>{
+      .catch((err) => {
         console.log(err);
-      })
+      });
   };
 
-  useEffect(()=>{
-    UserCartItems()
-  },[])
+  useEffect(() => {
+    UserCartItems();
+  }, []);
 
   return (
     <section className="cart">
@@ -47,42 +54,95 @@ const Cart = () => {
               <div className="m-4">
                 <h4 className="card-title mb-4">Your shopping cart</h4>
                 <div className="row gy-3 mb-4">
-                  {Items?.map((data,index) => {
-                    const dataPrice = data.price.toLocaleString("en-US")
-                    const quantity = data.quantity
+                  {Items?.map((data, index) => {
+                    // const dataPrice = data.price.toLocaleString("en-US");
+                    const quantity = data.quantity;
                     return (
                       <>
                         <div className="col-md-3">
                           <div className="d-flex">
-                            <img src={data.image} className="border rounded me-3 w-100"/>
+                            <img
+                              src={data.image}
+                              className="border rounded me-3 w-100"
+                            />
                           </div>
                         </div>
                         <div className="col-md-4">
                           <div className="">
-                            <Link to="#" className="nav-link">{data.design_name}</Link>
-                            <p className="text-muted">{data.category} - {data.metal}</p>
+                            <Link to="#" className="nav-link">
+                              {data.design_name}
+                            </Link>
+                            <p className="text-muted">
+                              {data.category} - {data.metal}
+                            </p>
                           </div>
                           <div className="">
-                            <text className="h6">₹{dataPrice}</text> <br />
+                            <text className="h6">
+                              ₹{data.price.toLocaleString("en-US")}
+                            </text>{" "}
+                            <br />
                           </div>
                         </div>
                         <div className="col-md-2">
                           <div className="quantity">
-                            <button className="btn" disabled={data.quantity === 0} >
+                            <button
+                              className="btn"
+                              onClick={() => {
+                                const updatedItems = Items.map((item) => {
+                                  if (
+                                    item.id === data.id &&
+                                    item.quantity > 1
+                                  ) {
+                                    return {
+                                      ...item,
+                                      quantity: item.quantity - 1,
+                                    };
+                                  }
+                                  return item;
+                                });
+                                setItems(updatedItems);
+                              }}
+                            >
                               -
                             </button>
-                            <input className="form-control" type="text" value={data.quantity} min={1}/>
-                            <button className="btn" disabled>
+
+                            <input
+                              className="form-control"
+                              type="text"
+                              value={data.quantity}
+                              min={1}
+                              max={5}
+                            />
+                            <button
+                              className="btn"
+                              onClick={() => {
+                                const updatedItems = Items.map((item) => {
+                                  if (item.id === data.id) {
+                                    return {
+                                      ...item,
+                                      quantity: item.quantity + 1,
+                                    };
+                                  }
+                                  return item;
+                                });
+                                setItems(updatedItems);
+                              }}
+                            >
                               +
                             </button>
                           </div>
                         </div>
+
                         <div className="col-md-3">
                           <div className="float-md-end">
                             {/* <Link to="#!" className="btn btn-light border px-2 icon-hover-primary me-2">
                               <BsHeart />
                             </Link> */}
-                            <Link to="#" className="btn btn-light border text-danger icon-hover-danger" onClick={() => Remove(data.id)}>
+                            <Link
+                              to="#"
+                              className="btn btn-light border text-danger icon-hover-danger"
+                              onClick={() => Remove(data.id)}
+                            >
                               Remove
                             </Link>
                           </div>
@@ -117,25 +177,33 @@ const Cart = () => {
             <div className="card shadow-0 border">
               <div className="card-body">
                 <div className="d-flex justify-content-between">
-                  <p className="mb-2">Total price:{}</p>
-                  <p className="mb-2">₹</p>
+                  <p className="mb-2">Total price:</p>
+                  <p className="mb-2">{TotalPrice()}₹</p>
                 </div>
                 <div className="d-flex justify-content-between">
                   <p className="mb-2">Discount:</p>
                   <p className="mb-2 text-success">-₹60.00</p>
                 </div>
                 <div className="d-flex justify-content-between">
-                  <p className="mb-2">TAX:</p>
-                  <p className="mb-2">₹14.00</p>
+                  <p className="mb-2">TAX (18%) :</p>
+                  <p className="mb-2">
+                    ₹{((TotalPrice() / 100) * 18).toFixed(2)}
+                  </p>
                 </div>
                 <hr />
                 <div className="d-flex justify-content-between">
                   <p className="mb-2">Total price:</p>
-                  <p className="mb-2 fw-bold">₹</p>
+                  <p className="mb-2 fw-bold">
+                    {(TotalPrice() + TotalPrice() * 0.18).toFixed(2)}₹
+                  </p>
                 </div>
                 <div className="mt-3">
-                  <a href="#" className="btn btn-success w-100 shadow-0 mb-2">Make Purchase</a>
-                  <Link to="/shop" className="btn btn-light w-100 border mt-2">Back to shop</Link>
+                  <a href="#" className="btn btn-success w-100 shadow-0 mb-2">
+                    Make Purchase
+                  </a>
+                  <Link to="/shop" className="btn btn-light w-100 border mt-2">
+                    Back to shop
+                  </Link>
                 </div>
               </div>
             </div>

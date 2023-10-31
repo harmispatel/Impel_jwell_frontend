@@ -55,7 +55,7 @@ const Categories = () => {
                         <img src={data.image} className="w-100" />
                         <div className="product_details">
                           <h4>{data.name}</h4>
-                          <p>Minola Golden Earrings</p>
+                          <p>{data.category_name}</p>
                         </div>
                       </div>
                     </Link>

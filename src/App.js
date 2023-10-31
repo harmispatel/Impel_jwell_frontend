@@ -25,6 +25,7 @@ import DealerOrders from "./pages/Dealer/Orders";
 import { WishListProvider } from "./context/WishListContext";
 import DealerCart from "./pages/Dealer/Cart";
 import Cart from "./pages/user/Cart";
+import About from "./components/About";
 
 function App() {
 
@@ -34,6 +35,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
+            <Route path="about" element={<About />} />
             <Route path="shop" element={<Shop />} />
             <Route path="shopdetails/:id" element={<ShopDetails />} />
             <Route path="categories" element={<Categories />} />

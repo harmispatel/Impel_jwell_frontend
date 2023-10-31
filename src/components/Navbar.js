@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaUserAlt } from "react-icons/fa";
 import { BsHandbag, BsHeart } from "react-icons/bs";
@@ -6,13 +6,13 @@ import Logo from "../assets/images/logo.png";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import DealerService from "../services/Dealer/Cart";
-import UserService from "../services/Cart"
+import UserService from "../services/Cart";
 
 const Navbar = () => {
   const [colorChange, setColorchange] = useState(false);
   const [isLoggedOut, setIsLoggedOut] = useState(false);
-  const [dealerCartCounts, setDealerCartCounts] = useState()
-  const [userCartCounts, setUsererCartCounts] = useState()
+  const [dealerCartCounts, setDealerCartCounts] = useState();
+  const [userCartCounts, setUsererCartCounts] = useState();
   const location = useLocation();
   const currentRoute = location.pathname;
   const navigate = useNavigate();
@@ -32,7 +32,7 @@ const Navbar = () => {
 
   const CartCounts = JSON.parse(sessionStorage.getItem("cartItems"));
 
-  const DealerCart = () =>{
+  const DealerCart = () => {
     DealerService.CartList({ email: DealerEmail })
       .then((res) => {
         setDealerCartCounts(res.data);
@@ -40,7 +40,7 @@ const Navbar = () => {
       .catch((err) => {
         console.log(err);
       });
-  }
+  };
 
   const UserCartItems = () => {
     UserService.CartList({ phone: Phone })
@@ -52,11 +52,10 @@ const Navbar = () => {
       });
   };
 
-  useEffect(()=>{
-    DealerCart()
-    UserCartItems()
-  },[])
-
+  useEffect(() => {
+    DealerCart();
+    UserCartItems();
+  }, []);
 
   const handleLogout = () => {
     if (Dealer) {
@@ -66,18 +65,20 @@ const Navbar = () => {
       localStorage.removeItem("user_type");
       setIsLoggedOut(true);
       navigate("/Dealer_login");
-      toast.success("Logout Successfully...");
+      // toast.success("Logout Successfully...");
     } else {
       localStorage.removeItem("_grecaptcha");
       localStorage.removeItem("phone");
       setIsLoggedOut(true);
       navigate("/login");
-      toast.success("Logout Successfully...");
+      // toast.success("Logout Successfully...");
     }
   };
 
+  console.log("User Cart Counts", userCartCounts);
+
   return (
-    <header className={colorChange ? "header colorChange" : "header"}>
+    <header className={colorChange ? "header sticky_header" : "header"}>
       <nav className="navbar navbar-expand-lg bg-body-tertiary">
         <div className="header_inner">
           <button
@@ -94,22 +95,43 @@ const Navbar = () => {
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav mb-2 mb-lg-0">
               <li className="nav-item">
-                <Link className={currentRoute === "/" ? "nav-link active" : "nav-link"} aria-current="page" to="/">
+                <Link
+                  className={
+                    currentRoute === "/" ? "nav-link active" : "nav-link"
+                  }
+                  aria-current="page"
+                  to="/"
+                >
                   Home
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className={currentRoute === "/shop" ? "nav-link active" : "nav-link"} to="/shop">
+                <Link
+                  className={
+                    currentRoute === "/shop" ? "nav-link active" : "nav-link"
+                  }
+                  to="/shop"
+                >
                   Shop
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className={currentRoute === "#" ? "nav-link active" : "nav-link"} to="#">
+                <Link
+                  className={
+                    currentRoute === "/about" ? "nav-link active" : "nav-link"
+                  }
+                  to="/about"
+                >
                   About
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className={currentRoute === "/#" ? "nav-link active" : "nav-link"} to="#">
+                <Link
+                  className={
+                    currentRoute === "/#" ? "nav-link active" : "nav-link"
+                  }
+                  to="#"
+                >
                   Contact
                 </Link>
               </li>
@@ -128,17 +150,28 @@ const Navbar = () => {
                       Hello! Dealer
                     </button>
                   </li>
-                  
+
                   <li className="login_user">
                     <Link className="icon" to="#">
                       <FaUserAlt />
                     </Link>
-                    
-                    <div className="login_dropdown">
+
+                    <div className="login_dropdown dealer_dropdown">
                       <ul>
-                        <li><Link to="/dealer_profile">Profile</Link></li>
-                        {/* <li><Link to="/dealer_orders">My Orders</Link></li> */}
-                        <li><a href="#" onClick={handleLogout}>LogOut</a></li>
+                        <li>
+                          <Link to="/dealer_profile">Profile</Link>
+                        </li>
+                        <li>
+                          <Link to="/dealer_orders">My Orders</Link>
+                        </li>
+                        <li>
+                          <Link to="/dealer_wishlist">My Selections</Link>
+                        </li>
+                        <li>
+                          <a href="#" onClick={handleLogout}>
+                            LogOut
+                          </a>
+                        </li>
                       </ul>
                     </div>
                   </li>
@@ -160,42 +193,72 @@ const Navbar = () => {
 
                     <div className="login_dropdown">
                       <ul>
-                        <li><Link to="/profile">Profile</Link></li>
+                        <li>
+                          <Link to="/profile">Profile</Link>
+                        </li>
                         {/* <li><Link to="/orders">My Orders</Link></li> */}
-                        <li><a href="#" onClick={handleLogout}>LogOut</a></li>
+                        <li>
+                          <a href="#" onClick={handleLogout}>
+                            LogOut
+                          </a>
+                        </li>
                       </ul>
                     </div>
                   </li>
                 </ul>
               )}
 
-              {!(Dealer || Phone) &&
+              {!(Dealer || Phone) && (
                 <li className="login_user">
-                    <Link className="icon" to="/login">
-                      <FaUserAlt />
-                    </Link>
+                  <Link className="icon" to="/login">
+                    <FaUserAlt />
+                  </Link>
                 </li>
-               }
+              )}
 
-              <li>
-                <Link className="icon"  to={Dealer ? ("/dealer_wishlist"):("/wishlist")}>
+              {/* <li>
+                <Link
+                  className="icon"
+                  to={Dealer ? "/dealer_wishlist" : "/wishlist"}
+                >
                   <BsHeart />
                 </Link>
-              </li>
-               
-              {/* <li>
-                {Dealer ? (
-                  <Link className="icon cart_icon" to="/dealer_cart">
-                  <BsHandbag />
-                  {dealerCartCounts && <div className="cart_count">{dealerCartCounts?.length}</div>}
-                </Link>
-                ):(
-                  <Link className="icon cart_icon" to="/cart">
-                    <BsHandbag />
-                    {userCartCounts && <div className="cart_count">{userCartCounts?.length}</div>}
-                  </Link>
-                )}
               </li> */}
+
+              {Phone && (
+                <li>
+                  <Link className="icon" to="/wishlist">
+                    <BsHeart />
+                  </Link>
+                </li>
+              )}
+
+              {Phone && (
+                <Link className="icon cart_icon" to="/cart">
+                  <BsHandbag />
+                  {userCartCounts?.length > 0 && (
+                    <div className="cart_count">{userCartCounts?.length}</div>
+                  )}
+                </Link>
+              )}
+
+              {/* {(Dealer || Phone) && (
+                <li>
+                  {Dealer ? (
+                    // <Link className="icon cart_icon" to="/dealer_cart">
+                    //   <BsHandbag />
+                    //   {dealerCartCounts?.length > 0 && (
+                    //     <div className="cart_count">
+                    //       {dealerCartCounts?.length}
+                    //     </div>
+                    //   )}
+                    // </Link>
+                    <div></div>
+                  ) : (
+                   
+                  )}
+                </li>
+              )} */}
             </ul>
           </div>
         </div>

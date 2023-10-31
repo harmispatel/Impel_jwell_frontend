@@ -1,45 +1,47 @@
 import React, { useEffect, useState } from "react";
 import { useWishList } from "../../context/WishListContext";
 import noWishlist from "../../assets/images/wishlist.png";
-import DealerWishlist from "../../services/Dealer/Collection"
+import DealerWishlist from "../../services/Dealer/Collection";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Link } from "react-router-dom";
 
 const DealerWishList = () => {
-  const [checkList,setCheckList] = useState([])
+  const [checkList, setCheckList] = useState([]);
 
   const DealerEmail = localStorage.getItem("email");
 
-  const collectionCheck = () =>{
-    DealerWishlist.ListCollection({email:DealerEmail})
-    .then(res=>{
-      setCheckList(res.data)
-    }).catch(err=>{
-      console.log(err);
-    })
-  }
+  const collectionCheck = () => {
+    DealerWishlist.ListCollection({ email: DealerEmail })
+      .then((res) => {
+        setCheckList(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const removeFromWishList = (product) => {
-    DealerWishlist.removetoWishlist({email:DealerEmail,design_id:product})
+    DealerWishlist.removetoWishlist({ email: DealerEmail, design_id: product })
       .then((res) => {
         if (res.success === true) {
-          toast.success(res.message)
-          collectionCheck()
+          // toast.success(res.message)
+          collectionCheck();
         }
       })
       .catch((err) => {
         console.log(err);
       });
-  }
+  };
 
   useEffect(() => {
-    collectionCheck()
+    collectionCheck();
   }, []);
 
   return (
     <section className="wishlist">
       <div className="container">
-        <h2>My Wishlist</h2>
+        <h2>My Collections</h2>
         {checkList.length ? (
           <>
             <div className="product_washlist">
@@ -50,9 +52,13 @@ const DealerWishList = () => {
                       <img src={product.image} className="w-100" />
                     </div>
                     <div className="wishlist_info">
-                      <h3>Product Name</h3>
+                      <Link to={`/shopdetails/${product.id}`} className="product_data">
+                        <h3>{product.name}</h3>
+                      </Link>
+
                       <p>
-                        $399<span>$449</span>
+                        ${product.price}
+                        <span>$449</span>
                         <label>(50% OFF)</label>
                       </p>
                     </div>
@@ -73,7 +79,13 @@ const DealerWishList = () => {
         ) : (
           <div class="row justify-content-center">
             <div class="col-md-4 text-center">
-                <img src={noWishlist} alt="" class="text-center align-items-center" height="350px" width="350px" />      
+              <img
+                src={noWishlist}
+                alt=""
+                class="text-center align-items-center"
+                height="350px"
+                width="350px"
+              />
             </div>
           </div>
         )}

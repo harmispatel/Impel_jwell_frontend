@@ -28,7 +28,7 @@ const DealerCart = () => {
     DealerService.RemovetoCart({ cart_id: product })
       .then((res) => {
         if (res.status === true) {
-          toast.success(res.message);
+          // toast.success(res.message);
           DealerCartItems();
         }
       })
@@ -47,7 +47,7 @@ const DealerCart = () => {
       .then((res) => {
         console.log(res);
         if (res.status === true) {
-          toast.success(res.message);
+          // toast.success(res.message);
           navigate('/dealer_orders')
           setItems([]); 
         }
