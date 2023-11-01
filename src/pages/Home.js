@@ -1,6 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation,Pagination,Scrollbar,A11y,Autoplay } from "swiper/modules";
+import {
+  Navigation,
+  Pagination,
+  Scrollbar,
+  A11y,
+  Autoplay,
+} from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/autoplay";
@@ -10,12 +16,12 @@ import Kada from "../assets/images/kada.jpg";
 import Gold_Ring from "../assets/images/gold_ring.png";
 import homeService from "../services/Home";
 import { Link } from "react-router-dom";
-import banner from "../assets/images/banner.jpg"
-import category_img from "../assets/images/category.jpg"
-import introBanner from "../assets/video/intro.mp4"
+import banner from "../assets/images/banner.jpg";
+import category_img from "../assets/images/category.jpg";
+import introBanner from "../assets/video/intro.mp4";
+import gif from "../assets/images/intro.gif"
 
 const Home = () => {
-
   const [bannerSlider, SetBannerSlider] = useState([]);
   const [category, SetCategory] = useState([]);
   const [newAdd, SetNewAdd] = useState([]);
@@ -109,29 +115,32 @@ const Home = () => {
           </div>
         </div>
         <div className="banner_slide">
-          {/* <Swiper
+          <Swiper
             modules={[Pagination, Scrollbar, A11y, Autoplay]}
             spaceBetween={50}
             slidesPerView={1}
             loop={true}
             autoplay={{ delay: 3000 }}
           >
-            {bannerSlider.map((data,index) => {
+            {/* {bannerSlider.map((data,index) => {
               return (
                 <SwiperSlide key={index} >
                   <img src={data.image} alt="" />
                 </SwiperSlide>
               );
-            })}
-          </Swiper> */}
+            })} */}
+            <SwiperSlide>
+              <img src={gif} alt="" />
+            </SwiperSlide>
+          </Swiper>
 
-          <video  
+          {/* <video  
             playsInline
             loop
             muted
             src={introBanner} 
             ref={videoEl}
-            className="w-100" />
+            className="w-100" /> */}
         </div>
       </section>
 
@@ -173,9 +182,9 @@ const Home = () => {
               loop={true}
               autoplay={{ delay: 2500 }}
             >
-              {category.map((data,index) => {
+              {category.map((data, index) => {
                 return (
-                  <SwiperSlide key={index}> 
+                  <SwiperSlide key={index}>
                     <Link
                       to={`/categories/${data.id}`}
                       className="text-decoration-none"
@@ -250,11 +259,10 @@ const Home = () => {
               }}
               modules={[Pagination, Scrollbar, A11y, Autoplay]}
               spaceBetween={20}
-              
               loop={true}
               autoplay={{ delay: 1700 }}
             >
-              {newAdd.slice(0, 6).map((data,index) => {
+              {newAdd.slice(0, 6).map((data, index) => {
                 return (
                   <SwiperSlide key={index}>
                     <Link
@@ -358,7 +366,7 @@ const Home = () => {
               loop={true}
               autoplay={{ delay: 1500 }}
             >
-              {TopSell.slice(0, 6).map((data,index) => {
+              {TopSell.slice(0, 6).map((data, index) => {
                 return (
                   <SwiperSlide key={index}>
                     <Link

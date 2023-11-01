@@ -26,40 +26,84 @@ import { WishListProvider } from "./context/WishListContext";
 import DealerCart from "./pages/Dealer/Cart";
 import Cart from "./pages/user/Cart";
 import About from "./components/About";
+import toast, { Toaster } from "react-hot-toast";
 
 function App() {
-
   return (
     <WishListProvider>
       <ScrollToTop />
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route index element={<Home />} />
-            <Route path="about" element={<About />} />
-            <Route path="shop" element={<Shop />} />
-            <Route path="shopdetails/:id" element={<ShopDetails />} />
-            <Route path="categories" element={<Categories />} />
-            <Route path="categories/:id" element={<CategoriesItems />} />
-            <Route path="categoryDetail/:id" element={<CategoriesDetail />} />
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path="about" element={<About />} />
+          <Route path="shop" element={<Shop />} />
+          <Route path="shopdetails/:id" element={<ShopDetails />} />
+          <Route path="categories" element={<Categories />} />
+          <Route path="categories/:id" element={<CategoriesItems />} />
+          <Route path="categoryDetail/:id" element={<CategoriesDetail />} />
 
-            {/* user protected */}
-            <Route path="wishlist" element={ <ProtectedRoute><WishList /></ProtectedRoute>} />
-            <Route path="profile" element={ <ProtectedRoute><Profile /></ProtectedRoute> } />
-            <Route path="orders" element={ <ProtectedRoute><Orders /></ProtectedRoute> } />
-            <Route path="cart" element={<Cart />} />
+          {/* user protected */}
+          <Route
+            path="wishlist"
+            element={
+              <ProtectedRoute>
+                <WishList />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="orders"
+            element={
+              <ProtectedRoute>
+                <Orders />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="cart" element={<Cart />} />
 
-            {/* Dealer protected */}
-            <Route path="dealer_wishlist" element={ <DealerProtectedRoute><DealerWishList /></DealerProtectedRoute>} />
-            <Route path="dealer_profile" element={ <DealerProtectedRoute><DealerProfile /></DealerProtectedRoute> } />
-            <Route path="dealer_orders" element={ <DealerProtectedRoute><DealerOrders /></DealerProtectedRoute> } />
-            <Route path="dealer_cart" element={ <DealerCart /> } />
-            
-            <Route path="/login" element={<Login />} />
-            <Route path="/Dealer_login" element={<DealerLogIN />} />
-          </Route>
+          {/* Dealer protected */}
+          <Route
+            path="dealer_wishlist"
+            element={
+              <DealerProtectedRoute>
+                <DealerWishList />
+              </DealerProtectedRoute>
+            }
+          />
+          <Route
+            path="dealer_profile"
+            element={
+              <DealerProtectedRoute>
+                <DealerProfile />
+              </DealerProtectedRoute>
+            }
+          />
+          <Route
+            path="dealer_orders"
+            element={
+              <DealerProtectedRoute>
+                <DealerOrders />
+              </DealerProtectedRoute>
+            }
+          />
+          <Route path="dealer_cart" element={<DealerCart />} />
 
-        </Routes>
-
+          <Route path="/login" element={<Login />} />
+          <Route path="/Dealer_login" element={<DealerLogIN />} />
+        </Route>
+      </Routes>
+      <Toaster
+        position="top-center"
+        toastOptions={{ className: "toast", duration: 2000 }}
+      />
       <ToastContainer />
     </WishListProvider>
   );

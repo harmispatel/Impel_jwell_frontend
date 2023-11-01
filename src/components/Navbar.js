@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import DealerService from "../services/Dealer/Cart";
 import UserService from "../services/Cart";
+import { Tooltip as ReactTooltip } from "react-tooltip";
 
 const Navbar = () => {
   const [colorChange, setColorchange] = useState(false);
@@ -125,22 +126,11 @@ const Navbar = () => {
                   About
                 </Link>
               </li>
-              <li className="nav-item">
-                <Link
-                  className={
-                    currentRoute === "/#" ? "nav-link active" : "nav-link"
-                  }
-                  to="#"
-                >
-                  Contact
-                </Link>
-              </li>
             </ul>
           </div>
           <Link className="navbar-brand m-0" to="#">
             <img src={Logo} alt="logo" width={100} />
           </Link>
-
           <div className="header_icon">
             <ul>
               {Dealer && (
@@ -153,7 +143,7 @@ const Navbar = () => {
 
                   <li className="login_user">
                     <Link className="icon" to="#">
-                      <FaUserAlt />
+                      <FaUserAlt data-tooltip-id="my-tooltip-1" />
                     </Link>
 
                     <div className="login_dropdown dealer_dropdown">
@@ -188,7 +178,7 @@ const Navbar = () => {
 
                   <li className="login_user">
                     <Link className="icon" to="#">
-                      <FaUserAlt />
+                      <FaUserAlt data-tooltip-id="my-tooltip-1" />
                     </Link>
 
                     <div className="login_dropdown">
@@ -211,7 +201,7 @@ const Navbar = () => {
               {!(Dealer || Phone) && (
                 <li className="login_user">
                   <Link className="icon" to="/login">
-                    <FaUserAlt />
+                    <FaUserAlt data-tooltip-id="my-tooltip-1" />
                   </Link>
                 </li>
               )}
@@ -228,20 +218,25 @@ const Navbar = () => {
               {Phone && (
                 <li>
                   <Link className="icon" to="/wishlist">
-                    <BsHeart />
+                    <BsHeart data-tooltip-id="my-tooltip-2" />
                   </Link>
                 </li>
               )}
 
               {Phone && (
                 <Link className="icon cart_icon" to="/cart">
-                  <BsHandbag />
+                  <BsHandbag
+                    data-tooltip-id="my-tooltip-3"
+                    style={{ fontSize: "20px", color: "black" }}
+                  />
                   {userCartCounts?.length > 0 && (
                     <div className="cart_count">{userCartCounts?.length}</div>
                   )}
                 </Link>
               )}
-
+              <ReactTooltip id="my-tooltip-1" place="top" content="user" />
+              <ReactTooltip id="my-tooltip-2" place="top" content="wishlist" />
+              <ReactTooltip id="my-tooltip-3" place="top" content="cart" />
               {/* {(Dealer || Phone) && (
                 <li>
                   {Dealer ? (

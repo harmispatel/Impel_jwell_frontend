@@ -25,7 +25,7 @@ const DealerWishList = () => {
     DealerWishlist.removetoWishlist({ email: DealerEmail, design_id: product })
       .then((res) => {
         if (res.success === true) {
-          // toast.success(res.message)
+          toast.success(res.message)
           collectionCheck();
         }
       })
@@ -41,7 +41,7 @@ const DealerWishList = () => {
   return (
     <section className="wishlist">
       <div className="container">
-        <h2>My Collections</h2>
+        <h2>My Selections</h2>
         {checkList.length ? (
           <>
             <div className="product_washlist">

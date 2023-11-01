@@ -5,18 +5,18 @@ import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 import OTPInput from "react-otp-input";
 import firebase from "./firebase.config";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import {
   RecaptchaVerifier,
   getAuth,
   signInWithPhoneNumber,
 } from "firebase/auth";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import CheckUser from "../../services/Auth"
+import CheckUser from "../../services/Auth";
 import axios from "axios";
 
 const Login = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [phoneNumber, setPhoneNumber] = useState("");
   const [otp, setOtp] = useState("");
   const [show, setShow] = useState(false);
@@ -29,38 +29,48 @@ const Login = () => {
   function onCaptchVerify() {
     const auth = getAuth();
     window.recaptchaVerifier = new RecaptchaVerifier(auth, "sign-in-button", {
-      'size': "invisible",
-      'callback': (response) => {
+      size: "invisible",
+      callback: (response) => {
         sendOtp();
-      }
+      },
     });
   }
 
   const sendOtp = (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     const formatPh = `${phoneNumber}`;
     const appVerifier = window.recaptchaVerifier;
 
-     axios.post('https://harmistechnology.com/admin.indianjewelley/api/login',{phone:formatPh}).then(res=>{
-      const auth = getAuth();
-      signInWithPhoneNumber(auth, formatPh, appVerifier)
-        .then((confirmationResult) => {
-          window.confirmationResult = confirmationResult;
-          setShow(true)
-          // toast.success("OTP has been sent");
-          console.log("OTP has been sent")
-        })
-        .catch((err) => {
-          console.log("SMS not sent", err)
-          // toast.error("Something went wrong");
-          setTimeout(() => {
-            window.location.reload(true);
-          }, 2000);
-        });
-    }).catch(err=>{
-      console.log(err);
-    })
+    axios
+      .post("https://harmistechnology.com/admin.indianjewelley/api/login", {
+        phone: formatPh,
+      })
+      .then((res) => {
+        const response = res.data;
+        if (response.status === 0) {
+          toast.error(response.message);
+          navigate("/login");
+          return;
+        } else {
+          const auth = getAuth();
+          signInWithPhoneNumber(auth, formatPh, appVerifier)
+            .then((confirmationResult) => {
+              window.confirmationResult = confirmationResult;
+              setShow(true);
+              console.log("OTP has been sent");
+            })
+            .catch((err) => {
+              console.log("SMS not sent", err);
+              setTimeout(() => {
+                window.location.reload(true);
+              }, 2000);
+            });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const handleOtpVerification = (e) => {
@@ -69,19 +79,20 @@ const Login = () => {
     const code = otp;
     console.log("OTP Code:", code);
 
-    window.confirmationResult.confirm(code)
+    window.confirmationResult
+      .confirm(code)
       .then((result) => {
         if (result) {
-          localStorage.setItem("phone",phoneNumber)
-          navigate('/')
+          localStorage.setItem("phone", phoneNumber);
+          navigate("/");
           // toast.success("Login Successfully...");
         }
       })
       .catch((error) => {
         console.error("Verification failed:", error);
         // toast.error("OTP Wrong!!");
-        setOtp('')
-      })
+        setOtp("");
+      });
   };
 
   return (
@@ -118,15 +129,37 @@ const Login = () => {
                                     placeholder="Enter Your Phone Number"
                                   />
                                 </div>
-                                <div className="d-flex justify-content-between text-center align-items-center" >
+                                <div className="d-flex justify-content-between text-center align-items-center">
                                   {show === true ? (
                                     <>
-                                      <button id="sign-in-button" type="submit" className="btn btn-outline-warning" disabled>Send OTP</button>
+                                      <button
+                                        id="sign-in-button"
+                                        type="submit"
+                                        className="btn btn-outline-warning"
+                                        disabled
+                                      >
+                                        Login
+                                      </button>
                                     </>
                                   ) : (
-                                    <button id="sign-in-button" type="submit" className="btn btn-outline-warning">Send OTP</button>
+                                    <button
+                                      id="sign-in-button"
+                                      type="submit"
+                                      className="btn btn-outline-warning"
+                                    >
+                                      Login
+                                    </button>
                                   )}
-                                  <Link to="/Dealer_login" className="text-decoration-none" style={{ "color":"#db9662","font-size":"15px !important"}}>Dealer Login ?</Link>
+                                  <Link
+                                    to="/Dealer_login"
+                                    className="text-decoration-none"
+                                    style={{
+                                      color: "#db9662",
+                                      "font-size": "15px !important",
+                                    }}
+                                  >
+                                    Dealer Login ?
+                                  </Link>
                                 </div>
                               </form>
                             </>
@@ -149,8 +182,21 @@ const Login = () => {
                                   />
                                 </div>
                                 <div className="d-flex justify-content-between">
-                                  <button id="sign-in-button" type="submit" className="btn btn-outline-warning">Verfy OTP</button>
-                                  <button  id="sign-in-button" type="button" onClick={sendOtp} className="btn btn-outline-warning">Resend OTP</button>
+                                  <button
+                                    id="sign-in-button"
+                                    type="submit"
+                                    className="btn btn-outline-warning"
+                                  >
+                                    Verfy OTP
+                                  </button>
+                                  <button
+                                    id="sign-in-button"
+                                    type="button"
+                                    onClick={sendOtp}
+                                    className="btn btn-outline-warning"
+                                  >
+                                    Resend OTP
+                                  </button>
                                 </div>
                               </form>
                             </>

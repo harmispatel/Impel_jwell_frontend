@@ -86,56 +86,81 @@ const Profile = () => {
       !userData.city
     ) {
       setError({
-        
-      })
-    }
-    const formData = new FormData();
-
-    formData.append("id", selectedData.id);
-    formData.append("name", userData.name ? userData.name : selectedData.name);
-    formData.append(
-      "email",
-      userData.email ? userData.email : selectedData.email
-    );
-    formData.append(
-      "phone",
-      userData.phone ? userData.phone : selectedData.phone
-    );
-    formData.append(
-      "address",
-      userData.address ? userData.address : selectedData.address
-    );
-    formData.append(
-      "pincode",
-      userData.pincode ? userData.pincode : selectedData.pincode
-    );
-    formData.append(
-      "pancard",
-      userData.pincode ? userData.pancard : selectedData.pancard
-    );
-    formData.append("gst", userData.pincode ? userData.gst : selectedData.gst);
-    formData.append(
-      "state",
-      userData.pincode ? userData.state : selectedData.state
-    );
-    formData.append(
-      "city",
-      userData.pincode ? userData.city : selectedData.city
-    );
-
-    profileService
-      .updateProfile(formData)
-      .then((res) => {
-        console.log(res.status);
-        if (res.status === true) {
-          setShowEdit(false);
-          getProfile();
-          // toast.success("Profile Updated Successfully...");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
+        nameErr: "please enter your name",
+        emailErr: "please enter your email",
+        phoneErr: "please enter your phone",
+        addressErr: "please enter your address",
+        gstErr: "please enter your gst number",
+        pincodeErr: "please enter your pincode",
+        pancardErr: "please enter your pancard number",
+        stateErr: "please enter your state",
+        cityErr: "please enter your city",
       });
+    } else {
+      setError({
+        nameErr: "",
+        emailErr: "",
+        phoneErr: "",
+        addressErr: "",
+        gstErr: "",
+        pincodeErr: "",
+        pancardErr: "",
+        stateErr: "",
+        cityErr: "",
+      });
+      const formData = new FormData();
+
+      formData.append("id", selectedData.id);
+      formData.append(
+        "name",
+        userData.name ? userData.name : selectedData.name
+      );
+      formData.append(
+        "email",
+        userData.email ? userData.email : selectedData.email
+      );
+      formData.append(
+        "phone",
+        userData.phone ? userData.phone : selectedData.phone
+      );
+      formData.append(
+        "address",
+        userData.address ? userData.address : selectedData.address
+      );
+      formData.append(
+        "pincode",
+        userData.pincode ? userData.pincode : selectedData.pincode
+      );
+      formData.append(
+        "pancard",
+        userData.pincode ? userData.pancard : selectedData.pancard
+      );
+      formData.append(
+        "gst",
+        userData.pincode ? userData.gst : selectedData.gst
+      );
+      formData.append(
+        "state",
+        userData.pincode ? userData.state : selectedData.state
+      );
+      formData.append(
+        "city",
+        userData.pincode ? userData.city : selectedData.city
+      );
+      profileService
+        .updateProfile(formData)
+        .then((res) => {
+          console.log(res.status);
+          if (res.status === true) {
+            setShowEdit(false);
+            getProfile();
+            // toast.success("Profile Updated Successfully...");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   useEffect(() => {
@@ -245,6 +270,11 @@ const Profile = () => {
                     onChange={(e) => handleEditChange(e)}
                     placeholder="Enter Your Name"
                   />
+                  {userData.name.length === 0 && userData.name ? (
+                    ""
+                  ) : (
+                    <span>{error.nameErr}</span>
+                  )}
                 </Form.Group>
               </div>
               <div className="col-md-6">
@@ -256,6 +286,11 @@ const Profile = () => {
                     onChange={(e) => handleEditChange(e)}
                     placeholder="Enter Your Email"
                   />
+                  {userData.email.length === 0 ? (
+                    ""
+                  ) : (
+                    <span>{error.emailErr}</span>
+                  )}
                 </Form.Group>
               </div>
               <div className="col-md-6">
@@ -304,6 +339,19 @@ const Profile = () => {
                   />
                 </Form.Group>
               </div>
+              <div className="col-md-12">
+                <Form.Group as={Col} className="mb-2" controlId="formGridZip">
+                  <Form.Label>Address</Form.Label>
+
+                  <textarea
+                    name="address"
+                    className="form-control"
+                    defaultValue={selectedData.address}
+                    onChange={(e) => handleEditChange(e)}
+                    placeholder="Enter Your Address"
+                  />
+                </Form.Group>
+              </div>
               <div className="col-md-6">
                 <Form.Group className="mb-2" controlId="formGridAddress1">
                   <Form.Label>State</Form.Label>
@@ -323,19 +371,6 @@ const Profile = () => {
                     defaultValue={selectedData.city}
                     onChange={(e) => handleEditChange(e)}
                     placeholder="Enter Your City"
-                  />
-                </Form.Group>
-              </div>
-              <div className="col-md-12">
-                <Form.Group as={Col} className="mb-2" controlId="formGridZip">
-                  <Form.Label>Address</Form.Label>
-
-                  <textarea
-                    name="address"
-                    className="form-control"
-                    defaultValue={selectedData.address}
-                    onChange={(e) => handleEditChange(e)}
-                    placeholder="Enter Your Address"
                   />
                 </Form.Group>
               </div>

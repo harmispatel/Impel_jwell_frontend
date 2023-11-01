@@ -8,6 +8,7 @@ import "swiper/css/navigation";
 // import Magnifier from "react-image-magnify";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+import toast from "react-hot-toast";
 import {
   BsFillBagPlusFill,
   BsFillEyeFill,
@@ -19,8 +20,6 @@ import DealeCartService from "../../services/Dealer/Cart";
 import UserCartService from "../../services/Cart";
 import Userservice from "../../services/Auth";
 import DealerWishlist from "../../services/Dealer/Collection";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 const ShopDetails = () => {
   const { id } = useParams();
@@ -131,6 +130,7 @@ const ShopDetails = () => {
       .then((res) => {
         if (res.status === true) {
           // toast.success(res.message);
+          toast(res.message, { icon: "✔️" });
           GetUserCartList();
         }
       })
@@ -152,6 +152,7 @@ const ShopDetails = () => {
         console.log(res);
         if (res.status === true) {
           // toast.success(res.message);
+          toast(res.message, { icon: "✔️" });
           GetCarList();
         }
       })
@@ -299,7 +300,7 @@ const ShopDetails = () => {
                       two.
                     </h5>
                     <div className="buttons pt-4 d-flex">
-                      <div className="quantity">
+                      {/* <div className="quantity">
                         {productQuantity === 1 ? (
                           <button
                             className="btn"
@@ -339,7 +340,7 @@ const ShopDetails = () => {
                         >
                           +
                         </button>
-                      </div>
+                      </div> */}
                       {/* <div className="add_cart align-items-center d-flex">
                         {Dealer ? (
                           <>
