@@ -84,6 +84,7 @@ const Login = () => {
       .then((result) => {
         if (result) {
           localStorage.setItem("phone", phoneNumber);
+          
           navigate("/");
           // toast.success("Login Successfully...");
         }

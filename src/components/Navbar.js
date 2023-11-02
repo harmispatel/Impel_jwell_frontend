@@ -70,6 +70,7 @@ const Navbar = () => {
     } else {
       localStorage.removeItem("_grecaptcha");
       localStorage.removeItem("phone");
+      localStorage.removeItem("verification");
       setIsLoggedOut(true);
       navigate("/login");
       // toast.success("Logout Successfully...");

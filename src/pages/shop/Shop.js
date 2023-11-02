@@ -686,6 +686,8 @@ const Shop = ({ product }) => {
   const userType = localStorage.getItem("user_type");
   const DealerEmail = localStorage.getItem("email");
   const phone = localStorage.getItem("phone");
+  const verification = localStorage.getItem("verification");
+  console.log("verification-code -->", verification);
 
   useEffect(() => {
     FilterData();
@@ -909,7 +911,7 @@ const Shop = ({ product }) => {
                 />
               </div> */}
               <div className="col-md-12">
-                <div className="row">
+                <div className="row justify-content-center">
                   <div className="col-md-2">
                     <div className="csm_sort_btn">
                       <input
@@ -926,7 +928,7 @@ const Shop = ({ product }) => {
                       </label>
                     </div>
                   </div>
-                  <div className="col-md-3">
+                  <div className="col-md-2">
                     <div class="csm_sort_btn">
                       <input
                         type="radio"
@@ -940,7 +942,7 @@ const Shop = ({ product }) => {
                       <label for="low_to_high">Price : low to high</label>
                     </div>
                   </div>
-                  <div className="col-md-3">
+                  <div className="col-md-2">
                     <div class="csm_sort_btn">
                       <input
                         type="radio"
@@ -1081,15 +1083,15 @@ const Shop = ({ product }) => {
                                             {DealercartItems.find(
                                               (item) => item.id === product.id
                                             ) ? (
-                                              <BsStarFill data-tooltip-id="my-tooltip-9" />
+                                              <BsStarFill data-tooltip-id="my-tooltip-12" />
                                             ) : (
-                                              <BsStar data-tooltip-id="my-tooltip-9" />
+                                              <BsStar data-tooltip-id="my-tooltip-12" />
                                             )}
                                           </Link>
                                         ) : (
                                           <Link to="/Dealer_login">
                                             {" "}
-                                            <BsStar data-tooltip-id="my-tooltip-9" />
+                                            <BsStar data-tooltip-id="my-tooltip-12" />
                                           </Link>
                                         )}
                                       </>
@@ -1183,15 +1185,15 @@ const Shop = ({ product }) => {
                                             {DealercartItems.find(
                                               (item) => item?.id === product?.id
                                             ) ? (
-                                              <BsStarFill data-tooltip-id="my-tooltip-9" />
+                                              <BsStarFill data-tooltip-id="my-tooltip-12" />
                                             ) : (
-                                              <BsStar data-tooltip-id="my-tooltip-9" />
+                                              <BsStar data-tooltip-id="my-tooltip-12" />
                                             )}
                                           </Link>
                                         ) : (
                                           <Link to="/Dealer_login">
                                             {" "}
-                                            <BsStar data-tooltip-id="my-tooltip-9" />
+                                            <BsStar data-tooltip-id="my-tooltip-12" />
                                           </Link>
                                         )}
                                       </>
@@ -1242,6 +1244,11 @@ const Shop = ({ product }) => {
                 id="my-tooltip-9"
                 place="bottom"
                 content="wishlist"
+              />
+              <ReactTooltip
+                id="my-tooltip-12"
+                place="bottom"
+                content="My Collections"
               />
             </div>
           </div>

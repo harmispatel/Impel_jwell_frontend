@@ -1,8 +1,6 @@
 import React, { useEffect } from "react";
 import profileService from "../../services/Auth";
 import { useState } from "react";
-import { useDropzone } from "react-dropzone";
-import { IconName, ImCross } from "react-icons/im";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -20,10 +18,11 @@ const Profile = () => {
     phone: "",
     address: "",
     pincode: "",
+    gst_no: "",
+    pan_no: "",
     state: "",
     city: "",
-    pancard: "",
-    gst: "",
+    states: "",
   });
   const [error, setError] = useState({
     nameErr: "",
@@ -43,11 +42,12 @@ const Profile = () => {
     setShowEdit(false);
   };
 
+  // user profile display function
   const getProfile = async () => {
     await profileService
       .getProfile({ phone: phone })
       .then((res) => {
-        console.log(res.data);
+        console.log("userData", res.data);
         setProfileData(res.data);
       })
       .catch((err) => {
@@ -65,7 +65,6 @@ const Profile = () => {
     //   });
     // }
   };
-
   const handleEdit = async (data) => {
     setShowEdit(true);
     setSelectedData(data);
@@ -74,95 +73,61 @@ const Profile = () => {
   const handleUpdate = async (e) => {
     e.preventDefault();
 
-    if (
-      !userData.name ||
-      !userData.email ||
-      !userData.phone ||
-      !userData.address ||
-      !userData.gst ||
-      !userData.pincode ||
-      !userData.pancard ||
-      !userData.state ||
-      !userData.city
-    ) {
-      setError({
-        nameErr: "please enter your name",
-        emailErr: "please enter your email",
-        phoneErr: "please enter your phone",
-        addressErr: "please enter your address",
-        gstErr: "please enter your gst number",
-        pincodeErr: "please enter your pincode",
-        pancardErr: "please enter your pancard number",
-        stateErr: "please enter your state",
-        cityErr: "please enter your city",
-      });
-    } else {
-      setError({
-        nameErr: "",
-        emailErr: "",
-        phoneErr: "",
-        addressErr: "",
-        gstErr: "",
-        pincodeErr: "",
-        pancardErr: "",
-        stateErr: "",
-        cityErr: "",
-      });
-      const formData = new FormData();
+    const formData = new FormData();
+    console.log("Users Updated Form data", formData);
+    localStorage.setItem("verification", profileData.verification);
 
-      formData.append("id", selectedData.id);
-      formData.append(
-        "name",
-        userData.name ? userData.name : selectedData.name
-      );
-      formData.append(
-        "email",
-        userData.email ? userData.email : selectedData.email
-      );
-      formData.append(
-        "phone",
-        userData.phone ? userData.phone : selectedData.phone
-      );
-      formData.append(
-        "address",
-        userData.address ? userData.address : selectedData.address
-      );
-      formData.append(
-        "pincode",
-        userData.pincode ? userData.pincode : selectedData.pincode
-      );
-      formData.append(
-        "pancard",
-        userData.pincode ? userData.pancard : selectedData.pancard
-      );
-      formData.append(
-        "gst",
-        userData.pincode ? userData.gst : selectedData.gst
-      );
-      formData.append(
-        "state",
-        userData.pincode ? userData.state : selectedData.state
-      );
-      formData.append(
-        "city",
-        userData.pincode ? userData.city : selectedData.city
-      );
-      profileService
-        .updateProfile(formData)
-        .then((res) => {
-          console.log(res.status);
-          if (res.status === true) {
-            setShowEdit(false);
-            getProfile();
-            // toast.success("Profile Updated Successfully...");
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
+    formData.append("id", selectedData.id);
+    formData.append("name", userData.name ? userData.name : selectedData.name);
+    formData.append(
+      "email",
+      userData.email ? userData.email : selectedData.email
+    );
+    formData.append(
+      "phone",
+      userData.phone ? userData.phone : selectedData.phone
+    );
+    formData.append(
+      "address",
+      userData.address ? userData.address : selectedData.address
+    );
+    formData.append(
+      "pincode",
+      userData.pincode ? userData.pincode : selectedData.pincode
+    );
+    formData.append(
+      "gst_no",
+      userData.gst_no ? userData.gst_no : selectedData.gst_no
+    );
+    formData.append(
+      "pan_no",
+      userData.pan_no ? userData.pan_no : selectedData.pan_no
+    );
+    formData.append("city", userData.city ? userData.city : selectedData.city);
+    formData.append(
+      "state",
+      userData.state ? userData.state : selectedData.state
+    );
+    // formData.append(
+    //   "states",
+    //   userData.states ? userData.states : selectedData.states
+    // );
+
+    profileService
+      .updateProfile(formData)
+      .then((res) => {
+        console.log(res.status);
+        if (res.status === true) {
+          setShowEdit(false);
+          getProfile();
+          toast.success(res.message);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
-
+  // console.log("Profile-States-->", profileData.states);
   useEffect(() => {
     getProfile();
   }, []);
@@ -221,11 +186,11 @@ const Profile = () => {
                           </tr>
                           <tr>
                             <td>GST Number</td>
-                            <td>{profileData.gst}</td>
+                            <td>{profileData.gst_no}</td>
                           </tr>
                           <tr>
                             <td>Pan number</td>
-                            <td>{profileData.pancard}</td>
+                            <td>{profileData.pan_no}</td>
                           </tr>
                           <tr>
                             <td colSpan={2}>
@@ -270,11 +235,6 @@ const Profile = () => {
                     onChange={(e) => handleEditChange(e)}
                     placeholder="Enter Your Name"
                   />
-                  {userData.name.length === 0 && userData.name ? (
-                    ""
-                  ) : (
-                    <span>{error.nameErr}</span>
-                  )}
                 </Form.Group>
               </div>
               <div className="col-md-6">
@@ -286,11 +246,6 @@ const Profile = () => {
                     onChange={(e) => handleEditChange(e)}
                     placeholder="Enter Your Email"
                   />
-                  {userData.email.length === 0 ? (
-                    ""
-                  ) : (
-                    <span>{error.emailErr}</span>
-                  )}
                 </Form.Group>
               </div>
               <div className="col-md-6">
@@ -321,8 +276,8 @@ const Profile = () => {
                 <Form.Group className="mb-2" controlId="formGridAddress1">
                   <Form.Label>Pan-card</Form.Label>
                   <Form.Control
-                    name="pancard"
-                    defaultValue={selectedData.pancard}
+                    name="pan_no"
+                    defaultValue={selectedData.pan_no}
                     onChange={(e) => handleEditChange(e)}
                     placeholder="Enter Your Pancard number"
                   />
@@ -332,8 +287,8 @@ const Profile = () => {
                 <Form.Group className="mb-2" controlId="formGridAddress1">
                   <Form.Label>GST-number</Form.Label>
                   <Form.Control
-                    name="gst"
-                    defaultValue={selectedData.gst}
+                    name="gst_no"
+                    defaultValue={selectedData.gst_no}
                     onChange={(e) => handleEditChange(e)}
                     placeholder="Enter Your GST number"
                   />
@@ -355,23 +310,28 @@ const Profile = () => {
               <div className="col-md-6">
                 <Form.Group className="mb-2" controlId="formGridAddress1">
                   <Form.Label>State</Form.Label>
-                  <Form.Control
-                    name="state"
-                    defaultValue={selectedData.state}
+                  <select
+                    className="form-control"
                     onChange={(e) => handleEditChange(e)}
-                    placeholder="Enter Your State"
-                  />
+                  >
+                    <option>--state select--</option>
+                    {profileData?.states?.map((userstate, index) => (
+                      <option key={index} value={userstate.name}>
+                        {userstate.name}
+                      </option>
+                    ))}
+                  </select>
                 </Form.Group>
               </div>
               <div className="col-md-6">
                 <Form.Group className="mb-2" controlId="formGridAddress1">
                   <Form.Label>City</Form.Label>
-                  <Form.Control
-                    name="city"
-                    defaultValue={selectedData.city}
-                    onChange={(e) => handleEditChange(e)}
-                    placeholder="Enter Your City"
-                  />
+                  <select className="form-control">
+                    <option>--city select--</option>
+                    {profileData?.customer_cities?.map((usercity, index) => (
+                      <option>{usercity.name}</option>
+                    ))}
+                  </select>
                 </Form.Group>
               </div>
             </div>

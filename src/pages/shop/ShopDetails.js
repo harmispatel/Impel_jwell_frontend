@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import productDetail from "../../services/Shop";
 import BreadCrumb from "../../components/common/BreadCrumb";
 import "swiper/css";
@@ -20,9 +20,11 @@ import DealeCartService from "../../services/Dealer/Cart";
 import UserCartService from "../../services/Cart";
 import Userservice from "../../services/Auth";
 import DealerWishlist from "../../services/Dealer/Collection";
+import { Button, Modal } from "react-bootstrap";
 
 const ShopDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const [product, setProduct] = useState();
   const [relatedProduct, setRelatedProduct] = useState([]);
@@ -36,15 +38,20 @@ const ShopDetails = () => {
   const [userWishlist, setUserWishlist] = useState(false);
   const [dealerWishlist, setDealerWishlist] = useState(false);
   const [UserWishlistItems, setUserWishlistItems] = useState([]);
+
   const [DealerWishlistItems, setDealerWishlistItems] = useState([]);
+  const [showEdit, setShowEdit] = useState(false);
+  const [show, setShow] = useState(false);
   const data = { categoryId: product?.category_id?.id };
   const Dealer = localStorage.getItem("email");
   const Phone = localStorage.getItem("phone");
+  const Verification = localStorage.getItem("verification");
 
   const productData = async () => {
     const data = {
       id: id,
     };
+
     await productDetail
       .product_detail(data)
       .then((res) => {
@@ -119,24 +126,28 @@ const ShopDetails = () => {
   }, []);
 
   const handleAddToCart = (product) => {
-    const CartData = {
-      phone: Phone,
-      design_name: product.name,
-      design_id: product.id,
-      quantity: productQuantity,
-    };
+    if (Verification === 3) {
+      const CartData = {
+        phone: Phone,
+        design_name: product.name,
+        design_id: product.id,
+        quantity: productQuantity,
+      };
 
-    UserCartService.AddtoCart(CartData)
-      .then((res) => {
-        if (res.status === true) {
-          // toast.success(res.message);
-          toast(res.message, { icon: "✔️" });
-          GetUserCartList();
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      UserCartService.AddtoCart(CartData)
+        .then((res) => {
+          if (res.status === true) {
+            toast(res.message, { icon: "✔️" });
+            GetUserCartList();
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      console.log("Please verify your information to access");
+      setShowEdit(true);
+    }
   };
 
   const handleAddToDealerCart = (product) => {
@@ -212,6 +223,10 @@ const ShopDetails = () => {
     const newIndex =
       (currentImageIndex + step + productImages.length) % productImages.length;
     setCurrentImageIndex(newIndex);
+  };
+  const handleClose = () => {
+    setShow(false);
+    setShowEdit(false);
   };
 
   return (
@@ -300,47 +315,52 @@ const ShopDetails = () => {
                       two.
                     </h5>
                     <div className="buttons pt-4 d-flex">
-                      {/* <div className="quantity">
-                        {productQuantity === 1 ? (
-                          <button
-                            className="btn"
-                            onClick={() =>
-                              setProductQuantity(productQuantity - 1)
-                            }
-                            disabled={productQuantity === 1}
-                          >
-                            -
-                          </button>
-                        ) : (
-                          <button
-                            className="btn"
-                            onClick={() =>
-                              setProductQuantity(productQuantity - 1)
-                            }
-                            disabled={productQuantity === 1}
-                          >
-                            -
-                          </button>
-                        )}
+                      {Phone ? (
+                        <div className="quantity">
+                          {productQuantity === 1 ? (
+                            <button
+                              className="btn"
+                              onClick={() =>
+                                setProductQuantity(productQuantity - 1)
+                              }
+                              disabled={productQuantity === 1}
+                            >
+                              -
+                            </button>
+                          ) : (
+                            <button
+                              className="btn"
+                              onClick={() =>
+                                setProductQuantity(productQuantity - 1)
+                              }
+                              disabled={productQuantity === 1}
+                            >
+                              -
+                            </button>
+                          )}
 
-                        <input
-                          className="form-control"
-                          type="text"
-                          name="productQuantity"
-                          onChange={(e) => setProductQuantity(e.target)}
-                          value={productQuantity}
-                          min={1}
-                          disabled
-                        />
-                        <button
-                          className="btn"
-                          onClick={() =>
-                            setProductQuantity(productQuantity + 1)
-                          }
-                        >
-                          +
-                        </button>
-                      </div> */}
+                          <input
+                            className="form-control"
+                            type="text"
+                            name="productQuantity"
+                            onChange={(e) => setProductQuantity(e.target)}
+                            value={productQuantity}
+                            min={1}
+                            disabled
+                          />
+                          <button
+                            className="btn"
+                            onClick={() =>
+                              setProductQuantity(productQuantity + 1)
+                            }
+                          >
+                            +
+                          </button>
+                        </div>
+                      ) : (
+                        <></>
+                      )}
+
                       {/* <div className="add_cart align-items-center d-flex">
                         {Dealer ? (
                           <>
@@ -429,9 +449,51 @@ const ShopDetails = () => {
                             )}
                           </>
                         ) : (
-                          <></>
+                          <>
+                            {/* <div>
+                              <Link to="/login">
+                                <div>
+                                  <button className="btn btn-outline-dark">
+                                    Add To Cart
+                                  </button>
+                                </div>
+                                <div>
+                                  <button className="btn btn-outline-dark align-items-center">
+                                    Add to wishlist
+                                  </button>
+                                </div>
+                              </Link>
+                            </div> */}
+                          </>
                         )}
                       </div>
+                      <Modal
+                        className="form_intent"
+                        centered
+                        show={showEdit}
+                        onHide={handleClose}
+                      >
+                        <Modal.Header closeButton>
+                          <Modal.Title>Registration</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                          <span>
+                            Prior to place your order, you need to provide your
+                            other information. Please update your profile, we
+                            will validate your profile in next 48 hours and then
+                            you can place your order.
+                          </span>
+                        </Modal.Body>
+                        <div className="text-center pb-3">
+                          <Button
+                            variant="primary"
+                            type="submit"
+                            onClick={() => navigate("/profile")}
+                          >
+                            Registration
+                          </Button>
+                        </div>
+                      </Modal>
                     </div>
                   </div>
                 </div>

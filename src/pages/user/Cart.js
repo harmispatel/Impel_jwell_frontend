@@ -199,7 +199,7 @@ const Cart = () => {
                 </div>
                 <div className="mt-3">
                   <a href="#" className="btn btn-success w-100 shadow-0 mb-2">
-                    Make Purchase
+                    Place Order
                   </a>
                   <Link to="/shop" className="btn btn-light w-100 border mt-2">
                     Back to shop

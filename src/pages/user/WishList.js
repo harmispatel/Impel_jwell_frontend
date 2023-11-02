@@ -69,7 +69,7 @@ const WishList = () => {
                         >
                           Remove
                         </button>
-                        <button className="btn w-100">Move To Bag</button>
+                        <button className="btn w-100">Move To Cart</button>
                       </div>
                     </div>
                   );

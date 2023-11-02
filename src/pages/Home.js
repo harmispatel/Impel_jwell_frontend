@@ -19,7 +19,7 @@ import { Link } from "react-router-dom";
 import banner from "../assets/images/banner.jpg";
 import category_img from "../assets/images/category.jpg";
 import introBanner from "../assets/video/intro.mp4";
-import gif from "../assets/images/intro.gif"
+import gif from "../assets/images/intro.gif";
 
 const Home = () => {
   const [bannerSlider, SetBannerSlider] = useState([]);
@@ -297,8 +297,6 @@ const Home = () => {
                         </div> */}
                         <div className="product_details">
                           <h4>{data.name}</h4>
-                          <p>Minola Golden Earrings</p>
-                          <h5>₹{data.price}</h5>
                         </div>
                       </div>
                     </Link>
@@ -378,8 +376,6 @@ const Home = () => {
                         <img src={data.image} alt="" />
                         <div className="product_details">
                           <h4>{data.name}</h4>
-                          <p>Venus Diamond Earrings</p>
-                          <h5>₹{data.price}</h5>
                         </div>
                       </div>
                     </Link>

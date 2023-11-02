@@ -1,5 +1,6 @@
 {
   "name": "client",
+  "homepage": "https://indianjewellery.harmistechnology.com",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -23,6 +24,7 @@
     "react-icons": "^4.10.1",
     "react-infinite-scroll-component": "^6.1.0",
     "react-loading": "^2.0.3",
+    "react-modal": "^3.16.1",
     "react-otp-input": "^3.0.4",
     "react-phone-number-input": "^3.3.6",
     "react-responsive-carousel": "^3.2.23",
