@@ -137,7 +137,6 @@ const ShopDetails = () => {
       UserCartService.AddtoCart(CartData)
         .then((res) => {
           if (res.status === true) {
-            toast(res.message, { icon: "✔️" });
             GetUserCartList();
           }
         })

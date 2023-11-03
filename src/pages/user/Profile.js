@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 
 const Profile = () => {
   const phone = localStorage.getItem("phone");
@@ -12,6 +13,7 @@ const Profile = () => {
   const [selectedData, setSelectedData] = useState([]);
   const [profileImg, setProfileImg] = useState({ preview: "", raw: "" });
   const [profileData, setProfileData] = useState([]);
+  const [city, setcity] = useState([]);
   const [userData, setUserData] = useState({
     name: "",
     email: "",
@@ -56,8 +58,19 @@ const Profile = () => {
   };
 
   const handleEditChange = (e) => {
+    const { name, value } = e.target;
     console.log(e.target.value);
-    setUserData({ ...userData, [e.target.name]: e.target.value });
+    if (name === "states") {
+      setUserData({
+        ...userData,
+        states: value,
+      });
+    } else {
+      setUserData({
+        ...userData,
+        [name]: value,
+      });
+    }
     // if (e.target.files?.length) {
     //   setProfileImg({
     //     preview: URL.createObjectURL(e.target.files[0]),
@@ -108,10 +121,6 @@ const Profile = () => {
       "state",
       userData.state ? userData.state : selectedData.state
     );
-    // formData.append(
-    //   "states",
-    //   userData.states ? userData.states : selectedData.states
-    // );
 
     profileService
       .updateProfile(formData)
@@ -125,9 +134,9 @@ const Profile = () => {
       })
       .catch((err) => {
         console.log(err);
+        toast.error(err.message);
       });
   };
-  // console.log("Profile-States-->", profileData.states);
   useEffect(() => {
     getProfile();
   }, []);
@@ -178,7 +187,7 @@ const Profile = () => {
                           </tr>
                           <tr>
                             <td>State</td>
-                            <td>{profileData.state}</td>
+                            <td>{profileData?.state}</td>
                           </tr>
                           <tr>
                             <td>City</td>
@@ -312,7 +321,11 @@ const Profile = () => {
                   <Form.Label>State</Form.Label>
                   <select
                     className="form-control"
-                    onChange={(e) => handleEditChange(e)}
+                    name="state"
+                    onChange={(e) => {
+                      handleEditChange(e);
+                    }}
+                    value={userData.state}
                   >
                     <option>--state select--</option>
                     {profileData?.states?.map((userstate, index) => (
@@ -328,9 +341,6 @@ const Profile = () => {
                   <Form.Label>City</Form.Label>
                   <select className="form-control">
                     <option>--city select--</option>
-                    {profileData?.customer_cities?.map((usercity, index) => (
-                      <option>{usercity.name}</option>
-                    ))}
                   </select>
                 </Form.Group>
               </div>

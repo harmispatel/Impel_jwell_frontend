@@ -56,11 +56,11 @@ const WishList = () => {
                       </div>
                       <div className="wishlist_info">
                         <h3>{product.name}</h3>
-                        <p>
+                        {/* <p>
                           ${product.price}
                           <span>$449</span>
                           <label>(50% OFF)</label>
-                        </p>
+                        </p> */}
                       </div>
                       <div className="move_bag_btn d-flex">
                         <button

@@ -624,13 +624,15 @@ import SidebarFilter from "../../components/common/SidebarFilter";
 import ReactLoading from "react-loading";
 import InfiniteScroll from "react-infinite-scroll-component";
 import ShopServices from "../../services/Shop";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import DealerWishlist from "../../services/Dealer/Collection";
 import UserWishlist from "../../services/Auth";
 import Userservice from "../../services/Cart";
 import { FcLike } from "react-icons/fc";
 import toast from "react-hot-toast";
+import UserCartService from "../../services/Cart";
 import { Tooltip as ReactTooltip } from "react-tooltip";
+import { Button, Modal } from "react-bootstrap";
 
 const Shop = ({ product }) => {
   const [searchInput, setSearchInput] = useState([]);
@@ -651,38 +653,21 @@ const Shop = ({ product }) => {
   const [collection_status, setCollectionStatus] = useState(false);
   const [userWishlist, setUserWishlist] = useState(false);
   const [UsercartItems, setUserCartItems] = useState([]);
+  const [productQuantity, setProductQuantity] = useState(1);
   const [DealercartItems, setDealerCartItems] = useState([]);
   const [cartItems, setCartItems] = useState(
     JSON.parse(sessionStorage.getItem("cartItems")) || []
   );
   const [newadd, setNewAdd] = useState([]);
   const [pricelow, setPriceLow] = useState([]);
+  const [showEdit, setShowEdit] = useState(false);
   const [pricehigh, setPriceHigh] = useState([]);
   const [topseller, setTopSeller] = useState([]);
   const [selectedOption, setSelectedOption] = useState([]);
-  const handleRadioChange = (event) => {
-    setSelectedOption(event.target.value);
-    switch (event.target.value) {
-      case "a21":
-        console.log("New Added");
-        break;
-      case "low_to_high":
-        console.log("Low to high price");
-        break;
-      case "high_to_low":
-        console.log("High to low price");
-        break;
-      case "top_seller":
-        console.log("Top sellling");
-        break;
-      case "clear_all":
-        console.log("clearing");
-        break;
-      default:
-        // Default case
-        break;
-    }
-  };
+  const [show, setShow] = useState(false);
+  const Phone = localStorage.getItem("phone");
+  const Verification = localStorage.getItem("verification");
+  const navigate = useNavigate();
   const userType = localStorage.getItem("user_type");
   const DealerEmail = localStorage.getItem("email");
   const phone = localStorage.getItem("phone");
@@ -691,7 +676,7 @@ const Shop = ({ product }) => {
 
   useEffect(() => {
     FilterData();
-  }, [category, tag, gender, searchInput, PriceRange, selectedOption]);
+  }, [category, tag, gender, searchInput, PriceRange]);
 
   const handleCategory = (e) => {
     setIsLoading(true);
@@ -806,77 +791,139 @@ const Shop = ({ product }) => {
       setLoadMore(loadMore + 9);
     }, 200);
   };
-
-  const handleAddToCart = (product) => {
-    const existingItem = cartItems.find((item) => item.id === product.id);
-
-    if (existingItem) {
-      const updatedCart = cartItems.map((item) =>
-        item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
-      );
-      toast.error("already added");
-
-      setCartItems(updatedCart);
-      sessionStorage.setItem("cartItems", JSON.stringify(updatedCart));
-    } else {
-      const updatedCart = [...cartItems, { ...product, quantity: 1 }];
-      setCartItems(updatedCart);
-      sessionStorage.setItem("cartItems", JSON.stringify(updatedCart));
+  const handleRadioChange = (event) => {
+    setSelectedOption(event.target.value);
+    const sortfield = event.target.value;
+    console.log(sortfield);
+    let sorted = [...allData];
+    console.log(sorted);
+    switch (sortfield) {
+      case "new_added":
+        console.log("newadded");
+        break;
+      case "low_to_high":
+        sorted.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
+        break;
+      case "high_to_low":
+        sorted.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
+        break;
+      case "top_seller":
+        console.log("Top selling");
+        sorted = sorted.filter((product) => product.highest_selling === "Yes");
+        break;
+      case "clear_all":
+        sorted = [...allData];
+        break;
+      default:
+        break;
     }
+    setFilterData(sorted);
   };
+  // const handleAddToCart = (product) => {
+  //   const existingItem = cartItems.find((item) => item.id === product.id);
+
+  //   if (existingItem) {
+  //     const updatedCart = cartItems.map((item) =>
+  //       item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+  //     );
+  //     toast.error("already added");
+
+  //     setCartItems(updatedCart);
+  //     sessionStorage.setItem("cartItems", JSON.stringify(updatedCart));
+  //   } else {
+  //     const updatedCart = [...cartItems, { ...product, quantity: 1 }];
+  //     setCartItems(updatedCart);
+  //     sessionStorage.setItem("cartItems", JSON.stringify(updatedCart));
+  //   }
+  // };
 
   // const isProductInWishList = (product) => {
   //   return checkList.some((item) => item.id === product.id);
   // };
 
   const addToWishList = async (product) => {
-    const productId = product.id;
-
-    DealerWishlist.addtoWishlist({ email: DealerEmail, design_id: productId })
-      .then((res) => {
-        console.log(res);
-        if (res.success === true) {
-          setCollectionStatus(true);
-          // toast.success(res.message);
-          toast(res.message);
-
-          AllData();
-          GetCarList();
-          FilterData();
-          DealerList();
-        } else {
-          // toast.error(res.message);
-        }
+    if (!DealercartItems.some((item) => item.id === product.id)) {
+      DealerWishlist.addtoWishlist({
+        email: DealerEmail,
+        design_id: product.id,
       })
-      .catch((err) => {
-        console.log(err);
-      });
+        .then((res) => {
+          console.log(res);
+          if (res.success === true) {
+            setCollectionStatus(true);
+            toast(res.message);
+            AllData();
+            collectionCheck();
+          } else {
+            // Handle the error case
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      toast("Item is already in the collection");
+    }
   };
 
   const addToUserWishList = async (product) => {
-    UserWishlist.addtoWishlist({
-      phone: localStorage.getItem("phone"),
-      design_id: product.id,
-    })
-      .then((res) => {
-        if (res.success === true) {
-          setUserWishlist(true);
-          // toast.success(res.message);
-          toast(res.message);
+    if (!UsercartItems.some((item) => item.id === product.id)) {
+      UserWishlist.addtoWishlist({
+        phone: localStorage.getItem("phone"),
+        design_id: product.id,
+      })
+        .then((res) => {
+          if (res.success === true) {
+            setUserWishlist(true);
+            toast(res.message);
+            GetCarList();
+          } else {
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      toast("Item is already in the wishlist");
+    }
+  };
+  const handleAddToCart = (product) => {
+    if (Verification === 3) {
+      const CartData = {
+        phone: Phone,
+        design_name: product.name,
+        design_id: product.id,
+        quantity: productQuantity,
+      };
 
-          AllData();
-          DealerList();
-          GetCarList();
-          FilterData();
-        } else {
-          // toast.error(res.message);
-        }
+      UserCartService.AddtoCart(CartData)
+        .then((res) => {
+          if (res.status === true) {
+            toast(res.message, { icon: "✔️" });
+            GetUserCartList();
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      console.log("Please verify your information to access add to cart");
+      setShowEdit(true);
+    }
+  };
+  const GetUserCartList = async () => {
+    UserCartService.CartList({ phone: Phone })
+      .then((res) => {
+        setCartItems(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
   };
-
+  const handleClose = () => {
+    setShow(false);
+    setShowEdit(false);
+  };
   useEffect(() => {
     GetCarList();
     DealerList();
@@ -1059,9 +1106,7 @@ const Shop = ({ product }) => {
                                     {phone ? (
                                       <Link
                                         to="#"
-                                        onClick={() =>
-                                          handleAddToCart(product.id)
-                                        }
+                                        onClick={() => handleAddToCart(product)}
                                       >
                                         <BsHandbag data-tooltip-id="my-tooltip-7" />
                                       </Link>
@@ -1164,7 +1209,7 @@ const Shop = ({ product }) => {
                                     {phone ? (
                                       <Link
                                         to="#"
-                                        onClick={() => handleAddToCart(data)}
+                                        onClick={() => handleAddToCart(product)}
                                       >
                                         <BsHandbag data-tooltip-id="my-tooltip-7" />
                                       </Link>
@@ -1250,6 +1295,33 @@ const Shop = ({ product }) => {
                 place="bottom"
                 content="My Collections"
               />
+              <Modal
+                className="form_intent"
+                centered
+                show={showEdit}
+                onHide={handleClose}
+              >
+                <Modal.Header closeButton>
+                  <Modal.Title>Registration</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  <span>
+                    Prior to place your order, you need to provide your other
+                    information. Please update your profile, we will validate
+                    your profile in next 48 hours and then you can place your
+                    order.
+                  </span>
+                </Modal.Body>
+                <div className="text-center pb-3">
+                  <Button
+                    variant="primary"
+                    type="submit"
+                    onClick={() => navigate("/profile")}
+                  >
+                    Registration
+                  </Button>
+                </div>
+              </Modal>
             </div>
           </div>
         </div>

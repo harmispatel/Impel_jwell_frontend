@@ -25,7 +25,7 @@ const DealerWishList = () => {
     DealerWishlist.removetoWishlist({ email: DealerEmail, design_id: product })
       .then((res) => {
         if (res.success === true) {
-          toast.success(res.message)
+          toast.success(res.message);
           collectionCheck();
         }
       })
@@ -52,15 +52,18 @@ const DealerWishList = () => {
                       <img src={product.image} className="w-100" />
                     </div>
                     <div className="wishlist_info">
-                      <Link to={`/shopdetails/${product.id}`} className="product_data">
+                      <Link
+                        to={`/shopdetails/${product.id}`}
+                        className="product_data"
+                      >
                         <h3>{product.name}</h3>
                       </Link>
 
-                      <p>
+                      {/* <p>
                         ${product.price}
                         <span>$449</span>
                         <label>(50% OFF)</label>
-                      </p>
+                      </p> */}
                     </div>
                     <div className="move_bag_btn d-flex">
                       <button
