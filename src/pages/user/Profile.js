@@ -101,47 +101,48 @@ const Profile = () => {
   const handleUpdate = async (e) => {
     e.preventDefault();
 
-    const formData = new FormData();
-    console.log("Users Updated Form data", formData);
-    localStorage.setItem("verification", profileData.verification);
-
-    formData.append("id", selectedData.id);
-    formData.append("name", userData.name ? userData.name : selectedData.name);
-    formData.append(
-      "email",
-      userData.email ? userData.email : selectedData.email
-    );
-    formData.append(
-      "phone",
-      userData.phone ? userData.phone : selectedData.phone
-    );
-    formData.append(
-      "address",
-      userData.address ? userData.address : selectedData.address
-    );
-    formData.append("pincode", userData.pincode ? userData.pincode : "");
-    formData.append("gst_no", userData.gst_no ? userData.gst_no : "");
-    formData.append("pan_no", userData.pan_no ? userData.pan_no : "");
-    formData.append("city", userData.city ? userData.city : "");
-    formData.append(
-      "state",
-      userData.state ? userData.state : selectedData.state
-    );
-
-    profileService
-      .updateProfile(formData)
-      .then((res) => {
-        console.log(res.status);
-        if (res.status === true) {
-          setShowEdit(false);
-          getProfile();
-          toast.success(res.message);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        toast.error(err.message);
+    if (!userData.name || !userData.email) {
+      setError({
+        nameErr: "name is required",
+        emailErr: "email is required",
       });
+    } else {
+      const formData = new FormData();
+      console.log("Users Updated Form data", formData);
+      localStorage.setItem("verification", profileData.verification);
+
+      formData.append("id", selectedData.id);
+      formData.append("name", userData.name ? userData.name : "");
+      formData.append("email", userData.email ? userData.email : "");
+      formData.append(
+        "phone",
+        userData.phone ? userData.phone : selectedData.phone
+      );
+      formData.append(
+        "address",
+        userData.address ? userData.address : selectedData.address
+      );
+      formData.append("pincode", userData.pincode ? userData.pincode : "");
+      formData.append("gst_no", userData.gst_no ? userData.gst_no : "");
+      formData.append("pan_no", userData.pan_no ? userData.pan_no : "");
+      formData.append("state", userData.state ? userData.state : "");
+      formData.append("city", userData.city ? userData.city : "");
+
+      profileService
+        .updateProfile(formData)
+        .then((res) => {
+          console.log(res.status);
+          if (res.status === true) {
+            setShowEdit(false);
+            getProfile();
+            toast.success(res.message);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          toast.error(err.message);
+        });
+    }
   };
   useEffect(() => {
     getProfile();
@@ -247,9 +248,17 @@ const Profile = () => {
                   <Form.Control
                     name="name"
                     defaultValue={selectedData.name}
-                    onChange={(e) => handleEditChange(e)}
+                    onChange={(defaultValue) => {
+                      handleEditChange(defaultValue);
+                      setError({
+                        nameErr: "",
+                      });
+                    }}
                     placeholder="Enter Your Name"
                   />
+                  {error.nameErr && (
+                    <span className="text-danger">{error.nameErr}</span>
+                  )}
                 </Form.Group>
               </div>
               <div className="col-md-6">
@@ -258,9 +267,17 @@ const Profile = () => {
                   <Form.Control
                     name="email"
                     defaultValue={selectedData.email}
-                    onChange={(e) => handleEditChange(e)}
+                    onChange={(defaultValue) => {
+                      handleEditChange(defaultValue);
+                      setError({
+                        emailErr: "",
+                      });
+                    }}
                     placeholder="Enter Your Email"
                   />
+                  {error.emailErr && (
+                    <span className="text-danger">{error.emailErr}</span>
+                  )}
                 </Form.Group>
               </div>
               <div className="col-md-6">
@@ -298,7 +315,7 @@ const Profile = () => {
                   />
                 </Form.Group>
               </div>
-              <div className="col-md-6">
+              <div className="col-md-6 pb-3">
                 <Form.Group className="mb-2" controlId="formGridAddress1">
                   <Form.Label>GST-number</Form.Label>
                   <Form.Control
@@ -309,9 +326,65 @@ const Profile = () => {
                   />
                 </Form.Group>
               </div>
+              <hr />
               <div className="col-md-12">
                 <Form.Group as={Col} className="mb-2" controlId="formGridZip">
-                  <Form.Label>Address</Form.Label>
+                  <Form.Label>Company Address</Form.Label>
+
+                  <textarea
+                    name="address"
+                    className="form-control"
+                    defaultValue={selectedData.address}
+                    onChange={(e) => handleEditChange(e)}
+                    placeholder="Enter Your Address"
+                  />
+                </Form.Group>
+              </div>
+              <div className="col-md-6">
+                <Form.Group className="mb-2" controlId="formGridAddress1">
+                  <Form.Label>State</Form.Label>
+                  <select
+                    className="form-control"
+                    name="state"
+                    onChange={(e) => {
+                      handleEditChange(e);
+                      fetchCity(e.target.value);
+                    }}
+                    value={userData.state}
+                  >
+                    <option>--state select--</option>
+                    {profileData?.states?.map((userstate, index) => (
+                      <option key={index} value={userstate.id}>
+                        {userstate.name}
+                      </option>
+                    ))}
+                  </select>
+                </Form.Group>
+              </div>
+              <div className="col-md-6 mb-3">
+                <Form.Group className="mb-2" controlId="formGridAddress1">
+                  <Form.Label>City</Form.Label>
+                  <select
+                    className="form-control"
+                    name="city"
+                    onChange={(e) => {
+                      handleEditChange(e);
+                    }}
+                    value={userData.city}
+                  >
+                    <option>--city select--</option>
+                    {city?.map((userstate, index) => (
+                      <option key={index} value={userstate.name}>
+                        {userstate.name}
+                      </option>
+                    ))}
+                  </select>
+                </Form.Group>
+              </div>
+              <hr />
+              <div className="col-md-12">
+                <Form.Group as={Col} className="mb-2" controlId="formGridZip">
+                  <Form.Label>Shipping Address</Form.Label>
 
                   <textarea
                     name="address"
@@ -365,7 +438,7 @@ const Profile = () => {
               </div>
             </div>
 
-            <div className="text-center">
+            <div className="text-center mt-2">
               <Button variant="primary" type="submit">
                 Update
               </Button>

@@ -14,6 +14,7 @@ import {
 } from "firebase/auth";
 import CheckUser from "../../services/Auth";
 import axios from "axios";
+import { isValidPhoneNumber } from "react-phone-number-input";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -38,9 +39,9 @@ const Login = () => {
 
   const sendOtp = (e) => {
     e.preventDefault();
-    if (!phoneNumber) {
-      console.log("Please enter a valid phonenumber");
-    } else {
+    if (phoneNumber && isValidPhoneNumber(phoneNumber.toString())) {
+      console.log("Phone Number Valid wait for otp");
+      setError("Phone number is valid");
       const formatPh = `${phoneNumber}`;
       const appVerifier = window.recaptchaVerifier;
 
@@ -73,6 +74,9 @@ const Login = () => {
         .catch((err) => {
           console.log(err);
         });
+    } else {
+      setError("please enter a valid 10 digit phone number");
+      console.log("Invalid");
     }
   };
 
@@ -129,9 +133,15 @@ const Login = () => {
                                     defaultCountry="IN"
                                     className="form-control phone_input"
                                     value={phoneNumber}
-                                    onChange={setPhoneNumber}
+                                    onChange={(value) => {
+                                      setPhoneNumber(value);
+                                      setError("");
+                                    }}
                                     placeholder="Enter Your Phone Number"
                                   />
+                                  {error && (
+                                    <p className="text-danger">{error}</p>
+                                  )}
                                 </div>
                                 <div className="d-flex justify-content-between text-center align-items-center">
                                   {show === true ? (

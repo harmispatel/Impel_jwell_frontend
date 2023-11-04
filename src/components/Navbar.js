@@ -143,8 +143,12 @@ const Navbar = () => {
                   </li>
 
                   <li className="login_user">
-                    <Link className="icon" to="#">
-                      <FaUserAlt data-tooltip-id="my-tooltip-1" />
+                    <Link
+                      className="icon"
+                      to="#"
+                      data-tooltip-id="my-tooltip-1"
+                    >
+                      <FaUserAlt />
                     </Link>
 
                     <div className="login_dropdown dealer_dropdown">
@@ -178,8 +182,12 @@ const Navbar = () => {
                   </li>
 
                   <li className="login_user">
-                    <Link className="icon" to="#">
-                      <FaUserAlt data-tooltip-id="my-tooltip-1" />
+                    <Link
+                      className="icon"
+                      to="#"
+                      data-tooltip-id="my-tooltip-1"
+                    >
+                      <FaUserAlt />
                     </Link>
 
                     <div className="login_dropdown">
@@ -201,8 +209,12 @@ const Navbar = () => {
 
               {!(Dealer || Phone) && (
                 <li className="login_user">
-                  <Link className="icon" to="/login">
-                    <FaUserAlt data-tooltip-id="my-tooltip-1" />
+                  <Link
+                    className="icon"
+                    to="/login"
+                    data-tooltip-id="my-tooltip-1"
+                  >
+                    <FaUserAlt />
                   </Link>
                 </li>
               )}
@@ -218,23 +230,29 @@ const Navbar = () => {
 
               {Phone && (
                 <li>
-                  <Link className="icon" to="/wishlist">
-                    <BsHeart data-tooltip-id="my-tooltip-2" />
+                  <Link
+                    className="icon"
+                    to="/wishlist"
+                    data-tooltip-id="my-tooltip-2"
+                  >
+                    <BsHeart />
                   </Link>
                 </li>
               )}
-
-              {Phone && (
-                <Link className="icon cart_icon" to="/cart">
-                  <BsHandbag
+              <li>
+                {Phone && (
+                  <Link
+                    className="icon cart_icon"
+                    to="/cart"
                     data-tooltip-id="my-tooltip-3"
-                    style={{ fontSize: "20px", color: "black" }}
-                  />
-                  {userCartCounts?.length > 0 && (
-                    <div className="cart_count">{userCartCounts?.length}</div>
-                  )}
-                </Link>
-              )}
+                  >
+                    <BsHandbag style={{ fontSize: "20px", color: "black" }} />
+                    {userCartCounts?.length > 0 && (
+                      <div className="cart_count">{userCartCounts?.length}</div>
+                    )}
+                  </Link>
+                )}
+              </li>
               <ReactTooltip id="my-tooltip-1" place="top" content="user" />
               <ReactTooltip id="my-tooltip-2" place="top" content="wishlist" />
               <ReactTooltip id="my-tooltip-3" place="top" content="cart" />

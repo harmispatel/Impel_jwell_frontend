@@ -6,25 +6,22 @@ import {
   BsStar,
   BsStarFill,
 } from "react-icons/bs";
-import Select from "react-select";
 import SidebarFilter from "../../components/common/SidebarFilter";
 import ReactLoading from "react-loading";
 import InfiniteScroll from "react-infinite-scroll-component";
 import ShopServices from "../../services/Shop";
 import { Link, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import DealerWishlist from "../../services/Dealer/Collection";
-import UserCartService from "../../services/Cart";
 import UserWishlist from "../../services/Auth";
 import Userservice from "../../services/Cart";
 import { FcLike } from "react-icons/fc";
+import toast from "react-hot-toast";
+import UserCartService from "../../services/Cart";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import { Button, Modal } from "react-bootstrap";
 
 const Shop = ({ product }) => {
   const [searchInput, setSearchInput] = useState([]);
-  const [selectedOption, setSelectedOption] = useState(null);
   const [category, setCategory] = useState([]);
   const [gender, setGender] = useState([]);
   const [tag, setTag] = useState([]);
@@ -42,49 +39,30 @@ const Shop = ({ product }) => {
   const [collection_status, setCollectionStatus] = useState(false);
   const [userWishlist, setUserWishlist] = useState(false);
   const [UsercartItems, setUserCartItems] = useState([]);
+  const [productQuantity, setProductQuantity] = useState(1);
   const [DealercartItems, setDealerCartItems] = useState([]);
-  const [showEdit, setShowEdit] = useState(false);
-  const [show, setShow] = useState(false);
   const [cartItems, setCartItems] = useState(
     JSON.parse(sessionStorage.getItem("cartItems")) || []
   );
-  const [productQuantity, setProductQuantity] = useState(1);
+  const [newadd, setNewAdd] = useState([]);
+  const [pricelow, setPriceLow] = useState([]);
+  const [showEdit, setShowEdit] = useState(false);
+  const [pricehigh, setPriceHigh] = useState([]);
+  const [topseller, setTopSeller] = useState([]);
+  const [selectedOption, setSelectedOption] = useState([]);
+  const [show, setShow] = useState(false);
+  const Phone = localStorage.getItem("phone");
+  const Verification = localStorage.getItem("verification");
+  const navigate = useNavigate();
   const userType = localStorage.getItem("user_type");
   const DealerEmail = localStorage.getItem("email");
   const phone = localStorage.getItem("phone");
-  const Verification = localStorage.getItem("verification");
-  const navigate = useNavigate();
+  const verification = localStorage.getItem("verification");
+  console.log("verification-code -->", verification);
 
-  // const options = [
-  //   { value: "new_added", label: "New Added" },
-  //   { value: "low_to_high", label: "Price,low to high" },
-  //   { value: "high_to_low", label: "Price,high to low" },
-  //   { value: "best_seller", label: "Top Seller" },
-  // ];
-  // const handleSelectChange = (selectedOption) => {
-  //   setSelectedOption(selectedOption);
-  // };
-  // const handleAddToCart = (product) => {
-  //   const existingItem = cartItems.find((item) => item.id === product.id);
-
-  //   if (existingItem) {
-  //     const updatedCart = cartItems.map((item) =>
-  //       item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
-  //     );
-  //     toast.error("already added");
-
-  //     setCartItems(updatedCart);
-  //     sessionStorage.setItem("cartItems", JSON.stringify(updatedCart));
-  //   } else {
-  //     const updatedCart = [...cartItems, { ...product, quantity: 1 }];
-  //     setCartItems(updatedCart);
-  //     sessionStorage.setItem("cartItems", JSON.stringify(updatedCart));
-  //   }
-  // };
-
-  // const isProductInWishList = (product) => {
-  //   return checkList.some((item) => item.id === product.id);
-  // };
+  useEffect(() => {
+    FilterData();
+  }, [category, tag, gender, searchInput, PriceRange, selectedOption]);
 
   const handleCategory = (e) => {
     setIsLoading(true);
@@ -137,9 +115,9 @@ const Shop = ({ product }) => {
       GenderIds: gender,
       TagIds: tag,
       search: searchInput,
-      sort_by: selectedOption,
       MinPrice: PriceRange?.minprice,
       MaxPrice: PriceRange?.maxprice,
+      sort_by: selectedOption,
     };
 
     ShopServices.allfilterdesigns(userData)
@@ -199,92 +177,6 @@ const Shop = ({ product }) => {
       setLoadMore(loadMore + 9);
     }, 200);
   };
-
-  const GetUserCartList = async () => {
-    UserCartService.CartList({ phone: phone })
-      .then((res) => {
-        setCartItems(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  // for user add to cart function
-  const handleAddToCart = (product) => {
-    if (Verification === 3) {
-      const CartData = {
-        phone: phone,
-        design_name: product.name,
-        design_id: product.id,
-        quantity: productQuantity,
-      };
-
-      UserCartService.AddtoCart(CartData)
-        .then((res) => {
-          if (res.status === true) {
-            toast(res.message, { icon: "✔️" });
-            GetUserCartList();
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } else {
-      console.log("Please verify your information to access add to cart");
-      setShowEdit(true);
-    }
-  };
-
-  // for dealer wishlist products
-  const addToWishList = async (product) => {
-    const productId = product.id;
-
-    DealerWishlist.addtoWishlist({ email: DealerEmail, design_id: productId })
-      .then((res) => {
-        console.log(res);
-        if (res.success === true) {
-          setCollectionStatus(true);
-          toast.success(res.message);
-
-          AllData();
-          GetCarList();
-          FilterData();
-          DealerList();
-        } else {
-          toast.error(res.message);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  // for user wishlist products
-  const addToUserWishList = async (product) => {
-    UserWishlist.addtoWishlist({
-      phone: localStorage.getItem("phone"),
-      design_id: product.id,
-    })
-      .then((res) => {
-        if (res.success === true) {
-          setUserWishlist(true);
-          toast.success(res.message);
-
-          AllData();
-          DealerList();
-          GetCarList();
-          FilterData();
-        } else {
-          toast.error(res.message);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  // for sort_by filters
   const handleRadioChange = (event) => {
     setSelectedOption(event.target.value);
     const sortfield = event.target.value;
@@ -308,19 +200,119 @@ const Shop = ({ product }) => {
     setFilterData(sorted);
   };
 
-  useEffect(() => {
-    GetCarList();
-    DealerList();
-  }, []);
-  useEffect(() => {
-    FilterData();
-  }, [category, tag, gender, searchInput, selectedOption, PriceRange]);
+  // const handleAddToCart = (product) => {
+  //   const existingItem = cartItems.find((item) => item.id === product.id);
 
-  // for model
+  //   if (existingItem) {
+  //     const updatedCart = cartItems.map((item) =>
+  //       item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+  //     );
+  //     toast.error("already added");
+
+  //     setCartItems(updatedCart);
+  //     sessionStorage.setItem("cartItems", JSON.stringify(updatedCart));
+  //   } else {
+  //     const updatedCart = [...cartItems, { ...product, quantity: 1 }];
+  //     setCartItems(updatedCart);
+  //     sessionStorage.setItem("cartItems", JSON.stringify(updatedCart));
+  //   }
+  // };
+
+  // const isProductInWishList = (product) => {
+  //   return checkList.some((item) => item.id === product.id);
+  // };
+
+  // Dealer wishlist function
+
+  const addToWishList = async (product) => {
+    if (!DealercartItems.some((item) => item.id === product.id)) {
+      DealerWishlist.addtoWishlist({
+        email: DealerEmail,
+        design_id: product.id,
+      })
+        .then((res) => {
+          console.log(res);
+          if (res.success === true) {
+            setCollectionStatus(true);
+            toast(res.message);
+            AllData();
+            collectionCheck();
+          } else {
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      toast.error("Item is already in the collection");
+    }
+  };
+
+  // userwishlist function
+  const addToUserWishList = async (product) => {
+    UserWishlist.addtoWishlist({
+      phone: localStorage.getItem("phone"),
+      design_id: product.id,
+    })
+      .then((res) => {
+        if (res.success === true) {
+          setUserWishlist(true);
+          toast.success(res.message);
+
+          AllData();
+          DealerList();
+          GetCarList();
+          FilterData();
+        } else {
+          toast.error(res.message);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const handleAddToCart = (product) => {
+    if (Verification === 3) {
+      const CartData = {
+        phone: Phone,
+        design_name: product.name,
+        design_id: product.id,
+        quantity: productQuantity,
+      };
+
+      UserCartService.AddtoCart(CartData)
+        .then((res) => {
+          if (res.status === true) {
+            toast(res.message, { icon: "✔️" });
+            GetUserCartList();
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      console.log("Please verify your information to access add to cart");
+      setShowEdit(true);
+    }
+  };
+  const GetUserCartList = async () => {
+    UserCartService.CartList({ phone: Phone })
+      .then((res) => {
+        setCartItems(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   const handleClose = () => {
     setShow(false);
     setShowEdit(false);
   };
+  useEffect(() => {
+    GetCarList();
+    DealerList();
+  }, []);
+
   return (
     <section className="shop">
       <div className="container">
@@ -459,11 +451,11 @@ const Shop = ({ product }) => {
                 </div>
               ) : (
                 <>
-                  {category.length === 0 &&
+                  {searchInput.length === 0 &&
+                  category.length === 0 &&
                   gender.length === 0 &&
-                  searchInput.length === 0 &&
-                  PriceRange.minprice === null &&
-                  selectedOption === null ? (
+                  selectedOption.length === 0 &&
+                  PriceRange.minprice === null ? (
                     <InfiniteScroll
                       dataLength={displayedItems.length}
                       next={FetchMoreData}
@@ -499,21 +491,20 @@ const Shop = ({ product }) => {
                                       <Link
                                         to="#"
                                         onClick={() => handleAddToCart(product)}
-                                        data-tooltip-id="my-tooltip-7"
                                       >
-                                        <BsHandbag />
+                                        <BsHandbag data-tooltip-id="my-tooltip-7" />
                                       </Link>
                                     ) : (
                                       ""
                                     )}
                                   </div>
+
                                   <div>
                                     {userType == 1 ? (
                                       <>
                                         {DealerEmail ? (
                                           <Link
                                             to="#"
-                                            data-tooltip-id="my-tooltip-12"
                                             onClick={() =>
                                               addToWishList(product)
                                             }
@@ -521,17 +512,14 @@ const Shop = ({ product }) => {
                                             {DealercartItems.find(
                                               (item) => item.id === product.id
                                             ) ? (
-                                              <BsStarFill />
+                                              <BsStarFill data-tooltip-id="my-tooltip-12" />
                                             ) : (
-                                              <BsStar />
+                                              <BsStar data-tooltip-id="my-tooltip-12" />
                                             )}
                                           </Link>
                                         ) : (
-                                          <Link
-                                            to="/Dealer_login"
-                                            data-tooltip-id="my-tooltip-12"
-                                          >
-                                            <BsStar />
+                                          <Link to="/Dealer_login">
+                                            <BsStar data-tooltip-id="my-tooltip-12" />
                                           </Link>
                                         )}
                                       </>
@@ -540,7 +528,6 @@ const Shop = ({ product }) => {
                                         {phone ? (
                                           <Link
                                             to="#"
-                                            data-tooltip-id="my-tooltip-9"
                                             onClick={() =>
                                               addToUserWishList(product)
                                             }
@@ -548,26 +535,24 @@ const Shop = ({ product }) => {
                                             {UsercartItems?.find(
                                               (item) => item.id === product.id
                                             ) ? (
-                                              <FcLike />
+                                              <FcLike data-tooltip-id="my-tooltip-9" />
                                             ) : (
-                                              <BsHeart />
+                                              <BsHeart data-tooltip-id="my-tooltip-9" />
                                             )}
                                           </Link>
                                         ) : (
-                                          <Link
-                                            to="/login"
-                                            data-tooltip-id="my-tooltip-9"
-                                          >
-                                            <BsHeart />
+                                          <Link to="/login">
+                                            <BsHeart data-tooltip-id="my-tooltip-9" />
                                           </Link>
                                         )}
                                       </>
                                     )}
                                   </div>
                                 </div>
+
                                 <div className="product_details">
                                   <h4>{product.name}</h4>
-                                  <p>Minola Golden Necklace</p>
+                                  <p>{product.category_name}</p>
                                   <h5>
                                     ₹{product.price.toLocaleString("en-US")}
                                   </h5>
@@ -586,7 +571,6 @@ const Shop = ({ product }) => {
                             <div className="col-md-4">
                               <Link
                                 to={`/shopdetails/${data.id}`}
-                                target={"_blank"}
                                 className="product_data"
                               >
                                 {data.image ? (
@@ -608,9 +592,8 @@ const Shop = ({ product }) => {
                                       <Link
                                         to="#"
                                         onClick={() => handleAddToCart(product)}
-                                        data-tooltip-id="my-tooltip-7"
                                       >
-                                        <BsHandbag />
+                                        <BsHandbag data-tooltip-id="my-tooltip-7" />
                                       </Link>
                                     ) : (
                                       ""
@@ -622,7 +605,6 @@ const Shop = ({ product }) => {
                                         {DealerEmail ? (
                                           <Link
                                             to="#"
-                                            data-tooltip-id="my-tooltip-12"
                                             onClick={() =>
                                               addToWishList(product)
                                             }
@@ -630,17 +612,14 @@ const Shop = ({ product }) => {
                                             {DealercartItems.find(
                                               (item) => item?.id === product?.id
                                             ) ? (
-                                              <BsStarFill />
+                                              <BsStarFill data-tooltip-id="my-tooltip-12" />
                                             ) : (
-                                              <BsStar />
+                                              <BsStar data-tooltip-id="my-tooltip-12" />
                                             )}
                                           </Link>
                                         ) : (
-                                          <Link
-                                            to="/Dealer_login"
-                                            data-tooltip-id="my-tooltip-12"
-                                          >
-                                            <BsStar />
+                                          <Link to="/Dealer_login">
+                                            <BsStar data-tooltip-id="my-tooltip-12" />
                                           </Link>
                                         )}
                                       </>
@@ -649,7 +628,6 @@ const Shop = ({ product }) => {
                                         {phone ? (
                                           <Link
                                             to="#"
-                                            data-tooltip-id="my-tooltip-9"
                                             onClick={() =>
                                               addToUserWishList(data)
                                             }
@@ -657,27 +635,25 @@ const Shop = ({ product }) => {
                                             {UsercartItems?.find(
                                               (item) => item.id === data.id
                                             ) ? (
-                                              <FcLike />
+                                              <FcLike data-tooltip-id="my-tooltip-9" />
                                             ) : (
-                                              <BsHeart />
+                                              <BsHeart data-tooltip-id="my-tooltip-9" />
                                             )}
                                           </Link>
                                         ) : (
-                                          <Link
-                                            to="/login"
-                                            data-tooltip-id="my-tooltip-9"
-                                          >
-                                            <BsHeart />
+                                          <Link to="/login">
+                                            <BsHeart data-tooltip-id="my-tooltip-9" />
                                           </Link>
                                         )}
                                       </>
                                     )}
                                   </div>
                                 </div>
+
                                 <div className="product_details">
                                   <h4>{data.name}</h4>
-                                  <p>Minola Golden Necklace</p>
-                                  <h5>₹{data.price.toLocaleString("en-US")}</h5>
+                                  <p>{data.category_name}</p>
+                                  <h5>₹{data.price}</h5>
                                 </div>
                               </Link>
                             </div>

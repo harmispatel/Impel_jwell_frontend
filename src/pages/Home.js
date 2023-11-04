@@ -16,9 +16,6 @@ import Kada from "../assets/images/kada.jpg";
 import Gold_Ring from "../assets/images/gold_ring.png";
 import homeService from "../services/Home";
 import { Link } from "react-router-dom";
-import banner from "../assets/images/banner.jpg";
-import category_img from "../assets/images/category.jpg";
-import introBanner from "../assets/video/intro.mp4";
 import gif from "../assets/images/intro.gif";
 
 const Home = () => {

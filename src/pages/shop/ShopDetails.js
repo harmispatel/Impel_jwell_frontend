@@ -360,53 +360,26 @@ const ShopDetails = () => {
                         <></>
                       )}
 
-                      {/* <div className="add_cart align-items-center d-flex">
+                      <div className="add_cart align-items-center d-flex">
                         {Dealer ? (
                           <>
-                            {DealercartItems.find((item) => item?.design_name === product?.name) ? (
-                              <Link className="btn btn-outline-dark" to="/dealer_cart">
-                                Go To Cart
-                              </Link>
-                            ) : (
-                              <>
-                              <div>
-                                <button className="btn btn-outline-dark" onClick={() => handleAddToDealerCart(product)}>
-                                  Add To Cart
-                                </button>
-                              </div>
-                              <div>
-                                  <button className="btn btn-outline-dark" onClick={() => addToDealerWishList(product)}>
-                                  {DealerWishlistItems?.find((item)=>item?.id === product?.id)?('Wishlisted'):('Wishlist')} 
-                                  </button>
-                              </div>
-                              </> 
-                            )}
+                            <div>
+                              <button
+                                className="btn btn-outline-dark"
+                                onClick={() => addToDealerWishList(product)}
+                              >
+                                {DealerWishlistItems?.find(
+                                  (item) => item?.id === product?.id
+                                )
+                                  ? "Wishlisted"
+                                  : "Wishlist"}
+                              </button>
+                            </div>
                           </>
                         ) : (
-                          <>  
-                            {cartItems && cartItems?.find((item) => item.design_name === product?.name) ? (
-                              <>
-                                <Link className="btn btn-outline-dark" to="/cart">
-                                  Go To Cart
-                                </Link>
-                              </>
-                            ) : (
-                              <>
-                                <div>
-                                    <button className="btn btn-outline-dark" onClick={() => handleAddToCart(product)}>
-                                      Add To Cart
-                                    </button>
-                                </div>
-                                <div>
-                                    <button className="btn btn-outline-dark align-items-center" onClick={()=>addToUserWishList(product)}>
-                                      {UserWishlistItems?.find((item)=>item?.id === product?.id)?('Wishlisted'):('Wishlist')} 
-                                    </button>
-                                </div>
-                              </>
-                            )}
-                          </>
+                          <></>
                         )}
-                      </div> */}
+                      </div>
                       <div className="add_cart align-items-center d-flex">
                         {Phone ? (
                           <>
