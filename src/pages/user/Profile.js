@@ -4,7 +4,6 @@ import { useState } from "react";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
 
 const Profile = () => {
   const phone = localStorage.getItem("phone");
@@ -50,20 +49,36 @@ const Profile = () => {
       .getProfile({ phone: phone })
       .then((res) => {
         console.log("userData", res.data);
-        setProfileData(res.data);
+        const statename = res.data.states?.find(
+          (item) => item.id == res.data.state
+        );
+        setProfileData({ ...res.data, state_name: statename?.name });
+        setUserData({ ...res.data, state_name: statename?.name });
+        res.data.state && fetchCity(res.data.state);
       })
       .catch((err) => {
         console.log(err);
       });
   };
-
+  const fetchCity = async (stateId) => {
+    await profileService
+      .getCity({ state_id: stateId })
+      .then((res) => {
+        console.log("userData", res.data);
+        setcity(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   const handleEditChange = (e) => {
     const { name, value } = e.target;
     console.log(e.target.value);
-    if (name === "states") {
+    if (name === "state") {
       setUserData({
         ...userData,
-        states: value,
+        state: value,
+        city: "",
       });
     } else {
       setUserData({
@@ -104,19 +119,10 @@ const Profile = () => {
       "address",
       userData.address ? userData.address : selectedData.address
     );
-    formData.append(
-      "pincode",
-      userData.pincode ? userData.pincode : selectedData.pincode
-    );
-    formData.append(
-      "gst_no",
-      userData.gst_no ? userData.gst_no : selectedData.gst_no
-    );
-    formData.append(
-      "pan_no",
-      userData.pan_no ? userData.pan_no : selectedData.pan_no
-    );
-    formData.append("city", userData.city ? userData.city : selectedData.city);
+    formData.append("pincode", userData.pincode ? userData.pincode : "");
+    formData.append("gst_no", userData.gst_no ? userData.gst_no : "");
+    formData.append("pan_no", userData.pan_no ? userData.pan_no : "");
+    formData.append("city", userData.city ? userData.city : "");
     formData.append(
       "state",
       userData.state ? userData.state : selectedData.state
@@ -187,7 +193,7 @@ const Profile = () => {
                           </tr>
                           <tr>
                             <td>State</td>
-                            <td>{profileData?.state}</td>
+                            <td>{profileData?.state_name}</td>
                           </tr>
                           <tr>
                             <td>City</td>
@@ -324,12 +330,13 @@ const Profile = () => {
                     name="state"
                     onChange={(e) => {
                       handleEditChange(e);
+                      fetchCity(e.target.value);
                     }}
                     value={userData.state}
                   >
                     <option>--state select--</option>
                     {profileData?.states?.map((userstate, index) => (
-                      <option key={index} value={userstate.name}>
+                      <option key={index} value={userstate.id}>
                         {userstate.name}
                       </option>
                     ))}
@@ -339,8 +346,20 @@ const Profile = () => {
               <div className="col-md-6">
                 <Form.Group className="mb-2" controlId="formGridAddress1">
                   <Form.Label>City</Form.Label>
-                  <select className="form-control">
+                  <select
+                    className="form-control"
+                    name="city"
+                    onChange={(e) => {
+                      handleEditChange(e);
+                    }}
+                    value={userData.city}
+                  >
                     <option>--city select--</option>
+                    {city?.map((userstate, index) => (
+                      <option key={index} value={userstate.name}>
+                        {userstate.name}
+                      </option>
+                    ))}
                   </select>
                 </Form.Group>
               </div>

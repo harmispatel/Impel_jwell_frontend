@@ -38,39 +38,42 @@ const Login = () => {
 
   const sendOtp = (e) => {
     e.preventDefault();
+    if (!phoneNumber) {
+      console.log("Please enter a valid phonenumber");
+    } else {
+      const formatPh = `${phoneNumber}`;
+      const appVerifier = window.recaptchaVerifier;
 
-    const formatPh = `${phoneNumber}`;
-    const appVerifier = window.recaptchaVerifier;
-
-    axios
-      .post("https://harmistechnology.com/admin.indianjewelley/api/login", {
-        phone: formatPh,
-      })
-      .then((res) => {
-        const response = res.data;
-        if (response.status === 0) {
-          toast.error(response.message);
-          navigate("/login");
-          return;
-        } else {
-          const auth = getAuth();
-          signInWithPhoneNumber(auth, formatPh, appVerifier)
-            .then((confirmationResult) => {
-              window.confirmationResult = confirmationResult;
-              setShow(true);
-              console.log("OTP has been sent");
-            })
-            .catch((err) => {
-              console.log("SMS not sent", err);
-              setTimeout(() => {
-                window.location.reload(true);
-              }, 2000);
-            });
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      axios
+        .post("https://harmistechnology.com/admin.indianjewelley/api/login", {
+          phone: formatPh,
+        })
+        .then((res) => {
+          const response = res.data;
+          if (response.status === 0) {
+            toast.error(response.message);
+            navigate("/login");
+            return;
+          } else {
+            const auth = getAuth();
+            signInWithPhoneNumber(auth, formatPh, appVerifier)
+              .then((confirmationResult) => {
+                window.confirmationResult = confirmationResult;
+                setShow(true);
+                console.log("OTP has been sent");
+              })
+              .catch((err) => {
+                console.log("SMS not sent", err);
+                setTimeout(() => {
+                  window.location.reload(true);
+                }, 2000);
+              });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   const handleOtpVerification = (e) => {
@@ -84,7 +87,7 @@ const Login = () => {
       .then((result) => {
         if (result) {
           localStorage.setItem("phone", phoneNumber);
-          
+
           navigate("/");
           // toast.success("Login Successfully...");
         }

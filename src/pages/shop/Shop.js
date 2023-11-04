@@ -676,7 +676,7 @@ const Shop = ({ product }) => {
 
   useEffect(() => {
     FilterData();
-  }, [category, tag, gender, searchInput, PriceRange]);
+  }, [category, tag, gender, searchInput, PriceRange, selectedOption]);
 
   const handleCategory = (e) => {
     setIsLoading(true);
@@ -731,7 +731,7 @@ const Shop = ({ product }) => {
       search: searchInput,
       MinPrice: PriceRange?.minprice,
       MaxPrice: PriceRange?.maxprice,
-      sortby: selectedOption,
+      sort_by: selectedOption,
     };
 
     ShopServices.allfilterdesigns(userData)
@@ -799,17 +799,12 @@ const Shop = ({ product }) => {
     console.log(sorted);
     switch (sortfield) {
       case "new_added":
-        console.log("newadded");
         break;
       case "low_to_high":
-        sorted.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
         break;
       case "high_to_low":
-        sorted.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
         break;
       case "top_seller":
-        console.log("Top selling");
-        sorted = sorted.filter((product) => product.highest_selling === "Yes");
         break;
       case "clear_all":
         sorted = [...allData];
@@ -819,6 +814,7 @@ const Shop = ({ product }) => {
     }
     setFilterData(sorted);
   };
+
   // const handleAddToCart = (product) => {
   //   const existingItem = cartItems.find((item) => item.id === product.id);
 
