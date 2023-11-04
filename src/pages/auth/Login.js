@@ -14,7 +14,6 @@ import {
 } from "firebase/auth";
 import CheckUser from "../../services/Auth";
 import axios from "axios";
-import { isValidPhoneNumber } from "react-phone-number-input";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -39,45 +38,39 @@ const Login = () => {
 
   const sendOtp = (e) => {
     e.preventDefault();
-    if (phoneNumber && isValidPhoneNumber(phoneNumber.toString())) {
-      console.log("Phone Number Valid wait for otp");
-      setError("Phone number is valid");
-      const formatPh = `${phoneNumber}`;
-      const appVerifier = window.recaptchaVerifier;
 
-      axios
-        .post("https://harmistechnology.com/admin.indianjewelley/api/login", {
-          phone: formatPh,
-        })
-        .then((res) => {
-          const response = res.data;
-          if (response.status === 0) {
-            toast.error(response.message);
-            navigate("/login");
-            return;
-          } else {
-            const auth = getAuth();
-            signInWithPhoneNumber(auth, formatPh, appVerifier)
-              .then((confirmationResult) => {
-                window.confirmationResult = confirmationResult;
-                setShow(true);
-                console.log("OTP has been sent");
-              })
-              .catch((err) => {
-                console.log("SMS not sent", err);
-                setTimeout(() => {
-                  window.location.reload(true);
-                }, 2000);
-              });
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } else {
-      setError("please enter a valid 10 digit phone number");
-      console.log("Invalid");
-    }
+    const formatPh = `${phoneNumber}`;
+    const appVerifier = window.recaptchaVerifier;
+
+    axios
+      .post("https://harmistechnology.com/admin.indianjewelley/api/login", {
+        phone: formatPh,
+      })
+      .then((res) => {
+        const response = res.data;
+        if (response.status === 0) {
+          toast.error(response.message);
+          navigate("/login");
+          return;
+        } else {
+          const auth = getAuth();
+          signInWithPhoneNumber(auth, formatPh, appVerifier)
+            .then((confirmationResult) => {
+              window.confirmationResult = confirmationResult;
+              setShow(true);
+              console.log("OTP has been sent");
+            })
+            .catch((err) => {
+              console.log("SMS not sent", err);
+              setTimeout(() => {
+                window.location.reload(true);
+              }, 2000);
+            });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const handleOtpVerification = (e) => {
@@ -133,15 +126,9 @@ const Login = () => {
                                     defaultCountry="IN"
                                     className="form-control phone_input"
                                     value={phoneNumber}
-                                    onChange={(value) => {
-                                      setPhoneNumber(value);
-                                      setError("");
-                                    }}
+                                    onChange={setPhoneNumber}
                                     placeholder="Enter Your Phone Number"
                                   />
-                                  {error && (
-                                    <p className="text-danger">{error}</p>
-                                  )}
                                 </div>
                                 <div className="d-flex justify-content-between text-center align-items-center">
                                   {show === true ? (

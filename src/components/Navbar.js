@@ -77,7 +77,7 @@ const Navbar = () => {
     }
   };
 
-  console.log("User Cart Counts", userCartCounts);
+  // console.log("User Cart Counts", userCartCounts);
 
   return (
     <header className={colorChange ? "header sticky_header" : "header"}>
