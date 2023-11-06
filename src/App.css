@@ -843,6 +843,11 @@ body {
   color: #fff;
 }
 
+.filters .col-md-12 .row .col-md-2:last-child .csm_sort_btn input[type="radio"]:checked+label {
+  background: #edeae9;
+  color: #000;
+}
+
 
 .csm_sort_btn {
   position: relative;
@@ -1054,6 +1059,11 @@ body {
 .profile {
   margin-top: 130px;
   background-color: #fff;
+}
+
+.address-check-text {
+  font-weight: 800;
+  font-size: 16px;
 }
 
 /* loader */
@@ -1550,7 +1560,7 @@ body {
     margin-top: 115px;
     padding: 40px 0
   }
-  
+
 
   .login_main {
     height: auto;

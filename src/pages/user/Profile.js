@@ -12,13 +12,18 @@ const Profile = () => {
   const [selectedData, setSelectedData] = useState([]);
   const [profileImg, setProfileImg] = useState({ preview: "", raw: "" });
   const [profileData, setProfileData] = useState([]);
-  const [city, setcity] = useState([]);
+  const [city, setcity] = useState();
+  const [shipping_city, setShipping_city] = useState();
   const [userData, setUserData] = useState({
     name: "",
     email: "",
     phone: "",
     address: "",
     pincode: "",
+    shipping_address: "",
+    shipping_pincode: "",
+    shipping_state: "",
+    shipping_city: "",
     gst_no: "",
     pan_no: "",
     state: "",
@@ -35,6 +40,10 @@ const Profile = () => {
     cityErr: "",
     pancardErr: "",
     gstErr: "",
+    shipping_address_err: "",
+    shipping_pincode_err: "",
+    shipping_state_err: "",
+    shipping_city_err: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -48,24 +57,42 @@ const Profile = () => {
     await profileService
       .getProfile({ phone: phone })
       .then((res) => {
-        console.log("userData", res.data);
-        const statename = res.data.states?.find(
-          (item) => item.id == res.data.state
-        );
-        setProfileData({ ...res.data, state_name: statename?.name });
-        setUserData({ ...res.data, state_name: statename?.name });
-        res.data.state && fetchCity(res.data.state);
+        const statename = res.data.state.name;
+        const cityname = res.data.city.name;
+        setProfileData({
+          ...res.data,
+          state_name: statename,
+          city_name: cityname,
+        });
+        setUserData({
+          ...res.data,
+          state_name: statename,
+          city_name: cityname,
+        });
+        res.data.state.id && fetchCity(res.data.state.id);
+        res.data.shipping_state.id &&
+          fetchShippingCity(res.data.shipping_state.id);
       })
       .catch((err) => {
         console.log(err);
       });
   };
+
   const fetchCity = async (stateId) => {
     await profileService
       .getCity({ state_id: stateId })
       .then((res) => {
-        console.log("userData", res.data);
         setcity(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const fetchShippingCity = async (stateId) => {
+    await profileService
+      .getCity({ state_id: stateId })
+      .then((res) => {
+        setShipping_city(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -73,7 +100,6 @@ const Profile = () => {
   };
   const handleEditChange = (e) => {
     const { name, value } = e.target;
-    console.log(e.target.value);
     if (name === "state") {
       setUserData({
         ...userData,
@@ -93,24 +119,107 @@ const Profile = () => {
     //   });
     // }
   };
+
+  const pincodeRegex = /^\d{6}$/;
   const handleEdit = async (data) => {
     setShowEdit(true);
     setSelectedData(data);
   };
+  const validateForm = () => {
+    let isValid = true;
+    const validationErrors = { ...error };
+    if (!userData.name.trim()) {
+      validationErrors.nameErr = "Name is required";
+      isValid = false;
+    } else {
+      validationErrors.nameErr = "";
+    }
+
+    if (!userData.email.trim()) {
+      validationErrors.emailErr = "Email is required";
+      isValid = false;
+    } else if (
+      !/^[a-zA-Z\d\.-]+@[a-zA-Z\d\.-]+\.[a-zA-Z]{2,}$/i.test(userData.email)
+    ) {
+      validationErrors.emailErr = "Invalid email address";
+      isValid = false;
+    } else if (userData.email.indexOf("@") === -1) {
+      validationErrors.emailErr = "Email address must contain @ symbol";
+      isValid = false;
+    } else {
+      validationErrors.emailErr = "";
+    }
+
+    if (!userData.address.trim()) {
+      validationErrors.addressErr = "Address is required";
+      isValid = false;
+    } else {
+      validationErrors.addressErr = "";
+    }
+    if (!userData.pincode.trim()) {
+      validationErrors.pincodeErr = "Pincode is required";
+      isValid = false;
+    } else if (!pincodeRegex.test(userData.pincode.trim())) {
+      validationErrors.pincodeErr = "Pincode must be a 6-digit number";
+      isValid = false;
+    } else {
+      validationErrors.pincodeErr = "";
+    }
+
+    if (userData.state.id === "--state select--") {
+      validationErrors.stateErr = "State is required";
+      isValid = false;
+    } else {
+      validationErrors.stateErr = "";
+    }
+
+    if (!userData.city.id) {
+      validationErrors.cityErr = "City is required";
+      isValid = false;
+    } else {
+      validationErrors.cityErr = "";
+    }
+
+    // shiopping-addres-errors
+    if (!userData.shipping_address.trim()) {
+      validationErrors.shipping_address_err = "Shipping address is required.";
+      isValid = false;
+    } else {
+      validationErrors.shipping_address_err = "";
+    }
+    if (!userData.shipping_pincode.trim()) {
+      validationErrors.shipping_pincode_err = "Pincode is required";
+      isValid = false;
+    } else if (!pincodeRegex.test(userData.shipping_pincode.trim())) {
+      validationErrors.shipping_pincode_err =
+        "Pincode must be a 6-digit number";
+      isValid = false;
+    } else {
+      validationErrors.shipping_pincode_err = "";
+    }
+    if (userData.shipping_state === "--shipping state select--") {
+      validationErrors.shipping_state_err = "Shipping State is required";
+      isValid = false;
+    } else {
+      validationErrors.shipping_state_err = "";
+    }
+    if (userData.shipping_city === "--shipping City select--") {
+      validationErrors.shipping_city_err = "Shipping city is required";
+      isValid = false;
+    } else {
+      validationErrors.shipping_city_err = "";
+    }
+
+    setError(validationErrors);
+    return isValid;
+  };
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-
-    if (!userData.name || !userData.email) {
-      setError({
-        nameErr: "name is required",
-        emailErr: "email is required",
-      });
-    } else {
+    const isFormValid = validateForm();
+    localStorage.setItem("verification", profileData.verification);
+    if (isFormValid) {
       const formData = new FormData();
-      console.log("Users Updated Form data", formData);
-      localStorage.setItem("verification", profileData.verification);
-
       formData.append("id", selectedData.id);
       formData.append("name", userData.name ? userData.name : "");
       formData.append("email", userData.email ? userData.email : "");
@@ -118,32 +227,45 @@ const Profile = () => {
         "phone",
         userData.phone ? userData.phone : selectedData.phone
       );
+      formData.append("address", userData.address ? userData.address : "");
       formData.append(
-        "address",
-        userData.address ? userData.address : selectedData.address
+        "shipping_address",
+        userData.shipping_address ? userData.shipping_address : ""
       );
       formData.append("pincode", userData.pincode ? userData.pincode : "");
       formData.append("gst_no", userData.gst_no ? userData.gst_no : "");
       formData.append("pan_no", userData.pan_no ? userData.pan_no : "");
-      formData.append("state", userData.state ? userData.state : "");
-      formData.append("city", userData.city ? userData.city : "");
-
+      formData.append("state", userData.state.id ? userData.state.id : "");
+      formData.append(
+        "shipping_state",
+        userData.shipping_state.id ? userData.shipping_state.id : ""
+      );
+      formData.append("city", userData.city.id ? userData.city.id : "");
+      formData.append(
+        "shipping_city",
+        userData.shipping_city.id ? userData.shipping_city.id : ""
+      );
       profileService
         .updateProfile(formData)
         .then((res) => {
-          console.log(res.status);
           if (res.status === true) {
             setShowEdit(false);
             getProfile();
             toast.success(res.message);
+            localStorage.setItem("verification", res.data.verification);
           }
         })
         .catch((err) => {
           console.log(err);
           toast.error(err.message);
         });
+    } else {
+      // Form is not valid, display errors to the user
+      // Optionally, you can also scroll to the first error or display a message
+      // to inform the user that there are validation errors.
     }
   };
+
   useEffect(() => {
     getProfile();
   }, []);
@@ -185,7 +307,7 @@ const Profile = () => {
                             <td>{profileData.email}</td>
                           </tr>
                           <tr>
-                            <td>Address</td>
+                            <td>Company Address</td>
                             <td>{profileData.address}</td>
                           </tr>
                           <tr>
@@ -198,7 +320,7 @@ const Profile = () => {
                           </tr>
                           <tr>
                             <td>City</td>
-                            <td>{profileData.city}</td>
+                            <td>{profileData?.city_name}</td>
                           </tr>
                           <tr>
                             <td>GST Number</td>
@@ -240,7 +362,10 @@ const Profile = () => {
         </Modal.Header>
 
         <Modal.Body>
-          <Form onSubmit={(e) => handleUpdate(e, selectedData)}>
+          <Form
+            onSubmit={(e) => handleUpdate(e, selectedData)}
+            onKeyUp={(e) => validateForm(e)}
+          >
             <div className="row">
               <div className="col-md-6">
                 <Form.Group as={Col} className="mb-2" controlId="formGridState">
@@ -248,17 +373,10 @@ const Profile = () => {
                   <Form.Control
                     name="name"
                     defaultValue={selectedData.name}
-                    onChange={(defaultValue) => {
-                      handleEditChange(defaultValue);
-                      setError({
-                        nameErr: "",
-                      });
-                    }}
+                    onChange={(e) => handleEditChange(e)}
                     placeholder="Enter Your Name"
                   />
-                  {error.nameErr && (
-                    <span className="text-danger">{error.nameErr}</span>
-                  )}
+                  <span className="text-danger">{error.nameErr}</span>
                 </Form.Group>
               </div>
               <div className="col-md-6">
@@ -267,17 +385,10 @@ const Profile = () => {
                   <Form.Control
                     name="email"
                     defaultValue={selectedData.email}
-                    onChange={(defaultValue) => {
-                      handleEditChange(defaultValue);
-                      setError({
-                        emailErr: "",
-                      });
-                    }}
+                    onChange={(e) => handleEditChange(e)}
                     placeholder="Enter Your Email"
                   />
-                  {error.emailErr && (
-                    <span className="text-danger">{error.emailErr}</span>
-                  )}
+                  <span className="text-danger">{error.emailErr}</span>
                 </Form.Group>
               </div>
               <div className="col-md-6">
@@ -290,20 +401,10 @@ const Profile = () => {
                     onChange={(e) => handleEditChange(e)}
                     placeholder="Enter Your Phone"
                   />
+                  <span className="text-danger">{error.phoneErr}</span>
                 </Form.Group>
               </div>
 
-              <div className="col-md-6">
-                <Form.Group className="mb-2" controlId="formGridAddress1">
-                  <Form.Label>Pincode</Form.Label>
-                  <Form.Control
-                    name="pincode"
-                    defaultValue={selectedData.pincode}
-                    onChange={(e) => handleEditChange(e)}
-                    placeholder="Enter Your Pincode"
-                  />
-                </Form.Group>
-              </div>
               <div className="col-md-6">
                 <Form.Group className="mb-2" controlId="formGridAddress1">
                   <Form.Label>Pan-card</Form.Label>
@@ -313,9 +414,10 @@ const Profile = () => {
                     onChange={(e) => handleEditChange(e)}
                     placeholder="Enter Your Pancard number"
                   />
+                  <span className="text-danger">{error.pancardErr}</span>
                 </Form.Group>
               </div>
-              <div className="col-md-6 pb-3">
+              <div className="col-md-6 mb-3">
                 <Form.Group className="mb-2" controlId="formGridAddress1">
                   <Form.Label>GST-number</Form.Label>
                   <Form.Control
@@ -324,20 +426,36 @@ const Profile = () => {
                     onChange={(e) => handleEditChange(e)}
                     placeholder="Enter Your GST number"
                   />
+                  <span className="text-danger">{error.gstErr}</span>
                 </Form.Group>
               </div>
               <hr />
-              <div className="col-md-12">
+              <div className="col-md-6">
                 <Form.Group as={Col} className="mb-2" controlId="formGridZip">
                   <Form.Label>Company Address</Form.Label>
-
                   <textarea
                     name="address"
                     className="form-control"
                     defaultValue={selectedData.address}
-                    onChange={(e) => handleEditChange(e)}
+                    onChange={(e) => {
+                      handleEditChange(e);
+                    }}
                     placeholder="Enter Your Address"
                   />
+                  <span className="text-danger">{error.addressErr}</span>
+                </Form.Group>
+              </div>
+              <div className="col-md-6">
+                <Form.Group className="mb-2" controlId="formGridAddress1">
+                  <Form.Label>Pincode</Form.Label>
+                  <Form.Control
+                    name="pincode"
+                    defaultValue={selectedData.pincode}
+                    onChange={(e) => handleEditChange(e)}
+                    placeholder="Enter Your Pincode"
+                    maxLength={6}
+                  />
+                  <span className="text-danger">{error.pincodeErr}</span>
                 </Form.Group>
               </div>
               <div className="col-md-6">
@@ -350,7 +468,7 @@ const Profile = () => {
                       handleEditChange(e);
                       fetchCity(e.target.value);
                     }}
-                    value={userData.state}
+                    value={userData.state.id}
                   >
                     <option>--state select--</option>
                     {profileData?.states?.map((userstate, index) => (
@@ -359,6 +477,7 @@ const Profile = () => {
                       </option>
                     ))}
                   </select>
+                  <span className="text-danger">{error.stateErr}</span>
                 </Form.Group>
               </div>
               <div className="col-md-6 mb-3">
@@ -370,75 +489,110 @@ const Profile = () => {
                     onChange={(e) => {
                       handleEditChange(e);
                     }}
-                    value={userData.city}
+                    value={userData.city.id}
                   >
                     <option>--city select--</option>
-                    {city?.map((userstate, index) => (
-                      <option key={index} value={userstate.name}>
-                        {userstate.name}
+                    {city?.map((usercity, index) => (
+                      <option key={index} value={usercity.id}>
+                        {usercity.name}
                       </option>
                     ))}
                   </select>
+                  <span className="text-danger">{error.cityErr}</span>
                 </Form.Group>
               </div>
-              <hr />
-              <div className="col-md-12">
+              <div className="address-checkbox-btn">
+                <input
+                  type="checkbox"
+                  id="address-check"
+                  name="address-check"
+                  className="address-checkbox"
+                />
+                <label for="address-check" className="ms-1 address-check-text">
+                  Parcel Address is as same above then check this box
+                </label>
+              </div>
+              <hr className="mt-3" />
+              <div className="col-md-6">
                 <Form.Group as={Col} className="mb-2" controlId="formGridZip">
                   <Form.Label>Shipping Address</Form.Label>
-
                   <textarea
-                    name="address"
+                    name="shipping_address"
                     className="form-control"
-                    defaultValue={selectedData.address}
-                    onChange={(e) => handleEditChange(e)}
+                    defaultValue={selectedData.shipping_address}
+                    onChange={(e) => {
+                      handleEditChange(e);
+                    }}
                     placeholder="Enter Your Address"
                   />
+                  <span className="text-danger">
+                    {error.shipping_address_err}
+                  </span>
                 </Form.Group>
               </div>
               <div className="col-md-6">
                 <Form.Group className="mb-2" controlId="formGridAddress1">
-                  <Form.Label>State</Form.Label>
+                  <Form.Label>Pincode</Form.Label>
+                  <Form.Control
+                    name="shipping_pincode"
+                    defaultValue={selectedData.shipping_pincode}
+                    onChange={(e) => handleEditChange(e)}
+                    placeholder="Enter Your Pincode"
+                    maxLength={6}
+                  />
+                  <span className="text-danger">
+                    {error.shipping_pincode_err}
+                  </span>
+                </Form.Group>
+              </div>
+              <div className="col-md-6">
+                <Form.Group className="mb-2" controlId="formGridAddress1">
+                  <Form.Label>Shipping-State</Form.Label>
                   <select
                     className="form-control"
-                    name="state"
+                    name="shipping_state"
                     onChange={(e) => {
                       handleEditChange(e);
-                      fetchCity(e.target.value);
+                      fetchShippingCity(e.target.value);
                     }}
-                    value={userData.state}
+                    value={userData.shipping_state.id}
                   >
-                    <option>--state select--</option>
+                    <option>--shipping state select--</option>
                     {profileData?.states?.map((userstate, index) => (
                       <option key={index} value={userstate.id}>
                         {userstate.name}
                       </option>
                     ))}
                   </select>
+                  <span className="text-danger">
+                    {error.shipping_state_err}
+                  </span>
                 </Form.Group>
               </div>
-              <div className="col-md-6">
+              <div className="col-md-6 mb-3">
                 <Form.Group className="mb-2" controlId="formGridAddress1">
-                  <Form.Label>City</Form.Label>
+                  <Form.Label>Shipping-City</Form.Label>
                   <select
                     className="form-control"
-                    name="city"
+                    name="shipping_city"
                     onChange={(e) => {
                       handleEditChange(e);
                     }}
-                    value={userData.city}
+                    value={userData.shipping_city.id}
                   >
-                    <option>--city select--</option>
-                    {city?.map((userstate, index) => (
-                      <option key={index} value={userstate.name}>
-                        {userstate.name}
+                    <option>--shipping City select--</option>
+                    {shipping_city?.map((usercity, index) => (
+                      <option key={index} value={usercity.id}>
+                        {usercity.name}
                       </option>
                     ))}
                   </select>
+                  <span className="text-danger">{error.cityErr}</span>
                 </Form.Group>
               </div>
             </div>
 
-            <div className="text-center mt-2">
+            <div className="text-center">
               <Button variant="primary" type="submit">
                 Update
               </Button>

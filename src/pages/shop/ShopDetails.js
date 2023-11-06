@@ -422,20 +422,22 @@ const ShopDetails = () => {
                           </>
                         ) : (
                           <>
-                            {/* <div>
+                            <div class="buttons pt-4 d-flex">
                               <Link to="/login">
-                                <div>
-                                  <button className="btn btn-outline-dark">
-                                    Add To Cart
-                                  </button>
-                                </div>
-                                <div>
-                                  <button className="btn btn-outline-dark align-items-center">
-                                    Add to wishlist
-                                  </button>
+                                <div class="add_cart align-items-center d-flex">
+                                  <div>
+                                    <button class="btn btn-outline-dark">
+                                      Add To Cart
+                                    </button>
+                                  </div>
+                                  <div>
+                                    <button class="btn btn-outline-dark align-items-center">
+                                      Wishlist
+                                    </button>
+                                  </div>
                                 </div>
                               </Link>
-                            </div> */}
+                            </div>
                           </>
                         )}
                       </div>

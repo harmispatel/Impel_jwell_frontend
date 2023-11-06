@@ -52,14 +52,14 @@ const Shop = ({ product }) => {
   const userType = localStorage.getItem("user_type");
   const DealerEmail = localStorage.getItem("email");
   const phone = localStorage.getItem("phone");
-  const Verification = localStorage.getItem("verification");
+  const Verification = JSON.parse(localStorage.getItem("verification"));
   const navigate = useNavigate();
 
   // const options = [
   //   { value: "new_added", label: "New Added" },
   //   { value: "low_to_high", label: "Price,low to high" },
   //   { value: "high_to_low", label: "Price,high to low" },
-  //   { value: "best_seller", label: "Top Seller" },
+  //   { value: "highest_selling", label: "Top Seller" },
   // ];
   // const handleSelectChange = (selectedOption) => {
   //   setSelectedOption(selectedOption);
@@ -215,8 +215,8 @@ const Shop = ({ product }) => {
     if (Verification === 3) {
       const CartData = {
         phone: phone,
-        design_name: product.name,
-        design_id: product.id,
+        design_name: product?.name,
+        design_id: product?.id,
         quantity: productQuantity,
       };
 
@@ -298,7 +298,7 @@ const Shop = ({ product }) => {
         break;
       case "high_to_low":
         break;
-      case "best_seller":
+      case "highest_selling":
         break;
       case "clear_all":
         break;
@@ -308,6 +308,7 @@ const Shop = ({ product }) => {
     setFilterData(sorted);
   };
 
+  console.log(Verification);
   useEffect(() => {
     GetCarList();
     DealerList();
@@ -399,14 +400,14 @@ const Shop = ({ product }) => {
                     <div class="csm_sort_btn">
                       <input
                         type="radio"
-                        id="best_seller"
-                        value="best_seller"
-                        name="attr_option[0]"
-                        checked={selectedOption === "best_seller"}
-                        onChange={handleRadioChange}
+                        id="highest_selling"
                         class="d-none"
+                        value="highest_selling"
+                        name="attr_option[0]"
+                        checked={selectedOption === "highest_selling"}
+                        onChange={handleRadioChange}
                       />
-                      <label for="best_seller">Top Seller</label>
+                      <label for="highest_selling">Top Seller</label>
                     </div>
                   </div>
                   <div className="col-md-2">
@@ -414,7 +415,7 @@ const Shop = ({ product }) => {
                       <input
                         type="radio"
                         id="clear_all"
-                        class="d-none"
+                        class="d-none clear_all_checked"
                         value="clear_all"
                         name="attr_option[0]"
                         checked={selectedOption === "clear_all"}
@@ -504,7 +505,12 @@ const Shop = ({ product }) => {
                                         <BsHandbag />
                                       </Link>
                                     ) : (
-                                      ""
+                                      <Link
+                                        to="/login"
+                                        data-tooltip-id="my-tooltip-7"
+                                      >
+                                        <BsHandbag />
+                                      </Link>
                                     )}
                                   </div>
                                   <div>
@@ -540,7 +546,7 @@ const Shop = ({ product }) => {
                                         {phone ? (
                                           <Link
                                             to="#"
-                                            data-tooltip-id="my-tooltip-9"
+                                            data-tooltip-id="wishlist-icon"
                                             onClick={() =>
                                               addToUserWishList(product)
                                             }
@@ -556,7 +562,7 @@ const Shop = ({ product }) => {
                                         ) : (
                                           <Link
                                             to="/login"
-                                            data-tooltip-id="my-tooltip-9"
+                                            data-tooltip-id="wishlist-icon"
                                           >
                                             <BsHeart />
                                           </Link>
@@ -586,7 +592,6 @@ const Shop = ({ product }) => {
                             <div className="col-md-4">
                               <Link
                                 to={`/shopdetails/${data.id}`}
-                                target={"_blank"}
                                 className="product_data"
                               >
                                 {data.image ? (
@@ -613,7 +618,12 @@ const Shop = ({ product }) => {
                                         <BsHandbag />
                                       </Link>
                                     ) : (
-                                      ""
+                                      <Link
+                                        to="/login"
+                                        data-tooltip-id="my-tooltip-7"
+                                      >
+                                        <BsHandbag />
+                                      </Link>
                                     )}
                                   </div>
                                   <div>
@@ -649,7 +659,7 @@ const Shop = ({ product }) => {
                                         {phone ? (
                                           <Link
                                             to="#"
-                                            data-tooltip-id="my-tooltip-9"
+                                            data-tooltip-id="wishlist-icon"
                                             onClick={() =>
                                               addToUserWishList(data)
                                             }
@@ -665,7 +675,7 @@ const Shop = ({ product }) => {
                                         ) : (
                                           <Link
                                             to="/login"
-                                            data-tooltip-id="my-tooltip-9"
+                                            data-tooltip-id="wishlist-icon"
                                           >
                                             <BsHeart />
                                           </Link>
@@ -690,7 +700,7 @@ const Shop = ({ product }) => {
               )}
               <ReactTooltip id="my-tooltip-7" place="top" content="cart" />
               <ReactTooltip
-                id="my-tooltip-9"
+                id="wishlist-icon"
                 place="bottom"
                 content="wishlist"
               />

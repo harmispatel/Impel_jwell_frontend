@@ -66,18 +66,14 @@ const Navbar = () => {
       localStorage.removeItem("user_type");
       setIsLoggedOut(true);
       navigate("/Dealer_login");
-      // toast.success("Logout Successfully...");
     } else {
       localStorage.removeItem("_grecaptcha");
       localStorage.removeItem("phone");
       localStorage.removeItem("verification");
       setIsLoggedOut(true);
       navigate("/login");
-      // toast.success("Logout Successfully...");
     }
   };
-
-  // console.log("User Cart Counts", userCartCounts);
 
   return (
     <header className={colorChange ? "header sticky_header" : "header"}>
