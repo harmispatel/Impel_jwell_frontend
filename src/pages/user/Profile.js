@@ -29,7 +29,9 @@ const Profile = () => {
     state: "",
     city: "",
     states: "",
+    address_same_as_company: "",
   });
+  const [isChecked, setIsChecked] = useState(userData.address_same_as_company);
   const [error, setError] = useState({
     nameErr: "",
     emailErr: "",
@@ -52,13 +54,20 @@ const Profile = () => {
     setShowEdit(false);
   };
 
+  const handleCheckboxChange = (event) => {
+    const newValue = event.target.checked ? 1 : 0;
+    setIsChecked(newValue);
+  };
+
   // user profile display function
   const getProfile = async () => {
     await profileService
       .getProfile({ phone: phone })
       .then((res) => {
         const statename = res.data.state.name;
+        console.log(statename);
         const cityname = res.data.city.name;
+        console.log(cityname);
         setProfileData({
           ...res.data,
           state_name: statename,
@@ -70,6 +79,7 @@ const Profile = () => {
           city_name: cityname,
         });
         res.data.state.id && fetchCity(res.data.state.id);
+        console.log(res.data.state.id);
         res.data.shipping_state.id &&
           fetchShippingCity(res.data.shipping_state.id);
       })
@@ -88,9 +98,9 @@ const Profile = () => {
         console.log(err);
       });
   };
-  const fetchShippingCity = async (stateId) => {
+  const fetchShippingCity = async (cityId) => {
     await profileService
-      .getCity({ state_id: stateId })
+      .getCity({ state_id: cityId })
       .then((res) => {
         setShipping_city(res.data);
       })
@@ -119,7 +129,6 @@ const Profile = () => {
     //   });
     // }
   };
-
   const pincodeRegex = /^\d{6}$/;
   const handleEdit = async (data) => {
     setShowEdit(true);
@@ -166,48 +175,27 @@ const Profile = () => {
       validationErrors.pincodeErr = "";
     }
 
-    if (userData.state.id === "--state select--") {
-      validationErrors.stateErr = "State is required";
-      isValid = false;
-    } else {
-      validationErrors.stateErr = "";
-    }
+    if (!isChecked) {
+      if (!userData.shipping_address.trim()) {
+        validationErrors.shipping_address_err = "Address is required";
+        isValid = false;
+      } else {
+        validationErrors.shipping_address_err = "";
+      }
 
-    if (!userData.city.id) {
-      validationErrors.cityErr = "City is required";
-      isValid = false;
-    } else {
-      validationErrors.cityErr = "";
-    }
-
-    // shiopping-addres-errors
-    if (!userData.shipping_address.trim()) {
-      validationErrors.shipping_address_err = "Shipping address is required.";
-      isValid = false;
+      if (!userData.shipping_pincode.trim()) {
+        validationErrors.shipping_pincode_err = "Pincode is required";
+        isValid = false;
+      } else if (!pincodeRegex.test(userData.shipping_pincode.trim())) {
+        validationErrors.shipping_pincode_err =
+          "Pincode must be a 6-digit number";
+        isValid = false;
+      } else {
+        validationErrors.shipping_pincode_err = "";
+      }
     } else {
       validationErrors.shipping_address_err = "";
-    }
-    if (!userData.shipping_pincode.trim()) {
-      validationErrors.shipping_pincode_err = "Pincode is required";
-      isValid = false;
-    } else if (!pincodeRegex.test(userData.shipping_pincode.trim())) {
-      validationErrors.shipping_pincode_err =
-        "Pincode must be a 6-digit number";
-      isValid = false;
-    } else {
       validationErrors.shipping_pincode_err = "";
-    }
-    if (userData.shipping_state === "--shipping state select--") {
-      validationErrors.shipping_state_err = "Shipping State is required";
-      isValid = false;
-    } else {
-      validationErrors.shipping_state_err = "";
-    }
-    if (userData.shipping_city === "--shipping City select--") {
-      validationErrors.shipping_city_err = "Shipping city is required";
-      isValid = false;
-    } else {
-      validationErrors.shipping_city_err = "";
     }
 
     setError(validationErrors);
@@ -223,28 +211,41 @@ const Profile = () => {
       formData.append("id", selectedData.id);
       formData.append("name", userData.name ? userData.name : "");
       formData.append("email", userData.email ? userData.email : "");
-      formData.append(
-        "phone",
-        userData.phone ? userData.phone : selectedData.phone
-      );
+      formData.append("phone", userData.phone ? userData.phone : "");
+      formData.append("pan_no", userData.pan_no ? userData.pan_no : "");
+      formData.append("gst_no", userData.gst_no ? userData.gst_no : "");
+
+      // company address update
       formData.append("address", userData.address ? userData.address : "");
+      formData.append("pincode", userData.pincode ? userData.pincode : "");
+      formData.append("state", userData.state.id ? userData.state.id : "");
+      formData.append("city", userData.city.id ? userData.city.id : "");
+
+      // checkbox update
+      if (isChecked) {
+        formData.append("address_same_as_company", 1);
+      } else {
+        formData.append("address_same_as_company", 0);
+      }
+
+      // shipping address update
       formData.append(
         "shipping_address",
         userData.shipping_address ? userData.shipping_address : ""
       );
-      formData.append("pincode", userData.pincode ? userData.pincode : "");
-      formData.append("gst_no", userData.gst_no ? userData.gst_no : "");
-      formData.append("pan_no", userData.pan_no ? userData.pan_no : "");
-      formData.append("state", userData.state.id ? userData.state.id : "");
+      formData.append(
+        "shipping_pincode",
+        userData.shipping_pincode ? userData.shipping_pincode : ""
+      );
       formData.append(
         "shipping_state",
         userData.shipping_state.id ? userData.shipping_state.id : ""
       );
-      formData.append("city", userData.city.id ? userData.city.id : "");
       formData.append(
         "shipping_city",
         userData.shipping_city.id ? userData.shipping_city.id : ""
       );
+
       profileService
         .updateProfile(formData)
         .then((res) => {
@@ -260,9 +261,6 @@ const Profile = () => {
           toast.error(err.message);
         });
     } else {
-      // Form is not valid, display errors to the user
-      // Optionally, you can also scroll to the first error or display a message
-      // to inform the user that there are validation errors.
     }
   };
 
@@ -294,52 +292,54 @@ const Profile = () => {
                     <div className="col-md-9">
                       <div className="profile_card_inr">
                         <table className="table">
-                          <tr>
-                            <td>Full Name</td>
-                            <td>{profileData.name}</td>
-                          </tr>
-                          <tr>
-                            <td>Mobile Number</td>
-                            <td>{profileData.phone}</td>
-                          </tr>
-                          <tr>
-                            <td>Email Id</td>
-                            <td>{profileData.email}</td>
-                          </tr>
-                          <tr>
-                            <td>Company Address</td>
-                            <td>{profileData.address}</td>
-                          </tr>
-                          <tr>
-                            <td>Pincode</td>
-                            <td>{profileData.pincode}</td>
-                          </tr>
-                          <tr>
-                            <td>State</td>
-                            <td>{profileData?.state_name}</td>
-                          </tr>
-                          <tr>
-                            <td>City</td>
-                            <td>{profileData?.city_name}</td>
-                          </tr>
-                          <tr>
-                            <td>GST Number</td>
-                            <td>{profileData.gst_no}</td>
-                          </tr>
-                          <tr>
-                            <td>Pan number</td>
-                            <td>{profileData.pan_no}</td>
-                          </tr>
-                          <tr>
-                            <td colSpan={2}>
-                              <button
-                                className="w-100 profile_edit_btn border-0"
-                                onClick={() => handleEdit(profileData)}
-                              >
-                                Edit
-                              </button>
-                            </td>
-                          </tr>
+                          <tbody>
+                            <tr>
+                              <td>Full Name</td>
+                              <td>{profileData.name}</td>
+                            </tr>
+                            <tr>
+                              <td>Mobile Number</td>
+                              <td>{profileData.phone}</td>
+                            </tr>
+                            <tr>
+                              <td>Email Id</td>
+                              <td>{profileData.email}</td>
+                            </tr>
+                            <tr>
+                              <td>Company Address</td>
+                              <td>{profileData.address}</td>
+                            </tr>
+                            <tr>
+                              <td>Pincode</td>
+                              <td>{profileData.pincode}</td>
+                            </tr>
+                            <tr>
+                              <td>State</td>
+                              <td>{profileData?.state_name}</td>
+                            </tr>
+                            <tr>
+                              <td>City</td>
+                              <td>{profileData?.city_name}</td>
+                            </tr>
+                            <tr>
+                              <td>GST Number</td>
+                              <td>{profileData.gst_no}</td>
+                            </tr>
+                            <tr>
+                              <td>Pan number</td>
+                              <td>{profileData.pan_no}</td>
+                            </tr>
+                            <tr>
+                              <td colSpan={2}>
+                                <button
+                                  className="w-100 profile_edit_btn border-0"
+                                  onClick={() => handleEdit(profileData)}
+                                >
+                                  Edit
+                                </button>
+                              </td>
+                            </tr>
+                          </tbody>
                         </table>
                       </div>
                     </div>
@@ -504,12 +504,15 @@ const Profile = () => {
               <div className="address-checkbox-btn">
                 <input
                   type="checkbox"
-                  id="address-check"
-                  name="address-check"
+                  id="checkbox"
+                  name="address_same_as_company"
                   className="address-checkbox"
+                  checked={isChecked === 1}
+                  defaultChecked={profileData.address_same_as_company}
+                  onChange={handleCheckboxChange}
                 />
-                <label for="address-check" className="ms-1 address-check-text">
-                  Parcel Address is as same above then check this box
+                <label htmlFor="checkbox" className="ms-1 address-check-text">
+                  Shipping Address is as same above then check this box
                 </label>
               </div>
               <hr className="mt-3" />
@@ -532,7 +535,7 @@ const Profile = () => {
               </div>
               <div className="col-md-6">
                 <Form.Group className="mb-2" controlId="formGridAddress1">
-                  <Form.Label>Pincode</Form.Label>
+                  <Form.Label>Shipping Pincode</Form.Label>
                   <Form.Control
                     name="shipping_pincode"
                     defaultValue={selectedData.shipping_pincode}
@@ -587,7 +590,7 @@ const Profile = () => {
                       </option>
                     ))}
                   </select>
-                  <span className="text-danger">{error.cityErr}</span>
+                  <span className="text-danger">{error.shipping_city_err}</span>
                 </Form.Group>
               </div>
             </div>
@@ -605,3 +608,380 @@ const Profile = () => {
 };
 
 export default Profile;
+// import React, { useEffect } from "react";
+// import profileService from "../../services/Auth";
+// import { useState } from "react";
+// import { Button, Col, Form, Modal, Row } from "react-bootstrap";
+// import { toast } from "react-toastify";
+// import "react-toastify/dist/ReactToastify.css";
+// import axios from "axios";
+
+// const Profile = () => {
+//   const phone = localStorage.getItem("phone");
+//   const [showEdit, setShowEdit] = useState(false);
+//   const [show, setShow] = useState(false);
+//   const [selectedData, setSelectedData] = useState([]);
+//   const [profileImg, setProfileImg] = useState({ preview: "", raw: "" });
+//   const [profileData, setProfileData] = useState([]);
+//   const [city, setcity] = useState([]);
+//   const [userData, setUserData] = useState({
+//     name: "",
+//     email: "",
+//     phone: "",
+//     address: "",
+//     pincode: "",
+//     gst_no: "",
+//     pan_no: "",
+//     state: "",
+//     city: "",
+//     states: "",
+//   });
+//   const [error, setError] = useState({
+//     nameErr: "",
+//     emailErr: "",
+//     phoneErr: "",
+//     addressErr: "",
+//     pincodeErr: "",
+//     stateErr: "",
+//     cityErr: "",
+//     pancardErr: "",
+//     gstErr: "",
+//   });
+//   const [isSubmitting, setIsSubmitting] = useState(false);
+
+//   const handleClose = () => {
+//     setShow(false);
+//     setShowEdit(false);
+//   };
+
+//   // user profile display function
+//   const getProfile = async () => {
+//     await profileService
+//       .getProfile({ phone: phone })
+//       .then((res) => {
+//         console.log("userData", res.data);
+//         const statename = res.data.state.name;
+//         console.log(statename);
+//         setProfileData({ ...res.data, state_name: statename });
+//         setUserData({ ...res.data, state_name: statename });
+//         res.data.state.id && fetchCity(res.data.state.id);
+//       })
+//       .catch((err) => {
+//         console.log(err);
+//       });
+//   };
+//   const fetchCity = async (stateId) => {
+//     await profileService
+//       .getCity({ state_id: stateId })
+//       .then((res) => {
+//         console.log("userData", res.data);
+//         setcity(res.data);
+//       })
+//       .catch((err) => {
+//         console.log(err);
+//       });
+//   };
+//   const handleEditChange = (e) => {
+//     const { name, value } = e.target;
+//     console.log(e.target.value);
+//     if (name === "state") {
+//       setUserData({
+//         ...userData,
+//         state: value,
+//         city: "",
+//       });
+//     } else {
+//       setUserData({
+//         ...userData,
+//         [name]: value,
+//       });
+//     }
+//     // if (e.target.files?.length) {
+//     //   setProfileImg({
+//     //     preview: URL.createObjectURL(e.target.files[0]),
+//     //     raw: e.target.files[0]
+//     //   });
+//     // }
+//   };
+//   const handleEdit = async (data) => {
+//     setShowEdit(true);
+//     setSelectedData(data);
+//   };
+
+//   const handleUpdate = async (e) => {
+//     e.preventDefault();
+
+//     const formData = new FormData();
+//     console.log("Users Updated Form data", formData);
+//     localStorage.setItem("verification", profileData.verification);
+
+//     formData.append("id", selectedData.id);
+//     formData.append("name", userData.name ? userData.name : selectedData.name);
+//     formData.append(
+//       "email",
+//       userData.email ? userData.email : selectedData.email
+//     );
+//     formData.append(
+//       "phone",
+//       userData.phone ? userData.phone : selectedData.phone
+//     );
+//     formData.append(
+//       "address",
+//       userData.address ? userData.address : selectedData.address
+//     );
+//     formData.append("pincode", userData.pincode ? userData.pincode : "");
+//     formData.append("gst_no", userData.gst_no ? userData.gst_no : "");
+//     formData.append("pan_no", userData.pan_no ? userData.pan_no : "");
+//     formData.append("city", userData.city ? userData.city : "");
+//     formData.append("state", userData.state.id ? userData.state.id : "");
+
+//     profileService
+//       .updateProfile(formData)
+//       .then((res) => {
+//         console.log(res.status);
+//         if (res.status === true) {
+//           setShowEdit(false);
+//           getProfile();
+//           toast.success(res.message);
+//         }
+//       })
+//       .catch((err) => {
+//         console.log(err);
+//         toast.error(err.message);
+//       });
+//   };
+//   useEffect(() => {
+//     getProfile();
+//   }, []);
+
+//   return (
+//     <section className="profile">
+//       <div className="container">
+//         <div className="row justify-content-center">
+//           <div className="col-md-10">
+//             <div className="d-flex justify-content-between align-items-center mb-3">
+//               <h4 className="text-right">Profile</h4>
+//             </div>
+//             <hr />
+//             <div className="row justify-content-center">
+//               <div className="col-md-3">
+//                 <input
+//                   type="file"
+//                   id="upload-button"
+//                   style={{ display: "none" }}
+//                   onChange={handleEditChange}
+//                 />
+//               </div>
+//               <div className="col-md-9">
+//                 <div className="profile_card">
+//                   <div className="row justify-content-center">
+//                     <div className="col-md-9">
+//                       <div className="profile_card_inr">
+//                         <table className="table">
+//                           <tr>
+//                             <td>Full Name</td>
+//                             <td>{profileData.name}</td>
+//                           </tr>
+//                           <tr>
+//                             <td>Mobile Number</td>
+//                             <td>{profileData.phone}</td>
+//                           </tr>
+//                           <tr>
+//                             <td>Email Id</td>
+//                             <td>{profileData.email}</td>
+//                           </tr>
+//                           <tr>
+//                             <td>Address</td>
+//                             <td>{profileData.address}</td>
+//                           </tr>
+//                           <tr>
+//                             <td>Pincode</td>
+//                             <td>{profileData.pincode}</td>
+//                           </tr>
+//                           <tr>
+//                             <td>State</td>
+//                             <td>{profileData?.state_name}</td>
+//                           </tr>
+//                           <tr>
+//                             <td>City</td>
+//                             <td>{profileData.city}</td>
+//                           </tr>
+//                           <tr>
+//                             <td>GST Number</td>
+//                             <td>{profileData.gst_no}</td>
+//                           </tr>
+//                           <tr>
+//                             <td>Pan number</td>
+//                             <td>{profileData.pan_no}</td>
+//                           </tr>
+//                           <tr>
+//                             <td colSpan={2}>
+//                               <button
+//                                 className="w-100 profile_edit_btn border-0"
+//                                 onClick={() => handleEdit(profileData)}
+//                               >
+//                                 Edit
+//                               </button>
+//                             </td>
+//                           </tr>
+//                         </table>
+//                       </div>
+//                     </div>
+//                   </div>
+//                 </div>
+//               </div>
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+
+//       <Modal
+//         className="form_intent profile_model"
+//         centered
+//         show={showEdit}
+//         onHide={handleClose}
+//       >
+//         <Modal.Header closeButton>
+//           <Modal.Title>Add Profile</Modal.Title>
+//         </Modal.Header>
+
+//         <Modal.Body>
+//           <Form onSubmit={(e) => handleUpdate(e, selectedData)}>
+//             <div className="row">
+//               <div className="col-md-6">
+//                 <Form.Group as={Col} className="mb-2" controlId="formGridState">
+//                   <Form.Label>Name</Form.Label>
+//                   <Form.Control
+//                     name="name"
+//                     defaultValue={selectedData.name}
+//                     onChange={(e) => handleEditChange(e)}
+//                     placeholder="Enter Your Name"
+//                   />
+//                 </Form.Group>
+//               </div>
+//               <div className="col-md-6">
+//                 <Form.Group as={Col} className="mb-2" controlId="formGridState">
+//                   <Form.Label>Email</Form.Label>
+//                   <Form.Control
+//                     name="email"
+//                     defaultValue={selectedData.email}
+//                     onChange={(e) => handleEditChange(e)}
+//                     placeholder="Enter Your Email"
+//                   />
+//                 </Form.Group>
+//               </div>
+//               <div className="col-md-6">
+//                 <Form.Group as={Col} className="mb-2" controlId="formGridState">
+//                   <Form.Label>Phone</Form.Label>
+//                   <Form.Control
+//                     name="phone"
+//                     defaultValue={selectedData.phone}
+//                     disabled
+//                     onChange={(e) => handleEditChange(e)}
+//                     placeholder="Enter Your Phone"
+//                   />
+//                 </Form.Group>
+//               </div>
+
+//               <div className="col-md-6">
+//                 <Form.Group className="mb-2" controlId="formGridAddress1">
+//                   <Form.Label>Pincode</Form.Label>
+//                   <Form.Control
+//                     name="pincode"
+//                     defaultValue={selectedData.pincode}
+//                     onChange={(e) => handleEditChange(e)}
+//                     placeholder="Enter Your Pincode"
+//                   />
+//                 </Form.Group>
+//               </div>
+//               <div className="col-md-6">
+//                 <Form.Group className="mb-2" controlId="formGridAddress1">
+//                   <Form.Label>Pan-card</Form.Label>
+//                   <Form.Control
+//                     name="pan_no"
+//                     defaultValue={selectedData.pan_no}
+//                     onChange={(e) => handleEditChange(e)}
+//                     placeholder="Enter Your Pancard number"
+//                   />
+//                 </Form.Group>
+//               </div>
+//               <div className="col-md-6">
+//                 <Form.Group className="mb-2" controlId="formGridAddress1">
+//                   <Form.Label>GST-number</Form.Label>
+//                   <Form.Control
+//                     name="gst_no"
+//                     defaultValue={selectedData.gst_no}
+//                     onChange={(e) => handleEditChange(e)}
+//                     placeholder="Enter Your GST number"
+//                   />
+//                 </Form.Group>
+//               </div>
+//               <div className="col-md-12">
+//                 <Form.Group as={Col} className="mb-2" controlId="formGridZip">
+//                   <Form.Label>Address</Form.Label>
+
+//                   <textarea
+//                     name="address"
+//                     className="form-control"
+//                     defaultValue={selectedData.address}
+//                     onChange={(e) => handleEditChange(e)}
+//                     placeholder="Enter Your Address"
+//                   />
+//                 </Form.Group>
+//               </div>
+//               <div className="col-md-6">
+//                 <Form.Group className="mb-2" controlId="formGridAddress1">
+//                   <Form.Label>State</Form.Label>
+//                   <select
+//                     className="form-control"
+//                     name="state"
+//                     onChange={(e) => {
+//                       handleEditChange(e);
+//                       fetchCity(e.target.value);
+//                     }}
+//                     value={userData.state.id}
+//                   >
+//                     <option>--state select--</option>
+//                     {profileData?.states?.map((userstate, index) => (
+//                       <option key={index} value={userstate.id}>
+//                         {userstate.name}
+//                       </option>
+//                     ))}
+//                   </select>
+//                 </Form.Group>
+//               </div>
+//               <div className="col-md-6">
+//                 <Form.Group className="mb-2" controlId="formGridAddress1">
+//                   <Form.Label>City</Form.Label>
+//                   <select
+//                     className="form-control"
+//                     name="city"
+//                     onChange={(e) => {
+//                       handleEditChange(e);
+//                     }}
+//                     value={userData.city}
+//                   >
+//                     <option>--city select--</option>
+//                     {city?.map((userstate, index) => (
+//                       <option key={index} value={userstate.name}>
+//                         {userstate.name}
+//                       </option>
+//                     ))}
+//                   </select>
+//                 </Form.Group>
+//               </div>
+//             </div>
+
+//             <div className="text-center">
+//               <Button variant="primary" type="submit">
+//                 Update
+//               </Button>
+//             </div>
+//           </Form>
+//         </Modal.Body>
+//       </Modal>
+//     </section>
+//   );
+// };
+
+// export default Profile;

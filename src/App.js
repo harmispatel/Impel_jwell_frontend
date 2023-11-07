@@ -9,7 +9,6 @@ import ShopDetails from "./pages/shop/ShopDetails";
 import Categories from "./pages/categories/Categories";
 import CategoriesItems from "./pages/categories/CategoriesItems";
 import Login from "./pages/auth/Login";
-import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import CategoriesDetail from "./pages/categories/CategoriesDetail";
 import ProtectedRoute from "./utils/ProtectedRoute";
@@ -26,7 +25,7 @@ import { WishListProvider } from "./context/WishListContext";
 import DealerCart from "./pages/Dealer/Cart";
 import Cart from "./pages/user/Cart";
 import About from "./components/About";
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   return (
@@ -100,11 +99,7 @@ function App() {
           <Route path="/Dealer_login" element={<DealerLogIN />} />
         </Route>
       </Routes>
-      <Toaster
-        position="top-center"
-        toastOptions={{ className: "toast", duration: 2000 }}
-      />
-      <ToastContainer />
+      <Toaster toastOptions={{ duration: 3000 }} />
     </WishListProvider>
   );
 }

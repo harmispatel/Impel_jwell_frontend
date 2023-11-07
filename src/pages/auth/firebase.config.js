@@ -7,8 +7,8 @@ const firebaseConfig = {
   storageBucket: "impelstore-e082f.appspot.com",
   messagingSenderId: "850802461038",
   appId: "1:850802461038:web:dfe2e4efbc651edf96d97f",
-  measurementId: "G-JBPRN514QY"
+  measurementId: "G-JBPRN514QY",
 };
 
 const app = initializeApp(firebaseConfig);
-export default app
+export default app;

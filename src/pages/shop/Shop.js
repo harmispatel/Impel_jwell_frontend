@@ -12,8 +12,6 @@ import ReactLoading from "react-loading";
 import InfiniteScroll from "react-infinite-scroll-component";
 import ShopServices from "../../services/Shop";
 import { Link, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import DealerWishlist from "../../services/Dealer/Collection";
 import UserCartService from "../../services/Cart";
 import UserWishlist from "../../services/Auth";
@@ -21,6 +19,7 @@ import Userservice from "../../services/Cart";
 import { FcLike } from "react-icons/fc";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import { Button, Modal } from "react-bootstrap";
+import toast from "react-hot-toast";
 
 const Shop = ({ product }) => {
   const [searchInput, setSearchInput] = useState([]);
@@ -82,7 +81,7 @@ const Shop = ({ product }) => {
   //   }
   // };
 
-  // const isProductInWishList = (product) => {
+  // const isDealerProductInWishlist = (product) => {
   //   return checkList.some((item) => item.id === product.id);
   // };
 
@@ -140,6 +139,7 @@ const Shop = ({ product }) => {
       sort_by: selectedOption,
       MinPrice: PriceRange?.minprice,
       MaxPrice: PriceRange?.maxprice,
+      userType: userType,
     };
 
     ShopServices.allfilterdesigns(userData)
@@ -223,7 +223,7 @@ const Shop = ({ product }) => {
       UserCartService.AddtoCart(CartData)
         .then((res) => {
           if (res.status === true) {
-            toast(res.message, { icon: "✔️" });
+            toast(res.message);
             GetUserCartList();
           }
         })
@@ -245,7 +245,7 @@ const Shop = ({ product }) => {
         console.log(res);
         if (res.success === true) {
           setCollectionStatus(true);
-          toast.success(res.message);
+          toast.success("Design has been Added to Your Collection.");
 
           AllData();
           GetCarList();
@@ -253,6 +253,18 @@ const Shop = ({ product }) => {
           DealerList();
         } else {
           toast.error(res.message);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const removeFromWishList = (product) => {
+    DealerWishlist.removetoWishlist({ email: DealerEmail, design_id: product })
+      .then((res) => {
+        if (res.success === true) {
+          toast.success("Design has been removed from Your Collection.");
+          collectionCheck();
         }
       })
       .catch((err) => {
@@ -269,7 +281,7 @@ const Shop = ({ product }) => {
       .then((res) => {
         if (res.success === true) {
           setUserWishlist(true);
-          toast.success(res.message);
+          toast.success("Design has been Added to Your Favorite List ");
 
           AllData();
           DealerList();
@@ -283,7 +295,18 @@ const Shop = ({ product }) => {
         console.log(err);
       });
   };
-
+  const removefromuserwishlist = (product) => {
+    Userservice.removetoWishlist({ phone: phone, design_id: product })
+      .then((res) => {
+        console.log(res);
+        if (res.success === true) {
+          GetCarList();
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   // for sort_by filters
   const handleRadioChange = (event) => {
     setSelectedOption(event.target.value);
@@ -314,7 +337,7 @@ const Shop = ({ product }) => {
     DealerList();
   }, []);
   useEffect(() => {
-    FilterData();
+    FilterData(userType);
   }, [category, tag, gender, searchInput, selectedOption, PriceRange]);
 
   // for model
@@ -520,11 +543,20 @@ const Shop = ({ product }) => {
                                           <Link
                                             to="#"
                                             data-tooltip-id="my-tooltip-12"
-                                            onClick={() =>
-                                              addToWishList(product)
-                                            }
+                                            onClick={() => {
+                                              const isDealerProductInWishlist =
+                                                DealercartItems.some(
+                                                  (item) =>
+                                                    item.id === product.id
+                                                );
+                                              if (isDealerProductInWishlist) {
+                                                removeFromWishList(product.id);
+                                              } else {
+                                                addToWishList(product);
+                                              }
+                                            }}
                                           >
-                                            {DealercartItems.find(
+                                            {DealercartItems.some(
                                               (item) => item.id === product.id
                                             ) ? (
                                               <BsStarFill />
@@ -633,12 +665,21 @@ const Shop = ({ product }) => {
                                           <Link
                                             to="#"
                                             data-tooltip-id="my-tooltip-12"
-                                            onClick={() =>
-                                              addToWishList(product)
-                                            }
+                                            onClick={() => {
+                                              const isDealerProductInWishlist =
+                                                DealercartItems.some(
+                                                  (item) =>
+                                                    item.id === product.id
+                                                );
+                                              if (isDealerProductInWishlist) {
+                                                removeFromWishList(product.id);
+                                              } else {
+                                                addToWishList(product);
+                                              }
+                                            }}
                                           >
-                                            {DealercartItems.find(
-                                              (item) => item?.id === product?.id
+                                            {DealercartItems.some(
+                                              (item) => item.id === product.id
                                             ) ? (
                                               <BsStarFill />
                                             ) : (
@@ -660,9 +701,20 @@ const Shop = ({ product }) => {
                                           <Link
                                             to="#"
                                             data-tooltip-id="wishlist-icon"
-                                            onClick={() =>
-                                              addToUserWishList(data)
-                                            }
+                                            onClick={() => {
+                                              const isUserWishlistProducts =
+                                                UsercartItems.some(
+                                                  (item) =>
+                                                    item.id === product.id
+                                                );
+                                              if (isUserWishlistProducts) {
+                                                removefromuserwishlist(
+                                                  product.id
+                                                );
+                                              } else {
+                                                addToUserWishList(data);
+                                              }
+                                            }}
                                           >
                                             {UsercartItems?.find(
                                               (item) => item.id === data.id

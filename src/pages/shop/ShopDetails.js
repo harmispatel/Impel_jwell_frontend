@@ -242,7 +242,7 @@ const ShopDetails = () => {
                 thirdName="Shopdetails"
               />
               <div className="row">
-                <div className="col-md-6">
+                <div className="col-md-7">
                   <div>
                     {productImages.length === 0 ? (
                       <img src={img} alt="" className="w-100" />
@@ -299,7 +299,7 @@ const ShopDetails = () => {
                     )}
                   </div>
                 </div>
-                <div className="col-md-6">
+                <div className="col-md-5">
                   <div>
                     <h3>{product?.name}</h3>
                     <p>{product?.category}</p>

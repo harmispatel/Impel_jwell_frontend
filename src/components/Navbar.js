@@ -70,6 +70,7 @@ const Navbar = () => {
       localStorage.removeItem("_grecaptcha");
       localStorage.removeItem("phone");
       localStorage.removeItem("verification");
+      localStorage.removeItem("user_type");
       setIsLoggedOut(true);
       navigate("/login");
     }
@@ -150,7 +151,7 @@ const Navbar = () => {
                     <div className="login_dropdown dealer_dropdown">
                       <ul>
                         <li>
-                          <Link to="/dealer_profile">Profile</Link>
+                          <Link to="/dealer_profile">My Profile</Link>
                         </li>
                         <li>
                           <Link to="/dealer_orders">My Orders</Link>
