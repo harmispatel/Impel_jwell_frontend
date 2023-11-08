@@ -56,6 +56,7 @@ const DealerLogIN = () => {
           setUser(response.data);
           localStorage.setItem("isLogin", true);
           localStorage.setItem("token", response.data.data.token);
+          localStorage.setItem("user_id", response.data.data.user.id);
           localStorage.setItem("user_type", response.data.data.user.user_type);
           localStorage.setItem("email", loginData.email);
           navigate("/");

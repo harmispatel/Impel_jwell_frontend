@@ -32,6 +32,7 @@ const Navbar = () => {
   window.addEventListener("scroll", changeNavbarColor);
 
   const CartCounts = JSON.parse(sessionStorage.getItem("cartItems"));
+  const productsquantity = localStorage.getItem("total_quantity");
 
   const DealerCart = () => {
     DealerService.CartList({ email: DealerEmail })
@@ -46,7 +47,7 @@ const Navbar = () => {
   const UserCartItems = () => {
     UserService.CartList({ phone: Phone })
       .then((res) => {
-        setUsererCartCounts(res.data);
+        setUsererCartCounts(localStorage.getItem("total_quantity"));
       })
       .catch((err) => {
         console.log(err);
@@ -64,6 +65,8 @@ const Navbar = () => {
       localStorage.removeItem("token");
       localStorage.removeItem("email");
       localStorage.removeItem("user_type");
+      localStorage.removeItem("user_id");
+      localStorage.removeItem("total_quantity");
       setIsLoggedOut(true);
       navigate("/Dealer_login");
     } else {
@@ -71,6 +74,8 @@ const Navbar = () => {
       localStorage.removeItem("phone");
       localStorage.removeItem("verification");
       localStorage.removeItem("user_type");
+      localStorage.removeItem("user_id");
+      localStorage.removeItem("total_quantity");
       setIsLoggedOut(true);
       navigate("/login");
     }
@@ -244,8 +249,8 @@ const Navbar = () => {
                     data-tooltip-id="my-tooltip-3"
                   >
                     <BsHandbag style={{ fontSize: "20px", color: "black" }} />
-                    {userCartCounts?.length > 0 && (
-                      <div className="cart_count">{userCartCounts?.length}</div>
+                    {productsquantity?.length > 0 && (
+                      <div className="cart_count">{productsquantity}</div>
                     )}
                   </Link>
                 )}

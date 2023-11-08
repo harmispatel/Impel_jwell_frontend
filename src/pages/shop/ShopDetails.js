@@ -5,22 +5,18 @@ import BreadCrumb from "../../components/common/BreadCrumb";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-// import Magnifier from "react-image-magnify";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import toast from "react-hot-toast";
-import {
-  BsFillBagPlusFill,
-  BsFillEyeFill,
-  BsHeart,
-  BsStar,
-} from "react-icons/bs";
+import { FcLike } from "react-icons/fc";
 import { RxChevronLeft, RxChevronRight, RxCross1 } from "react-icons/rx";
 import DealeCartService from "../../services/Dealer/Cart";
 import UserCartService from "../../services/Cart";
 import Userservice from "../../services/Auth";
 import DealerWishlist from "../../services/Dealer/Collection";
 import { Button, Modal } from "react-bootstrap";
+import { BsCartDash, BsHandbagFill, BsHeart } from "react-icons/bs";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 
 const ShopDetails = () => {
   const { id } = useParams();
@@ -88,7 +84,7 @@ const ShopDetails = () => {
   const GetUserCartList = async () => {
     UserCartService.CartList({ phone: Phone })
       .then((res) => {
-        setCartItems(res.data);
+        setCartItems(res.data.cart_items);
       })
       .catch((err) => {
         console.log(err);
@@ -125,30 +121,6 @@ const ShopDetails = () => {
     GetDealerWishList();
   }, []);
 
-  const handleAddToCart = (product) => {
-    if (Verification === 3) {
-      const CartData = {
-        phone: Phone,
-        design_name: product.name,
-        design_id: product.id,
-        quantity: productQuantity,
-      };
-
-      UserCartService.AddtoCart(CartData)
-        .then((res) => {
-          if (res.status === true) {
-            GetUserCartList();
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } else {
-      console.log("Please verify your information to access");
-      setShowEdit(true);
-    }
-  };
-
   const handleAddToDealerCart = (product) => {
     const CartData = {
       email: Dealer,
@@ -170,26 +142,6 @@ const ShopDetails = () => {
         console.log(err);
       });
   };
-
-  const addToUserWishList = async (product) => {
-    Userservice.addtoWishlist({
-      phone: localStorage.getItem("phone"),
-      design_id: product.id,
-    })
-      .then((res) => {
-        if (res.success === true) {
-          setUserWishlist(true);
-          // toast.success(res.message);
-          GetUserWishList();
-        } else {
-          // toast.error(res.message);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
   const addToDealerWishList = async (product) => {
     DealerWishlist.addtoWishlist({
       email: localStorage.getItem("email"),
@@ -200,6 +152,26 @@ const ShopDetails = () => {
           setDealerWishlist(true);
           // toast.success(res.message);
           GetDealerWishList();
+        } else {
+          // toast.error(res.message);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const addToUserWishList = async (product) => {
+    Userservice.addtoWishlist({
+      phone: localStorage.getItem("phone"),
+      design_id: product.id,
+      quantity: productQuantity,
+    })
+      .then((res) => {
+        if (res.success === true) {
+          setUserWishlist(true);
+          // toast.success(res.message);
+          GetUserWishList();
         } else {
           // toast.error(res.message);
         }
@@ -228,6 +200,31 @@ const ShopDetails = () => {
     setShowEdit(false);
   };
 
+  const handleAddToCart = (product) => {
+    if (Verification == 3) {
+      const CartData = {
+        phone: Phone,
+        design_name: product.name,
+        design_id: product.id,
+        quantity: productQuantity,
+      };
+
+      UserCartService.AddtoCart(CartData)
+        .then((res) => {
+          if (res.status === true) {
+            GetUserCartList();
+            toast.success(res.message);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      console.log("Please verify your information to access add to cart");
+      setShowEdit(true);
+    }
+  };
+
   return (
     <section className="shop_details">
       <div className="container">
@@ -242,7 +239,7 @@ const ShopDetails = () => {
                 thirdName="Shopdetails"
               />
               <div className="row">
-                <div className="col-md-7">
+                <div className="col-md-6">
                   <div>
                     {productImages.length === 0 ? (
                       <img src={img} alt="" className="w-100" />
@@ -299,7 +296,7 @@ const ShopDetails = () => {
                     )}
                   </div>
                 </div>
-                <div className="col-md-5">
+                <div className="col-md-6">
                   <div>
                     <h3>{product?.name}</h3>
                     <p>{product?.category}</p>
@@ -359,8 +356,7 @@ const ShopDetails = () => {
                       ) : (
                         <></>
                       )}
-
-                      <div className="add_cart align-items-center d-flex">
+                      {/* <div className="add_cart align-items-center d-flex">
                         {Dealer ? (
                           <>
                             <div>
@@ -379,7 +375,7 @@ const ShopDetails = () => {
                         ) : (
                           <></>
                         )}
-                      </div>
+                      </div> */}
                       <div className="add_cart align-items-center d-flex">
                         {Phone ? (
                           <>
@@ -392,7 +388,7 @@ const ShopDetails = () => {
                                   className="btn btn-outline-dark"
                                   to="/cart"
                                 >
-                                  Go To Cart
+                                  <BsCartDash className="me-2" /> Go To Cart
                                 </Link>
                               </>
                             ) : (
@@ -402,6 +398,7 @@ const ShopDetails = () => {
                                     className="btn btn-outline-dark"
                                     onClick={() => handleAddToCart(product)}
                                   >
+                                    <BsHandbagFill className="me-2" />
                                     Add To Cart
                                   </button>
                                 </div>
@@ -412,9 +409,17 @@ const ShopDetails = () => {
                                   >
                                     {UserWishlistItems?.find(
                                       (item) => item?.id === product?.id
-                                    )
-                                      ? "Wishlisted"
-                                      : "Wishlist"}
+                                    ) ? (
+                                      <div className="btn-success">
+                                        <FaHeart className="me-2" />
+                                        WISHLISTED
+                                      </div>
+                                    ) : (
+                                      <div className="btn-success">
+                                        <FaRegHeart className="me-2" />
+                                        WISHLIST
+                                      </div>
+                                    )}
                                   </button>
                                 </div>
                               </>
@@ -422,22 +427,28 @@ const ShopDetails = () => {
                           </>
                         ) : (
                           <>
-                            <div class="buttons pt-4 d-flex">
-                              <Link to="/login">
-                                <div class="add_cart align-items-center d-flex">
-                                  <div>
-                                    <button class="btn btn-outline-dark">
-                                      Add To Cart
-                                    </button>
+                            {Dealer ? (
+                              <></>
+                            ) : (
+                              <div class="buttons pt-4 d-flex">
+                                <Link to="/login">
+                                  <div class="add_cart align-items-center d-flex">
+                                    <div>
+                                      <button class="btn btn-outline-dark">
+                                        <BsHandbagFill className="me-2" />
+                                        Add To Cart
+                                      </button>
+                                    </div>
+                                    <div>
+                                      <button class="btn btn-outline-dark align-items-center">
+                                        <FaRegHeart className="me-2" />
+                                        Wishlist
+                                      </button>
+                                    </div>
                                   </div>
-                                  <div>
-                                    <button class="btn btn-outline-dark align-items-center">
-                                      Wishlist
-                                    </button>
-                                  </div>
-                                </div>
-                              </Link>
-                            </div>
+                                </Link>
+                              </div>
+                            )}
                           </>
                         )}
                       </div>

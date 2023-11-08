@@ -26,7 +26,6 @@ const WishList = () => {
       .then((res) => {
         console.log(res);
         if (res.success === true) {
-          // toast.success(res.message);
           GetCarList();
         }
       })

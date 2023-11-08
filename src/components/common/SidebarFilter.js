@@ -59,14 +59,12 @@ const SidebarFilter = (props) => {
 
   return (
     <>
-      {userType == 1 ? (
+      {userType !== "1" ? (
         <button className="btn dispatch_btn w-100 mb-2 p-2">
           Ready To Dispatch
         </button>
       ) : (
-        <button className="btn dispatch_btn w-100 mb-2 p-2">
-          Ready To Dispatch
-        </button>
+        ""
       )}
 
       <Accordion>

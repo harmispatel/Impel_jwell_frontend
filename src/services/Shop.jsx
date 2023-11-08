@@ -1,9 +1,10 @@
 import call from "./Call";
 
-const alldesigns = async () => {
+const alldesigns = async (data) => {
   let d = await call({
     path: "alldesigns",
-    method: "GET",
+    method: "POST",
+    data,
   });
   return d;
 };

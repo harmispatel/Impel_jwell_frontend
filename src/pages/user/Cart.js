@@ -14,7 +14,7 @@ const Cart = () => {
   const UserCartItems = () => {
     UserService.CartList({ phone: Phone })
       .then((res) => {
-        setItems(res.data);
+        setItems(res.data.cart_items);
       })
       .catch((err) => {
         console.log(err);
@@ -32,8 +32,9 @@ const Cart = () => {
     UserService.RemovetoCart({ cart_id: id })
       .then((res) => {
         if (res.status === true) {
-          // toast.success(res.message);
           UserCartItems();
+          localStorage.setItem("total_quantity", res.data.total_quantity);
+          console.log(res.data.total_quantity);
         }
       })
       .catch((err) => {
