@@ -16,30 +16,44 @@ const category = async () => {
   return d;
 };
 
-const TopSelling = async () =>{
+const TopSelling = async () => {
   let d = await call({
     path: "highest-selling-designs",
     method: "GET",
   });
   return d;
-}
+};
 
-const RecentAdd = async () =>{
+const RecentAdd = async () => {
   let d = await call({
     path: "latest-designs",
     method: "GET",
   });
   return d;
-}
+};
 
-const Featured = async () =>{
+const Featured = async () => {
   let d = await call({
     path: "flash-design",
     method: "GET",
   });
   return d;
-}
+};
+const headerTags = async () => {
+  let d = await call({
+    path: "header-tags",
+    method: "GET",
+  });
+  return d;
+};
 
-const exportObject = { slider,category,TopSelling,RecentAdd,Featured };
+const exportObject = {
+  slider,
+  category,
+  TopSelling,
+  RecentAdd,
+  Featured,
+  headerTags,
+};
 
 export default exportObject;

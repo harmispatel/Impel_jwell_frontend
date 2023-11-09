@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
+  BsFillCartCheckFill,
   BsHandbag,
   BsHeart,
   BsSearch,
@@ -40,9 +41,7 @@ const Shop = ({ product }) => {
   const [userWishlist, setUserWishlist] = useState(false);
   const [UsercartItems, setUserCartItems] = useState([]);
   const [DealercartItems, setDealerCartItems] = useState([]);
-  const [cartItems, setCartItems] = useState(
-    JSON.parse(sessionStorage.getItem("cartItems")) || []
-  );
+  const [cartItems, setCartItems] = useState([]);
   const [newadd, setNewAdd] = useState([]);
   const [pricelow, setPriceLow] = useState([]);
   const [showEdit, setShowEdit] = useState(false);
@@ -251,7 +250,34 @@ const Shop = ({ product }) => {
         console.log(err);
       });
   };
+  const handleAddToCart = async (product) => {
+    if (!cartItems.some((item) => item.design_id === product.id)) {
+      if (Verification == 3) {
+        const CartData = {
+          phone: Phone,
+          design_name: product.name,
+          design_id: product.id,
+        };
 
+        UserCartService.AddtoCart(CartData)
+          .then((res) => {
+            if (res.status === true) {
+              toast.success(res.message);
+              GetUserCartList();
+              localStorage.setItem("total_quantity", res.data.total_quantity);
+              console.log(res.data.total_quantity);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
+        console.log("Please verify your information to access add to cart");
+        setShowEdit(true);
+      }
+    } else {
+    }
+  };
   // user wishlist products add
   const addToUserWishList = async (product) => {
     if (!UsercartItems.some((item) => item.id === product.id)) {
@@ -290,35 +316,12 @@ const Shop = ({ product }) => {
         console.log(err);
       });
   };
-  const handleAddToCart = (product) => {
-    if (Verification == 3) {
-      const CartData = {
-        phone: Phone,
-        design_name: product.name,
-        design_id: product.id,
-      };
 
-      UserCartService.AddtoCart(CartData)
-        .then((res) => {
-          if (res.status === true) {
-            toast.success(res.message);
-            GetUserCartList();
-            localStorage.setItem("total_quantity", res.data.total_quantity);
-            console.log(res.data.total_quantity);
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } else {
-      console.log("Please verify your information to access add to cart");
-      setShowEdit(true);
-    }
-  };
   const GetUserCartList = async () => {
     UserCartService.CartList({ phone: Phone })
       .then((res) => {
-        setCartItems(res.data);
+        setCartItems(res.data.cart_items);
+        console.log(res.data.cart_items);
       })
       .catch((err) => {
         console.log(err);
@@ -507,7 +510,14 @@ const Shop = ({ product }) => {
                                             handleAddToCart(product)
                                           }
                                         >
-                                          <BsHandbag />
+                                          {cartItems.find(
+                                            (item) =>
+                                              item.design_id === product.id
+                                          ) ? (
+                                            <BsFillCartCheckFill />
+                                          ) : (
+                                            <BsHandbag />
+                                          )}
                                         </Link>
                                       </>
                                     ) : (
@@ -640,7 +650,15 @@ const Shop = ({ product }) => {
                                         data-tooltip-id="my-tooltip-7"
                                         onClick={() => handleAddToCart(data)}
                                       >
-                                        <BsHandbag />
+                                        {cartItems.find(
+                                          (item) => item.design_id === data.id
+                                        ) ? (
+                                          <Link to="/cart" className="mt-2">
+                                            <BsFillCartCheckFill />
+                                          </Link>
+                                        ) : (
+                                          <BsHandbag />
+                                        )}
                                       </Link>
                                     ) : (
                                       ""

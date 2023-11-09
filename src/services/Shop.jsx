@@ -39,6 +39,7 @@ const related_products = async (data) => {
   return d;
 };
 
+
 const exportObject = {
   related_products,
   alldesigns,

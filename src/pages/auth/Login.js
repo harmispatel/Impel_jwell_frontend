@@ -83,6 +83,7 @@ const Login = () => {
                 toast.success("OTP sended successfully!");
                 localStorage.setItem("user_type", res.data.user_type);
                 localStorage.setItem("user_id", res.data.user_id);
+                localStorage.setItem("verification", res.data.verification);
               })
               .catch((err) => {
                 console.log("SMS not sent", err);

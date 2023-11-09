@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from "../../assets/images/logo.png";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const DealerLogIN = () => {
   const navigate = useNavigate();
@@ -59,10 +58,12 @@ const DealerLogIN = () => {
           localStorage.setItem("user_id", response.data.data.user.id);
           localStorage.setItem("user_type", response.data.data.user.user_type);
           localStorage.setItem("email", loginData.email);
+
           navigate("/");
         } else {
-          // toast.error("Something went wrong!");
-          navigate("/login");
+          navigate("/Dealer_login");
+          toast.error(response.data.message);
+          setUser("");
         }
       })
       .catch((err) => {

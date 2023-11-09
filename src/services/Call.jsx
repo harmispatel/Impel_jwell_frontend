@@ -30,7 +30,7 @@ export default function call({ path, method, data }) {
         : Axios({
             url: API_URL + path,
             method,
-            data
+            data,
           })
             .then((d) => {
               resolve(d.data);

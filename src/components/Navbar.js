@@ -8,12 +8,15 @@ import "react-toastify/dist/ReactToastify.css";
 import DealerService from "../services/Dealer/Cart";
 import UserService from "../services/Cart";
 import { Tooltip as ReactTooltip } from "react-tooltip";
+import homeService from "../services/Home";
 
 const Navbar = () => {
   const [colorChange, setColorchange] = useState(false);
   const [isLoggedOut, setIsLoggedOut] = useState(false);
   const [dealerCartCounts, setDealerCartCounts] = useState();
   const [userCartCounts, setUsererCartCounts] = useState();
+  const [tags, setTags] = useState([]);
+
   const location = useLocation();
   const currentRoute = location.pathname;
   const navigate = useNavigate();
@@ -21,6 +24,8 @@ const Navbar = () => {
   const Dealer = localStorage.getItem("token");
   const DealerEmail = localStorage.getItem("email");
   const Phone = localStorage.getItem("phone");
+  const CartCounts = JSON.parse(sessionStorage.getItem("cartItems"));
+  const productsquantity = localStorage.getItem("total_quantity");
 
   const changeNavbarColor = () => {
     if (window.scrollY >= 80) {
@@ -30,9 +35,6 @@ const Navbar = () => {
     }
   };
   window.addEventListener("scroll", changeNavbarColor);
-
-  const CartCounts = JSON.parse(sessionStorage.getItem("cartItems"));
-  const productsquantity = localStorage.getItem("total_quantity");
 
   const DealerCart = () => {
     DealerService.CartList({ email: DealerEmail })
@@ -47,7 +49,20 @@ const Navbar = () => {
   const UserCartItems = () => {
     UserService.CartList({ phone: Phone })
       .then((res) => {
-        setUsererCartCounts(localStorage.getItem("total_quantity"));
+        setUsererCartCounts(res.data.total_quantity);
+        console.log(res.data.total_quantity);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  console.log(homeService);
+  const Tags = () => {
+    homeService
+      .headerTags()
+      .then((res) => {
+        setTags(res.data);
+        console.log(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -57,6 +72,7 @@ const Navbar = () => {
   useEffect(() => {
     DealerCart();
     UserCartItems();
+    Tags();
   }, []);
 
   const handleLogout = () => {
@@ -96,7 +112,10 @@ const Navbar = () => {
           >
             <span className="navbar-toggler-icon"></span>
           </button>
-          <div className="collapse navbar-collapse" id="navbarSupportedContent">
+          <div
+            className="collapse navbar-collapse position-relative"
+            id="navbarSupportedContent"
+          >
             <ul className="navbar-nav mb-2 mb-lg-0">
               <li className="nav-item">
                 <Link
@@ -108,6 +127,22 @@ const Navbar = () => {
                 >
                   Home
                 </Link>
+              </li>
+              <li className="nav-item main-tags">
+                <Link className="nav-link" aria-current="page">
+                  Tags
+                </Link>
+                <div className="tags-dropdown">
+                  <div className="row">
+                    {tags?.map((multitags, index) => (
+                      <div className="col-md-3">
+                        <div className="tags-links" key={index}>
+                          <Link>{multitags.name}</Link>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </li>
               <li className="nav-item">
                 <Link
@@ -131,7 +166,7 @@ const Navbar = () => {
               </li>
             </ul>
           </div>
-          <Link className="navbar-brand m-0" to="#">
+          <Link className="navbar-brand m-0" to="/">
             <img src={Logo} alt="logo" width={100} />
           </Link>
           <div className="header_icon">
@@ -249,8 +284,8 @@ const Navbar = () => {
                     data-tooltip-id="my-tooltip-3"
                   >
                     <BsHandbag style={{ fontSize: "20px", color: "black" }} />
-                    {productsquantity?.length > 0 && (
-                      <div className="cart_count">{productsquantity}</div>
+                    {userCartCounts?.length > 0 && (
+                      <div className="cart_count">{userCartCounts}</div>
                     )}
                   </Link>
                 )}

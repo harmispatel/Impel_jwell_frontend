@@ -5,12 +5,14 @@ import { Link, useParams } from "react-router-dom";
 import homeService from "../../services/Home";
 import categoryDetail from "../../services/Shop";
 import BreadCrumb from "../../components/common/BreadCrumb";
+import ReactLoading from "react-loading";
 
 const CategoriesItems = () => {
   const paramId = useParams();
 
   const [category, SetCategory] = useState([]);
   const [selectedCategory, setselectedCategory] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
   const [categoriesData, setCategoriesData] = useState([]);
 
   const Category = () => {
@@ -36,9 +38,11 @@ const CategoriesItems = () => {
       .related_products({ categoryId: paramId })
       .then((res) => {
         setCategoriesData(res.data);
+        setIsLoading(false);
       })
       .catch((err) => {
         console.log(err);
+        setIsLoading(false);
       });
   };
 
@@ -69,30 +73,7 @@ const CategoriesItems = () => {
                     />
                     <ul className="nav nav-tabs">
                       {data.child_categories.map((item, index) => {
-                        return (
-                          <>
-                            {/* <li className="nav-item" key={index}>
-                              <button
-                                className={
-                                  selectedCategory === item.id
-                                    ? "nav-link active"
-                                    : "nav-link"
-                                }
-                                id="novelty-tab"
-                                data-bs-toggle="tab"
-                                data-bs-target="#novelty"
-                                type="button"
-                                onClick={() => handleDifferentFunction(item.id)}
-                                defaultValue={selectedCategory}
-                                role="tab"
-                                aria-controls="novelty"
-                                aria-selected="true"
-                              >
-                                {item.name}
-                              </button>
-                            </li> */}
-                          </>
-                        );
+                        return <></>;
                       })}
                     </ul>
                   </section>
@@ -104,27 +85,44 @@ const CategoriesItems = () => {
         <div>
           <div className="categories_data">
             <div className="row">
-              {categoriesData.length > 0 ? (
-                categoriesData.map((data) => {
-                  return (
-                    <div className="col-md-4" key={data.id}>
-                      <Link
-                        to={`/shopdetails/${data.id}`}
-                        className="text-decoration-none"
-                        style={{ color: "#000" }}
-                      >
-                        <div className="category_data py-2">
-                          <img src={data.image} alt="" className="w-100" />
-                          <div className="product_details">
-                            <h4>{data.name}</h4>
-                          </div>
-                        </div>
-                      </Link>
-                    </div>
-                  );
-                })
+              {isLoading ? (
+                <div className="h-100 d-flex justify-content-center">
+                  <ReactLoading
+                    type={"spinningBubbles"}
+                    color={"#053961"}
+                    delay={"2"}
+                    height={"20%"}
+                    width={"10%"}
+                    className="loader"
+                  />
+                </div>
               ) : (
-                <p>categoriesData is not an available</p>
+                <>
+                  {categoriesData.length > 0 ? (
+                    categoriesData.map((data) => {
+                      return (
+                        <div className="col-md-4" key={data.id}>
+                          <Link
+                            to={`/shopdetails/${data.id}`}
+                            className="text-decoration-none"
+                            style={{ color: "#000" }}
+                          >
+                            <div className="category_data py-2">
+                              <img src={data.image} alt="" className="w-100" />
+                              <div className="product_details">
+                                <h4>{data.name}</h4>
+                              </div>
+                            </div>
+                          </Link>
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <div className="categoriesData-not">
+                      <p>Categories data is not an available</p>
+                    </div>
+                  )}
+                </>
               )}
             </div>
           </div>
