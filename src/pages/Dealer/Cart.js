@@ -45,7 +45,6 @@ const DealerCart = () => {
 
     DealerService.PlaceOrder(orderData)
       .then((res) => {
-        console.log(res);
         if (res.status === true) {
           // toast.success(res.message);
           navigate('/dealer_orders')

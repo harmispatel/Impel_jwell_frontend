@@ -49,13 +49,12 @@ const Shop = ({ product }) => {
   const [topseller, setTopSeller] = useState([]);
   const [selectedOption, setSelectedOption] = useState([]);
   const [show, setShow] = useState(false);
-  const Phone = localStorage.getItem("phone");
   const Verification = localStorage.getItem("verification");
   const navigate = useNavigate();
   const userType = localStorage.getItem("user_type");
   const userId = localStorage.getItem("user_id");
   const email = localStorage.getItem("email");
-  const phone = localStorage.getItem("phone");
+  const Phone = localStorage.getItem("phone");
 
   useEffect(() => {
     if (
@@ -70,12 +69,43 @@ const Shop = ({ product }) => {
     }
   }, [category, tag, gender, searchInput, PriceRange, selectedOption]);
 
+  // sort by filters
+  const handleRadioChange = (event) => {
+    setSelectedOption(event.target.value);
+    const sortfield = event.target.value;
+    let sorted = [...allData];
+    switch (sortfield) {
+      case "new_added":
+        break;
+      case "low_to_high":
+        break;
+      case "high_to_low":
+        break;
+      case "highest_selling":
+        break;
+      case "clear_all":
+        break;
+      default:
+        break;
+    }
+    setFilterData(sorted);
+  };
+
+  // side filter 4 functions
   const handleCategory = (e) => {
     setIsLoading(true);
     if (e.target.checked) {
       setCategory([...category, e.target.value]);
     } else {
       setCategory(category.filter((item) => item !== e.target.value));
+    }
+  };
+  const handleGender = (e) => {
+    setIsLoading(true);
+    if (e.target.checked) {
+      setGender([...gender, e.target.value]);
+    } else {
+      setGender(gender.filter((item) => item !== e.target.value));
     }
   };
 
@@ -85,15 +115,6 @@ const Shop = ({ product }) => {
       setTag([...tag, e.target.value]);
     } else {
       setTag(tag.filter((item) => item !== e.target.value));
-    }
-  };
-
-  const handleGender = (e) => {
-    setIsLoading(true);
-    if (e.target.checked) {
-      setGender([...gender, e.target.value]);
-    } else {
-      setGender(gender.filter((item) => item !== e.target.value));
     }
   };
 
@@ -153,7 +174,7 @@ const Shop = ({ product }) => {
   };
 
   const GetCarList = async () => {
-    UserWishlist.userWishlist({ phone: phone })
+    UserWishlist.userWishlist({ phone: Phone })
       .then((res) => {
         setUserCartItems(res.data);
       })
@@ -177,6 +198,7 @@ const Shop = ({ product }) => {
     GetCarList();
     DealerList();
     collectionCheck();
+    GetUserCartList();
   }, []);
 
   const FetchMoreData = async () => {
@@ -188,27 +210,43 @@ const Shop = ({ product }) => {
       setLoadMore(loadMore + 9);
     }, 200);
   };
-  const handleRadioChange = (event) => {
-    setSelectedOption(event.target.value);
-    const sortfield = event.target.value;
-    console.log(sortfield);
-    let sorted = [...allData];
-    console.log(sorted);
-    switch (sortfield) {
-      case "new_added":
-        break;
-      case "low_to_high":
-        break;
-      case "high_to_low":
-        break;
-      case "highest_selling":
-        break;
-      case "clear_all":
-        break;
-      default:
-        break;
+
+  // user wishlist products add
+  const addToUserWishList = async (product) => {
+    if (!UsercartItems.some((item) => item.id === product.id)) {
+      UserWishlist.addtoWishlist({
+        phone: Phone,
+        design_id: product.id,
+      })
+        .then((res) => {
+          if (res.success === true) {
+            setUserWishlist(true);
+            toast.success("Design has been Added to Your Wishlist");
+            GetCarList();
+          } else {
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      toast("Item is already in the wishlist");
     }
-    setFilterData(sorted);
+  };
+  const removeFromWishList = (product) => {
+    UserWishlist.removetoWishlist({
+      phone: Phone,
+      design_id: product.id,
+    })
+      .then((res) => {
+        if (res.success === true) {
+          toast.success("Design has been Removed from Your Wishlist.");
+          GetCarList();
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   // Dealer Wishlist products add
@@ -219,7 +257,6 @@ const Shop = ({ product }) => {
         design_id: product.id,
       })
         .then((res) => {
-          console.log(res);
           if (res.success === true) {
             setCollectionStatus(true);
             toast.success("Design has been Added to Your Collection.");
@@ -250,7 +287,18 @@ const Shop = ({ product }) => {
         console.log(err);
       });
   };
-  const handleAddToCart = async (product) => {
+
+  const GetUserCartList = async () => {
+    UserCartService.CartList({ phone: Phone })
+      .then((res) => {
+        setCartItems(res.data.cart_items);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  // user add to cart function
+  const handleAddToCart = (product) => {
     if (!cartItems.some((item) => item.design_id === product.id)) {
       if (Verification == 3) {
         const CartData = {
@@ -262,71 +310,21 @@ const Shop = ({ product }) => {
         UserCartService.AddtoCart(CartData)
           .then((res) => {
             if (res.status === true) {
-              toast.success(res.message);
               GetUserCartList();
               localStorage.setItem("total_quantity", res.data.total_quantity);
-              console.log(res.data.total_quantity);
+              toast.success(res.message);
             }
           })
           .catch((err) => {
             console.log(err);
           });
       } else {
-        console.log("Please verify your information to access add to cart");
         setShowEdit(true);
       }
     } else {
     }
   };
-  // user wishlist products add
-  const addToUserWishList = async (product) => {
-    if (!UsercartItems.some((item) => item.id === product.id)) {
-      UserWishlist.addtoWishlist({
-        phone: localStorage.getItem("phone"),
-        design_id: product.id,
-      })
-        .then((res) => {
-          if (res.success === true) {
-            setUserWishlist(true);
-            toast.success("Design has been Added to Your Wishlist");
-            GetCarList();
-          } else {
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } else {
-      toast("Item is already in the wishlist");
-    }
-  };
-  const removeFromWishList = (product) => {
-    UserWishlist.removetoWishlist({
-      phone: localStorage.getItem("phone"),
-      design_id: product.id,
-    })
-      .then((res) => {
-        console.log(res);
-        if (res.success === true) {
-          toast.success("Design has been Removed from Your Wishlist.");
-          GetCarList();
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
 
-  const GetUserCartList = async () => {
-    UserCartService.CartList({ phone: Phone })
-      .then((res) => {
-        setCartItems(res.data.cart_items);
-        console.log(res.data.cart_items);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
   const handleClose = () => {
     setShow(false);
     setShowEdit(false);
@@ -501,7 +499,7 @@ const Shop = ({ product }) => {
 
                                 <div className="edit">
                                   <div>
-                                    {phone ? (
+                                    {Phone ? (
                                       <>
                                         <Link
                                           to="#"
@@ -514,7 +512,9 @@ const Shop = ({ product }) => {
                                             (item) =>
                                               item.design_id === product.id
                                           ) ? (
-                                            <BsFillCartCheckFill />
+                                            <Link to="/cart" className="mt-2">
+                                              <BsFillCartCheckFill />
+                                            </Link>
                                           ) : (
                                             <BsHandbag />
                                           )}
@@ -567,7 +567,7 @@ const Shop = ({ product }) => {
                                       </>
                                     ) : (
                                       <>
-                                        {phone ? (
+                                        {Phone ? (
                                           <Link
                                             to="#"
                                             data-tooltip-id="my-tooltip-9"
@@ -644,7 +644,7 @@ const Shop = ({ product }) => {
                                 )}
                                 <div className="edit">
                                   <div>
-                                    {phone ? (
+                                    {Phone ? (
                                       <Link
                                         to="#"
                                         data-tooltip-id="my-tooltip-7"
@@ -704,7 +704,7 @@ const Shop = ({ product }) => {
                                       </>
                                     ) : (
                                       <>
-                                        {phone ? (
+                                        {Phone ? (
                                           <Link
                                             to="#"
                                             data-tooltip-id="my-tooltip-9"

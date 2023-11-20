@@ -16,7 +16,6 @@ const WishList = () => {
   const GetCarList = async () => {
     Userservice.userWishlist({ phone: phone })
       .then((res) => {
-        console.log(res.data);
         setDealerCartItems(res.data);
         setIsLoading(false);
       })
@@ -29,7 +28,6 @@ const WishList = () => {
   const removeFromWishList = (product) => {
     Userservice.removetoWishlist({ phone: phone, design_id: product })
       .then((res) => {
-        console.log(res);
         if (res.success === true) {
           GetCarList();
         }

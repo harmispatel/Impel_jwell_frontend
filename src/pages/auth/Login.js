@@ -57,9 +57,7 @@ const Login = () => {
       setPhoneError("Please enter your mobile");
     } else if (phoneNumber.length !== 13) {
       setPhoneError("Your mobile number should be 10 digits");
-      console.log("invalid");
     } else {
-      console.log("valid");
       setPhoneError("");
       const formatPh = `${phoneNumber}`;
       const appVerifier = window.recaptchaVerifier;
@@ -86,7 +84,7 @@ const Login = () => {
                 localStorage.setItem("verification", res.data.verification);
               })
               .catch((err) => {
-                console.log("SMS not sent", err);
+                console.log(err);
                 setTimeout(() => {
                   window.location.reload(true);
                 }, 2000);
@@ -103,8 +101,6 @@ const Login = () => {
     e.preventDefault();
 
     const code = otp;
-    console.log("OTP Code:", code);
-
     window.confirmationResult
       .confirm(code)
       .then((result) => {

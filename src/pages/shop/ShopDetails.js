@@ -34,8 +34,9 @@ const ShopDetails = () => {
   const [userWishlist, setUserWishlist] = useState(false);
   const [dealerWishlist, setDealerWishlist] = useState(false);
   const [UserWishlistItems, setUserWishlistItems] = useState([]);
-
+  const [selectedGoldType, setSelectedGoldType] = useState("yellow_gold");
   const [DealerWishlistItems, setDealerWishlistItems] = useState([]);
+  const [selectedRadio, setSelectedRadio] = useState("18k");
   const [showEdit, setShowEdit] = useState(false);
   const [show, setShow] = useState(false);
   const data = { categoryId: product?.category_id?.id };
@@ -104,7 +105,6 @@ const ShopDetails = () => {
   const GetDealerWishList = async () => {
     DealerWishlist.ListCollection({ email: Dealer })
       .then((res) => {
-        console.log(res);
         setDealerWishlistItems(res.data);
       })
       .catch((err) => {
@@ -131,7 +131,6 @@ const ShopDetails = () => {
 
     DealeCartService.AddtoCart(CartData)
       .then((res) => {
-        console.log(res);
         if (res.status === true) {
           // toast.success(res.message);
           toast(res.message, { icon: "✔️" });
@@ -207,6 +206,8 @@ const ShopDetails = () => {
         design_name: product.name,
         design_id: product.id,
         quantity: productQuantity,
+        gold_color: selectedGoldType,
+        gold_type: selectedRadio,
       };
 
       UserCartService.AddtoCart(CartData)
@@ -220,11 +221,49 @@ const ShopDetails = () => {
           console.log(err);
         });
     } else {
-      console.log("Please verify your information to access add to cart");
       setShowEdit(true);
     }
   };
+  const handleGoldTypeClick = (buttonId) => {
+    setSelectedGoldType(buttonId);
+  };
+  const handleRadioChange = (event) => {
+    setSelectedRadio(event.target.id);
+  };
 
+  const goldrate = {
+    gold_rate_24k: 6000,
+    gold_rate_22k: 5220,
+    gold_rate_20k: 5040,
+    gold_rate_18k: 4560,
+    gold_rate_14k: 3540,
+  };
+  const price22k = parseFloat(
+    (product?.gross_weight_22k * goldrate.gold_rate_22k).toFixed(2)
+  );
+  const price20k = parseFloat(
+    (product?.gross_weight_20k * goldrate.gold_rate_20k).toFixed(2)
+  );
+  const price18k = parseFloat(
+    (product?.gross_weight_18k * goldrate.gold_rate_18k).toFixed(2)
+  );
+  const price14k = parseFloat(
+    (product?.gross_weight_14k * goldrate.gold_rate_14k).toFixed(2)
+  );
+
+  const makinghcharge22k =
+    ((goldrate.gold_rate_24k * 15) / 100) * product?.gross_weight_22k;
+  const makinghcharge20k =
+    ((goldrate.gold_rate_24k * 15) / 100) * product?.gross_weight_20k;
+  const makinghcharge18k =
+    ((goldrate.gold_rate_24k * 15) / 100) * product?.gross_weight_18k;
+  const makinghcharge14k =
+    ((goldrate.gold_rate_24k * 15) / 100) * product?.gross_weight_14k;
+
+  const totalprice22k = price22k + makinghcharge22k;
+  const totalprice20k = price20k + makinghcharge20k;
+  const totalprice18k = price18k + makinghcharge18k;
+  const totalprice14k = price14k + makinghcharge14k;
   return (
     <section className="shop_details">
       <div className="container">
@@ -241,7 +280,7 @@ const ShopDetails = () => {
               <div className="row">
                 <div className="col-md-6">
                   <div>
-                    {productImages.length === 0 ? (
+                    {productImages?.length === 0 ? (
                       <img src={img} alt="" className="w-100" />
                     ) : (
                       <div className="detalis_slider">
@@ -251,7 +290,7 @@ const ShopDetails = () => {
                           autoPlay
                           interval={3000}
                         >
-                          {productImages.map((image, index) => (
+                          {productImages?.map((image, index) => (
                             <div
                               key={index}
                               onClick={() => openLightbox(index)}
@@ -301,7 +340,7 @@ const ShopDetails = () => {
                     <h3>{product?.name}</h3>
                     <p>{product?.category}</p>
                     <p>
-                      <strong>₹{product?.price.toLocaleString("en-US")}</strong>
+                      <strong>₹{product?.price}</strong>
                     </p>
                     <h5>
                       Lorem ipsum dolor sit amet, consectetur adipisicing elit,
@@ -310,7 +349,354 @@ const ShopDetails = () => {
                       ullamco laboris nisi ut aliquip ex ea commodo consequat
                       two.
                     </h5>
-                    <div className="buttons pt-4 d-flex">
+
+                    <div>
+                      <div>
+                        <button
+                          className={`btn  yellow-gold ${
+                            selectedGoldType === "yellow_gold" ? "active" : ""
+                          }`}
+                          defaultValue="yellow_gold"
+                          onClick={() => handleGoldTypeClick("yellow_gold")}
+                        >
+                          Yellow Gold
+                        </button>
+                        <button
+                          className={`btn rose-gold mx-3 ${
+                            selectedGoldType === "rose_gold" ? "active" : ""
+                          }`}
+                          onClick={() => handleGoldTypeClick("rose_gold")}
+                        >
+                          Rose Gold
+                        </button>
+                        <button
+                          className={`btn white-gold ${
+                            selectedGoldType === "white_gold" ? "active" : ""
+                          }`}
+                          onClick={() => handleGoldTypeClick("white_gold")}
+                        >
+                          White Gold
+                        </button>
+                      </div>
+                      {selectedGoldType === "yellow_gold" && (
+                        <div className="mt-3">
+                          <h5>Weight in Gram(Approx.)</h5>
+                          <div className="prodcuts-weight">
+                            <table className="table table-bordered text-center">
+                              <thead>
+                                <tr>
+                                  <th>Title</th>
+                                  <th>
+                                    <div className="d-flex justify-content-space-between">
+                                      <input
+                                        class="form-check-input"
+                                        type="radio"
+                                        name="flexRadioDefault"
+                                        id="22k"
+                                        checked={selectedRadio === "22k"}
+                                        onChange={handleRadioChange}
+                                      />
+                                      <label class="form-check-label" for="22k">
+                                        22K / 76 Touch
+                                      </label>
+                                    </div>
+                                  </th>
+                                  <th>
+                                    <div className="d-flex justify-content-space-between">
+                                      <input
+                                        class="form-check-input"
+                                        type="radio"
+                                        name="flexRadioDefault"
+                                        id="20k"
+                                        checked={selectedRadio === "20k"}
+                                        onChange={handleRadioChange}
+                                      />
+                                      <label class="form-check-label" for="20k">
+                                        20K / 76 Touch
+                                      </label>
+                                    </div>
+                                  </th>
+                                  <th>
+                                    <div className="d-flex justify-content-space-between">
+                                      <input
+                                        class="form-check-input"
+                                        type="radio"
+                                        name="flexRadioDefault"
+                                        id="18k"
+                                        defaultChecked={selectedRadio === "18k"}
+                                        onChange={handleRadioChange}
+                                      />
+                                      <label class="form-check-label" for="18k">
+                                        18K / 76 Touch
+                                      </label>
+                                    </div>
+                                  </th>
+                                  <th>
+                                    <div className="d-flex justify-content-space-between">
+                                      <input
+                                        class="form-check-input"
+                                        type="radio"
+                                        name="flexRadioDefault"
+                                        id="14k"
+                                        checked={selectedRadio === "14k"}
+                                        onChange={handleRadioChange}
+                                      />
+                                      <label class="form-check-label" for="14k">
+                                        14K / 59 Touch
+                                      </label>
+                                    </div>
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td>Gross Weight</td>
+                                  <td>
+                                    {product?.gross_weight_22k} g.(Approx.)
+                                  </td>
+                                  <td>
+                                    {product?.gross_weight_20k} g.(Approx.)
+                                  </td>
+                                  <td>
+                                    {product?.gross_weight_18k} g.(Approx.)
+                                  </td>
+                                  <td>
+                                    {product?.gross_weight_14k} g.(Approx.)
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>Less Gems Stone</td>
+                                  <td>0</td>
+                                  <td>0</td>
+                                  <td>0</td>
+                                  <td>0</td>
+                                </tr>
+                                <tr>
+                                  <td>Less C.Z. Stone</td>
+                                  <td>0</td>
+                                  <td>0</td>
+                                  <td>0</td>
+                                  <td>0</td>
+                                </tr>
+                                <tr>
+                                  <th>Net Weight</th>
+                                  <td>{product?.gross_weight_22k} g.</td>
+                                  <td>{product?.gross_weight_20k} g.</td>
+                                  <td>{product?.gross_weight_18k} g.</td>
+                                  <td>{product?.gross_weight_14k} g.</td>
+                                </tr>
+                                <tr>
+                                  <th>Price</th>
+                                  <td>₹ {price22k}</td>
+                                  <td>₹ {price20k}</td>
+                                  <td>₹ {price18k}</td>
+                                  <td>₹ {price14k}</td>
+                                </tr>
+                                <tr>
+                                  <th>Making charge</th>
+                                  <td>₹ {makinghcharge22k}</td>
+                                  <td>₹ {makinghcharge20k}</td>
+                                  <td>₹ {makinghcharge18k}</td>
+                                  <td>₹ {makinghcharge14k}</td>
+                                </tr>
+                                <tr>
+                                  <th>Total Amount</th>
+                                  <td>₹ {totalprice22k}</td>
+                                  <td>₹ {totalprice20k}</td>
+                                  <td>₹ {totalprice18k}</td>
+                                  <td>₹ {totalprice14k}</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      )}
+                      {selectedGoldType === "rose_gold" && (
+                        <div className="mt-3">
+                          <h5>Weight in Gram(Approx.)</h5>
+                          <div className="prodcuts-weight-18k">
+                            <table className="table table-bordered text-center">
+                              <thead>
+                                <tr>
+                                  <th>Title</th>
+                                  <th>
+                                    <div className="d-flex justify-content-space-between">
+                                      <input
+                                        class="form-check-input"
+                                        type="radio"
+                                        name="flexRadioDefault"
+                                        id="18k"
+                                        defaultChecked={selectedRadio === "18k"}
+                                        onChange={handleRadioChange}
+                                      />
+                                      <label
+                                        class="form-check-label ms-2"
+                                        for="18k"
+                                      >
+                                        18K / 76 Touch
+                                      </label>
+                                    </div>
+                                  </th>
+                                  <th>
+                                    <div className="d-flex justify-content-space-between">
+                                      <input
+                                        class="form-check-input"
+                                        type="radio"
+                                        name="flexRadioDefault"
+                                        id="14k"
+                                        checked={selectedRadio === "14k"}
+                                        onChange={handleRadioChange}
+                                      />
+                                      <label
+                                        class="form-check-label ms-2"
+                                        for="14k"
+                                      >
+                                        14K / 59 Touch
+                                      </label>
+                                    </div>
+                                  </th>
+                                </tr>
+                              </thead>
+
+                              <tbody>
+                                <tr>
+                                  <td>Gross Weight</td>
+                                  <td>
+                                    {product?.gross_weight_18k} g.(Approx.)
+                                  </td>
+                                  <td>
+                                    {product?.gross_weight_14k} g.(Approx.)
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>Less Gems Stone</td>
+                                  <td>0</td>
+                                  <td>0</td>
+                                </tr>
+                                <tr>
+                                  <td>Less C.Z. Stone</td>
+                                  <td>0</td>
+                                  <td>0</td>
+                                </tr>
+                                <tr>
+                                  <th>Net Weight</th>
+                                  <td>{product?.gross_weight_18k} g.</td>
+                                  <td>{product?.gross_weight_14k} g.</td>
+                                </tr>
+                                <tr>
+                                  <th>Price</th>
+                                  <td>₹ {price18k}</td>
+                                  <td>₹ {price14k}</td>
+                                </tr>
+                                <tr>
+                                  <th>Making charge</th>
+                                  <td>₹ {makinghcharge18k}</td>
+                                  <td>₹ {makinghcharge14k}</td>
+                                </tr>
+                                <tr>
+                                  <th>Total Amount</th>
+                                  <td>₹ {totalprice18k}</td>
+                                  <td>₹ {totalprice14k}</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      )}
+                      {selectedGoldType === "white_gold" && (
+                        <div className="mt-3">
+                          <h5>Weight in Gram(Approx.)</h5>
+                          <div className="prodcuts-weight-18k">
+                            <table className="table table-bordered text-center">
+                              <thead>
+                                <tr>
+                                  <th>Title</th>
+                                  <th>
+                                    <div className="d-flex justify-content-space-between">
+                                      <input
+                                        class="form-check-input"
+                                        type="radio"
+                                        name="flexRadioDefault"
+                                        id="18k"
+                                        defaultChecked={selectedRadio === "18k"}
+                                        onChange={handleRadioChange}
+                                      />
+                                      <label
+                                        class="form-check-label ms-2"
+                                        for="18k"
+                                      >
+                                        18K / 76 Touch
+                                      </label>
+                                    </div>
+                                  </th>
+                                  <th>
+                                    <div className="d-flex justify-content-space-between">
+                                      <input
+                                        class="form-check-input"
+                                        type="radio"
+                                        name="flexRadioDefault"
+                                        id="14k"
+                                        checked={selectedRadio === "14k"}
+                                        onChange={handleRadioChange}
+                                      />
+                                      <label
+                                        class="form-check-label ms-2"
+                                        for="14k"
+                                      >
+                                        14K / 59 Touch
+                                      </label>
+                                    </div>
+                                  </th>
+                                </tr>
+                              </thead>
+
+                              <tbody>
+                                <tr>
+                                  <td>Gross Weight</td>
+                                  <td>
+                                    {product?.gross_weight_18k} g.(Approx.)
+                                  </td>
+                                  <td>
+                                    {product?.gross_weight_14k} g.(Approx.)
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>Less Gems Stone</td>
+                                  <td>0</td>
+                                  <td>0</td>
+                                </tr>
+                                <tr>
+                                  <td>Less C.Z. Stone</td>
+                                  <td>0</td>
+                                  <td>0</td>
+                                </tr>
+                                <tr>
+                                  <th>Net Weight</th>
+                                  <td>{product?.gross_weight_18k} g.</td>
+                                  <td>{product?.gross_weight_14k} g.</td>
+                                </tr>
+                                <tr>
+                                  <th>Price</th>
+                                  <td>₹ {price18k}</td>
+                                  <td>₹ {price14k}</td>
+                                </tr>
+                                <tr>
+                                  <th>Making charge</th>
+                                  <td>₹ {makinghcharge18k}</td>
+                                  <td>₹ {makinghcharge14k}</td>
+                                </tr>
+                                <tr>
+                                  <th>Total Amount</th>
+                                  <td>₹ {totalprice18k}</td>
+                                  <td>₹ {totalprice14k}</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    <div className="buttons pt-4 d-flex justify-content-space-between">
                       {Phone ? (
                         <div className="quantity">
                           {productQuantity === 1 ? (

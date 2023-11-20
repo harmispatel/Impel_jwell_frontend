@@ -15,6 +15,16 @@ const Cart = () => {
   const [productQuantity, setProductQuantity] = useState();
   const [isFormEmpty, setIsFormEmpty] = useState("");
   const [show, setShow] = useState(false);
+  const [showbox, setShowbox] = useState(false);
+
+  const handlecountchange = (update_type, id) => {
+    console.log(update_type);
+    UserService.Updatecart({ id: id, update_type: update_type })
+      .then((res) => {})
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const UserCartItems = () => {
     UserService.CartList({ phone: Phone })
@@ -30,22 +40,50 @@ const Cart = () => {
   const handlechange = (e) => {
     setDealerCode(e.target.value);
   };
+  useEffect(() => {
+    const savedDiscount = localStorage.getItem("savedDiscount");
+    if (savedDiscount) {
+      setCode(JSON.parse(savedDiscount));
+      setShow(true);
+    }
 
-  const TotalPrice = () => {
-    let totalPrice = 0;
-    Items.forEach((item) => {
-      totalPrice += item.price * item.quantity;
+    UserCartItems();
+  }, []);
+
+  const SubTotal = () => {
+    let subTotal = 0;
+    Items.forEach((data) => {
+      const gold_type = "gold_rate_" + data.gold_type;
+      const grossWeight = "gross_weight_" + data.gold_type;
+      const price =
+        parseFloat(data[grossWeight] * goldrate[gold_type]) +
+        ((goldrate.gold_rate_24k * 15) / 100) * data[grossWeight];
+      subTotal += price * data.quantity;
     });
-    return totalPrice;
+    return subTotal;
   };
+  const goldColor = {
+    yellow_gold: "Yellow Gold",
+    rose_gold: "Rose Gold",
+    white_gold: "White Gold",
+  };
+  const goldrate = {
+    gold_rate_24k: 6000,
+    gold_rate_22k: 5220,
+    gold_rate_20k: 5040,
+    gold_rate_18k: 4560,
+    gold_rate_14k: 3540,
+  };
+
   const Applycoupen = (e) => {
     e.preventDefault();
     UserService.DealerCode({ phone: Phone, dealer_code: dealer_code })
       .then((res) => {
         if (res.status === false) {
           setIsFormEmpty(res.message);
-          // toast.error(res.message);
+          setShow(false);
         } else {
+          localStorage.setItem("savedDiscount", JSON.stringify(res.data));
           setShow(true);
           setCode(res.data);
           setIsFormEmpty("");
@@ -62,7 +100,6 @@ const Cart = () => {
         if (res.status === true) {
           UserCartItems();
           localStorage.setItem("total_quantity", res.data.total_quantity);
-          console.log(res.data.total_quantity);
           toast.success("remove design from cart successfully");
         }
       })
@@ -98,8 +135,15 @@ const Cart = () => {
                   ) : (
                     <>
                       {Items?.map((data, index) => {
-                        // const dataPrice = data.price.toLocaleString("en-US");
-                        const quantity = data.quantity;
+                        const gold_type = "gold_rate_" + data.gold_type;
+                        const grossWeight = "gross_weight_" + data.gold_type;
+                        const price = parseFloat(
+                          data[grossWeight] * goldrate[gold_type]
+                        );
+                        const makinghcharge =
+                          ((goldrate.gold_rate_24k * 15) / 100) *
+                          data[grossWeight];
+                        const totalprice = price + makinghcharge;
                         return (
                           <>
                             <div className="col-md-3">
@@ -115,13 +159,18 @@ const Cart = () => {
                                 <Link to="#" className="nav-link">
                                   {data.design_name}
                                 </Link>
-                                <p className="text-muted">
-                                  {data.category} - {data.metal}
-                                </p>
+                                <div className="">
+                                  <p className="text-muted">
+                                    <b>Gold Color : </b>
+                                    {goldColor[data.gold_color]}
+                                    &nbsp;
+                                    {data.gold_type}
+                                  </p>
+                                </div>
                               </div>
                               <div className="">
                                 <text className="h6">
-                                  ₹{data.price.toLocaleString("en-US")}
+                                  ₹{totalprice.toLocaleString("en-US")}
                                 </text>{" "}
                                 <br />
                               </div>
@@ -144,6 +193,7 @@ const Cart = () => {
                                       return item;
                                     });
                                     setItems(updatedItems);
+                                    handlecountchange("decrement", data.id);
                                   }}
                                 >
                                   -
@@ -170,6 +220,7 @@ const Cart = () => {
                                       return item;
                                     });
                                     setItems(updatedItems);
+                                    handlecountchange("increment", data.id);
                                   }}
                                 >
                                   +
@@ -202,10 +253,11 @@ const Cart = () => {
           </div>
 
           <div className="col-lg-3">
-            <div className="card mb-3 border shadow-0">
-              <div className="card-body">
-                <form>
-                  {/* <div className="form-group">
+            {showbox ? (
+              <div className="card mb-3 border shadow-0">
+                <div className="card-body">
+                  <form>
+                    {/* <div className="form-group">
                     <label className="form-label">Have coupon?</label>
                     <div className="input-group">
                       <input
@@ -217,56 +269,109 @@ const Cart = () => {
                       <button className="btn btn-light border">Apply</button>
                     </div>
                   </div> */}
-                  <div className="form-group">
-                    <label className="form-label">Have a Dealer coupon?</label>
-                    <div className="input-group">
-                      <input
-                        type="text"
-                        name="dealer_code"
-                        placeholder="Dealer coupon code"
-                        value={dealer_code}
-                        onChange={(e) => handlechange(e)}
-                      />
-                      <button
-                        className="btn btn-light border"
-                        onClick={(e) => Applycoupen(e)}
-                      >
-                        Apply
-                      </button>
+                    <div className="form-group">
+                      <label className="form-label">
+                        Have a Dealer coupon?
+                      </label>
+                      <div className="input-group">
+                        <input
+                          type="text"
+                          name="dealer_code"
+                          placeholder="Dealer coupon code"
+                          value={dealer_code}
+                          onChange={(e) => handlechange(e)}
+                        />
+                        <button
+                          className="btn btn-light border"
+                          onClick={(e) => Applycoupen(e)}
+                        >
+                          Apply
+                        </button>
+                      </div>
+                      {isFormEmpty ? (
+                        <span className="text-danger">{isFormEmpty}</span>
+                      ) : (
+                        <></>
+                      )}
                     </div>
-                    {isFormEmpty ? (
-                      <span className="text-danger">{isFormEmpty}</span>
-                    ) : (
-                      <></>
-                    )}
-                  </div>
-                </form>
+                  </form>
+                </div>
               </div>
-            </div>
+            ) : (
+              <>
+                <div className="card mb-3 border shadow-0">
+                  <div className="card-body">
+                    <form>
+                      {/* <div className="form-group">
+                  <label className="form-label">Have coupon?</label>
+                  <div className="input-group">
+                    <input
+                      type="text"
+                      className="form-control border"
+                      name=""
+                      placeholder="Coupon code"
+                    />
+                    <button className="btn btn-light border">Apply</button>
+                  </div>
+                </div> */}
+                      <div className="form-group">
+                        <label className="form-label">
+                          Have a Dealer coupon?
+                        </label>
+                        <div className="input-group">
+                          <input
+                            type="text"
+                            name="dealer_code"
+                            placeholder="Dealer coupon code"
+                            value={dealer_code}
+                            onChange={(e) => handlechange(e)}
+                          />
+                          <button
+                            className="btn btn-light border"
+                            onClick={(e) => Applycoupen(e)}
+                          >
+                            Apply
+                          </button>
+                        </div>
+                        {isFormEmpty ? (
+                          <span className="text-danger">{isFormEmpty}</span>
+                        ) : (
+                          <></>
+                        )}
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </>
+            )}
+
             <div className="card shadow-0 border">
               <div className="card-body">
                 <div className="d-flex justify-content-between">
                   <p className="mb-2">Sub total :</p>
-                  <p className="mb-2">{TotalPrice().toFixed(2)}₹</p>
+                  <p className="mb-2">{SubTotal().toLocaleString("en-IN")}₹</p>
                 </div>
                 {show && (
                   <div className="d-flex justify-content-between">
                     <p className="mb-2">
                       Dealer Discount<code>({code.dealer_code})</code>:
                     </p>
-                    <p className="mb-2 text-success"></p>
+                    <p className="mb-2 text-success">
+                      {code.discount_type === "percentage"
+                        ? `-${(
+                            (SubTotal() * code.discount_value) /
+                            100
+                          ).toFixed(2)}`
+                        : `₹${code.discount_value}`}
+                    </p>
                   </div>
                 )}
-                {/* <div className="d-flex justify-content-between">
-                  <p className="mb-2">TAX (18%) :</p>
-                  <p className="mb-2">
-                    ₹{((TotalPrice() / 100) * 18).toFixed(2)}
-                  </p>
-                </div> */}
                 <hr />
                 <div className="d-flex justify-content-between">
                   <p className="mb-2">Total price:</p>
-                  <p className="mb-2 fw-bold">{TotalPrice().toFixed(2)}₹</p>
+                  <p className="mb-2 fw-bold">
+                    {SubTotal().toLocaleString("en-IN")}₹
+                  </p>
                 </div>
                 <div className="mt-3">
                   <a href="#" className="btn btn-success w-100 shadow-0 mb-2">

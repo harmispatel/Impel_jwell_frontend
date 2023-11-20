@@ -12,7 +12,6 @@ const DealerOrders = () => {
   const [endDate, setEndDate] = useState("");
   const [orders,setOrders] = useState([])
   const Dealer = localStorage.getItem('email')
-  console.log(startDate);
 
   const OrderList = () =>{
     OrderService.OrderList({email:Dealer})
@@ -83,7 +82,6 @@ const DealerOrders = () => {
                 </thead>
                 <tbody>
                   {orders.map(data=>{
-                    console.log(data);
                     return(
                       <tr>
                         <td>1</td>

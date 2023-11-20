@@ -50,19 +50,16 @@ const Navbar = () => {
     UserService.CartList({ phone: Phone })
       .then((res) => {
         setUsererCartCounts(res.data.total_quantity);
-        console.log(res.data.total_quantity);
       })
       .catch((err) => {
         console.log(err);
       });
   };
-  console.log(homeService);
   const Tags = () => {
     homeService
       .headerTags()
       .then((res) => {
         setTags(res.data);
-        console.log(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -92,6 +89,7 @@ const Navbar = () => {
       localStorage.removeItem("user_type");
       localStorage.removeItem("user_id");
       localStorage.removeItem("total_quantity");
+      localStorage.removeItem("savedDiscount");
       setIsLoggedOut(true);
       navigate("/login");
     }

@@ -64,9 +64,7 @@ const Profile = () => {
       .getProfile({ phone: phone })
       .then((res) => {
         const statename = res.data.state.name;
-        console.log(statename);
         const cityname = res.data.city.name;
-        console.log(cityname);
         setProfileData({
           ...res.data,
           state_name: statename,
@@ -86,7 +84,6 @@ const Profile = () => {
           shipping_city: res.data.shipping_city.id,
         });
         res.data.state.id && fetchCity(res.data.state.id);
-        console.log(res.data.state.id);
         res.data.shipping_state.id &&
           fetchShippingCity(res.data.shipping_state.id);
       })
@@ -241,8 +238,6 @@ const Profile = () => {
       validationErrors.shipping_state_err = "";
       validationErrors.shipping_city_err = "";
     }
-    console.log(userData.shipping_city);
-    console.log(userData.shipping_state);
     setError(validationErrors);
     return isValid;
   };

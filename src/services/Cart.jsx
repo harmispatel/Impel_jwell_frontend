@@ -39,6 +39,22 @@ const DealerCode = async (data) => {
   return d;
 };
 
-const exportObject = { AddtoCart, RemovetoCart, CartList, DealerCode };
+const Updatecart = async (data) => {
+  let d = await call({
+    path: "user/cart-update",
+    method: "POST",
+    enctype: "multipart/form-data",
+    data,
+  });
+  return d;
+};
+
+const exportObject = {
+  AddtoCart,
+  RemovetoCart,
+  CartList,
+  DealerCode,
+  Updatecart,
+};
 
 export default exportObject;

@@ -18,8 +18,8 @@ const Categories = () => {
         setIsLoading(false);
         setAllCategories(res.data);
       })
-      .catch((res) => {
-        console.log(res);
+      .catch((err) => {
+        console.log(err);
       });
   };
 
