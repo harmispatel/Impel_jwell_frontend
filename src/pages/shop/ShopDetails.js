@@ -281,7 +281,9 @@ const ShopDetails = () => {
                 <div className="col-md-6">
                   <div>
                     {productImages?.length === 0 ? (
-                      <img src={img} alt="" className="w-100" />
+                      <div id="imageMagnifyer">
+                        <img src={img} alt="" className="w-100" />
+                      </div>
                     ) : (
                       <div className="detalis_slider">
                         <Carousel

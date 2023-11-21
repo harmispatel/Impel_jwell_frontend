@@ -16,6 +16,7 @@ const Navbar = () => {
   const [dealerCartCounts, setDealerCartCounts] = useState();
   const [userCartCounts, setUsererCartCounts] = useState();
   const [tags, setTags] = useState([]);
+  const [selectedTag, setSelectedTag] = useState(null);
 
   const location = useLocation();
   const currentRoute = location.pathname;
@@ -66,6 +67,11 @@ const Navbar = () => {
       });
   };
 
+  const filterTags = (tag) => {
+    setSelectedTag(tag);
+    navigate("/shop");
+  };
+
   useEffect(() => {
     DealerCart();
     UserCartItems();
@@ -90,6 +96,7 @@ const Navbar = () => {
       localStorage.removeItem("user_id");
       localStorage.removeItem("total_quantity");
       localStorage.removeItem("savedDiscount");
+      localStorage.removeItem("username");
       setIsLoggedOut(true);
       navigate("/login");
     }
@@ -135,7 +142,12 @@ const Navbar = () => {
                     {tags?.map((multitags, index) => (
                       <div className="col-md-3">
                         <div className="tags-links" key={index}>
-                          <Link>{multitags.name}</Link>
+                          <Link
+                            to="/shop"
+                            onClick={() => filterTags(multitags.name)}
+                          >
+                            {multitags.name}
+                          </Link>
                         </div>
                       </div>
                     ))}

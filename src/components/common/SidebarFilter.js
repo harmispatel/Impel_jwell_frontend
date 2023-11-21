@@ -6,6 +6,7 @@ import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 
 const SidebarFilter = (props) => {
+  const userType = localStorage.getItem("user_type");
   const [categoryData, setCategoryData] = useState([]);
   const [genderData, setGenderData] = useState([]);
   const [TagData, setTagData] = useState([]);
@@ -34,7 +35,7 @@ const SidebarFilter = (props) => {
       .then((res) => {
         setGenderData(res.data);
       })
-      .catch((error) => console.log("Error in category filter"));
+      .catch((error) => console.log("Error in gender filter"));
   };
 
   const TagFilter = () => {
@@ -42,7 +43,7 @@ const SidebarFilter = (props) => {
       .then((res) => {
         setTagData(res.data);
       })
-      .catch((error) => console.log("Error in category filter"));
+      .catch((error) => console.log("Error in tag filter"));
   };
 
   const priceRange = () => {
@@ -54,8 +55,6 @@ const SidebarFilter = (props) => {
         console.log(err);
       });
   };
-
-  const userType = localStorage.getItem("user_type");
 
   return (
     <>

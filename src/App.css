@@ -1121,6 +1121,13 @@ body {
   background-color: #fff;
 }
 
+.not-products {
+  font-weight: 600;
+  font-size: 22px;
+  text-align: center;
+  margin-top: 20%;
+}
+
 /* profile */
 .profile {
   margin-top: 130px;
@@ -1620,7 +1627,7 @@ body {
   .add_cart .btn {
     padding: 7px 30px;
   }
-  
+
 
   .login {
     height: auto;

@@ -69,6 +69,12 @@ const Shop = ({ product }) => {
     }
   }, [category, tag, gender, searchInput, PriceRange, selectedOption]);
 
+  // sort by searching
+  const serchbar = (e) => {
+    setIsLoading(true);
+    setSearchInput(e.target.value);
+  };
+
   // sort by filters
   const handleRadioChange = (event) => {
     setSelectedOption(event.target.value);
@@ -76,12 +82,16 @@ const Shop = ({ product }) => {
     let sorted = [...allData];
     switch (sortfield) {
       case "new_added":
+        setIsLoading(true);
         break;
       case "low_to_high":
+        setIsLoading(true);
         break;
       case "high_to_low":
+        setIsLoading(true);
         break;
       case "highest_selling":
+        setIsLoading(true);
         break;
       case "clear_all":
         break;
@@ -98,6 +108,7 @@ const Shop = ({ product }) => {
       setCategory([...category, e.target.value]);
     } else {
       setCategory(category.filter((item) => item !== e.target.value));
+      AllData();
     }
   };
   const handleGender = (e) => {
@@ -106,6 +117,7 @@ const Shop = ({ product }) => {
       setGender([...gender, e.target.value]);
     } else {
       setGender(gender.filter((item) => item !== e.target.value));
+      AllData();
     }
   };
 
@@ -115,6 +127,7 @@ const Shop = ({ product }) => {
       setTag([...tag, e.target.value]);
     } else {
       setTag(tag.filter((item) => item !== e.target.value));
+      AllData();
     }
   };
 
@@ -345,7 +358,7 @@ const Shop = ({ product }) => {
                   <input
                     className="form-control"
                     placeholder="Search any product"
-                    onChange={(e) => setSearchInput(e.target.value)}
+                    onChange={(e) => serchbar(e)}
                     type="search"
                   />
                   {searchInput.length === 0 && (
@@ -475,283 +488,316 @@ const Shop = ({ product }) => {
                       style={{ overflow: "hidden" }}
                       loader={pageLoading ? <h4>Loading...</h4> : null}
                     >
-                      <div className="row">
-                        {displayedItems.map((product) => {
-                          return (
-                            <div key={product.id} className="col-md-4">
-                              <Link
-                                to={`/shopdetails/${product.id}`}
-                                className="product_data"
-                              >
-                                {product.image ? (
-                                  <img
-                                    src={product.image}
-                                    alt=""
-                                    className="w-100"
-                                  />
-                                ) : (
-                                  <img
-                                    src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg"
-                                    alt=""
-                                    className="w-100"
-                                  />
-                                )}
-
-                                <div className="edit">
-                                  <div>
-                                    {Phone ? (
-                                      <>
-                                        <Link
-                                          to="#"
-                                          data-tooltip-id="my-tooltip-7"
-                                          onClick={() =>
-                                            handleAddToCart(product)
-                                          }
-                                        >
-                                          {cartItems.find(
-                                            (item) =>
-                                              item.design_id === product.id
-                                          ) ? (
-                                            <Link to="/cart" className="mt-2">
-                                              <BsFillCartCheckFill />
-                                            </Link>
-                                          ) : (
-                                            <BsHandbag />
-                                          )}
-                                        </Link>
-                                      </>
+                      {displayedItems.length > 0 ? (
+                        <>
+                          <div className="row">
+                            {displayedItems.map((product) => {
+                              return (
+                                <div key={product.id} className="col-md-4">
+                                  <Link
+                                    to={`/shopdetails/${product.id}`}
+                                    className="product_data"
+                                  >
+                                    {product.image ? (
+                                      <img
+                                        src={product.image}
+                                        alt=""
+                                        className="w-100"
+                                      />
                                     ) : (
-                                      ""
+                                      <img
+                                        src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg"
+                                        alt=""
+                                        className="w-100"
+                                      />
                                     )}
-                                  </div>
 
-                                  <div>
-                                    {userType == 1 ? (
-                                      <>
-                                        {email ? (
-                                          <Link
-                                            to="#"
-                                            data-tooltip-id="my-tooltip-12"
-                                            onClick={() => {
-                                              if (
-                                                DealercartItems?.find(
-                                                  (item) =>
-                                                    item.id === product.id
-                                                )
-                                              ) {
-                                                removefromdealerwishlist(
-                                                  product
-                                                );
-                                              } else {
-                                                addToWishList(product);
-                                              }
-                                            }}
-                                          >
-                                            {DealercartItems.find(
-                                              (item) => item.id === product.id
-                                            ) ? (
-                                              <BsStarFill />
-                                            ) : (
-                                              <BsStar />
-                                            )}
-                                          </Link>
-                                        ) : (
-                                          <Link
-                                            to="/Dealer_login"
-                                            data-tooltip-id="my-tooltip-12"
-                                          >
-                                            {" "}
-                                            <BsStar />
-                                          </Link>
-                                        )}
-                                      </>
-                                    ) : (
-                                      <>
+                                    <div className="edit">
+                                      <div>
                                         {Phone ? (
-                                          <Link
-                                            to="#"
-                                            data-tooltip-id="my-tooltip-9"
-                                            onClick={() => {
-                                              if (
-                                                UsercartItems?.find(
+                                          <>
+                                            <Link
+                                              to="#"
+                                              data-tooltip-id="my-tooltip-7"
+                                              onClick={() =>
+                                                handleAddToCart(product)
+                                              }
+                                            >
+                                              {cartItems.find(
+                                                (item) =>
+                                                  item.design_id === product.id
+                                              ) ? (
+                                                <Link
+                                                  to="/cart"
+                                                  className="mt-2"
+                                                >
+                                                  <BsFillCartCheckFill />
+                                                </Link>
+                                              ) : (
+                                                <BsHandbag />
+                                              )}
+                                            </Link>
+                                          </>
+                                        ) : (
+                                          ""
+                                        )}
+                                      </div>
+
+                                      <div>
+                                        {userType == 1 ? (
+                                          <>
+                                            {email ? (
+                                              <Link
+                                                to="#"
+                                                data-tooltip-id="my-tooltip-12"
+                                                onClick={() => {
+                                                  if (
+                                                    DealercartItems?.find(
+                                                      (item) =>
+                                                        item.id === product.id
+                                                    )
+                                                  ) {
+                                                    removefromdealerwishlist(
+                                                      product
+                                                    );
+                                                  } else {
+                                                    addToWishList(product);
+                                                  }
+                                                }}
+                                              >
+                                                {DealercartItems.find(
                                                   (item) =>
                                                     item.id === product.id
-                                                )
-                                              ) {
-                                                removeFromWishList(product);
-                                              } else {
-                                                addToUserWishList(product);
-                                              }
-                                            }}
-                                          >
-                                            {UsercartItems?.find(
-                                              (item) => item.id === product.id
-                                            ) ? (
-                                              <FcLike />
+                                                ) ? (
+                                                  <BsStarFill />
+                                                ) : (
+                                                  <BsStar />
+                                                )}
+                                              </Link>
                                             ) : (
-                                              <BsHeart />
+                                              <Link
+                                                to="/Dealer_login"
+                                                data-tooltip-id="my-tooltip-12"
+                                              >
+                                                {" "}
+                                                <BsStar />
+                                              </Link>
                                             )}
-                                          </Link>
+                                          </>
                                         ) : (
-                                          <Link
-                                            to="/login"
-                                            data-tooltip-id="my-tooltip-9"
-                                          >
-                                            {" "}
-                                            <BsHeart />
-                                          </Link>
+                                          <>
+                                            {Phone ? (
+                                              <Link
+                                                to="#"
+                                                data-tooltip-id="my-tooltip-9"
+                                                onClick={() => {
+                                                  if (
+                                                    UsercartItems?.find(
+                                                      (item) =>
+                                                        item.id === product.id
+                                                    )
+                                                  ) {
+                                                    removeFromWishList(product);
+                                                  } else {
+                                                    addToUserWishList(product);
+                                                  }
+                                                }}
+                                              >
+                                                {UsercartItems?.find(
+                                                  (item) =>
+                                                    item.id === product.id
+                                                ) ? (
+                                                  <FcLike />
+                                                ) : (
+                                                  <BsHeart />
+                                                )}
+                                              </Link>
+                                            ) : (
+                                              <Link
+                                                to="/login"
+                                                data-tooltip-id="my-tooltip-9"
+                                              >
+                                                {" "}
+                                                <BsHeart />
+                                              </Link>
+                                            )}
+                                          </>
                                         )}
-                                      </>
-                                    )}
-                                  </div>
-                                </div>
+                                      </div>
+                                    </div>
 
-                                <div className="product_details">
-                                  <h4>{product.name}</h4>
-                                  <p>{product.category_name}</p>
-                                  <h5>
-                                    ₹{product.price.toLocaleString("en-US")}
-                                  </h5>
+                                    <div className="product_details">
+                                      <h4>{product.name}</h4>
+                                      <p>{product.category_name}</p>
+                                      <h5>
+                                        ₹{product.price.toLocaleString("en-US")}
+                                      </h5>
+                                    </div>
+                                  </Link>
                                 </div>
-                              </Link>
-                            </div>
-                          );
-                        })}
-                      </div>
+                              );
+                            })}
+                          </div>
+                        </>
+                      ) : (
+                        <div className="not-products">
+                          <p>
+                            No products available based on the selected filters.
+                          </p>
+                        </div>
+                      )}
                     </InfiniteScroll>
                   ) : (
                     <>
-                      <div className="row">
-                        {filterData.map((data) => {
-                          return (
-                            <div className="col-md-4">
-                              <Link
-                                to={`/shopdetails/${data.id}`}
-                                className="product_data"
-                              >
-                                {data.image ? (
-                                  <img
-                                    src={data.image}
-                                    alt=""
-                                    className="w-100"
-                                  />
-                                ) : (
-                                  <img
-                                    src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930"
-                                    alt=""
-                                    className="w-100"
-                                  />
-                                )}
-                                <div className="edit">
-                                  <div>
-                                    {Phone ? (
-                                      <Link
-                                        to="#"
-                                        data-tooltip-id="my-tooltip-7"
-                                        onClick={() => handleAddToCart(data)}
-                                      >
-                                        {cartItems.find(
-                                          (item) => item.design_id === data.id
-                                        ) ? (
-                                          <Link to="/cart" className="mt-2">
-                                            <BsFillCartCheckFill />
-                                          </Link>
-                                        ) : (
-                                          <BsHandbag />
-                                        )}
-                                      </Link>
+                      {filterData.length > 0 ? (
+                        <>
+                          {" "}
+                          <div className="row">
+                            {filterData.map((data) => {
+                              return (
+                                <div className="col-md-4">
+                                  <Link
+                                    to={`/shopdetails/${data.id}`}
+                                    className="product_data"
+                                  >
+                                    {data.image ? (
+                                      <img
+                                        src={data.image}
+                                        alt=""
+                                        className="w-100"
+                                      />
                                     ) : (
-                                      ""
+                                      <img
+                                        src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930"
+                                        alt=""
+                                        className="w-100"
+                                      />
                                     )}
-                                  </div>
-                                  <div>
-                                    {userType == 1 ? (
-                                      <>
-                                        {email ? (
-                                          <Link
-                                            to="#"
-                                            data-tooltip-id="my-tooltip-12"
-                                            onClick={() => {
-                                              if (
-                                                DealercartItems?.find(
-                                                  (item) =>
-                                                    item?.id === data?.id
-                                                )
-                                              ) {
-                                                removefromdealerwishlist(data);
-                                              } else {
-                                                addToWishList(data);
-                                              }
-                                            }}
-                                          >
-                                            {DealercartItems.find(
-                                              (item) => item?.id === data?.id
-                                            ) ? (
-                                              <BsStarFill />
-                                            ) : (
-                                              <BsStar />
-                                            )}
-                                          </Link>
-                                        ) : (
-                                          <Link
-                                            to="/Dealer_login"
-                                            data-tooltip-id="my-tooltip-12"
-                                          >
-                                            {" "}
-                                            <BsStar />
-                                          </Link>
-                                        )}
-                                      </>
-                                    ) : (
-                                      <>
+                                    <div className="edit">
+                                      <div>
                                         {Phone ? (
                                           <Link
                                             to="#"
-                                            data-tooltip-id="my-tooltip-9"
-                                            onClick={() => {
-                                              if (
-                                                UsercartItems?.find(
-                                                  (item) => item.id === data.id
-                                                )
-                                              ) {
-                                                removeFromWishList(data);
-                                              } else {
-                                                addToUserWishList(data);
-                                              }
-                                            }}
+                                            data-tooltip-id="my-tooltip-7"
+                                            onClick={() =>
+                                              handleAddToCart(data)
+                                            }
                                           >
-                                            {UsercartItems?.find(
-                                              (item) => item.id === data.id
+                                            {cartItems.find(
+                                              (item) =>
+                                                item.design_id === data.id
                                             ) ? (
-                                              <FcLike />
+                                              <Link to="/cart" className="mt-2">
+                                                <BsFillCartCheckFill />
+                                              </Link>
                                             ) : (
-                                              <BsHeart />
+                                              <BsHandbag />
                                             )}
                                           </Link>
                                         ) : (
-                                          <Link
-                                            to="/login"
-                                            data-tooltip-id="my-tooltip-9"
-                                          >
-                                            {" "}
-                                            <BsHeart />
-                                          </Link>
+                                          ""
                                         )}
-                                      </>
-                                    )}
-                                  </div>
-                                </div>
+                                      </div>
+                                      <div>
+                                        {userType == 1 ? (
+                                          <>
+                                            {email ? (
+                                              <Link
+                                                to="#"
+                                                data-tooltip-id="my-tooltip-12"
+                                                onClick={() => {
+                                                  if (
+                                                    DealercartItems?.find(
+                                                      (item) =>
+                                                        item?.id === data?.id
+                                                    )
+                                                  ) {
+                                                    removefromdealerwishlist(
+                                                      data
+                                                    );
+                                                  } else {
+                                                    addToWishList(data);
+                                                  }
+                                                }}
+                                              >
+                                                {DealercartItems.find(
+                                                  (item) =>
+                                                    item?.id === data?.id
+                                                ) ? (
+                                                  <BsStarFill />
+                                                ) : (
+                                                  <BsStar />
+                                                )}
+                                              </Link>
+                                            ) : (
+                                              <Link
+                                                to="/Dealer_login"
+                                                data-tooltip-id="my-tooltip-12"
+                                              >
+                                                {" "}
+                                                <BsStar />
+                                              </Link>
+                                            )}
+                                          </>
+                                        ) : (
+                                          <>
+                                            {Phone ? (
+                                              <Link
+                                                to="#"
+                                                data-tooltip-id="my-tooltip-9"
+                                                onClick={() => {
+                                                  if (
+                                                    UsercartItems?.find(
+                                                      (item) =>
+                                                        item.id === data.id
+                                                    )
+                                                  ) {
+                                                    removeFromWishList(data);
+                                                  } else {
+                                                    addToUserWishList(data);
+                                                  }
+                                                }}
+                                              >
+                                                {UsercartItems?.find(
+                                                  (item) => item.id === data.id
+                                                ) ? (
+                                                  <FcLike />
+                                                ) : (
+                                                  <BsHeart />
+                                                )}
+                                              </Link>
+                                            ) : (
+                                              <Link
+                                                to="/login"
+                                                data-tooltip-id="my-tooltip-9"
+                                              >
+                                                {" "}
+                                                <BsHeart />
+                                              </Link>
+                                            )}
+                                          </>
+                                        )}
+                                      </div>
+                                    </div>
 
-                                <div className="product_details">
-                                  <h4>{data.name}</h4>
-                                  <p>{data.category_name}</p>
-                                  <h5>₹{data.price}</h5>
+                                    <div className="product_details">
+                                      <h4>{data.name}</h4>
+                                      <p>{data.category_name}</p>
+                                      <h5>₹{data.price}</h5>
+                                    </div>
+                                  </Link>
                                 </div>
-                              </Link>
-                            </div>
-                          );
-                        })}
-                      </div>
+                              );
+                            })}
+                          </div>
+                        </>
+                      ) : (
+                        <div className="not-products">
+                          <p>
+                            No products available based on the selected filters.
+                          </p>
+                        </div>
+                      )}
                     </>
                   )}
                 </>

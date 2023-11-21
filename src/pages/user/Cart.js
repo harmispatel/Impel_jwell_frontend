@@ -12,10 +12,8 @@ const Cart = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [dealer_code, setDealerCode] = useState("");
   const [code, setCode] = useState("");
-  const [productQuantity, setProductQuantity] = useState();
   const [isFormEmpty, setIsFormEmpty] = useState("");
   const [show, setShow] = useState(false);
-  const [showbox, setShowbox] = useState(false);
 
   const handlecountchange = (update_type, id) => {
     console.log(update_type);
@@ -124,7 +122,7 @@ const Cart = () => {
                   {isLoading ? (
                     <div className="h-100 d-flex justify-content-center">
                       <ReactLoading
-                        type={"spokes"}
+                        type={"cubes"}
                         color={"#053961"}
                         delay={"2"}
                         height={"20%"}
@@ -194,7 +192,11 @@ const Cart = () => {
                                     });
                                     setItems(updatedItems);
                                     handlecountchange("decrement", data.id);
+                                    // if (data.quantity > 1) {
+                                    //   handlecountchange("decrement", data.id);
+                                    // }
                                   }}
+                                  disabled={data.quantity === 1}
                                 >
                                   -
                                 </button>
@@ -222,6 +224,7 @@ const Cart = () => {
                                     setItems(updatedItems);
                                     handlecountchange("increment", data.id);
                                   }}
+                                  disabled={data.quantity >= 10}
                                 >
                                   +
                                 </button>
@@ -253,22 +256,22 @@ const Cart = () => {
           </div>
 
           <div className="col-lg-3">
-            {showbox ? (
+            {!show && (
               <div className="card mb-3 border shadow-0">
                 <div className="card-body">
                   <form>
                     {/* <div className="form-group">
-                    <label className="form-label">Have coupon?</label>
-                    <div className="input-group">
-                      <input
-                        type="text"
-                        className="form-control border"
-                        name=""
-                        placeholder="Coupon code"
-                      />
-                      <button className="btn btn-light border">Apply</button>
-                    </div>
-                  </div> */}
+                  <label className="form-label">Have coupon?</label>
+                  <div className="input-group">
+                    <input
+                      type="text"
+                      className="form-control border"
+                      name=""
+                      placeholder="Coupon code"
+                    />
+                    <button className="btn btn-light border">Apply</button>
+                  </div>
+                </div> */}
                     <div className="form-group">
                       <label className="form-label">
                         Have a Dealer coupon?
@@ -297,54 +300,7 @@ const Cart = () => {
                   </form>
                 </div>
               </div>
-            ) : (
-              <>
-                <div className="card mb-3 border shadow-0">
-                  <div className="card-body">
-                    <form>
-                      {/* <div className="form-group">
-                  <label className="form-label">Have coupon?</label>
-                  <div className="input-group">
-                    <input
-                      type="text"
-                      className="form-control border"
-                      name=""
-                      placeholder="Coupon code"
-                    />
-                    <button className="btn btn-light border">Apply</button>
-                  </div>
-                </div> */}
-                      <div className="form-group">
-                        <label className="form-label">
-                          Have a Dealer coupon?
-                        </label>
-                        <div className="input-group">
-                          <input
-                            type="text"
-                            name="dealer_code"
-                            placeholder="Dealer coupon code"
-                            value={dealer_code}
-                            onChange={(e) => handlechange(e)}
-                          />
-                          <button
-                            className="btn btn-light border"
-                            onClick={(e) => Applycoupen(e)}
-                          >
-                            Apply
-                          </button>
-                        </div>
-                        {isFormEmpty ? (
-                          <span className="text-danger">{isFormEmpty}</span>
-                        ) : (
-                          <></>
-                        )}
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </>
             )}
-
             <div className="card shadow-0 border">
               <div className="card-body">
                 <div className="d-flex justify-content-between">
@@ -370,13 +326,17 @@ const Cart = () => {
                 <div className="d-flex justify-content-between">
                   <p className="mb-2">Total price:</p>
                   <p className="mb-2 fw-bold">
+                    {/* {(SubTotal() - code.discount_value).toLocaleString("en-IN")} */}
                     {SubTotal().toLocaleString("en-IN")}₹
                   </p>
                 </div>
                 <div className="mt-3">
-                  <a href="#" className="btn btn-success w-100 shadow-0 mb-2">
+                  <Link
+                    to="/orders"
+                    className="btn btn-success w-100 shadow-0 mb-2"
+                  >
                     Place Order
-                  </a>
+                  </Link>
                   <Link to="/shop" className="btn btn-light w-100 border mt-2">
                     Back to shop
                   </Link>

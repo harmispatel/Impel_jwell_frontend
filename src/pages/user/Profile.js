@@ -13,6 +13,7 @@ const Profile = () => {
   const [profileData, setProfileData] = useState([]);
   const [city, setcity] = useState();
   const [shipping_city, setShipping_city] = useState();
+
   const [userData, setUserData] = useState({
     name: "",
     email: "",

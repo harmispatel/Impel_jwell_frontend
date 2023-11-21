@@ -71,6 +71,7 @@ function App() {
             }
           />
           <Route path="cart" element={<Cart />} />
+          <Route path="orders" element={<Orders />} />
 
           {/* Dealer protected */}
           <Route
