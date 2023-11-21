@@ -1505,11 +1505,21 @@ body {
 @media only screen and (max-width: 767px) {
 
   .header_inner {
-    padding: 10px 40px;
+    padding: 10px 20px;
+  }
+
+  .navbar-brand img {
+    width: 60px;
+  }
+
+  .user-name {
+    display: none;
   }
 
   .banner {
     grid-template-columns: 1fr;
+    align-items: baseline;
+    padding-top: 95px;
   }
 
   .banner_content {

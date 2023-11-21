@@ -183,7 +183,7 @@ const Navbar = () => {
             <ul>
               {Dealer && (
                 <ul>
-                  <li>
+                  <li className="user-name">
                     <button type="submit" className="btn btn-outline-dark">
                       Hello! Dealer
                     </button>
@@ -222,7 +222,7 @@ const Navbar = () => {
 
               {Phone && (
                 <ul>
-                  <li>
+                  <li className="user-name">
                     <button type="submit" className="btn btn-outline-dark">
                       Hello! User
                     </button>

@@ -117,7 +117,7 @@ const Home = () => {
             spaceBetween={50}
             slidesPerView={1}
             loop={true}
-            autoplay={{ delay: 3000 }}
+            autoplay={{ delay: 2000 }}
           >
             {/* {bannerSlider.map((data,index) => {
               return (
@@ -177,7 +177,7 @@ const Home = () => {
               modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
               spaceBetween={50}
               loop={true}
-              autoplay={{ delay: 2500 }}
+              autoplay={{ delay: 800 }}
             >
               {category.map((data, index) => {
                 return (
@@ -257,7 +257,7 @@ const Home = () => {
               modules={[Pagination, Scrollbar, A11y, Autoplay]}
               spaceBetween={20}
               loop={true}
-              autoplay={{ delay: 1700 }}
+              autoplay={{ delay: 1200 }}
             >
               {newAdd.slice(0, 6).map((data, index) => {
                 return (
@@ -339,7 +339,7 @@ const Home = () => {
             <Swiper
               breakpoints={{
                 640: {
-                  slidesPerView: 1,
+                  slidesPerView: 2,
                   spaceBetween: 20,
                 },
                 768: {
@@ -359,7 +359,7 @@ const Home = () => {
               modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
               spaceBetween={20}
               loop={true}
-              autoplay={{ delay: 1500 }}
+              autoplay={{ delay: 1000 }}
             >
               {TopSell.slice(0, 6).map((data, index) => {
                 return (
