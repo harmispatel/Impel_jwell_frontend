@@ -5,9 +5,11 @@ import { useEffect } from "react";
 import noWishlist from "../../assets/images/wishlist.png";
 import { Link } from "react-router-dom";
 import ReactLoading from "react-loading";
+import { CgSpinner } from "react-icons/cg";
 
 const WishList = () => {
   const [DealercartItems, setDealerCartItems] = useState([]);
+  const [removingItemId, setRemovingItemId] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const phone = localStorage.getItem("phone");
 
@@ -24,6 +26,7 @@ const WishList = () => {
   };
 
   const removeFromWishList = (product) => {
+    setRemovingItemId(product);
     Userservice.removetoWishlist({ phone: phone, design_id: product })
       .then((res) => {
         if (res.success === true) {
@@ -32,6 +35,9 @@ const WishList = () => {
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        setRemovingItemId(null);
       });
   };
 
@@ -49,7 +55,6 @@ const WishList = () => {
               <ReactLoading
                 type={"spokes"}
                 color={"#053961"}
-                
                 height={"20%"}
                 width={"10%"}
                 className="loader"
@@ -84,6 +89,12 @@ const WishList = () => {
                               className="btn w-100"
                               onClick={() => removeFromWishList(product.id)}
                             >
+                              {removingItemId === product.id && (
+                                <CgSpinner
+                                  size={20}
+                                  className="animate_spin me-2"
+                                />
+                              )}
                               Remove
                             </button>
                             <button className="btn w-100">Move To Cart</button>

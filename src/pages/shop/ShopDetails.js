@@ -976,17 +976,14 @@ import "swiper/css/navigation";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import toast from "react-hot-toast";
-
 import { RxChevronLeft, RxChevronRight, RxCross1 } from "react-icons/rx";
 import DealeCartService from "../../services/Dealer/Cart";
 import UserCartService from "../../services/Cart";
 import Userservice from "../../services/Auth";
 import DealerWishlist from "../../services/Dealer/Collection";
-
 import { BsCartDash, BsHandbagFill } from "react-icons/bs";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import ReactLoading from "react-loading";
-import styled from "styled-components";
 
 const ShopDetails = () => {
   const { id } = useParams();
@@ -1091,45 +1088,6 @@ const ShopDetails = () => {
     GetDealerWishList();
   }, []);
 
-  // const handleAddToDealerCart = (product) => {
-  //   const CartData = {
-  //     email: Dealer,
-  //     quantity: productQuantity,
-  //     design_id: product.id,
-  //     design_name: product.name,
-  //   };
-
-  //   DealeCartService.AddtoCart(CartData)
-  //     .then((res) => {
-  //       if (res.status === true) {
-  //         // toast.success(res.message);
-  //         toast(res.message, { icon: "✔️" });
-  //         GetCarList();
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
-  // const addToDealerWishList = async (product) => {
-  //   DealerWishlist.addtoWishlist({
-  //     email: localStorage.getItem("email"),
-  //     design_id: product.id,
-  //   })
-  //     .then((res) => {
-  //       if (res.success === true) {
-  //         setDealerWishlist(true);
-  //         // toast.success(res.message);
-  //         GetDealerWishList();
-  //       } else {
-  //         // toast.error(res.message);
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
-
   const addToUserWishList = async (product) => {
     Userservice.addtoWishlist({
       phone: localStorage.getItem("phone"),
@@ -1139,10 +1097,8 @@ const ShopDetails = () => {
       .then((res) => {
         if (res.success === true) {
           setUserWishlist(true);
-          // toast.success(res.message);
           GetUserWishList();
         } else {
-          // toast.error(res.message);
         }
       })
       .catch((err) => {
@@ -1164,10 +1120,6 @@ const ShopDetails = () => {
       (currentImageIndex + step + productImages.length) % productImages.length;
     setCurrentImageIndex(newIndex);
   };
-  // const handleClose = () => {
-  //   setShow(false);
-  //   setShowEdit(false);
-  // };
 
   const handleAddToCart = (product) => {
     const CartData = {
@@ -1370,196 +1322,116 @@ const ShopDetails = () => {
                               White Gold
                             </button>
                           </div>
-
-                          <div>
+                          <div className="mt-3">
+                            {selectedGoldType === "yellow_gold" && (
+                              <>
+                                <div className="d-flex justify-content-between">
+                                  <div class="radio-item">
+                                    <input
+                                      name="radio1"
+                                      id="22k"
+                                      type="radio"
+                                      checked={selectedRadio === "22k"}
+                                      onChange={handleRadioChange}
+                                    />
+                                    <label for="22k">22K</label>
+                                  </div>
+                                  <div className="radio-item">
+                                    <input
+                                      name="radio1"
+                                      id="20k"
+                                      type="radio"
+                                      checked={selectedRadio === "20k"}
+                                      onChange={handleRadioChange}
+                                    />
+                                    <label for="20k">20K</label>
+                                  </div>
+                                  <div className="radio-item">
+                                    <input
+                                      name="radio1"
+                                      id="18k"
+                                      type="radio"
+                                      defaultChecked={selectedRadio === "18k"}
+                                      onChange={handleRadioChange}
+                                    />
+                                    <label for="18k">18K</label>
+                                  </div>
+                                  <div className="radio-item">
+                                    <input
+                                      name="radio1"
+                                      id="14k"
+                                      type="radio"
+                                      checked={selectedRadio === "14k"}
+                                      onChange={handleRadioChange}
+                                    />
+                                    <label for="14k">14K</label>
+                                  </div>
+                                </div>
+                              </>
+                            )}
+                            {selectedGoldType === "rose_gold" && (
+                              <>
+                                <div className="d-flex">
+                                  <div className="radio-item">
+                                    <input
+                                      name="radio1"
+                                      id="18k"
+                                      type="radio"
+                                      defaultChecked={selectedRadio === "18k"}
+                                      onChange={handleRadioChange}
+                                    />
+                                    <label for="18k">18K</label>
+                                  </div>
+                                  <div className="radio-item ms-3">
+                                    <input
+                                      name="radio1"
+                                      id="14k"
+                                      type="radio"
+                                      checked={selectedRadio === "14k"}
+                                      onChange={handleRadioChange}
+                                    />
+                                    <label for="14k">14K</label>
+                                  </div>
+                                </div>
+                              </>
+                            )}
                             {selectedGoldType === "white_gold" && (
                               <>
-                                <div className="d-flex justify-content-space-between">
-                                  <input
-                                    class="form-check-input"
-                                    type="radio"
-                                    name="flexRadioDefault"
-                                    id="18k"
-                                    defaultChecked={selectedRadio === "18k"}
-                                    onChange={handleRadioChange}
-                                  />
-                                  <label
-                                    class="form-check-label ms-2"
-                                    for="18k"
-                                  >
-                                    18K
-                                  </label>
-                                </div>
-                                <div className="d-flex justify-content-space-between">
-                                  <input
-                                    class="form-check-input"
-                                    type="radio"
-                                    name="flexRadioDefault"
-                                    id="14k"
-                                    checked={selectedRadio === "14k"}
-                                    onChange={handleRadioChange}
-                                  />
-                                  <label
-                                    for="14k"
-                                    class="form-check-label ms-2"
-                                  >
-                                    14K
-                                  </label>
+                                <div className="d-flex">
+                                  <div className="radio-item">
+                                    <input
+                                      name="radio1"
+                                      id="18k"
+                                      type="radio"
+                                      defaultChecked={selectedRadio === "18k"}
+                                      onChange={handleRadioChange}
+                                    />
+                                    <label for="18k">18K</label>
+                                  </div>
+                                  <div className="radio-item ms-3">
+                                    <input
+                                      name="radio1"
+                                      id="14k"
+                                      type="radio"
+                                      checked={selectedRadio === "14k"}
+                                      onChange={handleRadioChange}
+                                    />
+                                    <label for="14k">14K</label>
+                                  </div>
                                 </div>
                               </>
                             )}
                           </div>
-                          {selectedRadio === "18k" && (
-                            <table className="table table-bordered text-center">
-                              <thead>
-                                <tr>
-                                  <th>Approximate -Estimate</th>
-                                </tr>
-                              </thead>
-
-                              <tbody>
-                                <tr>
-                                  <th>Gross Weight</th>
-                                  <td>
-                                    {(product?.gross_weight_18k).toFixed(2)}{" "}
-                                    g.(Approx.)
-                                  </td>
-                                  <td>
-                                    {(product?.gross_weight_14k).toFixed(2)}{" "}
-                                    g.(Approx.)
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <th>Less Gems Stone</th>
-                                  <td>0</td>
-                                  <td>0</td>
-                                </tr>
-                                <tr>
-                                  <th>Less C.Z. Stone</th>
-                                  <td>0</td>
-                                  <td>0</td>
-                                </tr>
-                                <tr>
-                                  <th>Net Weight</th>
-                                  <td>
-                                    {(product?.gross_weight_18k).toFixed(2)} g.
-                                  </td>
-                                  <td>
-                                    {(product?.gross_weight_14k).toFixed(2)} g.
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <th>Price</th>
-                                  <td>₹ {price18k}</td>
-                                  <td>₹ {price14k}</td>
-                                </tr>
-                                <tr>
-                                  <th>C2 Charges</th>
-                                  <td></td>
-                                  <td></td>
-                                </tr>
-                                <tr>
-                                  <th>Gem stone charges</th>
-                                  <td></td>
-                                  <td></td>
-                                </tr>
-                                <tr>
-                                  <th>Making charge</th>
-                                  <td>₹ {makinghcharge18k}</td>
-                                  <td>₹ {makinghcharge14k}</td>
-                                </tr>
-                                <tr>
-                                  <th>Total Amount</th>
-                                  <td>₹ {totalprice18k}</td>
-                                  <td>₹ {totalprice14k}</td>
-                                </tr>
-                              </tbody>
-                            </table>
-                          )}
-                          {selectedGoldType === "yellow_gold" && (
-                            <div className="mt-3">
-                              <h5>Weight in Gram(Approx.)</h5>
-                              <div className="prodcuts-weight">
+                          <div className="mt-3">
+                            {selectedRadio === "22k" && (
+                              <>
                                 <table className="table table-bordered text-center">
                                   <thead>
                                     <tr>
-                                      <th>Approximate -Estimate</th>
-                                      <th>
-                                        <div className="d-flex justify-content-space-between">
-                                          <input
-                                            class="form-check-input"
-                                            type="radio"
-                                            name="flexRadioDefault"
-                                            id="22k"
-                                            checked={selectedRadio === "22k"}
-                                            onChange={handleRadioChange}
-                                          />
-                                          <label
-                                            class="form-check-label"
-                                            for="22k"
-                                          >
-                                            22K
-                                          </label>
-                                        </div>
-                                      </th>
-                                      <th>
-                                        <div className="d-flex justify-content-space-between">
-                                          <input
-                                            class="form-check-input"
-                                            type="radio"
-                                            name="flexRadioDefault"
-                                            id="20k"
-                                            checked={selectedRadio === "20k"}
-                                            onChange={handleRadioChange}
-                                          />
-                                          <label
-                                            class="form-check-label"
-                                            for="20k"
-                                          >
-                                            20K
-                                          </label>
-                                        </div>
-                                      </th>
-                                      <th>
-                                        <div className="d-flex justify-content-space-between">
-                                          <input
-                                            class="form-check-input"
-                                            type="radio"
-                                            name="flexRadioDefault"
-                                            id="18k"
-                                            defaultChecked={
-                                              selectedRadio === "18k"
-                                            }
-                                            onChange={handleRadioChange}
-                                          />
-                                          <label
-                                            class="form-check-label"
-                                            for="18k"
-                                          >
-                                            18K
-                                          </label>
-                                        </div>
-                                      </th>
-                                      <th>
-                                        <div className="d-flex justify-content-space-between">
-                                          <input
-                                            class="form-check-input"
-                                            type="radio"
-                                            name="flexRadioDefault"
-                                            id="14k"
-                                            checked={selectedRadio === "14k"}
-                                            onChange={handleRadioChange}
-                                          />
-                                          <label
-                                            class="form-check-label"
-                                            for="14k"
-                                          >
-                                            14K
-                                          </label>
-                                        </div>
-                                      </th>
+                                      <th colspan="3">Approximate -Estimate</th>
                                     </tr>
                                   </thead>
+
                                   <tbody>
                                     <tr>
                                       <th>Gross Weight</th>
@@ -1567,278 +1439,211 @@ const ShopDetails = () => {
                                         {(product?.gross_weight_22k).toFixed(2)}{" "}
                                         g.(Approx.)
                                       </td>
-                                      <td>
-                                        {(product?.gross_weight_20k).toFixed(2)}{" "}
-                                        g.(Approx.)
-                                      </td>
-                                      <td>
-                                        {(product?.gross_weight_18k).toFixed(2)}{" "}
-                                        g.(Approx.)
-                                      </td>
-                                      <td>
-                                        {(product?.gross_weight_14k).toFixed(2)}{" "}
-                                        g.(Approx.)
-                                      </td>
                                     </tr>
                                     <tr>
                                       <th>Less Gems Stone</th>
                                       <td>0</td>
-                                      <td>0</td>
-                                      <td>0</td>
-                                      <td>0</td>
                                     </tr>
                                     <tr>
                                       <th>Less C.Z. Stone</th>
-                                      <td>0</td>
-                                      <td>0</td>
-                                      <td>0</td>
                                       <td>0</td>
                                     </tr>
                                     <tr>
                                       <th>Net Weight</th>
                                       <td>
                                         {(product?.gross_weight_22k).toFixed(2)}{" "}
-                                        g.
-                                      </td>
-                                      <td>
-                                        {(product?.gross_weight_20k).toFixed(2)}{" "}
-                                        g.
-                                      </td>
-                                      <td>
-                                        {(product?.gross_weight_18k).toFixed(2)}{" "}
-                                        g.
-                                      </td>
-                                      <td>
-                                        {(product?.gross_weight_14k).toFixed(2)}{" "}
                                         g.
                                       </td>
                                     </tr>
                                     <tr>
                                       <th>Price</th>
                                       <td>₹ {price22k}</td>
-                                      <td>₹ {price20k}</td>
-                                      <td>₹ {price18k}</td>
-                                      <td>₹ {price14k}</td>
                                     </tr>
                                     <tr>
-                                      <th>C2 Charges</th>
-                                      <td></td>
-                                      <td></td>
-                                      <td></td>
+                                      <th>CZ Stone Charges</th>
                                       <td></td>
                                     </tr>
                                     <tr>
                                       <th>Gem stone charges</th>
-                                      <td></td>
-                                      <td></td>
-                                      <td></td>
                                       <td></td>
                                     </tr>
                                     <tr>
                                       <th>Making charge</th>
                                       <td>₹ {makinghcharge22k}</td>
-                                      <td>₹ {makinghcharge20k}</td>
-                                      <td>₹ {makinghcharge18k}</td>
-                                      <td>₹ {makinghcharge14k}</td>
                                     </tr>
                                     <tr>
                                       <th>Total Amount</th>
                                       <td>₹ {totalprice22k}</td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </>
+                            )}
+                            {selectedRadio === "20k" && (
+                              <>
+                                <table className="table table-bordered text-center">
+                                  <thead>
+                                    <tr>
+                                      <th colspan="3">Approximate -Estimate</th>
+                                    </tr>
+                                  </thead>
+
+                                  <tbody>
+                                    <tr>
+                                      <th>Gross Weight</th>
+                                      <td>
+                                        {(product?.gross_weight_20k).toFixed(2)}{" "}
+                                        g.(Approx.)
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <th>Less Gems Stone</th>
+                                      <td>0</td>
+                                    </tr>
+                                    <tr>
+                                      <th>Less C.Z. Stone</th>
+                                      <td>0</td>
+                                    </tr>
+                                    <tr>
+                                      <th>Net Weight</th>
+                                      <td>
+                                        {(product?.gross_weight_20k).toFixed(2)}{" "}
+                                        g.
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <th>Price</th>
+                                      <td>₹ {price20k}</td>
+                                    </tr>
+                                    <tr>
+                                      <th>CZ Stone Charges</th>
+                                      <td></td>
+                                    </tr>
+                                    <tr>
+                                      <th>Gem stone charges</th>
+                                      <td></td>
+                                    </tr>
+                                    <tr>
+                                      <th>Making charge</th>
+                                      <td>₹ {makinghcharge20k}</td>
+                                    </tr>
+                                    <tr>
+                                      <th>Total Amount</th>
                                       <td>₹ {totalprice20k}</td>
-                                      <td>₹ {totalprice18k}</td>
-                                      <td>₹ {totalprice14k}</td>
                                     </tr>
                                   </tbody>
                                 </table>
-                              </div>
-                            </div>
-                          )}
-                          {selectedGoldType === "rose_gold" && (
-                            <div className="mt-3">
-                              <h5>Weight in Gram(Approx.)</h5>
-                              <div className="prodcuts-weight-18k">
-                                <table className="table table-bordered text-center">
-                                  <thead>
-                                    <tr>
-                                      <th>Approximate -Estimate</th>
-                                      <th>
-                                        <div className="d-flex justify-content-space-between">
-                                          <input
-                                            class="form-check-input"
-                                            type="radio"
-                                            name="flexRadioDefault"
-                                            id="18k"
-                                            defaultChecked={
-                                              selectedRadio === "18k"
-                                            }
-                                            onChange={handleRadioChange}
-                                          />
-                                          <label
-                                            class="form-check-label ms-2"
-                                            for="18k"
-                                          >
-                                            18K
-                                          </label>
-                                        </div>
-                                      </th>
-                                      <th>
-                                        <div className="d-flex justify-content-space-between">
-                                          <input
-                                            class="form-check-input"
-                                            type="radio"
-                                            name="flexRadioDefault"
-                                            id="14k"
-                                            checked={selectedRadio === "14k"}
-                                            onChange={handleRadioChange}
-                                          />
-                                          <label
-                                            class="form-check-label ms-2"
-                                            for="14k"
-                                          >
-                                            14K
-                                          </label>
-                                        </div>
-                                      </th>
-                                    </tr>
-                                  </thead>
+                              </>
+                            )}
+                            {selectedRadio === "18k" && (
+                              <table className="table table-bordered text-center">
+                                <thead>
+                                  <tr>
+                                    <th colspan="3">Approximate -Estimate</th>
+                                  </tr>
+                                </thead>
 
-                                  <tbody>
-                                    <tr>
-                                      <th>Gross Weight</th>
-                                      <td>
-                                        {(product?.gross_weight_18k).toFixed(2)}{" "}
-                                        g.(Approx.)
-                                      </td>
-                                      <td>
-                                        {(product?.gross_weight_14k).toFixed(2)}{" "}
-                                        g.(Approx.)
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <th>Less Gems Stone</th>
-                                      <td>0</td>
-                                      <td>0</td>
-                                    </tr>
-                                    <tr>
-                                      <th>Less C.Z. Stone</th>
-                                      <td>0</td>
-                                      <td>0</td>
-                                    </tr>
-                                    <tr>
-                                      <th>Net Weight</th>
-                                      <td>
-                                        {(product?.gross_weight_18k).toFixed(2)}{" "}
-                                        g.
-                                      </td>
-                                      <td>
-                                        {(product?.gross_weight_14k).toFixed(2)}{" "}
-                                        g.
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <th>Price</th>
-                                      <td>₹ {price18k}</td>
-                                      <td>₹ {price14k}</td>
-                                    </tr>
-                                    <tr>
-                                      <th>C2 Charges</th>
-                                      <td></td>
-                                      <td></td>
-                                    </tr>
-                                    <tr>
-                                      <th>Gem stone charges</th>
-                                      <td></td>
-                                      <td></td>
-                                    </tr>
-                                    <tr>
-                                      <th>Making charge</th>
-                                      <td>₹ {makinghcharge18k}</td>
-                                      <td>₹ {makinghcharge14k}</td>
-                                    </tr>
-                                    <tr>
-                                      <th>Total Amount</th>
-                                      <td>₹ {totalprice18k}</td>
-                                      <td>₹ {totalprice14k}</td>
-                                    </tr>
-                                  </tbody>
-                                </table>
-                              </div>
-                            </div>
-                          )}
-                          {/* {selectedGoldType === "white_gold" && (
-                            <div className="mt-3">
-                              <h5>Weight in Gram(Approx.)</h5>
-                              <div className="prodcuts-weight-18k">
-                                <table className="table table-bordered text-center">
-                                  <thead>
-                                    <tr>
-                                      <th>Approximate -Estimate</th>
-                                    </tr>
-                                  </thead>
+                                <tbody>
+                                  <tr>
+                                    <th>Gross Weight</th>
+                                    <td>
+                                      {(product?.gross_weight_18k).toFixed(2)}{" "}
+                                      g.(Approx.)
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <th>Less Gems Stone</th>
+                                    <td>0</td>
+                                  </tr>
+                                  <tr>
+                                    <th>Less C.Z. Stone</th>
+                                    <td>0</td>
+                                  </tr>
+                                  <tr>
+                                    <th>Net Weight</th>
+                                    <td>
+                                      {(product?.gross_weight_18k).toFixed(2)}{" "}
+                                      g.
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <th>Price</th>
+                                    <td>₹ {price18k}</td>
+                                  </tr>
+                                  <tr>
+                                    <th>CZ Stone Charges</th>
+                                    <td></td>
+                                  </tr>
+                                  <tr>
+                                    <th>Gem stone charges</th>
+                                    <td></td>
+                                  </tr>
+                                  <tr>
+                                    <th>Making charge</th>
+                                    <td>₹ {makinghcharge18k}</td>
+                                  </tr>
+                                  <tr>
+                                    <th>Total Amount</th>
+                                    <td>₹ {totalprice18k}</td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            )}
+                            {selectedRadio === "14k" && (
+                              <table className="table table-bordered text-center">
+                                <thead>
+                                  <tr>
+                                    <th colspan="3">Approximate -Estimate</th>
+                                  </tr>
+                                </thead>
 
-                                  <tbody>
-                                    <tr>
-                                      <th>Gross Weight</th>
-                                      <td>
-                                        {(product?.gross_weight_18k).toFixed(2)}{" "}
-                                        g.(Approx.)
-                                      </td>
-                                      <td>
-                                        {(product?.gross_weight_14k).toFixed(2)}{" "}
-                                        g.(Approx.)
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <th>Less Gems Stone</th>
-                                      <td>0</td>
-                                      <td>0</td>
-                                    </tr>
-                                    <tr>
-                                      <th>Less C.Z. Stone</th>
-                                      <td>0</td>
-                                      <td>0</td>
-                                    </tr>
-                                    <tr>
-                                      <th>Net Weight</th>
-                                      <td>
-                                        {(product?.gross_weight_18k).toFixed(2)}{" "}
-                                        g.
-                                      </td>
-                                      <td>
-                                        {(product?.gross_weight_14k).toFixed(2)}{" "}
-                                        g.
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <th>Price</th>
-                                      <td>₹ {price18k}</td>
-                                      <td>₹ {price14k}</td>
-                                    </tr>
-                                    <tr>
-                                      <th>C2 Charges</th>
-                                      <td></td>
-                                      <td></td>
-                                    </tr>
-                                    <tr>
-                                      <th>Gem stone charges</th>
-                                      <td></td>
-                                      <td></td>
-                                    </tr>
-                                    <tr>
-                                      <th>Making charge</th>
-                                      <td>₹ {makinghcharge18k}</td>
-                                      <td>₹ {makinghcharge14k}</td>
-                                    </tr>
-                                    <tr>
-                                      <th>Total Amount</th>
-                                      <td>₹ {totalprice18k}</td>
-                                      <td>₹ {totalprice14k}</td>
-                                    </tr>
-                                  </tbody>
-                                </table>
-                              </div>
-                            </div>
-                          )} */}
+                                <tbody>
+                                  <tr>
+                                    <th>Gross Weight</th>
+                                    <td>
+                                      {(product?.gross_weight_14k).toFixed(2)}{" "}
+                                      g.(Approx.)
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <th>Less Gems Stone</th>
+                                    <td>0</td>
+                                  </tr>
+                                  <tr>
+                                    <th>Less C.Z. Stone</th>
+                                    <td>0</td>
+                                  </tr>
+                                  <tr>
+                                    <th>Net Weight</th>
+                                    <td>
+                                      {(product?.gross_weight_14k).toFixed(2)}{" "}
+                                      g.
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <th>Price</th>
+                                    <td>₹ {price14k}</td>
+                                  </tr>
+                                  <tr>
+                                    <th>CZ Stone Charges</th>
+                                    <td></td>
+                                  </tr>
+                                  <tr>
+                                    <th>Gem stone charges</th>
+                                    <td></td>
+                                  </tr>
+                                  <tr>
+                                    <th>Making charge</th>
+                                    <td>₹ {makinghcharge14k}</td>
+                                  </tr>
+                                  <tr>
+                                    <th>Total Amount</th>
+                                    <td>₹ {totalprice14k}</td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            )}
+                          </div>
                         </div>
                         <div className="buttons pt-4 d-flex justify-content-space-between">
                           {/* {Phone ? (
@@ -1911,7 +1716,7 @@ const ShopDetails = () => {
                               <>
                                 {cartItems &&
                                 cartItems?.find(
-                                  (item) => item.design_name === product?.name
+                                  (item) => item.design_id === product?.id
                                 ) ? (
                                   <>
                                     <Link
@@ -1997,5 +1802,4 @@ const ShopDetails = () => {
     </section>
   );
 };
-
 export default ShopDetails;

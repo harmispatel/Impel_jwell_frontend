@@ -461,7 +461,6 @@ const Shop = ({ product }) => {
                   <ReactLoading
                     type={"spinningBubbles"}
                     color={"#053961"}
-                   
                     height={"20%"}
                     width={"10%"}
                     className="loader"

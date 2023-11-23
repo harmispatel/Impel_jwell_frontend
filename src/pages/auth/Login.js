@@ -51,7 +51,6 @@ const Login = () => {
 
   const sendOtp = (e) => {
     e.preventDefault();
-
     if (!phoneNumber) {
       setPhoneError("Please enter your mobile");
     } else if (phoneNumber.length !== 13) {
@@ -67,7 +66,7 @@ const Login = () => {
         })
         .then((res) => {
           const response = res.data;
-          console.log(response)
+          console.log(response);
           if (response.status === 0) {
             toast.error(response.message);
             navigate("/login");
@@ -99,7 +98,6 @@ const Login = () => {
 
   const handleOtpVerification = (e) => {
     e.preventDefault();
-
     const code = otp;
     window.confirmationResult
       .confirm(code)

@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { BsHeart } from "react-icons/bs";
+import { BsBehance, BsHeart } from "react-icons/bs";
 import { Link, useNavigate } from "react-router-dom";
 import UserService from "../../services/Cart";
 import { useEffect } from "react";
 import ReactLoading from "react-loading";
 import toast from "react-hot-toast";
 import { Button, Modal } from "react-bootstrap";
+import { CgSpinner } from "react-icons/cg";
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -18,6 +19,8 @@ const Cart = () => {
   const [isFormEmpty, setIsFormEmpty] = useState("");
   const [show, setShow] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
+  const [spinner, setSpinner] = useState(false);
+  const [removingItemId, setRemovingItemId] = useState(null);
 
   const handlecountchange = (update_type, id) => {
     console.log(update_type);
@@ -97,6 +100,7 @@ const Cart = () => {
   };
 
   const Remove = (id) => {
+    setRemovingItemId(id);
     UserService.RemovetoCart({ cart_id: id })
       .then((res) => {
         if (res.status === true) {
@@ -107,6 +111,9 @@ const Cart = () => {
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        setRemovingItemId(null);
       });
   };
 
@@ -252,11 +259,18 @@ const Cart = () => {
                                 {/* <Link to="#!" className="btn btn-light border px-2 icon-hover-primary me-2">
                               <BsHeart />
                             </Link> */}
+
                                 <Link
                                   to="#"
                                   className="btn btn-light border text-danger icon-hover-danger"
                                   onClick={() => Remove(data.id)}
                                 >
+                                  {removingItemId === data.id && (
+                                    <CgSpinner
+                                      size={20}
+                                      className="animate_spin me-2"
+                                    />
+                                  )}
                                   Remove
                                 </Link>
                               </div>
@@ -321,7 +335,7 @@ const Cart = () => {
               <div className="card-body">
                 <div className="d-flex justify-content-between">
                   <p className="mb-2">Sub total :</p>
-                  <p className="mb-2">{SubTotal()}₹</p>
+                  <p className="mb-2">{SubTotal().toLocaleString("en-US")}₹</p>
                 </div>
                 {show && (
                   <div className="d-flex justify-content-between">
@@ -333,7 +347,7 @@ const Cart = () => {
                         ? `-${(
                             (SubTotal() * code.discount_value) /
                             100
-                          ).toFixed(2)}`
+                          ).toLocaleString("en-US")}`
                         : `₹${code.discount_value}`}
                     </p>
                   </div>
@@ -342,8 +356,16 @@ const Cart = () => {
                 <div className="d-flex justify-content-between">
                   <p className="mb-2">Total price:</p>
                   <p className="mb-2 fw-bold">
-                    {/* {(SubTotal() - code.discount_value)} */}
-                    {SubTotal()}₹
+                    {code.discount_value ? (
+                      <>
+                        {(SubTotal() - code.discount_value).toLocaleString(
+                          "en-US"
+                        )}
+                        ₹
+                      </>
+                    ) : (
+                      <>{SubTotal().toLocaleString("en-US")}₹</>
+                    )}
                   </p>
                 </div>
                 <div className="mt-3">
