@@ -26,10 +26,10 @@ import DealerCart from "./pages/Dealer/Cart";
 import Cart from "./pages/user/Cart";
 import About from "./components/About";
 import { Toaster } from "react-hot-toast";
-import Popup from "./components/common/Popup";
+// import Popup from "./components/common/Popup";
 
 function App() {
-  const popupshow = localStorage.getItem("user_type");
+  // const popupshow = localStorage.getItem("user_type");
 
   return (
     <WishListProvider>

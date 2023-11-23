@@ -71,11 +71,12 @@ const SidebarFilter = (props) => {
           <Accordion.Header>{props.Categoryheader}</Accordion.Header>
           <Accordion.Body>
             <ul>
-              {categoryData.map((data) => {
+              {categoryData.map((data, index) => {
                 return (
                   <li>
                     <input
                       type="checkbox"
+                      key={index}
                       value={data.id}
                       onChange={props.onCategoryChange}
                     />
@@ -90,11 +91,12 @@ const SidebarFilter = (props) => {
           <Accordion.Header>{props.Genderheader}</Accordion.Header>
           <Accordion.Body>
             <ul>
-              {genderData.map((data) => {
+              {genderData.map((data, index) => {
                 return (
                   <li>
                     <input
                       type="checkbox"
+                      key={index}
                       value={data.id}
                       onChange={props.onGenderChange}
                     />
@@ -109,11 +111,12 @@ const SidebarFilter = (props) => {
           <Accordion.Header>{props.Tagheader}</Accordion.Header>
           <Accordion.Body>
             <ul>
-              {TagData.map((data) => {
+              {TagData.map((data, index) => {
                 return (
                   <li>
                     <input
                       type="checkbox"
+                      key={index}
                       value={data.id}
                       onChange={props.onTagChange}
                     />

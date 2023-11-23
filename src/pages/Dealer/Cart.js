@@ -5,8 +5,6 @@ import DealerService from "../../services/Dealer/Cart";
 import { useEffect } from "react";
 import { BsFillTrashFill } from "react-icons/bs";
 import { Button } from "react-bootstrap";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 
 const DealerCart = () => {
@@ -86,7 +84,7 @@ const DealerCart = () => {
                         <>
                           <div className="col-md-4">
                             <div className="cart_product_img">
-                              <img src={product.image} className="w-100" />
+                              <img src={product.image} className="w-100" alt=""/>
                             </div>
                           </div>
                           <div className="col-md-4">

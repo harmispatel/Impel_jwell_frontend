@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import profileService from "../../services/Auth";
 import { useState } from "react";
-import { Button, Col, Form, Modal, Row } from "react-bootstrap";
+import { Button, Col, Form, Modal } from "react-bootstrap";
 import toast from "react-hot-toast";
 
 const Profile = () => {
@@ -9,7 +9,7 @@ const Profile = () => {
   const [showEdit, setShowEdit] = useState(false);
   const [show, setShow] = useState(false);
   const [selectedData, setSelectedData] = useState([]);
-  const [profileImg, setProfileImg] = useState({ preview: "", raw: "" });
+  // const [profileImg, setProfileImg] = useState({ preview: "", raw: "" });
   const [profileData, setProfileData] = useState([]);
   const [city, setcity] = useState();
   const [shipping_city, setShipping_city] = useState();
@@ -47,7 +47,6 @@ const Profile = () => {
     shipping_state_err: "",
     shipping_city_err: "",
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleClose = () => {
     setShow(false);
@@ -347,24 +346,20 @@ const Profile = () => {
                               <td>{profileData.email}</td>
                             </tr>
                             <tr>
-                              <td>Company Address</td>
+                              <td>Billing Address</td>
                               <td>{profileData.address}</td>
-                            </tr>
-                            <tr>
-                              <td>Pincode</td>
-                              <td>{profileData.pincode}</td>
-                            </tr>
-                            <tr>
-                              <td>State</td>
-                              <td>{profileData?.state_name}</td>
                             </tr>
                             <tr>
                               <td>City</td>
                               <td>{profileData?.city_name}</td>
                             </tr>
                             <tr>
-                              <td>GST Number</td>
-                              <td>{profileData.gst_no}</td>
+                              <td>State</td>
+                              <td>{profileData?.state_name}</td>
+                            </tr>
+                            <tr>
+                              <td>Pincode</td>
+                              <td>{profileData.pincode}</td>
                             </tr>
                             <tr>
                               <td>Pan number</td>
@@ -410,7 +405,9 @@ const Profile = () => {
             <div className="row">
               <div className="col-md-6">
                 <Form.Group as={Col} className="mb-2" controlId="formGridState">
-                  <Form.Label>Name</Form.Label>
+                  <Form.Label>
+                    Name<span className="text-danger">*</span>
+                  </Form.Label>
                   <Form.Control
                     name="name"
                     defaultValue={selectedData.name}
@@ -422,7 +419,9 @@ const Profile = () => {
               </div>
               <div className="col-md-6">
                 <Form.Group as={Col} className="mb-2" controlId="formGridState">
-                  <Form.Label>Email</Form.Label>
+                  <Form.Label>
+                    Email<span className="text-danger">*</span>
+                  </Form.Label>
                   <Form.Control
                     name="email"
                     defaultValue={selectedData.email}
@@ -446,7 +445,7 @@ const Profile = () => {
                 </Form.Group>
               </div>
 
-              <div className="col-md-6">
+              <div className="col-md-6 mb-3">
                 <Form.Group className="mb-2" controlId="formGridAddress1">
                   <Form.Label>Pan-card</Form.Label>
                   <Form.Control
@@ -458,7 +457,7 @@ const Profile = () => {
                   <span className="text-danger">{error.pancardErr}</span>
                 </Form.Group>
               </div>
-              <div className="col-md-6 mb-3">
+              {/* <div className="col-md-6 mb-3">
                 <Form.Group className="mb-2" controlId="formGridAddress1">
                   <Form.Label>GST-number</Form.Label>
                   <Form.Control
@@ -469,11 +468,13 @@ const Profile = () => {
                   />
                   <span className="text-danger">{error.gstErr}</span>
                 </Form.Group>
-              </div>
+              </div> */}
               <hr />
               <div className="col-md-6">
                 <Form.Group as={Col} className="mb-2" controlId="formGridZip">
-                  <Form.Label>Company Address</Form.Label>
+                  <Form.Label>
+                    Billing Address<span className="text-danger">*</span>
+                  </Form.Label>
                   <textarea
                     name="address"
                     className="form-control"
@@ -488,20 +489,9 @@ const Profile = () => {
               </div>
               <div className="col-md-6">
                 <Form.Group className="mb-2" controlId="formGridAddress1">
-                  <Form.Label>Pincode</Form.Label>
-                  <Form.Control
-                    name="pincode"
-                    defaultValue={selectedData.pincode}
-                    onChange={(e) => handleEditChange(e)}
-                    placeholder="Enter Your Pincode"
-                    maxLength={6}
-                  />
-                  <span className="text-danger">{error.pincodeErr}</span>
-                </Form.Group>
-              </div>
-              <div className="col-md-6">
-                <Form.Group className="mb-2" controlId="formGridAddress1">
-                  <Form.Label>State</Form.Label>
+                  <Form.Label>
+                    State<span className="text-danger">*</span>
+                  </Form.Label>
                   <select
                     className="form-control"
                     name="state"
@@ -521,9 +511,11 @@ const Profile = () => {
                   <span className="text-danger">{error.stateErr}</span>
                 </Form.Group>
               </div>
-              <div className="col-md-6 mb-3">
+              <div className="col-md-6">
                 <Form.Group className="mb-2" controlId="formGridAddress1">
-                  <Form.Label>City</Form.Label>
+                  <Form.Label>
+                    City<span className="text-danger">*</span>
+                  </Form.Label>
                   <select
                     className="form-control"
                     name="city"
@@ -540,6 +532,21 @@ const Profile = () => {
                     ))}
                   </select>
                   <span className="text-danger">{error.cityErr}</span>
+                </Form.Group>
+              </div>
+              <div className="col-md-6 mb-3">
+                <Form.Group className="mb-2" controlId="formGridAddress1">
+                  <Form.Label>
+                    Pincode<span className="text-danger">*</span>
+                  </Form.Label>
+                  <Form.Control
+                    name="pincode"
+                    defaultValue={selectedData.pincode}
+                    onChange={(e) => handleEditChange(e)}
+                    placeholder="Enter Your Pincode"
+                    maxLength={6}
+                  />
+                  <span className="text-danger">{error.pincodeErr}</span>
                 </Form.Group>
               </div>
               <div className="address-checkbox-btn">
@@ -559,7 +566,9 @@ const Profile = () => {
               <hr className="mt-3" />
               <div className="col-md-6">
                 <Form.Group as={Col} className="mb-2" controlId="formGridZip">
-                  <Form.Label>Shipping Address</Form.Label>
+                  <Form.Label>
+                    Shipping Address<span className="text-danger">*</span>
+                  </Form.Label>
                   <textarea
                     name="shipping_address"
                     className="form-control"
@@ -576,22 +585,9 @@ const Profile = () => {
               </div>
               <div className="col-md-6">
                 <Form.Group className="mb-2" controlId="formGridAddress1">
-                  <Form.Label>Shipping Pincode</Form.Label>
-                  <Form.Control
-                    name="shipping_pincode"
-                    defaultValue={selectedData.shipping_pincode}
-                    onChange={(e) => handleEditChange(e)}
-                    placeholder="Enter Your Pincode"
-                    maxLength={6}
-                  />
-                  <span className="text-danger">
-                    {error.shipping_pincode_err}
-                  </span>
-                </Form.Group>
-              </div>
-              <div className="col-md-6">
-                <Form.Group className="mb-2" controlId="formGridAddress1">
-                  <Form.Label>Shipping-State</Form.Label>
+                  <Form.Label>
+                    Shipping-State<span className="text-danger">*</span>
+                  </Form.Label>
                   <select
                     className="form-control"
                     name="shipping_state"
@@ -613,9 +609,11 @@ const Profile = () => {
                   </span>
                 </Form.Group>
               </div>
-              <div className="col-md-6 mb-3">
+              <div className="col-md-6">
                 <Form.Group className="mb-2" controlId="formGridAddress1">
-                  <Form.Label>Shipping-City</Form.Label>
+                  <Form.Label>
+                    Shipping-City<span className="text-danger">*</span>
+                  </Form.Label>
                   <select
                     className="form-control"
                     name="shipping_city"
@@ -632,6 +630,23 @@ const Profile = () => {
                     ))}
                   </select>
                   <span className="text-danger">{error.shipping_city_err}</span>
+                </Form.Group>
+              </div>
+              <div className="col-md-6 mb-3">
+                <Form.Group className="mb-2" controlId="formGridAddress1">
+                  <Form.Label>
+                    Shipping Pincode<span className="text-danger">*</span>
+                  </Form.Label>
+                  <Form.Control
+                    name="shipping_pincode"
+                    defaultValue={selectedData.shipping_pincode}
+                    onChange={(e) => handleEditChange(e)}
+                    placeholder="Enter Your Pincode"
+                    maxLength={6}
+                  />
+                  <span className="text-danger">
+                    {error.shipping_pincode_err}
+                  </span>
                 </Form.Group>
               </div>
             </div>

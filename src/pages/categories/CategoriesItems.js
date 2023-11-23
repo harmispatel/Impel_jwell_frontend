@@ -90,7 +90,7 @@ const CategoriesItems = () => {
                   <ReactLoading
                     type={"spinningBubbles"}
                     color={"#053961"}
-                    delay={"2"}
+                   
                     height={"20%"}
                     width={"10%"}
                     className="loader"

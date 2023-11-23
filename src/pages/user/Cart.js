@@ -1,19 +1,23 @@
 import React, { useState } from "react";
 import { BsHeart } from "react-icons/bs";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import UserService from "../../services/Cart";
 import { useEffect } from "react";
 import ReactLoading from "react-loading";
 import toast from "react-hot-toast";
+import { Button, Modal } from "react-bootstrap";
 
 const Cart = () => {
+  const navigate = useNavigate();
   const Phone = localStorage.getItem("phone");
+  const Verification = localStorage.getItem("verification");
   const [Items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [dealer_code, setDealerCode] = useState("");
   const [code, setCode] = useState("");
   const [isFormEmpty, setIsFormEmpty] = useState("");
   const [show, setShow] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
 
   const handlecountchange = (update_type, id) => {
     console.log(update_type);
@@ -106,6 +110,18 @@ const Cart = () => {
       });
   };
 
+  const Orderplacing = () => {
+    if (Verification == 3) {
+      navigate("/orders");
+    } else {
+      setShowEdit(true);
+    }
+  };
+  const handleClose = () => {
+    setShow(false);
+    setShowEdit(false);
+  };
+
   useEffect(() => {
     UserCartItems();
   }, []);
@@ -124,7 +140,6 @@ const Cart = () => {
                       <ReactLoading
                         type={"cubes"}
                         color={"#053961"}
-                        delay={"2"}
                         height={"20%"}
                         width={"10%"}
                         className="loader"
@@ -168,12 +183,13 @@ const Cart = () => {
                               </div>
                               <div className="">
                                 <text className="h6">
-                                  ₹{totalprice.toLocaleString("en-US")}
+                                  ₹{totalprice.toLocaleString("en-US")} (Approx
+                                  prefix)
                                 </text>{" "}
                                 <br />
                               </div>
                             </div>
-                            <div className="col-md-2">
+                            {/* <div className="col-md-2">
                               <div className="quantity">
                                 <button
                                   className="btn"
@@ -229,7 +245,7 @@ const Cart = () => {
                                   +
                                 </button>
                               </div>
-                            </div>
+                            </div> */}
 
                             <div className="col-md-3">
                               <div className="float-md-end">
@@ -305,7 +321,7 @@ const Cart = () => {
               <div className="card-body">
                 <div className="d-flex justify-content-between">
                   <p className="mb-2">Sub total :</p>
-                  <p className="mb-2">{SubTotal().toLocaleString("en-IN")}₹</p>
+                  <p className="mb-2">{SubTotal()}₹</p>
                 </div>
                 {show && (
                   <div className="d-flex justify-content-between">
@@ -326,17 +342,17 @@ const Cart = () => {
                 <div className="d-flex justify-content-between">
                   <p className="mb-2">Total price:</p>
                   <p className="mb-2 fw-bold">
-                    {/* {(SubTotal() - code.discount_value).toLocaleString("en-IN")} */}
-                    {SubTotal().toLocaleString("en-IN")}₹
+                    {/* {(SubTotal() - code.discount_value)} */}
+                    {SubTotal()}₹
                   </p>
                 </div>
                 <div className="mt-3">
-                  <Link
-                    to="/orders"
+                  <button
                     className="btn btn-success w-100 shadow-0 mb-2"
+                    onClick={Orderplacing}
                   >
                     Place Order
-                  </Link>
+                  </button>
                   <Link to="/shop" className="btn btn-light w-100 border mt-2">
                     Back to shop
                   </Link>
@@ -344,6 +360,31 @@ const Cart = () => {
               </div>
             </div>
           </div>
+          <Modal
+            className="form_intent"
+            centered
+            show={showEdit}
+            onHide={handleClose}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Registration</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <span>
+                Prior to place your order, you need to provide your other
+                information.
+              </span>
+            </Modal.Body>
+            <div className="text-center pb-3">
+              <Button
+                variant="primary"
+                type="submit"
+                onClick={() => navigate("/profile")}
+              >
+                Registration
+              </Button>
+            </div>
+          </Modal>
         </div>
       </div>
     </section>

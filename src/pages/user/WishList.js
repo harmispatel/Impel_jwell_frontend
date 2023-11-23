@@ -3,8 +3,6 @@ import Userservice from "../../services/Auth";
 import { useState } from "react";
 import { useEffect } from "react";
 import noWishlist from "../../assets/images/wishlist.png";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { Link } from "react-router-dom";
 import ReactLoading from "react-loading";
 
@@ -51,7 +49,7 @@ const WishList = () => {
               <ReactLoading
                 type={"spokes"}
                 color={"#053961"}
-                delay={"2"}
+                
                 height={"20%"}
                 width={"10%"}
                 className="loader"
@@ -66,7 +64,7 @@ const WishList = () => {
                       return (
                         <div className="wishlist_card">
                           <div className="wishlist_img">
-                            <img src={product.image} className="w-100" />
+                            <img src={product.image} className="w-100" alt="" />
                           </div>
                           <div className="wishlist_info">
                             <Link

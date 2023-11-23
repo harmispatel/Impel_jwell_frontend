@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  BsFillCartCheckFill,
-  BsHandbag,
-  BsHeart,
-  BsSearch,
-  BsStar,
-  BsStarFill,
-} from "react-icons/bs";
+import { BsHeart, BsSearch, BsStar, BsStarFill } from "react-icons/bs";
 import SidebarFilter from "../../components/common/SidebarFilter";
 import ReactLoading from "react-loading";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -14,7 +7,6 @@ import ShopServices from "../../services/Shop";
 import { Link, useNavigate } from "react-router-dom";
 import DealerWishlist from "../../services/Dealer/Collection";
 import UserWishlist from "../../services/Auth";
-import Userservice from "../../services/Cart";
 import { FcLike } from "react-icons/fc";
 import toast from "react-hot-toast";
 import UserCartService from "../../services/Cart";
@@ -84,12 +76,12 @@ const Shop = ({ product }) => {
       case "new_added":
         setIsLoading(true);
         break;
-      case "low_to_high":
-        setIsLoading(true);
-        break;
-      case "high_to_low":
-        setIsLoading(true);
-        break;
+      // case "low_to_high":
+      //   setIsLoading(true);
+      //   break;
+      // case "high_to_low":
+      //   setIsLoading(true);
+      //   break;
       case "highest_selling":
         setIsLoading(true);
         break;
@@ -190,6 +182,7 @@ const Shop = ({ product }) => {
     UserWishlist.userWishlist({ phone: Phone })
       .then((res) => {
         setUserCartItems(res.data);
+        console.log(res);
       })
       .catch((err) => {
         console.log(err);
@@ -384,7 +377,7 @@ const Shop = ({ product }) => {
                       </label>
                     </div>
                   </div>
-                  <div className="col-md-2">
+                  {/* <div className="col-md-2">
                     <div class="csm_sort_btn">
                       <input
                         type="radio"
@@ -411,7 +404,7 @@ const Shop = ({ product }) => {
                       />
                       <label for="high_to_low">Price : high to low</label>
                     </div>
-                  </div>
+                  </div> */}
                   <div className="col-md-2">
                     <div class="csm_sort_btn">
                       <input
@@ -468,7 +461,7 @@ const Shop = ({ product }) => {
                   <ReactLoading
                     type={"spinningBubbles"}
                     color={"#053961"}
-                    delay={"2"}
+                   
                     height={"20%"}
                     width={"10%"}
                     className="loader"
@@ -513,7 +506,7 @@ const Shop = ({ product }) => {
                                     )}
 
                                     <div className="edit">
-                                      <div>
+                                      {/* <div>
                                         {Phone ? (
                                           <>
                                             <Link
@@ -541,7 +534,7 @@ const Shop = ({ product }) => {
                                         ) : (
                                           ""
                                         )}
-                                      </div>
+                                      </div> */}
 
                                       <div>
                                         {userType == 1 ? (
@@ -674,7 +667,7 @@ const Shop = ({ product }) => {
                                       />
                                     )}
                                     <div className="edit">
-                                      <div>
+                                      {/* <div>
                                         {Phone ? (
                                           <Link
                                             to="#"
@@ -697,7 +690,7 @@ const Shop = ({ product }) => {
                                         ) : (
                                           ""
                                         )}
-                                      </div>
+                                      </div> */}
                                       <div>
                                         {userType == 1 ? (
                                           <>

@@ -1,6 +1,4 @@
 import { createContext, useContext, useReducer } from "react";
-import DealerWishlist from "../services/Dealer/Collection";
-import { useEffect } from "react";
 
 const WishListContext = createContext()
 

@@ -1423,7 +1423,7 @@ body {
 
 @media only screen and (max-width: 991px) {
   .banner {
-    height: 500px;
+    height: 100%;
   }
 
   .header_inner {
@@ -1506,10 +1506,16 @@ body {
 
   .header_inner {
     padding: 10px 20px;
+    grid-template-columns: auto auto 1fr;
+  }
+
+  .header .navbar {
+    padding: 0;
   }
 
   .navbar-brand img {
-    width: 60px;
+    width: auto;
+    height: 40px;
   }
 
   .user-name {
@@ -1519,11 +1525,12 @@ body {
   .banner {
     grid-template-columns: 1fr;
     align-items: baseline;
-    padding-top: 95px;
+    padding-top: 70px;
   }
 
   .banner_content {
     order: 2;
+    padding: 20px 0;
   }
 
   .explore_banner .banner_info .banner_img img {

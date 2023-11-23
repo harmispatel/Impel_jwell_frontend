@@ -1,20 +1,20 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaUserAlt } from "react-icons/fa";
 import { BsHandbag, BsHeart } from "react-icons/bs";
 import Logo from "../assets/images/logo.png";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import DealerService from "../services/Dealer/Cart";
 import UserService from "../services/Cart";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import homeService from "../services/Home";
+import profileService from "../services/Auth";
 
 const Navbar = () => {
   const [colorChange, setColorchange] = useState(false);
   const [isLoggedOut, setIsLoggedOut] = useState(false);
   const [dealerCartCounts, setDealerCartCounts] = useState();
   const [userCartCounts, setUsererCartCounts] = useState();
+  const [profileData, setProfileData] = useState([]);
   const [tags, setTags] = useState([]);
   const [selectedTag, setSelectedTag] = useState(null);
 
@@ -25,8 +25,6 @@ const Navbar = () => {
   const Dealer = localStorage.getItem("token");
   const DealerEmail = localStorage.getItem("email");
   const Phone = localStorage.getItem("phone");
-  const CartCounts = JSON.parse(sessionStorage.getItem("cartItems"));
-  const productsquantity = localStorage.getItem("total_quantity");
 
   const changeNavbarColor = () => {
     if (window.scrollY >= 80) {
@@ -71,10 +69,19 @@ const Navbar = () => {
     setSelectedTag(tag);
     navigate("/shop");
   };
+  const getProfile = async () => {
+    await profileService
+      .getProfile({ phone: Phone })
+      .then((res) => setProfileData(res.data))
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   useEffect(() => {
     DealerCart();
     UserCartItems();
+    getProfile();
     Tags();
   }, []);
 
@@ -96,7 +103,6 @@ const Navbar = () => {
       localStorage.removeItem("user_id");
       localStorage.removeItem("total_quantity");
       localStorage.removeItem("savedDiscount");
-      localStorage.removeItem("username");
       setIsLoggedOut(true);
       navigate("/login");
     }
@@ -117,11 +123,8 @@ const Navbar = () => {
           >
             <span className="navbar-toggler-icon"></span>
           </button>
-          <div
-            className="collapse navbar-collapse position-relative"
-            id="navbarSupportedContent"
-          >
-            <ul className="navbar-nav mb-2 mb-lg-0">
+          <div className="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul className="navbar-nav mb-2 mb-lg-0 position-relative w-100">
               <li className="nav-item">
                 <Link
                   className={
@@ -140,8 +143,8 @@ const Navbar = () => {
                 <div className="tags-dropdown">
                   <div className="row">
                     {tags?.map((multitags, index) => (
-                      <div className="col-md-3">
-                        <div className="tags-links" key={index}>
+                      <div className="col-md-3" key={index}>
+                        <div className="tags-links">
                           <Link
                             to="/shop"
                             onClick={() => filterTags(multitags.name)}
@@ -181,78 +184,90 @@ const Navbar = () => {
           </Link>
           <div className="header_icon">
             <ul>
-              {Dealer && (
-                <ul>
-                  <li className="user-name">
-                    <button type="submit" className="btn btn-outline-dark">
-                      Hello! Dealer
-                    </button>
-                  </li>
+              <li className="m-0">
+                {Dealer && (
+                  <ul>
+                    <li className="user-name">
+                      <button type="submit" className="btn btn-outline-dark">
+                        Hello! Dealer
+                      </button>
+                    </li>
 
-                  <li className="login_user">
-                    <Link
-                      className="icon"
-                      to="#"
-                      data-tooltip-id="my-tooltip-1"
-                    >
-                      <FaUserAlt />
-                    </Link>
+                    <li className="login_user">
+                      <Link
+                        className="icon"
+                        to="#"
+                        data-tooltip-id="my-tooltip-1"
+                      >
+                        <FaUserAlt />
+                      </Link>
 
-                    <div className="login_dropdown dealer_dropdown">
-                      <ul>
-                        <li>
-                          <Link to="/dealer_profile">My Profile</Link>
-                        </li>
-                        <li>
-                          <Link to="/dealer_orders">My Orders</Link>
-                        </li>
-                        <li>
-                          <Link to="/dealer_wishlist">My Selections</Link>
-                        </li>
-                        <li>
-                          <a href="#" onClick={handleLogout}>
-                            LogOut
-                          </a>
-                        </li>
-                      </ul>
-                    </div>
-                  </li>
-                </ul>
-              )}
+                      <div className="login_dropdown dealer_dropdown">
+                        <ul>
+                          <li>
+                            <Link to="/dealer_profile">My Profile</Link>
+                          </li>
+                          <li>
+                            <Link to="/dealer_orders">My Orders</Link>
+                          </li>
+                          <li>
+                            <Link to="/dealer_wishlist">My Selections</Link>
+                          </li>
+                          <li>
+                            <a href="#" onClick={handleLogout}>
+                              LogOut
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+                    </li>
+                  </ul>
+                )}
+                {Phone && (
+                  <ul>
+                    <li className="user-name">
+                      {profileData.name ? (
+                        <button type="submit" className="btn btn-outline-dark">
+                          {profileData.name}
+                        </button>
+                      ) : (
+                        <>
+                          <button
+                            type="submit"
+                            className="btn btn-outline-dark"
+                          >
+                            Hello! user
+                          </button>
+                        </>
+                      )}
+                    </li>
 
-              {Phone && (
-                <ul>
-                  <li className="user-name">
-                    <button type="submit" className="btn btn-outline-dark">
-                      Hello! User
-                    </button>
-                  </li>
+                    <li className="login_user">
+                      <Link
+                        className="icon"
+                        to="#"
+                        data-tooltip-id="my-tooltip-1"
+                      >
+                        <FaUserAlt />
+                      </Link>
 
-                  <li className="login_user">
-                    <Link
-                      className="icon"
-                      to="#"
-                      data-tooltip-id="my-tooltip-1"
-                    >
-                      <FaUserAlt />
-                    </Link>
-
-                    <div className="login_dropdown">
-                      <ul>
-                        <li>
-                          <Link to="/profile">Profile</Link>
-                        </li>
-                        {/* <li><Link to="/orders">My Orders</Link></li> */}
-                        <li>
-                          <a href="#" onClick={handleLogout}>
-                            LogOut
-                          </a>
-                        </li>
-                      </ul>
-                    </div>
-                  </li>
-                </ul>
-              )}
+                      <div className="login_dropdown">
+                        <ul>
+                          <li>
+                            <Link to="/profile">Profile</Link>
+                          </li>
+                          {/* <li><Link to="/orders">My Orders</Link></li> */}
+                          <li>
+                            <a href="#" onClick={handleLogout}>
+                              LogOut
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+                    </li>
+                  </ul>
+                )}
+              </li>
 
               {!(Dealer || Phone) && (
                 <li className="login_user">
@@ -270,13 +285,12 @@ const Navbar = () => {
                 <Link
                   className="icon"
                   to={Dealer ? "/dealer_wishlist" : "/wishlist"}
-                >
+                >   
                   <BsHeart />
                 </Link>
               </li> */}
-
-              {Phone && (
-                <li>
+              <li>
+                {Phone && (
                   <Link
                     className="icon"
                     to="/wishlist"
@@ -284,8 +298,8 @@ const Navbar = () => {
                   >
                     <BsHeart />
                   </Link>
-                </li>
-              )}
+                )}
+              </li>
               <li>
                 {Phone && (
                   <Link

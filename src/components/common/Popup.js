@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Button } from "react-bootstrap";
+import { Modal, Button, Image } from "react-bootstrap";
 
 const Popup = () => {
   const [showPopup, setShowPopup] = useState(false);
@@ -24,7 +24,7 @@ const Popup = () => {
         <Modal.Body>
           <img
             src="https://www.smartrmail.com/blog/wp-content/uploads/2021/04/7-exit-intent-popup.png "
-            alt="Popup Image"
+            alt=""
             className="w-100"
           />
         </Modal.Body>

@@ -51,7 +51,7 @@ const DealerWishList = () => {
             <ReactLoading
               type={"spinningBubbles"}
               color={"#053961"}
-              delay={"1"}
+              
               height={"20%"}
               width={"10%"}
               className="loader"

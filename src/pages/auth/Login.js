@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Logo from "../../assets/images/logo.png";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 import OTPInput from "react-otp-input";
@@ -68,6 +67,7 @@ const Login = () => {
         })
         .then((res) => {
           const response = res.data;
+          console.log(response)
           if (response.status === 0) {
             toast.error(response.message);
             navigate("/login");

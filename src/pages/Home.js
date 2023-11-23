@@ -156,9 +156,10 @@ const Home = () => {
           </div>
           <div className="more_categories_slide">
             <Swiper
+              slidesPerView={2}
               breakpoints={{
                 640: {
-                  slidesPerView: 1,
+                  slidesPerView: 2,
                   spaceBetween: 20,
                 },
                 768: {
@@ -177,7 +178,10 @@ const Home = () => {
               modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
               spaceBetween={50}
               loop={true}
-              autoplay={{ delay: 800 }}
+              autoplay={{
+                delay: 800,
+                disableOnInteraction: false,
+              }}
             >
               {category.map((data, index) => {
                 return (
@@ -236,9 +240,10 @@ const Home = () => {
           </div>
           <div className="new_arrival_slide">
             <Swiper
+              slidesPerView={2}
               breakpoints={{
                 640: {
-                  slidesPerView: 1,
+                  slidesPerView: 2,
                   spaceBetween: 20,
                 },
                 768: {
@@ -257,7 +262,10 @@ const Home = () => {
               modules={[Pagination, Scrollbar, A11y, Autoplay]}
               spaceBetween={20}
               loop={true}
-              autoplay={{ delay: 1200 }}
+              autoplay={{
+                delay: 1200,
+                disableOnInteraction: false,
+              }}
             >
               {newAdd.slice(0, 6).map((data, index) => {
                 return (
@@ -337,6 +345,7 @@ const Home = () => {
           </div>
           <div className="seller_slider">
             <Swiper
+              slidesPerView={2}
               breakpoints={{
                 640: {
                   slidesPerView: 2,
@@ -347,7 +356,7 @@ const Home = () => {
                   spaceBetween: 40,
                 },
                 992: {
-                  slidesPerView: 2,
+                  slidesPerView: 3,
                   spaceBetween: 50,
                 },
                 1199: {
@@ -357,9 +366,12 @@ const Home = () => {
               }}
               Navigation={true}
               modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
-              spaceBetween={20}
+              spaceBetween={10}
               loop={true}
-              autoplay={{ delay: 1000 }}
+              autoplay={{
+                delay: 1000,
+                disableOnInteraction: false,
+              }}
             >
               {TopSell.slice(0, 6).map((data, index) => {
                 return (
@@ -401,7 +413,10 @@ const Home = () => {
               spaceBetween={20}
               slidesPerView={1}
               loop={true}
-              autoplay={{ delay: 1500 }}
+              autoplay={{
+                delay: 1500,
+                disableOnInteraction: false,
+              }}
             >
               <SwiperSlide>
                 <div className="testimonial_details">
