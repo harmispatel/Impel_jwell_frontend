@@ -59,10 +59,10 @@ const DealerWishList = () => {
           </div>
         ) : (
           <>
-            {checkList.length ? (
+            {checkList?.length ? (
               <>
                 <div className="product_washlist">
-                  {checkList.map((product) => {
+                  {checkList?.map((product) => {
                     return (
                       <div className="wishlist_card">
                         <div className="wishlist_img">

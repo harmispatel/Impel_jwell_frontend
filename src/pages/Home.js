@@ -183,26 +183,32 @@ const Home = () => {
                 disableOnInteraction: false,
               }}
             >
-              {category.map((data, index) => {
-                return (
-                  <SwiperSlide key={index}>
-                    <Link
-                      to={`/categories/${data.id}`}
-                      className="text-decoration-none"
-                      style={{ color: "#000" }}
-                    >
-                      <div className="category_box animate__animated animate__fadeInLeft animate__delay-2s">
-                        <img
-                          src={data.image}
-                          className="w-100"
-                          alt="item_category"
-                        />
-                        <div className="category_name">{data.name}</div>
-                      </div>
-                    </Link>
-                  </SwiperSlide>
-                );
-              })}
+              {category.length ? (
+                <>
+                  {category.map((data, index) => {
+                    return (
+                      <SwiperSlide key={index}>
+                        <Link
+                          to={`/categories/${data.id}`}
+                          className="text-decoration-none"
+                          style={{ color: "#000" }}
+                        >
+                          <div className="category_box animate__animated animate__fadeInLeft animate__delay-2s">
+                            <img
+                              src={data.image}
+                              className="w-100"
+                              alt="item_category"
+                            />
+                            <div className="category_name">{data.name}</div>
+                          </div>
+                        </Link>
+                      </SwiperSlide>
+                    );
+                  })}
+                </>
+              ) : (
+                <></>
+              )}
             </Swiper>
           </div>
         </div>
@@ -267,19 +273,21 @@ const Home = () => {
                 disableOnInteraction: false,
               }}
             >
-              {newAdd.slice(0, 6).map((data, index) => {
-                return (
-                  <SwiperSlide key={index}>
-                    <Link
-                      to={`/shopdetails/${data.id}`}
-                      className="text-decoration-none"
-                      style={{ color: "#000" }}
-                    >
-                      <div className="profile-pic">
-                        <div className="profile_img">
-                          <img src={data.image} alt="" />
-                        </div>
-                        {/* <div class="edit">
+              {newAdd.length ? (
+                <>
+                  {newAdd.slice(0, 6).map((data, index) => {
+                    return (
+                      <SwiperSlide key={index}>
+                        <Link
+                          to={`/shopdetails/${data.id}`}
+                          className="text-decoration-none"
+                          style={{ color: "#000" }}
+                        >
+                          <div className="profile-pic">
+                            <div className="profile_img">
+                              <img src={data.image} alt="" />
+                            </div>
+                            {/* <div class="edit">
                           <div>
                             <a
                               href="#"
@@ -300,14 +308,18 @@ const Home = () => {
                             </a>
                           </div>
                         </div> */}
-                        <div className="product_details">
-                          <h4>{data.name}</h4>
-                        </div>
-                      </div>
-                    </Link>
-                  </SwiperSlide>
-                );
-              })}
+                            <div className="product_details">
+                              <h4>{data.name}</h4>
+                            </div>
+                          </div>
+                        </Link>
+                      </SwiperSlide>
+                    );
+                  })}
+                </>
+              ) : (
+                <></>
+              )}
             </Swiper>
           </div>
         </div>
@@ -373,24 +385,30 @@ const Home = () => {
                 disableOnInteraction: false,
               }}
             >
-              {TopSell.slice(0, 6).map((data, index) => {
-                return (
-                  <SwiperSlide key={index}>
-                    <Link
-                      to={`/shopdetails/${data.id}`}
-                      className="text-decoration-none"
-                      style={{ color: "#000" }}
-                    >
-                      <div className="profile-pic">
-                        <img src={data.image} alt="" />
-                        <div className="product_details">
-                          <h4>{data.name}</h4>
-                        </div>
-                      </div>
-                    </Link>
-                  </SwiperSlide>
-                );
-              })}
+              {TopSell.length ? (
+                <>
+                  {TopSell.slice(0, 6).map((data, index) => {
+                    return (
+                      <SwiperSlide key={index}>
+                        <Link
+                          to={`/shopdetails/${data.id}`}
+                          className="text-decoration-none"
+                          style={{ color: "#000" }}
+                        >
+                          <div className="profile-pic">
+                            <img src={data.image} alt="" />
+                            <div className="product_details">
+                              <h4>{data.name}</h4>
+                            </div>
+                          </div>
+                        </Link>
+                      </SwiperSlide>
+                    );
+                  })}
+                </>
+              ) : (
+                <></>
+              )}
             </Swiper>
           </div>
         </div>

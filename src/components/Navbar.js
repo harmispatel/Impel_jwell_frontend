@@ -142,18 +142,24 @@ const Navbar = () => {
                 </Link>
                 <div className="tags-dropdown">
                   <div className="row">
-                    {tags?.map((multitags, index) => (
-                      <div className="col-md-3" key={index}>
-                        <div className="tags-links">
-                          <Link
-                            to="/shop"
-                            onClick={() => filterTags(multitags.name)}
-                          >
-                            {multitags.name}
-                          </Link>
-                        </div>
-                      </div>
-                    ))}
+                    {tags.length ? (
+                      <>
+                        {tags?.map((multitags, index) => (
+                          <div className="col-md-3" key={index}>
+                            <div className="tags-links">
+                              <Link
+                                to="/shop"
+                                onClick={() => filterTags(multitags.name)}
+                              >
+                                {multitags.name}
+                              </Link>
+                            </div>
+                          </div>
+                        ))}
+                      </>
+                    ) : (
+                      <></>
+                    )}
                   </div>
                 </div>
               </li>

@@ -62,10 +62,10 @@ const WishList = () => {
             </div>
           ) : (
             <>
-              {DealercartItems.length ? (
+              {DealercartItems?.length ? (
                 <>
                   <div className="product_washlist">
-                    {DealercartItems.map((product) => {
+                    {DealercartItems?.map((product) => {
                       return (
                         <div className="wishlist_card">
                           <div className="wishlist_img">

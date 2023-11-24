@@ -137,7 +137,7 @@ const Shop = ({ product }) => {
       .then((res) => {
         setIsLoading(false);
         setAllData(res.data);
-        setDisplayedItems(res.data.slice(0, loadMore));
+        setDisplayedItems(res.data?.slice(0, loadMore));
       })
       .catch((err) => {
         console.log(err);
@@ -182,7 +182,6 @@ const Shop = ({ product }) => {
     UserWishlist.userWishlist({ phone: Phone })
       .then((res) => {
         setUserCartItems(res.data);
-        console.log(res);
       })
       .catch((err) => {
         console.log(err);
@@ -645,6 +644,7 @@ const Shop = ({ product }) => {
                                     {data.image ? (
                                       <img
                                         src={data.image}
+                                        key={data.id}
                                         alt=""
                                         className="w-100"
                                       />

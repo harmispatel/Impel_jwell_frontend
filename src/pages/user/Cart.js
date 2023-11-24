@@ -149,7 +149,7 @@ const Cart = () => {
             </>
           ) : (
             <>
-              {Items.length ? (
+              {Items?.length ? (
                 <>
                   <div className="col-md-9">
                     <div className="card border shadow-0">
