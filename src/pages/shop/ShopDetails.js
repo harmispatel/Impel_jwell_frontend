@@ -982,7 +982,7 @@ import UserCartService from "../../services/Cart";
 import Userservice from "../../services/Auth";
 import DealerWishlist from "../../services/Dealer/Collection";
 import { BsCartDash, BsHandbagFill } from "react-icons/bs";
-import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { FaHeart, FaLongArrowAltLeft, FaRegHeart } from "react-icons/fa";
 import ReactLoading from "react-loading";
 
 const ShopDetails = () => {
@@ -1190,6 +1190,7 @@ const ShopDetails = () => {
             <div className="col-md-10">
               <div className="pb-3">
                 <Link className="btn btn-outline-dark" to="/shop">
+                  <FaLongArrowAltLeft className="me-2" />
                   Back to shop
                 </Link>
               </div>

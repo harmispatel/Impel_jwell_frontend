@@ -36,11 +36,11 @@ const Shop = ({ product }) => {
   const [cartItems, setCartItems] = useState([]);
   const [newadd, setNewAdd] = useState([]);
   const [pricelow, setPriceLow] = useState([]);
-  const [showEdit, setShowEdit] = useState(false);
+
   const [pricehigh, setPriceHigh] = useState([]);
   const [topseller, setTopSeller] = useState([]);
   const [selectedOption, setSelectedOption] = useState([]);
-  const [show, setShow] = useState(false);
+
   const Verification = localStorage.getItem("verification");
   const navigate = useNavigate();
   const userType = localStorage.getItem("user_type");
@@ -304,37 +304,32 @@ const Shop = ({ product }) => {
       });
   };
   // user add to cart function
-  const handleAddToCart = (product) => {
-    if (!cartItems.some((item) => item.design_id === product.id)) {
-      if (Verification == 3) {
-        const CartData = {
-          phone: Phone,
-          design_name: product.name,
-          design_id: product.id,
-        };
+  // const handleAddToCart = (product) => {
+  //   if (!cartItems.some((item) => item.design_id === product.id)) {
+  //     if (Verification == 3) {
+  //       const CartData = {
+  //         phone: Phone,
+  //         design_name: product.name,
+  //         design_id: product.id,
+  //       };
 
-        UserCartService.AddtoCart(CartData)
-          .then((res) => {
-            if (res.status === true) {
-              GetUserCartList();
-              localStorage.setItem("total_quantity", res.data.total_quantity);
-              toast.success(res.message);
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      } else {
-        setShowEdit(true);
-      }
-    } else {
-    }
-  };
-
-  const handleClose = () => {
-    setShow(false);
-    setShowEdit(false);
-  };
+  //       UserCartService.AddtoCart(CartData)
+  //         .then((res) => {
+  //           if (res.status === true) {
+  //             GetUserCartList();
+  //             localStorage.setItem("total_quantity", res.data.total_quantity);
+  //             toast.success(res.message);
+  //           }
+  //         })
+  //         .catch((err) => {
+  //           console.log(err);
+  //         });
+  //     } else {
+  //       setShowEdit(true);
+  //     }
+  //   } else {
+  //   }
+  // };
   useEffect(() => {
     GetCarList();
     DealerList();
@@ -571,7 +566,6 @@ const Shop = ({ product }) => {
                                                 to="/Dealer_login"
                                                 data-tooltip-id="my-tooltip-12"
                                               >
-                                                {" "}
                                                 <BsStar />
                                               </Link>
                                             )}
@@ -609,7 +603,6 @@ const Shop = ({ product }) => {
                                                 to="/login"
                                                 data-tooltip-id="my-tooltip-9"
                                               >
-                                                {" "}
                                                 <BsHeart />
                                               </Link>
                                             )}
@@ -633,9 +626,7 @@ const Shop = ({ product }) => {
                         </>
                       ) : (
                         <div className="not-products">
-                          <p>
-                            No products available based on the selected filters.
-                          </p>
+                          <p>No products available.</p>
                         </div>
                       )}
                     </InfiniteScroll>
@@ -643,7 +634,6 @@ const Shop = ({ product }) => {
                     <>
                       {filterData.length > 0 ? (
                         <>
-                          {" "}
                           <div className="row">
                             {filterData.map((data) => {
                               return (
@@ -726,7 +716,6 @@ const Shop = ({ product }) => {
                                                 to="/Dealer_login"
                                                 data-tooltip-id="my-tooltip-12"
                                               >
-                                                {" "}
                                                 <BsStar />
                                               </Link>
                                             )}
@@ -763,7 +752,6 @@ const Shop = ({ product }) => {
                                                 to="/login"
                                                 data-tooltip-id="my-tooltip-9"
                                               >
-                                                {" "}
                                                 <BsHeart />
                                               </Link>
                                             )}
@@ -805,33 +793,6 @@ const Shop = ({ product }) => {
                 place="bottom"
                 content="My Collections"
               />
-              <Modal
-                className="form_intent"
-                centered
-                show={showEdit}
-                onHide={handleClose}
-              >
-                <Modal.Header closeButton>
-                  <Modal.Title>Registration</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                  <span>
-                    Prior to place your order, you need to provide your other
-                    information. Please update your profile, we will validate
-                    your profile in next 48 hours and then you can place your
-                    order.
-                  </span>
-                </Modal.Body>
-                <div className="text-center pb-3">
-                  <Button
-                    variant="primary"
-                    type="submit"
-                    onClick={() => navigate("/profile")}
-                  >
-                    Registration
-                  </Button>
-                </div>
-              </Modal>
             </div>
           </div>
         </div>

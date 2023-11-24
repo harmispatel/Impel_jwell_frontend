@@ -12,6 +12,7 @@ import {
 import CheckUser from "../../services/Auth";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { CgSpinner } from "react-icons/cg";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ const Login = () => {
   const [show, setShow] = useState(false);
   const [error, setError] = useState("");
   const [phoneError, setPhoneError] = useState();
+  const [spinner, setSpinner] = useState(false);
 
   useEffect(() => {
     onCaptchVerify();
@@ -59,7 +61,7 @@ const Login = () => {
       setPhoneError("");
       const formatPh = `${phoneNumber}`;
       const appVerifier = window.recaptchaVerifier;
-
+      setSpinner(true);
       axios
         .post("https://harmistechnology.com/admin.indianjewelley/api/login", {
           phone: formatPh,
@@ -76,22 +78,26 @@ const Login = () => {
             signInWithPhoneNumber(auth, formatPh, appVerifier)
               .then((confirmationResult) => {
                 window.confirmationResult = confirmationResult;
-                setShow(true);
-                toast.success("OTP sended successfully!");
+                toast.success("OTP sent successfully!");
                 localStorage.setItem("user_type", res.data.user_type);
                 localStorage.setItem("user_id", res.data.user_id);
                 localStorage.setItem("verification", res.data.verification);
+                setShow(true);
               })
               .catch((err) => {
                 console.log(err);
                 setTimeout(() => {
                   window.location.reload(true);
                 }, 2000);
+              })
+              .finally(() => {
+                setSpinner(false);
               });
           }
         })
         .catch((err) => {
           console.log(err);
+          setSpinner(false);
         });
     }
   };
@@ -111,7 +117,7 @@ const Login = () => {
       })
       .catch((error) => {
         console.error("Verification failed:", error);
-        toast.error("OTP Wrong!!");
+        toast.error("Verification failed");
         setOtp("");
       });
   };
@@ -156,37 +162,35 @@ const Login = () => {
                                     </div>
                                   )}
                                 </div>
-                                <div className="d-flex justify-content-between text-center align-items-center">
-                                  {show === true ? (
-                                    <>
-                                      <button
-                                        id="sign-in-button"
-                                        type="submit"
-                                        className="btn btn-outline-warning"
-                                        disabled
-                                      >
-                                        Login
-                                      </button>
-                                    </>
-                                  ) : (
+                                <div className="row">
+                                  <div className="col-md-6">
                                     <button
-                                      id="sign-in-button"
+                                      class="button-60"
+                                      role="button"
                                       type="submit"
-                                      className="btn btn-outline-warning"
+                                      id="sign-in-button"
                                     >
+                                      {spinner && (
+                                        <CgSpinner
+                                          size={20}
+                                          className="animate_spin me-2"
+                                        />
+                                      )}
                                       Login
                                     </button>
-                                  )}
-                                  <Link
-                                    to="/Dealer_login"
-                                    className="text-decoration-none"
-                                    style={{
-                                      color: "#db9662",
-                                      "font-size": "15px !important",
-                                    }}
-                                  >
-                                    Dealer Login ?
-                                  </Link>
+                                  </div>
+                                  <div className="col-md-6 text-end">
+                                    <Link
+                                      to="/Dealer_login"
+                                      className="text-decoration-none"
+                                      style={{
+                                        color: "#db9662",
+                                        "font-size": "15px !important",
+                                      }}
+                                    >
+                                      Dealer Login ?
+                                    </Link>
+                                  </div>
                                 </div>
                               </form>
                             </>
