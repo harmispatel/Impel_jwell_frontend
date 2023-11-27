@@ -78,9 +78,16 @@ const SidebarFilter = (props) => {
                       type="checkbox"
                       key={index}
                       value={data.id}
+                      id={`Categorydata${index}`}
                       onChange={props.onCategoryChange}
                     />
-                    <span>{data.name}</span>
+                    <label
+                      className="form-check-label ms-2"
+                      style={{ cursor: "pointer" }}
+                      for={`Categorydata${index}`}
+                    >
+                      {data.name}
+                    </label>
                   </li>
                 );
               })}
@@ -98,9 +105,16 @@ const SidebarFilter = (props) => {
                       type="checkbox"
                       key={index}
                       value={data.id}
+                      id={`Genderdata${index}`}
                       onChange={props.onGenderChange}
                     />
-                    <span>{data.name}</span>
+                    <label
+                      className="form-check-label ms-2"
+                      style={{ cursor: "pointer" }}
+                      for={`Genderdata${index}`}
+                    >
+                      {data.name}
+                    </label>
                   </li>
                 );
               })}
@@ -118,9 +132,16 @@ const SidebarFilter = (props) => {
                       type="checkbox"
                       key={index}
                       value={data.id}
+                      id={`Tagdata${index}`}
                       onChange={props.onTagChange}
                     />
-                    <span>{data.name}</span>
+                    <label
+                      className="form-check-label ms-2"
+                      style={{ cursor: "pointer" }}
+                      for={`Tagdata${index}`}
+                    >
+                      {data.name}
+                    </label>
                   </li>
                 );
               })}

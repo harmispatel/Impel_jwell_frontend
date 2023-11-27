@@ -67,7 +67,6 @@ const Navbar = () => {
 
   const filterTags = (tag) => {
     setSelectedTag(tag);
-    navigate("/shop");
   };
   const getProfile = async () => {
     await profileService
@@ -145,10 +144,10 @@ const Navbar = () => {
                     {tags.length ? (
                       <>
                         {tags?.map((multitags, index) => (
-                          <div className="col-md-3" key={index}>
+                          <div className="col-md-2" key={index}>
                             <div className="tags-links">
                               <Link
-                                to="/shop"
+                                to={`/shop?tag_id=${multitags?.id}`}
                                 onClick={() => filterTags(multitags.name)}
                               >
                                 {multitags.name}

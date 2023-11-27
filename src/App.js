@@ -1,7 +1,7 @@
 import "./App.css";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "../node_modules/bootstrap/dist/js/bootstrap.bundle";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useParams } from "react-router-dom";
 import Layout from "./components/Layout";
 import Home from "./pages/Home";
 import Shop from "./pages/shop/Shop";
@@ -30,7 +30,7 @@ import { Toaster } from "react-hot-toast";
 
 function App() {
   // const popupshow = localStorage.getItem("user_type");
-
+  const { tagId } = useParams();
   return (
     <WishListProvider>
       <ScrollToTop />

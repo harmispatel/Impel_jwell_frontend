@@ -69,14 +69,18 @@ const WishList = () => {
                       return (
                         <div className="wishlist_card">
                           <div className="wishlist_img">
-                            <img src={product.image} className="w-100" alt="" />
+                            <img
+                              src={product?.image}
+                              className="w-100"
+                              alt=""
+                            />
                           </div>
                           <div className="wishlist_info">
                             <Link
-                              to={`/shopdetails/${product.id}`}
+                              to={`/shopdetails/${product?.id}`}
                               className="product_data"
                             >
-                              <h3>{product.name}</h3>
+                              <h3>{product?.name}</h3>
                             </Link>
                             {/* <p>
                           ${product.price}

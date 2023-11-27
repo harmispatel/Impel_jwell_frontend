@@ -4,7 +4,7 @@ import SidebarFilter from "../../components/common/SidebarFilter";
 import ReactLoading from "react-loading";
 import InfiniteScroll from "react-infinite-scroll-component";
 import ShopServices from "../../services/Shop";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import DealerWishlist from "../../services/Dealer/Collection";
 import UserWishlist from "../../services/Auth";
 import { FcLike } from "react-icons/fc";
@@ -47,6 +47,12 @@ const Shop = ({ product }) => {
   const userId = localStorage.getItem("user_id");
   const email = localStorage.getItem("email");
   const Phone = localStorage.getItem("phone");
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+
+  useEffect(() => {
+    const tagId = searchParams.get("tag_id");
+  }, [location.search]);
 
   useEffect(() => {
     if (
@@ -76,16 +82,17 @@ const Shop = ({ product }) => {
       case "new_added":
         setIsLoading(true);
         break;
-      // case "low_to_high":
-      //   setIsLoading(true);
-      //   break;
-      // case "high_to_low":
-      //   setIsLoading(true);
-      //   break;
+      case "low_to_high":
+        setIsLoading(true);
+        break;
+      case "high_to_low":
+        setIsLoading(true);
+        break;
       case "highest_selling":
         setIsLoading(true);
         break;
       case "clear_all":
+        setIsLoading(true);
         break;
       default:
         break;
@@ -371,7 +378,7 @@ const Shop = ({ product }) => {
                       </label>
                     </div>
                   </div>
-                  {/* <div className="col-md-2">
+                  <div className="col-md-2">
                     <div class="csm_sort_btn">
                       <input
                         type="radio"
@@ -398,7 +405,7 @@ const Shop = ({ product }) => {
                       />
                       <label for="high_to_low">Price : high to low</label>
                     </div>
-                  </div> */}
+                  </div>
                   <div className="col-md-2">
                     <div class="csm_sort_btn">
                       <input
@@ -483,6 +490,7 @@ const Shop = ({ product }) => {
                                   <Link
                                     to={`/shopdetails/${product.id}`}
                                     className="product_data"
+                                    target="_blank"
                                   >
                                     {product.image ? (
                                       <img
@@ -614,7 +622,10 @@ const Shop = ({ product }) => {
                                       <h4>{product.name}</h4>
                                       <p>{product.category_name}</p>
                                       <h5>
-                                        ₹{product.price.toLocaleString("en-US")}
+                                        ₹
+                                        {product.total_price_18k.toLocaleString(
+                                          "en-US"
+                                        )}
                                       </h5>
                                     </div>
                                   </Link>
@@ -640,6 +651,7 @@ const Shop = ({ product }) => {
                                   <Link
                                     to={`/shopdetails/${data.id}`}
                                     className="product_data"
+                                    target="_blank"
                                   >
                                     {data.image ? (
                                       <img
@@ -763,7 +775,12 @@ const Shop = ({ product }) => {
                                     <div className="product_details">
                                       <h4>{data.name}</h4>
                                       <p>{data.category_name}</p>
-                                      <h5>₹{data.price}</h5>
+                                      <h5>
+                                        ₹
+                                        {data.total_price_18k.toLocaleString(
+                                          "en-US"
+                                        )}
+                                      </h5>
                                     </div>
                                   </Link>
                                 </div>

@@ -27,15 +27,6 @@ const Login = () => {
     onCaptchVerify();
   }, []);
 
-  function onCaptchVerify() {
-    const auth = getAuth();
-    window.recaptchaVerifier = new RecaptchaVerifier(auth, "sign-in-button", {
-      size: "invisible",
-      callback: (response) => {
-        sendOtp();
-      },
-    });
-  }
   const handlePhoneNumberChange = (newPhoneNumber) => {
     let isValid = true;
     if (!newPhoneNumber) {
@@ -50,6 +41,17 @@ const Login = () => {
     setPhoneNumber(newPhoneNumber);
     return isValid;
   };
+
+  function onCaptchVerify() {
+    const auth = getAuth();
+    window.recaptchaVerifier = new RecaptchaVerifier(auth, "sign-in-button", {
+      size: "invisible",
+      callback: (response) => {
+        sendOtp();
+      },
+      "expired-callback": () => {},
+    });
+  }
 
   const sendOtp = (e) => {
     e.preventDefault();
@@ -68,7 +70,6 @@ const Login = () => {
         })
         .then((res) => {
           const response = res.data;
-          console.log(response);
           if (response.status === 0) {
             toast.error(response.message);
             navigate("/login");
@@ -103,6 +104,7 @@ const Login = () => {
   };
 
   const handleOtpVerification = (e) => {
+    setSpinner(true);
     e.preventDefault();
     const code = otp;
     window.confirmationResult
@@ -119,6 +121,9 @@ const Login = () => {
         console.error("Verification failed:", error);
         toast.error("Verification failed");
         setOtp("");
+      })
+      .finally(() => {
+        setSpinner(false);
       });
   };
 
@@ -218,6 +223,12 @@ const Login = () => {
                                     type="submit"
                                     className="btn btn-outline-warning"
                                   >
+                                    {spinner && (
+                                      <CgSpinner
+                                        size={20}
+                                        className="animate_spin me-2"
+                                      />
+                                    )}
                                     Verfy OTP
                                   </button>
                                   <button

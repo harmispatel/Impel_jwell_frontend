@@ -19,7 +19,6 @@ const Cart = () => {
   const [isFormEmpty, setIsFormEmpty] = useState("");
   const [show, setShow] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
-  const [spinner, setSpinner] = useState(false);
   const [removingItemId, setRemovingItemId] = useState(null);
 
   // const handlecountchange = (update_type, id) => {
@@ -56,12 +55,9 @@ const Cart = () => {
   const SubTotal = () => {
     let subTotal = 0;
     Items.forEach((data) => {
-      const gold_type = "gold_rate_" + data.gold_type;
-      const grossWeight = "gross_weight_" + data.gold_type;
-      const price =
-        parseFloat(data[grossWeight] * goldrate[gold_type]) +
-        ((goldrate.gold_rate_24k * 15) / 100) * data[grossWeight];
-      subTotal += price * data.quantity;
+      const Pricekey = "total_price_" + data.gold_type;
+      const price = parseFloat(data[Pricekey]);
+      subTotal += price;
     });
     return subTotal;
   };
@@ -69,13 +65,6 @@ const Cart = () => {
     yellow_gold: "Yellow Gold",
     rose_gold: "Rose Gold",
     white_gold: "White Gold",
-  };
-  const goldrate = {
-    gold_rate_24k: 6000,
-    gold_rate_22k: 5220,
-    gold_rate_20k: 5040,
-    gold_rate_18k: 4560,
-    gold_rate_14k: 3540,
   };
 
   const Applycoupen = (e) => {
@@ -158,16 +147,8 @@ const Cart = () => {
                         <div className="row gy-3 mb-4">
                           <>
                             {Items?.map((data, index) => {
-                              const gold_type = "gold_rate_" + data.gold_type;
-                              const grossWeight =
-                                "gross_weight_" + data.gold_type;
-                              const price = parseFloat(
-                                data[grossWeight] * goldrate[gold_type]
-                              );
-                              const makinghcharge =
-                                ((goldrate.gold_rate_24k * 15) / 100) *
-                                data[grossWeight];
-                              const totalprice = price + makinghcharge;
+                              const Pricekey = "total_price_" + data.gold_type;
+                              const price = parseFloat(data[Pricekey]);
                               return (
                                 <>
                                   <div className="col-md-3">
@@ -180,7 +161,10 @@ const Cart = () => {
                                   </div>
                                   <div className="col-md-4">
                                     <div className="">
-                                      <Link to="#" className="nav-link">
+                                      <Link
+                                        to={`/shopdetails/${data.design_id}`}
+                                        className="nav-link"
+                                      >
                                         {data.design_name}
                                       </Link>
                                       <div className="">
@@ -194,8 +178,8 @@ const Cart = () => {
                                     </div>
                                     <div className="">
                                       <text className="h6">
-                                        ₹{totalprice.toLocaleString("en-US")}{" "}
-                                        (Approx prefix)
+                                        ₹{price.toLocaleString("en-US")}{" "}
+                                        {/* ₹ 100 (Approx prefix) */}
                                       </text>
                                       <br />
                                     </div>
@@ -341,7 +325,7 @@ const Cart = () => {
                         <div className="d-flex justify-content-between">
                           <p className="mb-2">Sub total :</p>
                           <p className="mb-2">
-                            {SubTotal().toLocaleString("en-US")}₹
+                            ₹{SubTotal().toLocaleString("en-US")}
                           </p>
                         </div>
                         {show && (
@@ -353,17 +337,17 @@ const Cart = () => {
                                 {code.discount_type === "percentage" ? (
                                   <>(-{code.discount_value}%)</>
                                 ) : (
-                                  <>({code.discount_value}₹)</>
+                                  <></>
                                 )}
                               </p>
                             </p>
                             <p className="mb-2 text-success">
                               {code.discount_type === "percentage"
-                                ? `-${(
+                                ? `- ₹${(
                                     (SubTotal() * code.discount_value) /
                                     100
                                   ).toLocaleString("en-US")}`
-                                : `₹${code.discount_value}`}
+                                : `- ₹${code.discount_value}`}
                             </p>
                           </div>
                         )}
@@ -373,12 +357,12 @@ const Cart = () => {
                           <p className="mb-2 fw-bold">
                             {code.discount_value ? (
                               <>
+                                ₹
                                 {(code.discount_type === "percentage"
                                   ? SubTotal() -
                                     (SubTotal() * code.discount_value) / 100
                                   : SubTotal() - code.discount_value
                                 ).toLocaleString("en-US")}
-                                ₹
                               </>
                             ) : (
                               <>{SubTotal().toLocaleString("en-US")}₹</>

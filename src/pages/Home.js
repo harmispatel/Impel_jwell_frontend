@@ -108,7 +108,7 @@ const Home = () => {
             <h1>TRY TO SOMETHING NEW</h1>
             <p>Because every piece caries a precious story</p>
 
-            <button className="btn btn-outline-warning">- Explore More</button>
+            <button className="btn btn-outline-warning">Explore More</button>
           </div>
         </div>
         <div className="banner_slide">
@@ -151,7 +151,7 @@ const Home = () => {
               style={{ color: "#000" }}
               to="/categories"
             >
-              <u>- View All</u>
+              <u>View All</u>
             </Link>
           </div>
           <div className="more_categories_slide">
@@ -227,7 +227,7 @@ const Home = () => {
                 <label></label>
                 <p>Discover our awesome rings collection</p>
                 <button className="btn discover_btn">
-                  - Discover The Collection
+                  Discover The Collection
                 </button>
               </div>
             </div>
@@ -341,7 +341,7 @@ const Home = () => {
                   <img src={Gold_Ring} width="150px" alt="" />
                 </div>
                 <button className="btn discover_btn">
-                  - Discover The Collection
+                  Discover The Collection
                 </button>
               </div>
             </div>
@@ -385,9 +385,9 @@ const Home = () => {
                 disableOnInteraction: false,
               }}
             >
-              {TopSell.length ? (
+              {TopSell?.length ? (
                 <>
-                  {TopSell.slice(0, 6).map((data, index) => {
+                  {TopSell?.slice(0, 6).map((data, index) => {
                     return (
                       <SwiperSlide key={index}>
                         <Link

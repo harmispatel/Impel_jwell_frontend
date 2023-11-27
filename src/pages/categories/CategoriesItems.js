@@ -90,7 +90,6 @@ const CategoriesItems = () => {
                   <ReactLoading
                     type={"spinningBubbles"}
                     color={"#053961"}
-                   
                     height={"20%"}
                     width={"10%"}
                     className="loader"
@@ -106,6 +105,7 @@ const CategoriesItems = () => {
                             to={`/shopdetails/${data.id}`}
                             className="text-decoration-none"
                             style={{ color: "#000" }}
+                            target="_blank"
                           >
                             <div className="category_data py-2">
                               <img src={data.image} alt="" className="w-100" />
