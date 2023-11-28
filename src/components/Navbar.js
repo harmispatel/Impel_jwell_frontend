@@ -6,25 +6,29 @@ import Logo from "../assets/images/logo.png";
 import DealerService from "../services/Dealer/Cart";
 import UserService from "../services/Cart";
 import { Tooltip as ReactTooltip } from "react-tooltip";
-import homeService from "../services/Home";
+import FilterServices from "../services/Filter";
 import profileService from "../services/Auth";
 
 const Navbar = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const currentRoute = location.pathname;
+
+  const Dealer = localStorage.getItem("token");
+  const DealerEmail = localStorage.getItem("email");
+  const Phone = localStorage.getItem("phone");
+
   const [colorChange, setColorchange] = useState(false);
   const [isLoggedOut, setIsLoggedOut] = useState(false);
   const [dealerCartCounts, setDealerCartCounts] = useState();
   const [userCartCounts, setUsererCartCounts] = useState();
   const [profileData, setProfileData] = useState([]);
   const [tags, setTags] = useState([]);
-  const [selectedTag, setSelectedTag] = useState(null);
+  const [tag, setTag] = useState([]);
 
-  const location = useLocation();
-  const currentRoute = location.pathname;
-  const navigate = useNavigate();
-
-  const Dealer = localStorage.getItem("token");
-  const DealerEmail = localStorage.getItem("email");
-  const Phone = localStorage.getItem("phone");
+  const handleTag = (e) => {
+    setTag([...tag, parseFloat(e.target.value)]);
+  };
 
   const changeNavbarColor = () => {
     if (window.scrollY >= 80) {
@@ -54,20 +58,18 @@ const Navbar = () => {
         console.log(err);
       });
   };
+
   const Tags = () => {
-    homeService
-      .headerTags()
+    FilterServices.headerTags()
       .then((res) => {
         setTags(res.data);
+        console.log(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  const filterTags = (tag) => {
-    setSelectedTag(tag);
-  };
   const getProfile = async () => {
     await profileService
       .getProfile({ phone: Phone })
@@ -148,7 +150,7 @@ const Navbar = () => {
                             <div className="tags-links">
                               <Link
                                 to={`/shop?tag_id=${multitags?.id}`}
-                                onClick={() => filterTags(multitags.name)}
+                                onChange={(e) => handleTag(e)}
                               >
                                 {multitags.name}
                               </Link>
@@ -286,14 +288,6 @@ const Navbar = () => {
                 </li>
               )}
 
-              {/* <li>
-                <Link
-                  className="icon"
-                  to={Dealer ? "/dealer_wishlist" : "/wishlist"}
-                >   
-                  <BsHeart />
-                </Link>
-              </li> */}
               <li>
                 {Phone && (
                   <Link

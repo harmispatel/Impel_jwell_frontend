@@ -169,6 +169,14 @@ const Profile = () => {
       validationErrors.emailErr = "";
     }
 
+    // if (totalPrice >= 200000 && !userData.pan_no.trim()) {
+    //   validationErrors.pancardErr =
+    //     "Pancard is required for total price 2,00,000 or above";
+    //   isValid = false;
+    // } else {
+    //   validationErrors.pancardErr = "";
+    // }
+
     if (!userData.address.trim()) {
       validationErrors.addressErr = "Address is required";
       isValid = false;
@@ -414,7 +422,9 @@ const Profile = () => {
                     onChange={(e) => handleEditChange(e)}
                     placeholder="Enter Your Name"
                   />
-                  <span className="text-danger">{error.nameErr}</span>
+                  {error.nameErr && (
+                    <span className="text-danger">{error.nameErr}</span>
+                  )}
                 </Form.Group>
               </div>
               <div className="col-md-6">
@@ -454,7 +464,9 @@ const Profile = () => {
                     onChange={(e) => handleEditChange(e)}
                     placeholder="Enter Your Pancard number"
                   />
-                  <span className="text-danger">{error.pancardErr}</span>
+                  {error.pancardErr && (
+                    <span className="text-danger">{error.pancardErr}</span>
+                  )}
                 </Form.Group>
               </div>
               {/* <div className="col-md-6 mb-3">
@@ -484,7 +496,9 @@ const Profile = () => {
                     }}
                     placeholder="Enter Your Address"
                   />
-                  <span className="text-danger">{error.addressErr}</span>
+                  {error.addressErr && (
+                    <span className="text-danger">{error.addressErr}</span>
+                  )}
                 </Form.Group>
               </div>
               <div className="col-md-6">

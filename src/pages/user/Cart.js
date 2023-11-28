@@ -146,6 +146,7 @@ const Cart = () => {
                         <h4 className="card-title mb-4">Your shopping cart</h4>
                         <div className="row gy-3 mb-4">
                           <>
+                            <hr />
                             {Items?.map((data, index) => {
                               const Pricekey = "total_price_" + data.gold_type;
                               const price = parseFloat(data[Pricekey]);
@@ -263,6 +264,7 @@ const Cart = () => {
                                       </Link>
                                     </div>
                                   </div>
+                                  <hr />
                                 </>
                               );
                             })}
@@ -278,17 +280,19 @@ const Cart = () => {
                         <div className="card-body">
                           <form>
                             {/* <div className="form-group">
-                    <label className="form-label">Have coupon?</label>
-                    <div className="input-group">
-                      <input
-                        type="text"
-                        className="form-control border"
-                        name=""
-                        placeholder="Coupon code"
-                      />
-                      <button className="btn btn-light border">Apply</button>
-                    </div>
-                  </div> */}
+                              <label className="form-label">Have coupon?</label>
+                              <div className="input-group">
+                                <input  
+                                  type="text"
+                                  className="form-control border"
+                                  name=""
+                                  placeholder="Coupon code"
+                                />
+                                <button className="btn btn-light border">
+                                  Apply
+                                </button>
+                              </div>
+                            </div> */}
                             <div className="form-group">
                               <label className="form-label">
                                 Have a Dealer coupon?
@@ -297,6 +301,7 @@ const Cart = () => {
                                 <input
                                   type="text"
                                   name="dealer_code"
+                                  className="form-control border"
                                   placeholder="Dealer coupon code"
                                   value={dealer_code}
                                   onChange={(e) => handlechange(e)}
@@ -365,7 +370,7 @@ const Cart = () => {
                                 ).toLocaleString("en-US")}
                               </>
                             ) : (
-                              <>{SubTotal().toLocaleString("en-US")}₹</>
+                              <>₹{SubTotal().toLocaleString("en-US")}</>
                             )}
                           </p>
                         </div>

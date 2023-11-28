@@ -39,13 +39,6 @@ const Featured = async () => {
   });
   return d;
 };
-const headerTags = async () => {
-  let d = await call({
-    path: "header-tags",
-    method: "GET",
-  });
-  return d;
-};
 
 const exportObject = {
   slider,
@@ -53,7 +46,6 @@ const exportObject = {
   TopSelling,
   RecentAdd,
   Featured,
-  headerTags,
 };
 
 export default exportObject;

@@ -39,8 +39,21 @@ const metalFilter = async () => {
   });
   return d;
 };
+const headerTags = async () => {
+  let d = await call({
+    path: "header-tags",
+    method: "GET",
+  });
+  return d;
+};
 
-const exportObject = { categoryFilter,subCategory,genderFilter,metalFilter,TagFilter };
+const exportObject = {
+  categoryFilter,
+  subCategory,
+  genderFilter,
+  metalFilter,
+  TagFilter,
+  headerTags,
+};
 
 export default exportObject;
- 
