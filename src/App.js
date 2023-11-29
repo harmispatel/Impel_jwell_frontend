@@ -37,15 +37,15 @@ function App() {
       {/* {popupshow == null ? <Popup /> : <></>} */}
       <Routes>
         <Route path="/" element={<Layout />}>
+          {/* COMMON COMPONENT */}
           <Route index element={<Home />} />
-          <Route path="about" element={<About />} />
           <Route path="shop" element={<Shop />} />
           <Route path="shopdetails/:id" element={<ShopDetails />} />
+          <Route path="about" element={<About />} />
           <Route path="categories" element={<Categories />} />
           <Route path="categories/:id" element={<CategoriesItems />} />
           <Route path="categoryDetail/:id" element={<CategoriesDetail />} />
-
-          {/* user protected */}
+          {/* USER PROTECTED */}
           <Route
             path="wishlist"
             element={
@@ -72,8 +72,7 @@ function App() {
           />
           <Route path="cart" element={<Cart />} />
           <Route path="orders" element={<Orders />} />
-
-          {/* Dealer protected */}
+          {/* DEALER PROTECTED */}
           <Route
             path="dealer_wishlist"
             element={
@@ -99,7 +98,7 @@ function App() {
             }
           />
           <Route path="dealer_cart" element={<DealerCart />} />
-
+          {/* AUTH */}
           <Route path="/login" element={<Login />} />
           <Route path="/Dealer_login" element={<DealerLogIN />} />
         </Route>

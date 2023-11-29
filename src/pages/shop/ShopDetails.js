@@ -605,6 +605,7 @@ const ShopDetails = () => {
                                       <th>Total Amount</th>
                                       <td>
                                         ₹{(product?.total_price_20k).toFixed(2)}
+                                        (Approx.)
                                       </td>
                                     </tr>
                                   </tbody>
@@ -678,6 +679,7 @@ const ShopDetails = () => {
                                     <th>Total Amount</th>
                                     <td>
                                       ₹ {(product?.total_price_18k).toFixed(2)}
+                                      (Approx.)
                                     </td>
                                   </tr>
                                 </tbody>
@@ -750,6 +752,7 @@ const ShopDetails = () => {
                                     <th>Total Amount</th>
                                     <td>
                                       ₹ {(product?.total_price_14k).toFixed(2)}
+                                      (Approx.)
                                     </td>
                                   </tr>
                                 </tbody>

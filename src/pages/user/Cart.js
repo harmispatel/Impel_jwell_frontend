@@ -7,6 +7,7 @@ import ReactLoading from "react-loading";
 import toast from "react-hot-toast";
 import { Button, Modal } from "react-bootstrap";
 import { CgSpinner } from "react-icons/cg";
+import profileService from "../../services/Auth";
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -19,6 +20,8 @@ const Cart = () => {
   const [isFormEmpty, setIsFormEmpty] = useState("");
   const [show, setShow] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
+  const [showpan, setShowpan] = useState(false);
+  const [profileData, setProfileData] = useState([]);
   const [removingItemId, setRemovingItemId] = useState(null);
 
   // const handlecountchange = (update_type, id) => {
@@ -103,7 +106,33 @@ const Cart = () => {
         setRemovingItemId(null);
       });
   };
+  const getProfile = async () => {
+    await profileService
+      .getProfile({ phone: Phone })
+      .then((res) => setProfileData(res.data))
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const PanNo = profileData.pan_no;
+  const FinalOrder = () => {
+    const totalPrice = code.discount_value
+      ? code.discount_type === "percentage"
+        ? SubTotal() - (SubTotal() * code.discount_value) / 100
+        : SubTotal() - code.discount_value
+      : SubTotal();
 
+    if (totalPrice >= 200000) {
+      if (PanNo === "") {
+        toast.error("Please add your PAN card in your profile");
+        setShowpan(true);
+      } else {
+        navigate("/orders");
+      }
+    } else {
+      navigate("/orders");
+    }
+  };
   const Orderplacing = () => {
     if (Verification == 3) {
       navigate("/orders");
@@ -114,10 +143,12 @@ const Cart = () => {
   const handleClose = () => {
     setShow(false);
     setShowEdit(false);
+    setShowpan(false);
   };
 
   useEffect(() => {
     UserCartItems();
+    getProfile();
   }, []);
 
   return (
@@ -166,7 +197,7 @@ const Cart = () => {
                                         to={`/shopdetails/${data.design_id}`}
                                         className="nav-link"
                                       >
-                                        {data.design_name}
+                                        {data?.design_name}
                                       </Link>
                                       <div className="">
                                         <p className="text-muted">
@@ -179,79 +210,91 @@ const Cart = () => {
                                     </div>
                                     <div className="">
                                       <text className="h6">
-                                        ₹{price.toLocaleString("en-US")}{" "}
-                                        {/* ₹ 100 (Approx prefix) */}
+                                        ₹{price.toLocaleString("en-US")}
                                       </text>
                                       <br />
                                     </div>
                                   </div>
                                   {/* <div className="col-md-2">
-                                <div className="quantity">
-                                  <button
-                                    className="btn"
-                                    onClick={() => {
-                                      const updatedItems = Items.map((item) => {
-                                        if (
-                                          item.id === data.id &&
-                                          item.quantity > 1
-                                        ) {
-                                          return {
-                                            ...item,
-                                            quantity: item.quantity - 1,
-                                          };
-                                        }
-                                        return item;
-                                      });
-                                      setItems(updatedItems);
-                                      handlecountchange("decrement", data.id);
-                                      // if (data.quantity > 1) {
-                                      //   handlecountchange("decrement", data.id);
-                                      // }
-                                    }}
-                                    disabled={data.quantity === 1}
-                                  >
-                                    -
-                                  </button>
-  
-                                  <input
-                                    className="form-control"
-                                    type="text"
-                                    value={data.quantity}
-                                    min={1}
-                                    max={5}
-                                    disabled
-                                  />
-                                  <button
-                                    className="btn"
-                                    onClick={() => {
-                                      const updatedItems = Items.map((item) => {
-                                        if (item.id === data.id) {
-                                          return {
-                                            ...item,
-                                            quantity: item.quantity + 1,
-                                          };
-                                        }
-                                        return item;
-                                      });
-                                      setItems(updatedItems);
-                                      handlecountchange("increment", data.id);
-                                    }}
-                                    disabled={data.quantity >= 10}
-                                  >
-                                    +
-                                  </button>
-                                </div>
-                              </div> */}
+                                    <div className="quantity">
+                                      <button
+                                        className="btn"
+                                        onClick={() => {
+                                          const updatedItems = Items.map(
+                                            (item) => {
+                                              if (
+                                                item.id === data.id &&
+                                                item.quantity > 1
+                                              ) {
+                                                return {
+                                                  ...item,
+                                                  quantity: item.quantity - 1,
+                                                };
+                                              }
+                                              return item;
+                                            }
+                                          );
+                                          setItems(updatedItems);
+                                          handlecountchange(
+                                            "decrement",
+                                            data.id
+                                          );
+                                          // if (data.quantity > 1) {
+                                          //   handlecountchange("decrement", data.id);
+                                          // }
+                                        }}
+                                        disabled={data.quantity === 1}
+                                      >
+                                        -
+                                      </button>
+
+                                      <input
+                                        className="form-control"
+                                        type="text"
+                                        value={data.quantity}
+                                        min={1}
+                                        max={5}
+                                        disabled
+                                      />
+                                      <button
+                                        className="btn"
+                                        onClick={() => {
+                                          const updatedItems = Items.map(
+                                            (item) => {
+                                              if (item.id === data.id) {
+                                                return {
+                                                  ...item,
+                                                  quantity: item.quantity + 1,
+                                                };
+                                              }
+                                              return item;
+                                            }
+                                          );
+                                          setItems(updatedItems);
+                                          handlecountchange(
+                                            "increment",
+                                            data.id
+                                          );
+                                        }}
+                                        disabled={data.quantity >= 10}
+                                      >
+                                        +
+                                      </button>
+                                    </div>
+                                  </div> */}
 
                                   <div className="col-md-3">
                                     <div className="float-md-end">
-                                      {/* <Link to="#!" className="btn btn-light border px-2 icon-hover-primary me-2">
-                                <BsHeart />
-                              </Link> */}
+                                      {/* <Link
+                                        to="#!"
+                                        className="btn btn-light border px-2 icon-hover-primary me-2"
+                                      >
+                                        <BsHeart />
+                                      </Link> */}
 
                                       <Link
                                         to="#"
-                                        className="btn btn-light border text-danger icon-hover-danger"
+                                        className="btn btn-light border text-danger icon-hover-danger text-end"
                                         onClick={() => Remove(data.id)}
                                       >
                                         {removingItemId === data.id && (
@@ -377,7 +420,8 @@ const Cart = () => {
                         <div className="mt-3">
                           <button
                             className="btn btn-success w-100 shadow-0 mb-2"
-                            onClick={Orderplacing}
+                            onClick={(Orderplacing, FinalOrder)}
+                            // onClick={Orderplacing}
                           >
                             Place Order
                           </button>
@@ -394,7 +438,6 @@ const Cart = () => {
                 </>
               ) : (
                 <>
-                  {" "}
                   <div className="col-md-12">
                     <div className="card border shadow-0">
                       <div className="m-4">
@@ -416,6 +459,54 @@ const Cart = () => {
               )}
             </>
           )}
+
+          <Modal
+            className="form_intent"
+            centered
+            show={showpan}
+            onHide={handleClose}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Registration</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <div>
+                <div className="">
+                  <span>
+                    <b>Dear Valued Customer</b>
+                  </span>
+                </div>
+                <div className="">
+                  <span>
+                    "In accordance with government regulations, we would like to
+                    inform you that a valid pan card is now required for all
+                    gold transactions. This measure ensures compliance with
+                    regulatory standards and helps us maintain the highest
+                    levels of security and transparency. Thank you for your
+                    understanding and cooperation. If you have any questions or
+                    require further assistance, please feel free to contact our
+                    customer service. Best regard.
+                  </span>
+                </div>
+              </div>
+            </Modal.Body>
+            <div className="text-center pb-3">
+              <Button
+                variant="primary"
+                type="submit"
+                onClick={() =>
+                  navigate("/profile", {
+                    state: {
+                      PanCardError:
+                        "pancard is required because your total amount is more than 2,00,000 ₹",
+                    },
+                  })
+                }
+              >
+                Registration
+              </Button>
+            </div>
+          </Modal>
 
           <Modal
             className="form_intent"

@@ -18,6 +18,10 @@ body {
   font-family: 'Rajdhani' !important;
   background-color: #faf7f5 !important;
 }
+.otp-card h6 {
+  color: red;
+  font-size: 25px
+}
 
 
 /* toast message css */

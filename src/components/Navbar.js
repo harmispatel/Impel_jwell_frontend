@@ -10,8 +10,17 @@ import FilterServices from "../services/Filter";
 import profileService from "../services/Auth";
 
 const Navbar = () => {
-  const navigate = useNavigate();
   const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const navigate = useNavigate();
+  let tagIds = searchParams.getAll("tag_id");
+  tagIds =
+    Array.isArray(tagIds) && tagIds?.length > 0
+      ? tagIds[0].split(",")
+      : tagIds
+      ? tagIds
+      : [];
+  tagIds = tagIds.map((i) => parseFloat(i));
   const currentRoute = location.pathname;
 
   const Dealer = localStorage.getItem("token");
@@ -63,7 +72,6 @@ const Navbar = () => {
     FilterServices.headerTags()
       .then((res) => {
         setTags(res.data);
-        console.log(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -138,7 +146,12 @@ const Navbar = () => {
                 </Link>
               </li>
               <li className="nav-item main-tags">
-                <Link className="nav-link" aria-current="page">
+                <Link
+                  // to={`/shop${tagIds?.length > 0 ? `?tag_id=${tagIds}` : ""}`}
+                  to="#"
+                  className="nav-link"
+                  aria-current="page"
+                >
                   Tags
                 </Link>
                 <div className="tags-dropdown">
@@ -149,7 +162,11 @@ const Navbar = () => {
                           <div className="col-md-2" key={index}>
                             <div className="tags-links">
                               <Link
-                                to={`/shop?tag_id=${multitags?.id}`}
+                                to={`/shop?tag_id=${
+                                  tagIds?.includes(multitags?.id)
+                                    ? tagIds
+                                    : [...tagIds, multitags?.id]
+                                }`}
                                 onChange={(e) => handleTag(e)}
                               >
                                 {multitags.name}

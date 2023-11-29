@@ -3,8 +3,11 @@ import profileService from "../../services/Auth";
 import { useState } from "react";
 import { Button, Col, Form, Modal } from "react-bootstrap";
 import toast from "react-hot-toast";
+import { useLocation } from "react-router-dom";
 
 const Profile = () => {
+  const { state } = useLocation();
+  const result = state?.PanCardError || null;
   const phone = localStorage.getItem("phone");
   const [showEdit, setShowEdit] = useState(false);
   const [show, setShow] = useState(false);
@@ -13,7 +16,6 @@ const Profile = () => {
   const [profileData, setProfileData] = useState([]);
   const [city, setcity] = useState();
   const [shipping_city, setShipping_city] = useState();
-
   const [userData, setUserData] = useState({
     name: "",
     email: "",
@@ -168,14 +170,6 @@ const Profile = () => {
     } else {
       validationErrors.emailErr = "";
     }
-
-    // if (totalPrice >= 200000 && !userData.pan_no.trim()) {
-    //   validationErrors.pancardErr =
-    //     "Pancard is required for total price 2,00,000 or above";
-    //   isValid = false;
-    // } else {
-    //   validationErrors.pancardErr = "";
-    // }
 
     if (!userData.address.trim()) {
       validationErrors.addressErr = "Address is required";
@@ -379,7 +373,7 @@ const Profile = () => {
                                   className="w-100 profile_edit_btn border-0"
                                   onClick={() => handleEdit(profileData)}
                                 >
-                                  Edit
+                                  Edit Profile
                                 </button>
                               </td>
                             </tr>
@@ -402,7 +396,7 @@ const Profile = () => {
         onHide={handleClose}
       >
         <Modal.Header closeButton>
-          <Modal.Title>Add Profile</Modal.Title>
+          <Modal.Title>Edit Profile</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
@@ -457,15 +451,17 @@ const Profile = () => {
 
               <div className="col-md-6 mb-3">
                 <Form.Group className="mb-2" controlId="formGridAddress1">
-                  <Form.Label>Pan-card</Form.Label>
+                  <Form.Label>
+                    Pan-card{result && <span className="text-danger">*</span>}
+                  </Form.Label>
                   <Form.Control
                     name="pan_no"
                     defaultValue={selectedData.pan_no}
                     onChange={(e) => handleEditChange(e)}
                     placeholder="Enter Your Pancard number"
                   />
-                  {error.pancardErr && (
-                    <span className="text-danger">{error.pancardErr}</span>
+                  {result?.length > 0 && (
+                    <span className="text-danger">{result}</span>
                   )}
                 </Form.Group>
               </div>
@@ -570,7 +566,6 @@ const Profile = () => {
                   name="address_same_as_company"
                   className="address-checkbox"
                   checked={isChecked === 1}
-                  defaultChecked={profileData.address_same_as_company}
                   onChange={handleCheckboxChange}
                 />
                 <label htmlFor="checkbox" className="ms-1 address-check-text">

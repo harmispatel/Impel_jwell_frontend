@@ -134,6 +134,7 @@ const SidebarFilter = (props) => {
                       value={data.id}
                       id={`Tagdata${index}`}
                       onChange={props.onTagChange}
+                      checked={props?.tag?.includes(data.id) ? true : false}
                     />
                     <label
                       className="form-check-label ms-2"
