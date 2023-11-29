@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { CgSpinner } from "react-icons/cg";
 
 const DealerLogin = () => {
   const navigate = useNavigate();
@@ -13,6 +14,7 @@ const DealerLogin = () => {
   const [user, setUser] = useState([]);
   const [error, setError] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [spinner, setSpinner] = useState(false);
 
   const handleChange = (e) => {
     setLoginData({ ...loginData, [e.target.name]: e.target.value });
@@ -34,7 +36,7 @@ const DealerLogin = () => {
       return;
     }
     setIsSubmitting(true);
-
+    setSpinner(true);
     let formdata = new FormData();
     formdata.append("email", loginData.email);
     formdata.append("password", loginData.password);
@@ -66,6 +68,9 @@ const DealerLogin = () => {
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        setSpinner(false);
       });
   };
 
@@ -117,6 +122,12 @@ const DealerLogin = () => {
 
                           <div className="form-group mt-4 mb-0">
                             <button type="submit" className="btn login_bt">
+                              {spinner && (
+                                <CgSpinner
+                                  size={20}
+                                  className="animate_spin me-2"
+                                />
+                              )}
                               Login
                             </button>
                             <div className="d-flex justify-content-between">

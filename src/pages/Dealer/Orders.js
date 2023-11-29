@@ -71,22 +71,32 @@ const DealerOrders = () => {
                   <th>Order Date</th>
                   <th>Order Number</th>
                   <th>Design Name</th>
-                  <th>No. of Qunty</th>
+                  <th>No. of Quantity</th>
                   <th>Order Status</th>
                 </tr>
               </thead>
               <tbody>
-                {orders.map((data) => {
-                  return (
-                    <tr>
-                      <td>1</td>
-                      <td>{data.id}</td>
-                      <td>{data.design_name}</td>
-                      <td>{data.quantity}</td>
-                      <td>{data.status}</td>
-                    </tr>
-                  );
-                })}
+                {orders.length > 0 ? (
+                  <>
+                    {orders.map((data) => {
+                      return (
+                        <tr>
+                          <td>1</td>
+                          <td>{data?.id}</td>
+                          <td>{data?.design_name}</td>
+                          <td>{data?.quantity}</td>
+                          <td>{data?.status}</td>
+                        </tr>
+                      );
+                    })}
+                  </>
+                ) : (
+                  <>
+                    <div className="mt-3 text-center">
+                      <h3>Currently no orders</h3>
+                    </div>
+                  </>
+                )}
               </tbody>
             </Table>
           </div>
