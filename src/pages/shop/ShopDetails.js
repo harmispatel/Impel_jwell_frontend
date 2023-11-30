@@ -20,6 +20,9 @@ import ReactLoading from "react-loading";
 const ShopDetails = () => {
   const { id } = useParams();
   const [product, setProduct] = useState();
+  const data = { categoryId: product?.category_id?.id };
+  const Dealer = localStorage.getItem("email");
+  const Phone = localStorage.getItem("phone");
   const [relatedProduct, setRelatedProduct] = useState([]);
   const [img, setImg] = useState();
   const [productImages, setProduuctImages] = useState([]);
@@ -29,17 +32,11 @@ const ShopDetails = () => {
   const [cartItems, setCartItems] = useState([]);
   const [DealercartItems, setDealerCartItems] = useState([]);
   const [userWishlist, setUserWishlist] = useState(false);
-  const [dealerWishlist, setDealerWishlist] = useState(false);
   const [UserWishlistItems, setUserWishlistItems] = useState([]);
-  const [selectedGoldType, setSelectedGoldType] = useState("yellow_gold");
   const [DealerWishlistItems, setDealerWishlistItems] = useState([]);
-  const [selectedRadio, setSelectedRadio] = useState("18k");
-  const [showEdit, setShowEdit] = useState(false);
-  const [show, setShow] = useState(false);
+  const [goldColor, setGoldColor] = useState("yellow_gold");
+  const [goldType, setGoldType] = useState("18k");
   const [isLoading, setIsLoading] = useState(true);
-  const data = { categoryId: product?.category_id?.id };
-  const Dealer = localStorage.getItem("email");
-  const Phone = localStorage.getItem("phone");
 
   const productData = async () => {
     const data = {
@@ -159,8 +156,8 @@ const ShopDetails = () => {
       design_name: product.name,
       design_id: product.id,
       quantity: productQuantity,
-      gold_color: selectedGoldType,
-      gold_type: selectedRadio,
+      gold_color: goldColor,
+      gold_type: goldType,
     };
 
     UserCartService.AddtoCart(CartData)
@@ -174,46 +171,62 @@ const ShopDetails = () => {
         console.log(err);
       });
   };
-  const handleGoldTypeClick = (buttonId) => {
-    setSelectedGoldType(buttonId);
+  const handleGoldColor = (goldType) => {
+    setGoldColor(goldType);
+    setGoldType("18k");
   };
-  const handleRadioChange = (event) => {
-    setSelectedRadio(event.target.id);
+  const handleGoldType = (event) => {
+    setGoldType(event.target.id);
   };
+  const productdetail = {
+    // details for 22k gold
+    gross_weight_22k: product?.gross_weight_22k?.toFixed(2),
+    less_gems_stone: product?.less_gems_stone?.toFixed(2),
+    less_cz_stone: product?.less_cz_stone?.toFixed(2),
+    net_weight_22k: product?.net_weight_22k?.toFixed(2),
+    price_22k: product?.price_22k?.toFixed(2),
+    cz_stone_price: product?.cz_stone_price?.toFixed(2),
+    gemstone_price: product?.gemstone_price?.toFixed(2),
+    percentage: product?.percentage,
+    making_charge: product?.making_charge?.toFixed(2),
+    total_price_22k: product?.total_price_22k?.toLocaleString("en-US"),
 
-  // const goldrate = {
-  //   gold_rate_24k: 6000,
-  //   gold_rate_22k: 5220,
-  //   gold_rate_20k: 5040,
-  //   gold_rate_18k: 4560,
-  //   gold_rate_14k: 3540,
-  // };
-  // const price22k = parseFloat(
-  //   (product?.gross_weight_22k * goldrate.gold_rate_22k).toFixed(2)
-  // );
-  // const price20k = parseFloat(
-  //   (product?.gross_weight_20k * goldrate.gold_rate_20k).toFixed(2)
-  // );
-  // const price18k = parseFloat(
-  //   (product?.gross_weight_18k * goldrate.gold_rate_18k).toFixed(2)
-  // );
-  // const price14k = parseFloat(
-  //   (product?.gross_weight_14k * goldrate.gold_rate_14k).toFixed(2)
-  // );
+    // details for 20k gold
+    gross_weight_20k: product?.gross_weight_20k?.toFixed(2),
+    less_gems_stone: product?.less_gems_stone?.toFixed(2),
+    less_cz_stone: product?.less_cz_stone?.toFixed(2),
+    net_weight_20k: product?.net_weight_20k?.toFixed(2),
+    price_20k: product?.price_20k?.toFixed(2),
+    cz_stone_price: product?.cz_stone_price?.toFixed(2),
+    gemstone_price: product?.gemstone_price?.toFixed(2),
+    percentage: product?.percentage,
+    making_charge: product?.making_charge?.toFixed(2),
+    total_price_20k: product?.total_price_20k?.toLocaleString("en-US"),
 
-  // const makinghcharge22k =
-  //   ((goldrate.gold_rate_24k * 15) / 100) * product?.gross_weight_22k;
-  // const makinghcharge20k =
-  //   ((goldrate.gold_rate_24k * 15) / 100) * product?.gross_weight_20k;
-  // const makinghcharge18k =
-  //   ((goldrate.gold_rate_24k * 15) / 100) * product?.gross_weight_18k;
-  // const makinghcharge14k =
-  //   ((goldrate.gold_rate_24k * 15) / 100) * product?.gross_weight_14k;
+    // details for 18k gold
+    gross_weight_18k: product?.gross_weight_18k?.toFixed(2),
+    less_gems_stone: product?.less_gems_stone?.toFixed(2),
+    less_cz_stone: product?.less_cz_stone?.toFixed(2),
+    net_weight_18k: product?.net_weight_18k?.toFixed(2),
+    price_18k: product?.price_18k?.toFixed(2),
+    cz_stone_price: product?.cz_stone_price?.toFixed(2),
+    gemstone_price: product?.gemstone_price?.toFixed(2),
+    percentage: product?.percentage,
+    making_charge: product?.making_charge?.toFixed(2),
+    total_price_18k: product?.total_price_18k?.toLocaleString("en-US"),
 
-  // const totalprice22k = price22k + makinghcharge22k;
-  // const totalprice20k = price20k + makinghcharge20k;
-  // const totalprice18k = price18k + makinghcharge18k;
-  // const totalprice14k = price14k + makinghcharge14k;
+    // details for 14k gold
+    gross_weight_14k: product?.gross_weight_14k?.toFixed(2),
+    less_gems_stone: product?.less_gems_stone?.toFixed(2),
+    less_cz_stone: product?.less_cz_stone?.toFixed(2),
+    net_weight_14k: product?.net_weight_14k?.toFixed(2),
+    price_14k: product?.price_14k?.toFixed(2),
+    cz_stone_price: product?.cz_stone_price?.toFixed(2),
+    gemstone_price: product?.gemstone_price?.toFixed(2),
+    percentage: product?.percentage,
+    making_charge: product?.making_charge?.toFixed(2),
+    total_price_14k: product?.total_price_14k?.toLocaleString("en-US"),
+  };
   return (
     <section className="shop_details">
       <div className="container">
@@ -326,37 +339,32 @@ const ShopDetails = () => {
                         <div>
                           <div>
                             <button
-                              className={`btn  yellow-gold ${
-                                selectedGoldType === "yellow_gold"
-                                  ? "active"
-                                  : ""
+                              className={`btn yellow-gold ${
+                                goldColor === "yellow_gold" ? "active" : ""
                               }`}
-                              defaultValue="yellow_gold"
-                              onClick={() => handleGoldTypeClick("yellow_gold")}
+                              onClick={() => handleGoldColor("yellow_gold")}
                             >
                               Yellow Gold
                             </button>
                             <button
                               className={`btn rose-gold mx-3 ${
-                                selectedGoldType === "rose_gold" ? "active" : ""
+                                goldColor === "rose_gold" ? "active" : ""
                               }`}
-                              onClick={() => handleGoldTypeClick("rose_gold")}
+                              onClick={() => handleGoldColor("rose_gold")}
                             >
                               Rose Gold
                             </button>
                             <button
                               className={`btn white-gold ${
-                                selectedGoldType === "white_gold"
-                                  ? "active"
-                                  : ""
+                                goldColor === "white_gold" ? "active" : ""
                               }`}
-                              onClick={() => handleGoldTypeClick("white_gold")}
+                              onClick={() => handleGoldColor("white_gold")}
                             >
                               White Gold
                             </button>
                           </div>
                           <div className="mt-3">
-                            {selectedGoldType === "yellow_gold" && (
+                            {goldColor === "yellow_gold" && (
                               <>
                                 <div className="d-flex justify-content-between">
                                   <div class="radio-item">
@@ -364,8 +372,8 @@ const ShopDetails = () => {
                                       name="radio1"
                                       id="22k"
                                       type="radio"
-                                      checked={selectedRadio === "22k"}
-                                      onChange={handleRadioChange}
+                                      checked={goldType === "22k"}
+                                      onChange={handleGoldType}
                                     />
                                     <label for="22k">22K</label>
                                   </div>
@@ -374,8 +382,8 @@ const ShopDetails = () => {
                                       name="radio1"
                                       id="20k"
                                       type="radio"
-                                      checked={selectedRadio === "20k"}
-                                      onChange={handleRadioChange}
+                                      checked={goldType === "20k"}
+                                      onChange={handleGoldType}
                                     />
                                     <label for="20k">20K</label>
                                   </div>
@@ -384,8 +392,8 @@ const ShopDetails = () => {
                                       name="radio1"
                                       id="18k"
                                       type="radio"
-                                      defaultChecked={selectedRadio === "18k"}
-                                      onChange={handleRadioChange}
+                                      defaultChecked={goldType === "18k"}
+                                      onChange={handleGoldType}
                                     />
                                     <label for="18k">18K</label>
                                   </div>
@@ -394,15 +402,15 @@ const ShopDetails = () => {
                                       name="radio1"
                                       id="14k"
                                       type="radio"
-                                      checked={selectedRadio === "14k"}
-                                      onChange={handleRadioChange}
+                                      checked={goldType === "14k"}
+                                      onChange={handleGoldType}
                                     />
                                     <label for="14k">14K</label>
                                   </div>
                                 </div>
                               </>
                             )}
-                            {selectedGoldType === "rose_gold" && (
+                            {goldColor === "rose_gold" && (
                               <>
                                 <div className="d-flex">
                                   <div className="radio-item">
@@ -410,8 +418,8 @@ const ShopDetails = () => {
                                       name="radio1"
                                       id="18k"
                                       type="radio"
-                                      defaultChecked={selectedRadio === "18k"}
-                                      onChange={handleRadioChange}
+                                      defaultChecked={goldType === "18k"}
+                                      onChange={handleGoldType}
                                     />
                                     <label for="18k">18K</label>
                                   </div>
@@ -420,15 +428,15 @@ const ShopDetails = () => {
                                       name="radio1"
                                       id="14k"
                                       type="radio"
-                                      checked={selectedRadio === "14k"}
-                                      onChange={handleRadioChange}
+                                      checked={goldType === "14k"}
+                                      onChange={handleGoldType}
                                     />
                                     <label for="14k">14K</label>
                                   </div>
                                 </div>
                               </>
                             )}
-                            {selectedGoldType === "white_gold" && (
+                            {goldColor === "white_gold" && (
                               <>
                                 <div className="d-flex">
                                   <div className="radio-item">
@@ -436,8 +444,8 @@ const ShopDetails = () => {
                                       name="radio1"
                                       id="18k"
                                       type="radio"
-                                      defaultChecked={selectedRadio === "18k"}
-                                      onChange={handleRadioChange}
+                                      defaultChecked={goldType === "18k"}
+                                      onChange={handleGoldType}
                                     />
                                     <label for="18k">18K</label>
                                   </div>
@@ -446,8 +454,8 @@ const ShopDetails = () => {
                                       name="radio1"
                                       id="14k"
                                       type="radio"
-                                      checked={selectedRadio === "14k"}
-                                      onChange={handleRadioChange}
+                                      checked={goldType === "14k"}
+                                      onChange={handleGoldType}
                                     />
                                     <label for="14k">14K</label>
                                   </div>
@@ -456,7 +464,7 @@ const ShopDetails = () => {
                             )}
                           </div>
                           <div className="mt-3">
-                            {selectedRadio === "22k" && (
+                            {goldColor && goldType && (
                               <>
                                 <table className="table table-bordered text-center">
                                   <thead>
@@ -464,368 +472,282 @@ const ShopDetails = () => {
                                       <th colspan="3">Approximate -Estimate</th>
                                     </tr>
                                   </thead>
-
                                   <tbody>
-                                    <tr>
-                                      <th>Gross Weight</th>
-                                      <td>
-                                        {(product?.gross_weight_22k).toFixed(2)}
-                                        g.(Approx.)
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <th>Less Gems Stone</th>
-                                      <td>
-                                        {(product?.less_gems_stone).toFixed(2)}
-                                        g.
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <th>Less C.Z. Stone</th>
-                                      <td>
-                                        {(product?.less_cz_stone).toFixed(2)} g.
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <th>Net Weight</th>
-                                      <td>
-                                        {(product?.net_weight_22k).toFixed(2)}
-                                        g.
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <th>Price</th>
-                                      <td>
-                                        ₹ {(product?.price_22k).toFixed(2)}
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <th>CZ Stone Charges</th>
-                                      <td>
-                                        ₹ {(product?.cz_stone_price).toFixed(2)}
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <th>Gem stone charges</th>
-                                      <td>
-                                        ₹ {(product?.gemstone_price).toFixed(2)}
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <th>
-                                        Making charge (
-                                        {product?.percentage.length
-                                          ? product?.percentage
-                                          : 0}
-                                        %)
-                                      </th>
-                                      <td>
-                                        ₹ {(product?.making_charge).toFixed(2)}
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <th>Total Amount</th>
-                                      <td>
-                                        ₹{(product?.total_price_22k).toFixed(2)}
-                                        (Approx.)
-                                      </td>
-                                    </tr>
+                                    {goldType === "22k" && (
+                                      <>
+                                        <tr>
+                                          <th>Gross Weight</th>
+                                          <td>
+                                            {productdetail?.gross_weight_22k}
+                                            g. (Approx.)
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <th>Less Gems Stone</th>
+                                          <td>
+                                            {productdetail?.less_gems_stone}
+                                            g.
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <th>Less C.Z. Stone</th>
+                                          <td>
+                                            {productdetail?.less_cz_stone}
+                                            g.
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <th>Net Weight</th>
+                                          <td>
+                                            {productdetail?.net_weight_22k}
+                                            g.
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <th>Price</th>
+                                          <td>₹ {productdetail?.price_22k}</td>
+                                        </tr>
+                                        <tr>
+                                          <th>CZ Stone Charges</th>
+                                          <td>
+                                            ₹{productdetail?.cz_stone_price}
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <th>Gem stone charges</th>
+                                          <td>
+                                            ₹{productdetail?.gemstone_price}
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <th>
+                                            Making charge (
+                                            {productdetail?.percentage?.length
+                                              ? product?.percentage
+                                              : 0}
+                                            %)
+                                          </th>
+                                          <td>
+                                            ₹{productdetail?.making_charge}
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <th>Total Amount</th>
+                                          <td>
+                                            ₹{productdetail?.total_price_22k}
+                                            (Approx.)
+                                          </td>
+                                        </tr>
+                                      </>
+                                    )}
+                                    {goldType === "20k" && (
+                                      <>
+                                        <tr>
+                                          <th>Gross Weight</th>
+                                          <td>
+                                            {productdetail?.gross_weight_20k}
+                                            g. (Approx.)
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <th>Less Gems Stone</th>
+                                          <td>
+                                            {productdetail?.less_gems_stone}
+                                            g.
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <th>Less C.Z. Stone</th>
+                                          <td>
+                                            {productdetail?.less_cz_stone}
+                                            g.
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <th>Net Weight</th>
+                                          <td>
+                                            {productdetail?.net_weight_20k}
+                                            g.
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <th>Price</th>
+                                          <td>₹ {productdetail?.price_20k}</td>
+                                        </tr>
+                                        <tr>
+                                          <th>CZ Stone Charges</th>
+                                          <td>
+                                            ₹{productdetail?.cz_stone_price}
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <th>Gem stone charges</th>
+                                          <td>
+                                            ₹{productdetail?.gemstone_price}
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <th>
+                                            Making charge (
+                                            {productdetail?.percentage?.length
+                                              ? product?.percentage
+                                              : 0}
+                                            %)
+                                          </th>
+                                          <td>
+                                            ₹{productdetail?.making_charge}
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <th>Total Amount</th>
+                                          <td>
+                                            ₹{productdetail?.total_price_20k}
+                                            (Approx.)
+                                          </td>
+                                        </tr>
+                                      </>
+                                    )}
+                                    {goldType === "18k" && (
+                                      <>
+                                        <tr>
+                                          <th>Gross Weight</th>
+                                          <td>
+                                            {productdetail?.gross_weight_18k}
+                                            g. (Approx.)
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <th>Less Gems Stone</th>
+                                          <td>
+                                            {productdetail?.less_gems_stone}
+                                            g.
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <th>Less C.Z. Stone</th>
+                                          <td>
+                                            {productdetail?.less_cz_stone}
+                                            g.
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <th>Net Weight</th>
+                                          <td>
+                                            {productdetail?.net_weight_18k}
+                                            g.
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <th>Price</th>
+                                          <td>₹ {productdetail?.price_18k}</td>
+                                        </tr>
+                                        <tr>
+                                          <th>CZ Stone Charges</th>
+                                          <td>
+                                            ₹{productdetail?.cz_stone_price}
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <th>Gem stone charges</th>
+                                          <td>
+                                            ₹{productdetail?.gemstone_price}
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <th>
+                                            Making charge (
+                                            {productdetail?.percentage?.length
+                                              ? product?.percentage
+                                              : 0}
+                                            %)
+                                          </th>
+                                          <td>
+                                            ₹{productdetail?.making_charge}
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <th>Total Amount</th>
+                                          <td>
+                                            ₹{productdetail?.total_price_18k}
+                                            (Approx.)
+                                          </td>
+                                        </tr>
+                                      </>
+                                    )}
+                                    {goldType === "14k" && (
+                                      <>
+                                        <tr>
+                                          <th>Gross Weight</th>
+                                          <td>
+                                            {productdetail?.gross_weight_14k}
+                                            g. (Approx.)
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <th>Less Gems Stone</th>
+                                          <td>
+                                            {productdetail?.less_gems_stone}
+                                            g.
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <th>Less C.Z. Stone</th>
+                                          <td>
+                                            {productdetail?.less_cz_stone}
+                                            g.
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <th>Net Weight</th>
+                                          <td>
+                                            {productdetail?.net_weight_14k}
+                                            g.
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <th>Price</th>
+                                          <td>₹ {productdetail?.price_14k}</td>
+                                        </tr>
+                                        <tr>
+                                          <th>CZ Stone Charges</th>
+                                          <td>
+                                            ₹{productdetail?.cz_stone_price}
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <th>Gem stone charges</th>
+                                          <td>
+                                            ₹{productdetail?.gemstone_price}
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <th>
+                                            Making charge (
+                                            {productdetail?.percentage?.length
+                                              ? product?.percentage
+                                              : 0}
+                                            %)
+                                          </th>
+                                          <td>
+                                            ₹{productdetail?.making_charge}
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <th>Total Amount</th>
+                                          <td>
+                                            ₹{productdetail?.total_price_14k}
+                                            (Approx.)
+                                          </td>
+                                        </tr>
+                                      </>
+                                    )}
                                   </tbody>
                                 </table>
                               </>
-                            )}
-                            {selectedRadio === "20k" && (
-                              <>
-                                <table className="table table-bordered text-center">
-                                  <thead>
-                                    <tr>
-                                      <th colspan="3">Approximate -Estimate</th>
-                                    </tr>
-                                  </thead>
-
-                                  <tbody>
-                                    <tr>
-                                      <th>Gross Weight</th>
-                                      <td>
-                                        {(product?.gross_weight_20k).toFixed(2)}
-                                        g.(Approx.)
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <th>Less Gems Stone</th>
-                                      <td>
-                                        {(product?.less_gems_stone).toFixed(2)}
-                                        g.
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <th>Less C.Z. Stone</th>
-                                      <td>
-                                        {(product?.less_cz_stone).toFixed(2)}g.
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <th>Net Weight</th>
-                                      <td>
-                                        {(product?.net_weight_20k).toFixed(2)}
-                                        g.
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <th>Price</th>
-                                      <td>
-                                        ₹ {(product?.price_20k).toFixed(2)}
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <th>CZ Stone Charges</th>
-                                      <td>
-                                        ₹ {(product?.cz_stone_price).toFixed(2)}
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <th>Gem stone charges</th>
-                                      <td>
-                                        ₹ {(product?.gemstone_price).toFixed(2)}
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <th>
-                                        Making charge (
-                                        {product?.percentage.length
-                                          ? product?.percentage
-                                          : 0}
-                                        %)
-                                      </th>
-                                      <td>
-                                        ₹ {(product?.making_charge).toFixed(2)}
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <th>Total Amount</th>
-                                      <td>
-                                        ₹{(product?.total_price_20k).toFixed(2)}
-                                        (Approx.)
-                                      </td>
-                                    </tr>
-                                  </tbody>
-                                </table>
-                              </>
-                            )}
-                            {selectedRadio === "18k" && (
-                              <table className="table table-bordered text-center">
-                                <thead>
-                                  <tr>
-                                    <th colspan="3">Approximate -Estimate</th>
-                                  </tr>
-                                </thead>
-
-                                <tbody>
-                                  <tr>
-                                    <th>Gross Weight</th>
-                                    <td>
-                                      {(product?.gross_weight_18k).toFixed(2)}
-                                      g.(Approx.)
-                                    </td>
-                                  </tr>
-                                  <tr>
-                                    <th>Less Gems Stone</th>
-                                    <td>
-                                      {(product?.less_gems_stone).toFixed(2)} g.
-                                    </td>
-                                  </tr>
-                                  <tr>
-                                    <th>Less C.Z. Stone</th>
-                                    <td>
-                                      {(product?.less_cz_stone).toFixed(2)} g.
-                                    </td>
-                                  </tr>
-                                  <tr>
-                                    <th>Net Weight</th>
-                                    <td>
-                                      {(product?.net_weight_18k).toFixed(2)}
-                                      g.
-                                    </td>
-                                  </tr>
-                                  <tr>
-                                    <th>Price</th>
-                                    <td>₹ {(product?.price_18k).toFixed(2)}</td>
-                                  </tr>
-                                  <tr>
-                                    <th>CZ Stone Charges</th>
-                                    <td>
-                                      ₹ {(product?.cz_stone_price).toFixed(2)}
-                                    </td>
-                                  </tr>
-                                  <tr>
-                                    <th>Gem stone charges</th>
-                                    <td>
-                                      ₹ {(product?.gemstone_price).toFixed(2)}
-                                    </td>
-                                  </tr>
-                                  <tr>
-                                    <th>
-                                      Making charge (
-                                      {product?.percentage.length
-                                        ? product?.percentage
-                                        : 0}
-                                      %)
-                                    </th>
-                                    <td>
-                                      ₹ {(product?.making_charge).toFixed(2)}
-                                    </td>
-                                  </tr>
-                                  <tr>
-                                    <th>Total Amount</th>
-                                    <td>
-                                      ₹ {(product?.total_price_18k).toFixed(2)}
-                                      (Approx.)
-                                    </td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                            )}
-                            {selectedRadio === "14k" && (
-                              <table className="table table-bordered text-center">
-                                <thead>
-                                  <tr>
-                                    <th colspan="3">Approximate -Estimate</th>
-                                  </tr>
-                                </thead>
-
-                                <tbody>
-                                  <tr>
-                                    <th>Gross Weight</th>
-                                    <td>
-                                      {(product?.gross_weight_14k).toFixed(2)}
-                                      g.(Approx.)
-                                    </td>
-                                  </tr>
-                                  <tr>
-                                    <th>Less Gems Stone</th>
-                                    <td>
-                                      {(product?.less_gems_stone).toFixed(2)} g.
-                                    </td>
-                                  </tr>
-                                  <tr>
-                                    <th>Less C.Z. Stone</th>
-                                    <td>
-                                      {(product?.less_cz_stone).toFixed(2)} g.
-                                    </td>
-                                  </tr>
-                                  <tr>
-                                    <th>Net Weight</th>
-                                    <td>
-                                      {(product?.net_weight_14k).toFixed(2)}
-                                      g.
-                                    </td>
-                                  </tr>
-                                  <tr>
-                                    <th>Price</th>
-                                    <td>₹ {(product?.price_14k).toFixed(2)}</td>
-                                  </tr>
-                                  <tr>
-                                    <th>CZ Stone Charges</th>
-                                    <td>
-                                      ₹ {(product?.cz_stone_price).toFixed(2)}
-                                    </td>
-                                  </tr>
-                                  <tr>
-                                    <th>Gem stone charges</th>
-                                    <td>
-                                      ₹ {(product?.gemstone_price).toFixed(2)}
-                                    </td>
-                                  </tr>
-                                  <tr>
-                                    <th>
-                                      Making charge (
-                                      {product?.percentage.length
-                                        ? product?.percentage
-                                        : 0}
-                                      %)
-                                    </th>
-                                    <td>
-                                      ₹ {(product?.making_charge).toFixed(2)}
-                                    </td>
-                                  </tr>
-                                  <tr>
-                                    <th>Total Amount</th>
-                                    <td>
-                                      ₹ {(product?.total_price_14k).toFixed(2)}
-                                      (Approx.)
-                                    </td>
-                                  </tr>
-                                </tbody>
-                              </table>
                             )}
                           </div>
                         </div>
                         <div className="buttons pt-4 d-flex justify-content-space-between">
-                          {/* {Phone ? (
-                        <div className="quantity">
-                          {productQuantity === 1 ? (
-                            <button
-                              className="btn"
-                              onClick={() =>
-                                setProductQuantity(productQuantity - 1)
-                              }
-                              disabled={productQuantity === 1}
-                            >
-                              -
-                            </button>
-                          ) : (
-                            <button
-                              className="btn"
-                              onClick={() =>
-                                setProductQuantity(productQuantity - 1)
-                              }
-                              disabled={productQuantity === 1}
-                            >
-                              -
-                            </button>
-                          )}
-
-                          <input
-                            className="form-control"
-                            type="text"
-                            name="productQuantity"
-                            onChange={(e) => setProductQuantity(e.target)}
-                            value={productQuantity}
-                            min={1}
-                            disabled
-                          />
-                          <button
-                            className="btn"
-                            onClick={() =>
-                              setProductQuantity(productQuantity + 1)
-                            }
-                          >
-                            +
-                          </button>
-                        </div>
-                      ) : (
-                        <></>
-                      )} */}
-                          {/* <div className="add_cart align-items-center d-flex">
-                        {Dealer ? (
-                          <>
-                            <div>
-                              <button
-                                className="btn btn-outline-dark"
-                                onClick={() => addToDealerWishList(product)}
-                              >
-                                {DealerWishlistItems?.find(
-                                  (item) => item?.id === product?.id
-                                )
-                                  ? "Wishlisted"
-                                  : "Wishlist"}
-                              </button>
-                            </div>
-                          </>
-                        ) : (
-                          <></>
-                        )}
-                      </div> */}
                           <div className="add_cart align-items-center d-flex">
                             {Phone ? (
                               <>

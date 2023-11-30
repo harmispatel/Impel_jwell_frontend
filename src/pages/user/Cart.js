@@ -124,7 +124,6 @@ const Cart = () => {
 
     if (totalPrice >= 200000) {
       if (PanNo === "") {
-        toast.error("Please add your PAN card in your profile");
         setShowpan(true);
       } else {
         navigate("/orders");
@@ -210,7 +209,7 @@ const Cart = () => {
                                     </div>
                                     <div className="">
                                       <text className="h6">
-                                        ₹{price.toLocaleString("en-US")}
+                                        ₹{price?.toLocaleString("en-US")}
                                       </text>
                                       <br />
                                     </div>
@@ -466,27 +465,55 @@ const Cart = () => {
             show={showpan}
             onHide={handleClose}
           >
-            <Modal.Header closeButton>
-              <Modal.Title>Registration</Modal.Title>
-            </Modal.Header>
             <Modal.Body>
               <div>
                 <div className="">
-                  <span>
+                  <h5>
                     <b>Dear Valued Customer</b>
+                  </h5>
+                </div>
+                <div>
+                  <h6>PAN Card Requirements for Gold Purchase</h6>
+                </div>
+                <div style={{ textAlign: "justify" }}>
+                  <span>
+                    Furnishing PAN card details for gold purchase was made
+                    mandatory by the Government of India&nbsp;
+                    <b>for transactions valued at Rs.2 lakh and above.</b> The
+                    rule impacted the organised jewellery trade affecting more
+                    than 50% of businesses in terms of value. Prior to 1 January
+                    2016, PAN details were required only for purchase of Rs.5
+                    lakh and above. Jewellers complained that customers who did
+                    not have a PAN card faced hardships in purchasing gold.
+                    Along with people who did not have PAN cards, those who did
+                    want to share PAN details sought out unorganised retailers
+                    to buy jewellery without bills. Important things to note
+                    regarding PAN details for gold purchase are as follows:
                   </span>
                 </div>
-                <div className="">
-                  <span>
-                    "In accordance with government regulations, we would like to
-                    inform you that a valid pan card is now required for all
-                    gold transactions. This measure ensures compliance with
-                    regulatory standards and helps us maintain the highest
-                    levels of security and transparency. Thank you for your
-                    understanding and cooperation. If you have any questions or
-                    require further assistance, please feel free to contact our
-                    customer service. Best regard.
-                  </span>
+                <div className="mt-3">
+                  <ul>
+                    <li>
+                      <b>
+                        If you are buying gold worth Rs.2 lakh and above, you
+                        need to provide your Permanent Account Number
+                        (PAN-CARD).
+                      </b>
+                    </li>
+                    <li>PAN will be traded as the buyer's identity.</li>
+                    <li>
+                      Sellers must collect tax at source on such sales which
+                      will be different from Tax Deducted at Source.
+                    </li>
+                    <li>
+                      The tax rate is specified and must be collected and
+                      deposited with the Government.
+                    </li>
+                    <li>
+                      Furnishing PAN details does not mean you have to pay tax.
+                      It is merely a means of establishing financial identity.
+                    </li>
+                  </ul>
                 </div>
               </div>
             </Modal.Body>
