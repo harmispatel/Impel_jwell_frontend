@@ -16,6 +16,7 @@ const Profile = () => {
   const [profileData, setProfileData] = useState([]);
   const [city, setcity] = useState();
   const [shipping_city, setShipping_city] = useState();
+  const [isChecked, setIsChecked] = useState(false);
   const [userData, setUserData] = useState({
     name: "",
     email: "",
@@ -33,7 +34,7 @@ const Profile = () => {
     states: "",
     address_same_as_company: "",
   });
-  const [isChecked, setIsChecked] = useState(userData.address_same_as_company);
+
   const [error, setError] = useState({
     nameErr: "",
     emailErr: "",
@@ -56,8 +57,9 @@ const Profile = () => {
   };
 
   const handleCheckboxChange = (event) => {
-    const newValue = event.target.checked ? 1 : 0;
+    const newValue = event.target.checked;
     setIsChecked(newValue);
+    localStorage.setItem("isChecked", newValue.toString());
   };
 
   // user profile display function
@@ -308,6 +310,8 @@ const Profile = () => {
 
   useEffect(() => {
     getProfile();
+    const storedCheckboxState = localStorage.getItem("isChecked");
+    setIsChecked(storedCheckboxState === "true");
   }, []);
 
   return (
@@ -565,7 +569,7 @@ const Profile = () => {
                   id="checkbox"
                   name="address_same_as_company"
                   className="address-checkbox"
-                  checked={isChecked === 1}
+                  checked={isChecked}
                   onChange={handleCheckboxChange}
                 />
                 <label htmlFor="checkbox" className="ms-1 address-check-text">

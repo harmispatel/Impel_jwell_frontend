@@ -372,7 +372,7 @@ const Cart = () => {
                         <div className="d-flex justify-content-between">
                           <p className="mb-2">Sub total :</p>
                           <p className="mb-2">
-                            ₹{SubTotal().toLocaleString("en-US")}
+                            ₹{SubTotal()?.toLocaleString("en-US")}
                           </p>
                         </div>
                         {show && (
@@ -393,7 +393,7 @@ const Cart = () => {
                                 ? `- ₹${(
                                     (SubTotal() * code.discount_value) /
                                     100
-                                  ).toLocaleString("en-US")}`
+                                  )?.toLocaleString("en-US")}`
                                 : `- ₹${code.discount_value}`}
                             </p>
                           </div>
@@ -409,10 +409,10 @@ const Cart = () => {
                                   ? SubTotal() -
                                     (SubTotal() * code.discount_value) / 100
                                   : SubTotal() - code.discount_value
-                                ).toLocaleString("en-US")}
+                                )?.toLocaleString("en-US")}
                               </>
                             ) : (
-                              <>₹{SubTotal().toLocaleString("en-US")}</>
+                              <>₹{SubTotal()?.toLocaleString("en-US")}</>
                             )}
                           </p>
                         </div>
@@ -525,7 +525,7 @@ const Cart = () => {
                   navigate("/profile", {
                     state: {
                       PanCardError:
-                        "pancard is required because your total amount is more than 2,00,000 ₹",
+                        "pancard is required because your total amount is more than ₹2,00,000",
                     },
                   })
                 }

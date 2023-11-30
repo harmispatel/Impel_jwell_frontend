@@ -112,6 +112,7 @@ const Navbar = () => {
       localStorage.removeItem("user_id");
       localStorage.removeItem("total_quantity");
       localStorage.removeItem("savedDiscount");
+      localStorage.removeItem("isChecked")
       setIsLoggedOut(true);
       navigate("/login");
     }
