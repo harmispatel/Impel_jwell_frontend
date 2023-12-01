@@ -490,20 +490,19 @@ const Shop = ({ product }) => {
                       style={{ overflow: "hidden" }}
                       loader={pageLoading ? <h4>Loading...</h4> : null}
                     >
-                      {displayedItems.length > 0 ? (
+                      {displayedItems?.length > 0 ? (
                         <>
                           <div className="row">
-                            {displayedItems.map((product) => {
+                            {displayedItems?.map((product) => {
                               return (
                                 <div key={product.id} className="col-md-4">
                                   <Link
                                     to={`/shopdetails/${product.id}`}
                                     className="product_data"
-                                    target="_blank"
                                   >
-                                    {product.image ? (
+                                    {product?.image ? (
                                       <img
-                                        src={product.image}
+                                        src={product?.image}
                                         alt=""
                                         className="w-100"
                                       />
@@ -660,7 +659,6 @@ const Shop = ({ product }) => {
                                   <Link
                                     to={`/shopdetails/${data.id}`}
                                     className="product_data"
-                                    target="_blank"
                                   >
                                     {data.image ? (
                                       <img

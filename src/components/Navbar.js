@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaUserAlt } from "react-icons/fa";
 import { BsHandbag, BsHeart } from "react-icons/bs";
@@ -8,8 +8,10 @@ import UserService from "../services/Cart";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import FilterServices from "../services/Filter";
 import profileService from "../services/Auth";
+import { CartSystem } from "../context/CartContext";
 
 const Navbar = () => {
+  const { state } = useContext(CartSystem);
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const navigate = useNavigate();
@@ -112,12 +114,11 @@ const Navbar = () => {
       localStorage.removeItem("user_id");
       localStorage.removeItem("total_quantity");
       localStorage.removeItem("savedDiscount");
-      localStorage.removeItem("isChecked")
+      localStorage.removeItem("isChecked");
       setIsLoggedOut(true);
       navigate("/login");
     }
   };
-
   return (
     <header className={colorChange ? "header sticky_header" : "header"}>
       <nav className="navbar navbar-expand-lg bg-body-tertiary">
@@ -325,8 +326,8 @@ const Navbar = () => {
                     data-tooltip-id="my-tooltip-3"
                   >
                     <BsHandbag style={{ fontSize: "20px", color: "black" }} />
-                    {userCartCounts?.length > 0 && (
-                      <div className="cart_count">{userCartCounts}</div>
+                    {state.totalQuantity > 0 && (
+                      <div className="cart_count">{state.totalQuantity}</div>
                     )}
                   </Link>
                 )}

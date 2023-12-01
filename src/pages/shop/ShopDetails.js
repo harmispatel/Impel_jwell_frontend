@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import productDetail from "../../services/Shop";
 import BreadCrumb from "../../components/common/BreadCrumb";
@@ -16,8 +16,11 @@ import DealerWishlist from "../../services/Dealer/Collection";
 import { BsCartDash, BsHandbagFill } from "react-icons/bs";
 import { FaHeart, FaLongArrowAltLeft, FaRegHeart } from "react-icons/fa";
 import ReactLoading from "react-loading";
+import { CartSystem } from "../../context/CartContext";
+import { WishListContext } from "../../context/WishListContext";
 
 const ShopDetails = () => {
+  const { dispatch } = useContext(CartSystem);
   const { id } = useParams();
   const [product, setProduct] = useState();
   const data = { categoryId: product?.category_id?.id };
@@ -165,6 +168,10 @@ const ShopDetails = () => {
         if (res.status === true) {
           GetUserCartList();
           toast.success(res.message);
+          dispatch({
+            type: "ADD_TO_CART",
+            payload: { design_id: CartData.design_id },
+          });
         }
       })
       .catch((err) => {

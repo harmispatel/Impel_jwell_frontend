@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { BsBehance, BsHeart } from "react-icons/bs";
 import { Link, useNavigate } from "react-router-dom";
 import UserService from "../../services/Cart";
@@ -8,8 +8,10 @@ import toast from "react-hot-toast";
 import { Button, Modal } from "react-bootstrap";
 import { CgSpinner } from "react-icons/cg";
 import profileService from "../../services/Auth";
+import { CartSystem } from "../../context/CartContext";
 
 const Cart = () => {
+  const { dispatch } = useContext(CartSystem);
   const navigate = useNavigate();
   const Phone = localStorage.getItem("phone");
   const Verification = localStorage.getItem("verification");

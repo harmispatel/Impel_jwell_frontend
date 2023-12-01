@@ -18,6 +18,7 @@ body {
   font-family: 'Rajdhani' !important;
   background-color: #faf7f5 !important;
 }
+
 .otp-card h6 {
   color: red;
   font-size: 25px
@@ -266,15 +267,15 @@ body {
   background-color: #db9662 !important;
   color: #fff;
   border-radius: 50%;
-  width: 25px;
-  height: 25px;
+  width: 20px;
+  height: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
-  top: -10px;
-  right: -10px;
-  font-size: 15px;
-  font-weight: 700;
+  top: -6px;
+  right: -6px;
+  font-size: 14px;
+  font-weight: 900;
 }
 
 /* login */
@@ -426,6 +427,63 @@ body {
 .login_info_inr .form-group a {
   color: #ffc107;
   text-decoration: none;
+}
+
+/* Forget password form css */
+.forget-password form {
+  font-size: 16px;
+  max-width: 450px;
+  margin: 10px auto;
+  padding: 10px 20px;
+  background: #f4f7f8;
+  border-radius: 0px;
+}
+
+.forget-password h1 {
+  font-size: 32px;
+  margin: 0 0 30px 0;
+  text-align: center;
+}
+
+.forget-password h3 {
+  font-size: 20px;
+  margin: 0 0 30px 0;
+  text-align: center;
+}
+
+.forget-password input[type="email"] {
+  border: none;
+  font-size: 16px;
+  height: auto;
+  margin: 0;
+  outline: 0;
+  padding: 15px;
+  width: 100%;
+  background-color: #e8eeef;
+  color: #8a97a0;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.03) inset;
+  border-radius: 5px;
+  margin-bottom: 30px;
+}
+
+.forget-password label {
+  display: block;
+  margin-bottom: 8px;
+  padding-top: 15px;
+  font-weight: bold;
+}
+
+.forget-password button {
+  padding: 10px 30px 10px 30px;
+  color: #FFF;
+  background-color: #4bc970;
+  font-size: 18px;
+  text-align: center;
+  font-style: normal;
+  border: 1px solid #3ac162;
+  margin-bottom: 10px;
+  overflow: hidden;
+  border-radius: 5px;
 }
 
 /* banner */
@@ -899,6 +957,7 @@ body {
 .cart,
 .profile,
 .about-section,
+.forget-password,
 .my_orders {
   padding: 80px 0;
   margin-top: 130px;
