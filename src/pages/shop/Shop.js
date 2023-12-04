@@ -1,20 +1,22 @@
-import React, { useEffect, useState } from "react";
-import { BsHeart, BsSearch, BsStar, BsStarFill } from "react-icons/bs";
+import React, { useContext, useEffect, useState } from "react";
+import { BsHeart, BsSearch } from "react-icons/bs";
 import SidebarFilter from "../../components/common/SidebarFilter";
 import ReactLoading from "react-loading";
 import InfiniteScroll from "react-infinite-scroll-component";
 import ShopServices from "../../services/Shop";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import DealerWishlist from "../../services/Dealer/Collection";
 import UserWishlist from "../../services/Auth";
 import { FcLike } from "react-icons/fc";
 import toast from "react-hot-toast";
 import UserCartService from "../../services/Cart";
 import { Tooltip as ReactTooltip } from "react-tooltip";
+import { WishlistSystem } from "../../context/WishListContext";
+import { FaRegStar, FaStar } from "react-icons/fa";
 
 const Shop = ({ product }) => {
+  const { dispatch: wishlistDispatch } = useContext(WishlistSystem);
   const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
   const navigate = useNavigate();
   const userType = localStorage.getItem("user_type");
   const userId = localStorage.getItem("user_id");
@@ -212,12 +214,21 @@ const Shop = ({ product }) => {
       });
   };
 
+  const GetUserCartList = async () => {
+    UserCartService.CartList({ phone: Phone })
+      .then((res) => {
+        setCartItems(res.data.cart_items);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   useEffect(() => {
     AllData();
-    GetCarList();
-    DealerList();
     collectionCheck();
     GetUserCartList();
+    GetCarList();
+    DealerList();
   }, []);
 
   const FetchMoreData = async () => {
@@ -232,6 +243,7 @@ const Shop = ({ product }) => {
 
   // user wishlist products add
   const addToUserWishList = async (product) => {
+    const payload = { id: product.id };
     if (!UsercartItems.some((item) => item.id === product.id)) {
       UserWishlist.addtoWishlist({
         phone: Phone,
@@ -242,6 +254,10 @@ const Shop = ({ product }) => {
             setUserWishlist(true);
             toast.success("Design has been Added to Your Wishlist");
             GetCarList();
+            wishlistDispatch({
+              type: "ADD_TO_WISHLIST",
+              payload,
+            });
           } else {
           }
         })
@@ -249,7 +265,6 @@ const Shop = ({ product }) => {
           console.log(err);
         });
     } else {
-      toast("Item is already in the wishlist");
     }
   };
   const removeFromWishList = (product) => {
@@ -269,9 +284,9 @@ const Shop = ({ product }) => {
   };
 
   // Dealer Wishlist products add
-  const addToWishList = async (product) => {
+  const addToDealerWishList = async (product) => {
     if (!DealercartItems.some((item) => item.id === product.id)) {
-      DealerWishlist.addtoWishlist({
+      DealerWishlist.addtoDealerWishlist({
         email: email,
         design_id: product.id,
       })
@@ -307,15 +322,6 @@ const Shop = ({ product }) => {
       });
   };
 
-  const GetUserCartList = async () => {
-    UserCartService.CartList({ phone: Phone })
-      .then((res) => {
-        setCartItems(res.data.cart_items);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
   // user add to cart function
   // const handleAddToCart = (product) => {
   //   if (!cartItems.some((item) => item.design_id === product.id)) {
@@ -343,10 +349,6 @@ const Shop = ({ product }) => {
   //   } else {
   //   }
   // };
-  useEffect(() => {
-    GetCarList();
-    DealerList();
-  }, []);
 
   return (
     <section className="shop">
@@ -503,7 +505,7 @@ const Shop = ({ product }) => {
                                     {product?.image ? (
                                       <img
                                         src={product?.image}
-                                        alt=""
+                                        alt={product?.name}
                                         className="w-100"
                                       />
                                     ) : (
@@ -563,17 +565,19 @@ const Shop = ({ product }) => {
                                                       product
                                                     );
                                                   } else {
-                                                    addToWishList(product);
+                                                    addToDealerWishList(
+                                                      product
+                                                    );
                                                   }
                                                 }}
                                               >
-                                                {DealercartItems.find(
+                                                {DealercartItems?.find(
                                                   (item) =>
                                                     item.id === product.id
                                                 ) ? (
-                                                  <BsStarFill />
+                                                  <FaStar />
                                                 ) : (
-                                                  <BsStar />
+                                                  <FaRegStar />
                                                 )}
                                               </Link>
                                             ) : (
@@ -581,7 +585,7 @@ const Shop = ({ product }) => {
                                                 to="/Dealer_login"
                                                 data-tooltip-id="my-tooltip-12"
                                               >
-                                                <BsStar />
+                                                <FaRegStar />
                                               </Link>
                                             )}
                                           </>
@@ -631,7 +635,7 @@ const Shop = ({ product }) => {
                                       <p>{product?.category_name}</p>
                                       <h5>
                                         ₹
-                                        {product?.total_price_18k.toLocaleString(
+                                        {product?.total_price_18k?.toLocaleString(
                                           "en-US"
                                         )}
                                       </h5>
@@ -717,7 +721,7 @@ const Shop = ({ product }) => {
                                                       data
                                                     );
                                                   } else {
-                                                    addToWishList(data);
+                                                    addToDealerWishList(data);
                                                   }
                                                 }}
                                               >
@@ -725,9 +729,9 @@ const Shop = ({ product }) => {
                                                   (item) =>
                                                     item?.id === data?.id
                                                 ) ? (
-                                                  <BsStarFill />
+                                                  <FaRegStar />
                                                 ) : (
-                                                  <BsStar />
+                                                  <FaRegStar />
                                                 )}
                                               </Link>
                                             ) : (
@@ -735,7 +739,7 @@ const Shop = ({ product }) => {
                                                 to="/Dealer_login"
                                                 data-tooltip-id="my-tooltip-12"
                                               >
-                                                <BsStar />
+                                                <FaRegStar />
                                               </Link>
                                             )}
                                           </>
@@ -784,7 +788,7 @@ const Shop = ({ product }) => {
                                       <p>{data?.category_name}</p>
                                       <h5>
                                         ₹
-                                        {data?.total_price_18k.toLocaleString(
+                                        {data?.total_price_18k?.toLocaleString(
                                           "en-US"
                                         )}
                                       </h5>

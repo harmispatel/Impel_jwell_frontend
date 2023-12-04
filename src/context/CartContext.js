@@ -4,7 +4,7 @@ export const CartSystem = createContext();
 
 const initialState = {
   cart: [],
-  totalQuantity: parseInt(sessionStorage.getItem("totalQuantity")) || 0,
+  cartItems: parseInt(sessionStorage.getItem("cartItems")) || 0,
 };
 
 const Cart = (state, action) => {
@@ -20,17 +20,25 @@ const Cart = (state, action) => {
               ? { ...item, quantity: item.quantity + 1 }
               : item
           ),
-          totalQuantity: state.totalQuantity + 1,
+          cartItems: state.cartItems + 1,
         };
       } else {
         return {
           ...state,
           cart: [...state.cart, { design_id, quantity: 1 }],
-          totalQuantity: state.totalQuantity + 1,
+          cartItems: state.cartItems + 1,
         };
       }
 
-    case "REMOVE_TO_CART":
+    case "REMOVE_FROM_CART": {
+      const { design_id } = action.payload;
+      return {
+        ...state,
+        cart: state.cart.filter((item) => item.design_id !== design_id),
+        cartItems: state.cartItems - 1,
+      };
+    }
+
     default:
       return state;
   }
@@ -40,8 +48,8 @@ const CartProvider = ({ children }) => {
   const [state, dispatch] = useReducer(Cart, initialState);
 
   useEffect(() => {
-    sessionStorage.setItem("totalQuantity", state.totalQuantity.toString());
-  }, [state.totalQuantity]);
+    sessionStorage.setItem("cartItems", state.cartItems.toString());
+  }, [state.cartItems]);
 
   return (
     <CartSystem.Provider value={{ state, dispatch }}>

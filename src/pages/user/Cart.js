@@ -99,6 +99,10 @@ const Cart = () => {
           UserCartItems();
           localStorage.setItem("total_quantity", res.data.total_quantity);
           toast.success("remove design from cart successfully");
+          dispatch({
+            type: "REMOVE_FROM_CART",
+            payload: { design_id: id },
+          });
         }
       })
       .catch((err) => {

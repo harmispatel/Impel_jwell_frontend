@@ -9,7 +9,6 @@ import ReactLoading from "react-loading";
 
 const CategoriesItems = () => {
   const paramId = useParams();
-
   const [category, SetCategory] = useState([]);
   const [selectedCategory, setselectedCategory] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
@@ -105,7 +104,6 @@ const CategoriesItems = () => {
                             to={`/shopdetails/${data.id}`}
                             className="text-decoration-none"
                             style={{ color: "#000" }}
-                            target="_blank"
                           >
                             <div className="category_data py-2">
                               <img src={data.image} alt="" className="w-100" />

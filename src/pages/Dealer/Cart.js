@@ -1,15 +1,13 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import BreadCrumb from "../../components/common/BreadCrumb";
 import DealerService from "../../services/Dealer/Cart";
-import { useEffect } from "react";
 import { BsFillTrashFill } from "react-icons/bs";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 const DealerCart = () => {
   const Dealer = localStorage.getItem("email");
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [Items, setItems] = useState([]);
 
   const DealerCartItems = () => {
@@ -26,7 +24,6 @@ const DealerCart = () => {
     DealerService.RemovetoCart({ cart_id: product })
       .then((res) => {
         if (res.status === true) {
-          // toast.success(res.message);
           DealerCartItems();
         }
       })
@@ -44,9 +41,8 @@ const DealerCart = () => {
     DealerService.PlaceOrder(orderData)
       .then((res) => {
         if (res.status === true) {
-          // toast.success(res.message);
-          navigate('/dealer_orders')
-          setItems([]); 
+          navigate("/dealer_orders");
+          setItems([]);
         }
       })
       .catch((err) => {
@@ -84,7 +80,11 @@ const DealerCart = () => {
                         <>
                           <div className="col-md-4">
                             <div className="cart_product_img">
-                              <img src={product.image} className="w-100" alt=""/>
+                              <img
+                                src={product.image}
+                                className="w-100"
+                                alt=""
+                              />
                             </div>
                           </div>
                           <div className="col-md-4">
@@ -174,14 +174,11 @@ const DealerCart = () => {
                 )}
               </div>
             </div>
-                <div className="text-center">
-                  <button
-                    className="btn btn-primary"
-                    onClick={placeOrder}
-                  >
-                    Place Your Order
-                  </button>
-                </div>
+            <div className="text-center">
+              <button className="btn btn-primary" onClick={placeOrder}>
+                Place Your Order
+              </button>
+            </div>
           </div>
         </div>
       </div>

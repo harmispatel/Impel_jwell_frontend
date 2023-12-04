@@ -1,6 +1,6 @@
 import call from "../Call";
 
-const addtoWishlist = async (data) => {
+const addtoDealerWishlist = async (data) => {
   let d = await call({
     path: "add-collection-design",
     method: "POST",
@@ -30,6 +30,6 @@ const ListCollection = async (data) => {
   return d;
 };
 
-const exportObject = { addtoWishlist, removetoWishlist, ListCollection };
+const exportObject = { addtoDealerWishlist, removetoWishlist, ListCollection };
 
 export default exportObject;

@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { useWishList } from "../../context/WishListContext";
 import noWishlist from "../../assets/images/wishlist.png";
 import DealerWishlist from "../../services/Dealer/Collection";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { Link } from "react-router-dom";
 import ReactLoading from "react-loading";
+import toast from "react-hot-toast";
 
 const DealerWishList = () => {
+  const DealerEmail = localStorage.getItem("email");
   const [checkList, setCheckList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
-  const DealerEmail = localStorage.getItem("email");
 
   const collectionCheck = () => {
     DealerWishlist.ListCollection({ email: DealerEmail })
@@ -51,7 +48,6 @@ const DealerWishList = () => {
             <ReactLoading
               type={"spinningBubbles"}
               color={"#053961"}
-              
               height={"20%"}
               width={"10%"}
               className="loader"
@@ -75,12 +71,6 @@ const DealerWishList = () => {
                           >
                             <h3>{product.name}</h3>
                           </Link>
-
-                          {/* <p>
-                        ${product.price}
-                        <span>$449</span>
-                        <label>(50% OFF)</label>
-                      </p> */}
                         </div>
                         <div className="move_bag_btn d-flex">
                           <button

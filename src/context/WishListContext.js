@@ -1,38 +1,59 @@
-import { createContext, useContext, useReducer } from "react";
+import React, { createContext, useEffect, useReducer } from "react";
 
-const WishListContext = createContext()
+export const WishlistSystem = createContext();
 
-const wishListReducer = (state,action) =>{
-    switch (action.type) {
+const initialState = {
+  wishlist: [],
+  wishlistItems: parseInt(sessionStorage.getItem("wishlistItems")) || 0,
+};
 
-        case 'ADD_TO_WISHLIST':
-            return [...state,action.payload]
+const Wishlist = (state, action) => {
+  switch (action.type) {
+    case "ADD_TO_WISHLIST":
+      const { id } = action.payload;
+      const wishlistitem = state.wishlist.find((item) => item.id === id);
+      if (wishlistitem) {
+        return {
+          ...state,
+          wishlist: state.wishlist.map((item) =>
+            item.id === id ? { ...item, quantity: item.quantity + 1 } : item
+          ),
+          wishlistItems: state.wishlistItems + 1,
+        };
+      } else {
+        return {
+          ...state,
+          wishlist: [...state.wishlist, { id, quantity: 1 }],
+          wishlistItems: state.wishlistItems + 1,
+        };
+      }
 
-        case 'REMOVE_FROM_WISHLIST':
-            return state.filter((item) => item.id !== action.payload.id);
-    
-        default:
-            return state;
+    case "REMOVE_FROM_WISHLIST": {
+      const { id } = action.payload;
+      return {
+        ...state,
+        wishlist: state.wishlist.filter((item) => item.id !== id),
+        wishlistItems: state.wishlistItems - 1,
+      };
     }
-}
 
-const WishListProvider = ({children}) =>{
+    default:
+      return state;
+  }
+};
 
-    const [wishListData,dispatch] = useReducer(wishListReducer,[])
-    
-    return (
-        <WishListContext.Provider value={{ wishListData, dispatch }}>
-            {children}
-        </WishListContext.Provider>
-    )
-}
+const WishlistProvider = ({ children }) => {
+  const [state, dispatch] = useReducer(Wishlist, initialState);
 
-const useWishList = () =>{
-    const context = useContext(WishListContext)
-    if (!context) {
-        throw new Error('useWishList must be used within a WishListProvider')
-    }
-    return context
-}
+  useEffect(() => {
+    sessionStorage.setItem("wishlistItems", state.wishlistItems.toString());
+  }, [state.wishlistItems]);
 
-export { WishListProvider,useWishList }
+  return (
+    <WishlistSystem.Provider value={{ state, dispatch }}>
+      {children}
+    </WishlistSystem.Provider>
+  );
+};
+
+export default WishlistProvider;

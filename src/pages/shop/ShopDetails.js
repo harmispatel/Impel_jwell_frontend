@@ -17,10 +17,11 @@ import { BsCartDash, BsHandbagFill } from "react-icons/bs";
 import { FaHeart, FaLongArrowAltLeft, FaRegHeart } from "react-icons/fa";
 import ReactLoading from "react-loading";
 import { CartSystem } from "../../context/CartContext";
-import { WishListContext } from "../../context/WishListContext";
+import { WishlistSystem } from "../../context/WishListContext";
 
 const ShopDetails = () => {
-  const { dispatch } = useContext(CartSystem);
+  const { dispatch: cartDispatch } = useContext(CartSystem);
+  const { dispatch: wishlistDispatch } = useContext(WishlistSystem);
   const { id } = useParams();
   const [product, setProduct] = useState();
   const data = { categoryId: product?.category_id?.id };
@@ -121,6 +122,7 @@ const ShopDetails = () => {
   }, []);
 
   const addToUserWishList = async (product) => {
+    const payload = { id: product.id };
     Userservice.addtoWishlist({
       phone: localStorage.getItem("phone"),
       design_id: product.id,
@@ -130,6 +132,10 @@ const ShopDetails = () => {
         if (res.success === true) {
           setUserWishlist(true);
           GetUserWishList();
+          wishlistDispatch({
+            type: "ADD_TO_WISHLIST",
+            payload,
+          });
         } else {
         }
       })
@@ -168,7 +174,7 @@ const ShopDetails = () => {
         if (res.status === true) {
           GetUserCartList();
           toast.success(res.message);
-          dispatch({
+          cartDispatch({
             type: "ADD_TO_CART",
             payload: { design_id: CartData.design_id },
           });
@@ -332,7 +338,7 @@ const ShopDetails = () => {
                     <div className="col-md-6">
                       <div>
                         <h3>{product?.name}</h3>
-                        <p>{product?.category}</p>
+                        {/* <p>{product?.category}</p> */}
                         <h5>
                           Design code : <strong>{product?.code}</strong>
                         </h5>

@@ -9,9 +9,11 @@ import { Tooltip as ReactTooltip } from "react-tooltip";
 import FilterServices from "../services/Filter";
 import profileService from "../services/Auth";
 import { CartSystem } from "../context/CartContext";
+import { WishlistSystem } from "../context/WishListContext";
 
 const Navbar = () => {
-  const { state } = useContext(CartSystem);
+  const { state: cartState } = useContext(CartSystem);
+  const { state: wishliststate } = useContext(WishlistSystem);
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const navigate = useNavigate();
@@ -315,6 +317,11 @@ const Navbar = () => {
                     data-tooltip-id="my-tooltip-2"
                   >
                     <BsHeart />
+                    {wishliststate.wishlistItems > 0 && (
+                      <div className="cart_count">
+                        {wishliststate.wishlistItems}
+                      </div>
+                    )}
                   </Link>
                 )}
               </li>
@@ -326,8 +333,8 @@ const Navbar = () => {
                     data-tooltip-id="my-tooltip-3"
                   >
                     <BsHandbag style={{ fontSize: "20px", color: "black" }} />
-                    {state.totalQuantity > 0 && (
-                      <div className="cart_count">{state.totalQuantity}</div>
+                    {cartState.cartItems > 0 && (
+                      <div className="cart_count">{cartState.cartItems}</div>
                     )}
                   </Link>
                 )}

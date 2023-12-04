@@ -1,22 +1,23 @@
-import React from "react";
+import React, { useContext, useState, useEffect } from "react";
 import Userservice from "../../services/Auth";
-import { useState } from "react";
-import { useEffect } from "react";
-import noWishlist from "../../assets/images/wishlist.png";
 import { Link } from "react-router-dom";
 import ReactLoading from "react-loading";
 import { CgSpinner } from "react-icons/cg";
+import { WishlistSystem } from "../../context/WishListContext";
+import noWishlist from "../../assets/images/wishlist.png";
+import NoImage from "../../assets/images/NoImage.jpeg";
 
 const WishList = () => {
-  const [DealercartItems, setDealerCartItems] = useState([]);
+  const phone = localStorage.getItem("phone");
+  const { dispatch } = useContext(WishlistSystem);
+  const [items, setItems] = useState([]);
   const [removingItemId, setRemovingItemId] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const phone = localStorage.getItem("phone");
 
   const GetCarList = async () => {
     Userservice.userWishlist({ phone: phone })
       .then((res) => {
-        setDealerCartItems(res.data);
+        setItems(res.data);
         setIsLoading(false);
       })
       .catch((err) => {
@@ -31,6 +32,10 @@ const WishList = () => {
       .then((res) => {
         if (res.success === true) {
           GetCarList();
+          dispatch({
+            type: "REMOVE_FROM_WISHLIST",
+            payload: { id: product.id },
+          });
         }
       })
       .catch((err) => {
@@ -62,18 +67,22 @@ const WishList = () => {
             </div>
           ) : (
             <>
-              {DealercartItems?.length ? (
+              {items?.length ? (
                 <>
                   <div className="product_washlist">
-                    {DealercartItems?.map((product) => {
+                    {items?.map((product) => {
                       return (
                         <div className="wishlist_card">
                           <div className="wishlist_img">
-                            <img
-                              src={product?.image}
-                              className="w-100"
-                              alt=""
-                            />
+                            {product?.image ? (
+                              <img
+                                src={NoImage}
+                                className="w-100"
+                                alt={product.name}
+                              />
+                            ) : (
+                              <img src={NoImage} className="w-100" alt="" />
+                            )}
                           </div>
                           <div className="wishlist_info">
                             <Link
@@ -82,16 +91,11 @@ const WishList = () => {
                             >
                               <h3>{product?.name}</h3>
                             </Link>
-                            {/* <p>
-                          ${product.price}
-                          <span>$449</span>
-                          <label>(50% OFF)</label>
-                        </p> */}
                           </div>
                           <div className="move_bag_btn d-flex">
                             <button
                               className="btn w-100"
-                              onClick={() => removeFromWishList(product.id)}
+                              onClick={() => removeFromWishList(product?.id)}
                             >
                               {removingItemId === product.id && (
                                 <CgSpinner
