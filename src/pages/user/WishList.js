@@ -76,7 +76,7 @@ const WishList = () => {
                           <div className="wishlist_img">
                             {product?.image ? (
                               <img
-                                src={NoImage}
+                                src={product.image}
                                 className="w-100"
                                 alt={product.name}
                               />

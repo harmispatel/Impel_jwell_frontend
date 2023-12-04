@@ -4,7 +4,7 @@ export const CartSystem = createContext();
 
 const initialState = {
   cart: [],
-  cartItems: parseInt(sessionStorage.getItem("cartItems")) || 0,
+  cartItems: parseInt(localStorage.getItem("cartItems")) || 0,
 };
 
 const Cart = (state, action) => {
@@ -48,7 +48,7 @@ const CartProvider = ({ children }) => {
   const [state, dispatch] = useReducer(Cart, initialState);
 
   useEffect(() => {
-    sessionStorage.setItem("cartItems", state.cartItems.toString());
+    localStorage.setItem("cartItems", state.cartItems.toString());
   }, [state.cartItems]);
 
   return (

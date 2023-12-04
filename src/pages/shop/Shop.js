@@ -194,7 +194,7 @@ const Shop = ({ product }) => {
       });
   };
 
-  const GetCarList = async () => {
+  const GetCartList = async () => {
     UserWishlist.userWishlist({ phone: Phone })
       .then((res) => {
         setUserCartItems(res.data);
@@ -227,7 +227,7 @@ const Shop = ({ product }) => {
     AllData();
     collectionCheck();
     GetUserCartList();
-    GetCarList();
+    GetCartList();
     DealerList();
   }, []);
 
@@ -253,7 +253,7 @@ const Shop = ({ product }) => {
           if (res.success === true) {
             setUserWishlist(true);
             toast.success("Design has been Added to Your Wishlist");
-            GetCarList();
+            GetCartList();
             wishlistDispatch({
               type: "ADD_TO_WISHLIST",
               payload,
@@ -275,7 +275,7 @@ const Shop = ({ product }) => {
       .then((res) => {
         if (res.success === true) {
           toast.success("Design has been Removed from Your Wishlist.");
-          GetCarList();
+          GetCartList();
         }
       })
       .catch((err) => {

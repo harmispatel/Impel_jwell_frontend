@@ -4,7 +4,7 @@ export const WishlistSystem = createContext();
 
 const initialState = {
   wishlist: [],
-  wishlistItems: parseInt(sessionStorage.getItem("wishlistItems")) || 0,
+  wishlistItems: parseInt(localStorage.getItem("wishlistItems")) || 0,
 };
 
 const Wishlist = (state, action) => {
@@ -46,7 +46,7 @@ const WishlistProvider = ({ children }) => {
   const [state, dispatch] = useReducer(Wishlist, initialState);
 
   useEffect(() => {
-    sessionStorage.setItem("wishlistItems", state.wishlistItems.toString());
+    localStorage.setItem("wishlistItems", state.wishlistItems.toString());
   }, [state.wishlistItems]);
 
   return (

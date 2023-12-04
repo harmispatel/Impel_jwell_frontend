@@ -97,7 +97,6 @@ const Cart = () => {
       .then((res) => {
         if (res.status === true) {
           UserCartItems();
-          localStorage.setItem("total_quantity", res.data.total_quantity);
           toast.success("remove design from cart successfully");
           dispatch({
             type: "REMOVE_FROM_CART",
@@ -120,6 +119,10 @@ const Cart = () => {
         console.log(err);
       });
   };
+  const isValidPan = (panNumber) => {
+    const panRegex = /[A-Z]{5}[0-9]{4}[A-Z]{1}/;
+    return panRegex.test(panNumber);
+  };
   const PanNo = profileData.pan_no;
   const FinalOrder = () => {
     const totalPrice = code.discount_value
@@ -131,6 +134,8 @@ const Cart = () => {
     if (totalPrice >= 200000) {
       if (PanNo === "") {
         setShowpan(true);
+      } else if (!isValidPan(PanNo)) {
+        alert("Invalid PAN card number");
       } else {
         navigate("/orders");
       }
