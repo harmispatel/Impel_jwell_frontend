@@ -13,9 +13,9 @@ import UserCartService from "../../services/Cart";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import { WishlistSystem } from "../../context/WishListContext";
 import { FaRegStar, FaStar } from "react-icons/fa";
-
 const Shop = ({ product }) => {
   const { dispatch: wishlistDispatch } = useContext(WishlistSystem);
+  const { dispatch: wishlistRemoveDispatch } = useContext(WishlistSystem);
   const location = useLocation();
   const navigate = useNavigate();
   const userType = localStorage.getItem("user_type");
@@ -160,7 +160,6 @@ const Shop = ({ product }) => {
         setIsLoading(false);
       });
   };
-
   const FilterData = () => {
     const userData = {
       categoryIds: category,
@@ -268,6 +267,7 @@ const Shop = ({ product }) => {
     }
   };
   const removeFromWishList = (product) => {
+    const payload = { id: product.id };
     UserWishlist.removetoWishlist({
       phone: Phone,
       design_id: product.id,
@@ -276,6 +276,10 @@ const Shop = ({ product }) => {
         if (res.success === true) {
           toast.success("Design has been Removed from Your Wishlist.");
           GetCartList();
+          wishlistRemoveDispatch({
+            type: "REMOVE_FROM_WISHLIST",
+            payload,
+          });
         }
       })
       .catch((err) => {

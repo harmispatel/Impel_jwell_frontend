@@ -19,13 +19,34 @@ const Login = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [otp, setOtp] = useState("");
   const [show, setShow] = useState(false);
-  const [error, setError] = useState("");
   const [phoneError, setPhoneError] = useState();
   const [spinner, setSpinner] = useState(false);
+  const [minutes, setMinutes] = useState(1);
+  const [seconds, setSeconds] = useState(30);
 
   useEffect(() => {
     onCaptchVerify();
   }, []);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (seconds > 0) {
+        setSeconds(seconds - 1);
+      }
+
+      if (seconds === 0) {
+        if (minutes === 0) {
+          clearInterval(interval);
+        } else {
+          setSeconds(59);
+          setMinutes(minutes - 1);
+        }
+      }
+    }, 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [seconds]);
 
   const handlePhoneNumberChange = (newPhoneNumber) => {
     let isValid = true;
@@ -54,6 +75,8 @@ const Login = () => {
   }
 
   const sendOtp = (e) => {
+    setMinutes(1);
+    setSeconds(30);
     e.preventDefault();
     if (!phoneNumber) {
       setPhoneError("Please enter your mobile");
@@ -234,11 +257,24 @@ const Login = () => {
                                     )}
                                     Verfy OTP
                                   </button>
+                                  <div>
+                                    {seconds > 0 || minutes > 0 ? (
+                                      <p>
+                                        Time Remaining:{" "}
+                                        {minutes < 10 ? `0${minutes}` : minutes}
+                                        :
+                                        {seconds < 10 ? `0${seconds}` : seconds}
+                                      </p>
+                                    ) : (
+                                      <p>Didn't recieve code?</p>
+                                    )}
+                                  </div>
                                   <button
                                     id="sign-in-button"
                                     type="button"
                                     onClick={sendOtp}
                                     className="btn btn-outline-warning"
+                                    disabled={seconds > 0 || minutes > 0}
                                   >
                                     Resend OTP
                                   </button>

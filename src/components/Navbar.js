@@ -33,8 +33,8 @@ const Navbar = () => {
 
   const [colorChange, setColorchange] = useState(false);
   const [isLoggedOut, setIsLoggedOut] = useState(false);
-  const [dealerCartCounts, setDealerCartCounts] = useState();
-  const [userCartCounts, setUsererCartCounts] = useState();
+  // const [dealerCartCounts, setDealerCartCounts] = useState();
+  // const [userCartCounts, setUsererCartCounts] = useState();
   const [profileData, setProfileData] = useState([]);
   const [tags, setTags] = useState([]);
   const [tag, setTag] = useState([]);
@@ -52,25 +52,25 @@ const Navbar = () => {
   };
   window.addEventListener("scroll", changeNavbarColor);
 
-  const DealerCart = () => {
-    DealerService.CartList({ email: DealerEmail })
-      .then((res) => {
-        setDealerCartCounts(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  // const DealerCart = () => {
+  //   DealerService.CartList({ email: DealerEmail })
+  //     .then((res) => {
+  //       setDealerCartCounts(res.data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
 
-  const UserCartItems = () => {
-    UserService.CartList({ phone: Phone })
-      .then((res) => {
-        setUsererCartCounts(res.data.total_quantity);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  // const UserCartItems = () => {
+  //   UserService.CartList({ phone: Phone })
+  //     .then((res) => {
+  //       setUsererCartCounts(res.data.total_quantity);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
 
   const Tags = () => {
     FilterServices.headerTags()
@@ -92,8 +92,8 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-    DealerCart();
-    UserCartItems();
+    // DealerCart();
+    // UserCartItems();
     getProfile();
     Tags();
   }, []);

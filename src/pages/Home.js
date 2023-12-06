@@ -22,7 +22,7 @@ const Home = () => {
   const [bannerSlider, SetBannerSlider] = useState([]);
   const [category, SetCategory] = useState([]);
   const [newAdd, SetNewAdd] = useState([]);
-  const [Featured, SetFeatured] = useState([]);
+  // const [Featured, SetFeatured] = useState([]); 
   const [TopSell, SetTopSell] = useState([]);
 
   const videoEl = useRef(null);
@@ -39,7 +39,7 @@ const Home = () => {
     banners();
     Category();
     RecentAdd();
-    FeaturedProduct();
+    // FeaturedProduct();
     HighSell();
     attemptPlay();
   }, []);
@@ -49,6 +49,7 @@ const Home = () => {
       .slider()
       .then((res) => {
         SetBannerSlider(res.data);
+        console.log(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -77,16 +78,16 @@ const Home = () => {
       });
   };
 
-  const FeaturedProduct = () => {
-    homeService
-      .Featured()
-      .then((res) => {
-        SetFeatured(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  // const FeaturedProduct = () => {
+  //   homeService
+  //     .Featured()
+  //     .then((res) => {
+  //       SetFeatured(res.data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
 
   const HighSell = () => {
     homeService
@@ -119,9 +120,9 @@ const Home = () => {
             loop={true}
             autoplay={{ delay: 2000 }}
           >
-            {/* {bannerSlider.map((data,index) => {
+            {/* {bannerSlider.map((data, index) => {
               return (
-                <SwiperSlide key={index} >
+                <SwiperSlide key={index}>
                   <img src={data.image} alt="" />
                 </SwiperSlide>
               );

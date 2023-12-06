@@ -1,13 +1,13 @@
-import call from "./Call";
+// import call from "./Call";
 
-const categoryFilter = async () => {
-  let d = await call({
-    path: "parent-category",
-    method: "GET",
-  });
-  return d;
-};
+// const categoryFilter = async () => {
+//   let d = await call({
+//     path: "parent-category",
+//     method: "GET",
+//   });
+//   return d;
+// };
 
-const exportObject = { categoryFilter };
+// const exportObject = { categoryFilter };
 
-export default exportObject;
+// export default exportObject;

@@ -44,7 +44,7 @@ const About = () => {
         <div className="row">
           <div class="form-main">
             <div class="main-wrapper">
-              <h2 class="form-head">Contact From</h2>
+              <h2 class="form-head">Contact Form</h2>
               <form class="form-wrapper">
                 <div class="form-card">
                   <input

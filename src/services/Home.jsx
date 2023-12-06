@@ -40,12 +40,20 @@ const Featured = async () => {
   return d;
 };
 
+const SiteSetting = async () => {
+  let d = await call({
+    path: "site-settings",
+    method: "GET",
+  });
+  return d;
+};
 const exportObject = {
   slider,
   category,
   TopSelling,
   RecentAdd,
   Featured,
+  SiteSetting,
 };
 
 export default exportObject;

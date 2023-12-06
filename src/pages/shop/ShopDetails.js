@@ -18,6 +18,7 @@ import { FaHeart, FaLongArrowAltLeft, FaRegHeart } from "react-icons/fa";
 import ReactLoading from "react-loading";
 import { CartSystem } from "../../context/CartContext";
 import { WishlistSystem } from "../../context/WishListContext";
+import { CgSpinner } from "react-icons/cg";
 
 const ShopDetails = () => {
   const { dispatch: cartDispatch } = useContext(CartSystem);
@@ -41,6 +42,7 @@ const ShopDetails = () => {
   const [goldColor, setGoldColor] = useState("yellow_gold");
   const [goldType, setGoldType] = useState("18k");
   const [isLoading, setIsLoading] = useState(true);
+  const [spinner, setSpinner] = useState(false);
 
   const productData = async () => {
     const data = {
@@ -160,6 +162,7 @@ const ShopDetails = () => {
   };
 
   const handleAddToCart = (product) => {
+    setSpinner(true);
     const CartData = {
       phone: Phone,
       design_name: product.name,
@@ -182,6 +185,9 @@ const ShopDetails = () => {
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        setSpinner(false);
       });
   };
   const handleGoldColor = (goldType) => {
@@ -782,8 +788,17 @@ const ShopDetails = () => {
                                       <button
                                         className="btn btn-outline-dark"
                                         onClick={() => handleAddToCart(product)}
+                                        disabled={spinner}
                                       >
-                                        <BsHandbagFill className="me-2" />
+                                        {spinner && (
+                                          <CgSpinner
+                                            size={20}
+                                            className="animate_spin me-2"
+                                          />
+                                        )}
+                                        {!spinner && (
+                                          <BsHandbagFill className="me-2" />
+                                        )}
                                         Add To Cart
                                       </button>
                                     </div>
