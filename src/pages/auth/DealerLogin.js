@@ -19,7 +19,6 @@ const DealerLogin = () => {
   const handleChange = (e) => {
     setLoginData({ ...loginData, [e.target.name]: e.target.value });
   };
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -47,7 +46,10 @@ const DealerLogin = () => {
     };
 
     axios
-      .post("https://harmistechnology.com/admin.indianjewelley/api/user-login", userData)
+      .post(
+        "https://harmistechnology.com/admin.indianjewelley/api/user-login",
+        userData
+      )
       .then((response) => {
         if (response.data.success === true) {
           setUser(response.data);

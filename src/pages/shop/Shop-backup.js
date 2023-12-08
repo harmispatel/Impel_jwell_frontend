@@ -2,72 +2,47 @@ import React, { useContext, useEffect, useState } from "react";
 import { BsHeart, BsSearch } from "react-icons/bs";
 import SidebarFilter from "../../components/common/SidebarFilter";
 import ReactLoading from "react-loading";
+import InfiniteScroll from "react-infinite-scroll-component";
 import ShopServices from "../../services/Shop";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import DealerWishlist from "../../services/Dealer/Collection";
 import UserWishlist from "../../services/Auth";
-import UserCartService from "../../services/Cart";
 import { FcLike } from "react-icons/fc";
 import toast from "react-hot-toast";
+import UserCartService from "../../services/Cart";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import { WishlistSystem } from "../../context/WishListContext";
 import { FaRegStar, FaStar } from "react-icons/fa";
-import ReactPaginate from "react-paginate";
 const Shop = ({ product }) => {
   const { dispatch: wishlistDispatch } = useContext(WishlistSystem);
   const { dispatch: wishlistRemoveDispatch } = useContext(WishlistSystem);
-
   const location = useLocation();
   const navigate = useNavigate();
-
   const userType = localStorage.getItem("user_type");
   const userId = localStorage.getItem("user_id");
   const email = localStorage.getItem("email");
   const Phone = localStorage.getItem("phone");
-
   const [searchInput, setSearchInput] = useState([]);
-  const [selectedOption, setSelectedOption] = useState([]);
   const [category, setCategory] = useState([]);
   const [gender, setGender] = useState([]);
   const [tag, setTag] = useState([]);
+  const [allData, setAllData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [filterData, setFilterData] = useState([]);
+  const [displayedItems, setDisplayedItems] = useState([]);
+  const [pageLoading, setPageLoading] = useState(false);
+  const [loadMore, setLoadMore] = useState(20);
   const [PriceRange, setPriceRange] = useState({
     minprice: null,
     maxprice: null,
   });
-
-  const [isLoading, setIsLoading] = useState(true);
-  const [allData, setAllData] = useState([]);
-  const [filterData, setFilterData] = useState([]);
-
+  const [checkList, setCheckList] = useState([]);
   const [collection_status, setCollectionStatus] = useState(false);
-  const [DealerCollection, setDealerCollection] = useState([]);
-
   const [userWishlist, setUserWishlist] = useState(false);
   const [UsercartItems, setUserCartItems] = useState([]);
+  const [DealercartItems, setDealerCartItems] = useState([]);
   const [cartItems, setCartItems] = useState([]);
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage, setPostsPerPage] = useState(200);
-
-  const indexOfLastPost = currentPage * postsPerPage;
-  const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = allData.slice(indexOfFirstPost, indexOfLastPost);
-
-  const pageNumbers = [];
-
-  for (let i = 1; i < Math.ceil(allData?.length / postsPerPage); i++) {
-    pageNumbers.push(i);
-  }
-  const handlePageClick = (data) => {
-    const selectedPage = data.selected + 1;
-    setCurrentPage(selectedPage);
-  };
-  const scrollup = () => {
-    window.scrollTo({
-      top: 200,
-      behavior: "smooth",
-    });
-  };
+  const [selectedOption, setSelectedOption] = useState([]);
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
@@ -126,12 +101,10 @@ const Shop = ({ product }) => {
     setIsLoading(true);
     if (e.target.checked) {
       setCategory([...category, e.target.value]);
-      scrollup();
     } else {
       setCategory(category.filter((item) => item !== e.target.value));
       if (category.filter((item) => item !== e.target.value)?.length === 0) {
         AllData();
-        scrollup();
       }
     }
   };
@@ -139,24 +112,11 @@ const Shop = ({ product }) => {
     setIsLoading(true);
     if (e.target.checked) {
       setGender([...gender, e.target.value]);
-      scrollup();
     } else {
       setGender(gender.filter((item) => item !== e.target.value));
       AllData();
-      scrollup();
     }
   };
-  // const handleTag = (e) => {
-  //   setIsLoading(true);
-  //   if (e.target.checked) {
-  //     setTag([...tag, e.target.value]);
-  //     scrollup();
-  //   } else {
-  //     setTag(tag.filter((item) => item !== e.target.value));
-  //     AllData();
-  //     scrollup();
-  //   }
-  // };
 
   const handleTag = (e) => {
     setIsLoading(true);
@@ -165,7 +125,6 @@ const Shop = ({ product }) => {
       setTag([...tag, selectedTagId]);
       const updatedTagIds = [...tag, selectedTagId];
       navigate(`/shop?tag_id=${updatedTagIds}`);
-      scrollup();
     } else {
       const updatedTags = tag.filter((item) => item !== selectedTagId);
       setTag(updatedTags);
@@ -176,7 +135,6 @@ const Shop = ({ product }) => {
       }
       if (updatedTags?.length === 0) {
         AllData();
-        scrollup();
       }
     }
   };
@@ -184,7 +142,6 @@ const Shop = ({ product }) => {
   const handleSliderChange = (e) => {
     setIsLoading(true);
     setPriceRange({ minprice: e[0], maxprice: e[1] });
-    scrollup();
   };
 
   const AllData = () => {
@@ -196,6 +153,7 @@ const Shop = ({ product }) => {
       .then((res) => {
         setIsLoading(false);
         setAllData(res.data);
+        setDisplayedItems(res.data?.slice(0, loadMore));
       })
       .catch((err) => {
         console.log(err);
@@ -225,17 +183,36 @@ const Shop = ({ product }) => {
       });
   };
 
-  // user wishlist API
-  const GetCartList = async () => {
-    UserWishlist.userWishlist({ phone: Phone })
+  const collectionCheck = () => {
+    DealerWishlist.ListCollection({ email: email })
       .then((res) => {
-        setUserCartItems(res?.data);
+        setCheckList(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
   };
-  // user cart API
+
+  const GetCartList = async () => {
+    UserWishlist.userWishlist({ phone: Phone })
+      .then((res) => {
+        setUserCartItems(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const DealerList = async () => {
+    DealerWishlist.ListCollection({ email: email })
+      .then((res) => {
+        setDealerCartItems(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const GetUserCartList = async () => {
     UserCartService.CartList({ phone: Phone })
       .then((res) => {
@@ -245,24 +222,23 @@ const Shop = ({ product }) => {
         console.log(err);
       });
   };
-
-  // Dealer wishlist API
-  const collectionCheck = () => {
-    DealerWishlist.ListCollection({ email: email })
-      .then((res) => {
-        setDealerCollection(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
   useEffect(() => {
     AllData();
     collectionCheck();
     GetUserCartList();
     GetCartList();
+    DealerList();
   }, []);
+
+  const FetchMoreData = async () => {
+    setTimeout(() => {
+      setDisplayedItems((prevItems) => [
+        ...prevItems,
+        ...allData.slice(loadMore, loadMore + 20),
+      ]);
+      setLoadMore(loadMore + 20);
+    }, 200);
+  };
 
   // user wishlist products add
   const addToUserWishList = async (product) => {
@@ -312,8 +288,8 @@ const Shop = ({ product }) => {
   };
 
   // Dealer Wishlist products add
-  const AddToDealerWishlist = async (product) => {
-    if (!DealerCollection.some((item) => item.id === product.id)) {
+  const addToDealerWishList = async (product) => {
+    if (!DealercartItems.some((item) => item.id === product.id)) {
       DealerWishlist.addtoDealerWishlist({
         email: email,
         design_id: product.id,
@@ -349,6 +325,34 @@ const Shop = ({ product }) => {
         console.log(err);
       });
   };
+
+  // user add to cart function
+  // const handleAddToCart = (product) => {
+  //   if (!cartItems.some((item) => item.design_id === product.id)) {
+  //     if (Verification == 3) {
+  //       const CartData = {
+  //         phone: Phone,
+  //         design_name: product.name,
+  //         design_id: product.id,
+  //       };
+
+  //       UserCartService.AddtoCart(CartData)
+  //         .then((res) => {
+  //           if (res.status === true) {
+  //             GetUserCartList();
+  //             localStorage.setItem("total_quantity", res.data.total_quantity);
+  //             toast.success(res.message);
+  //           }
+  //         })
+  //         .catch((err) => {
+  //           console.log(err);
+  //         });
+  //     } else {
+  //       setShowEdit(true);
+  //     }
+  //   } else {
+  //   }
+  // };
 
   return (
     <section className="shop">
@@ -388,7 +392,7 @@ const Shop = ({ product }) => {
                     </div>
                   </div>
                   <div className="col-md-2">
-                    <div className="csm_sort_btn">
+                    <div class="csm_sort_btn">
                       <input
                         type="radio"
                         id="low_to_high"
@@ -396,17 +400,17 @@ const Shop = ({ product }) => {
                         name="attr_option[0]"
                         checked={selectedOption === "low_to_high"}
                         onChange={handleRadioChange}
-                        className="d-none"
+                        class="d-none"
                       />
                       <label for="low_to_high">Price : low to high</label>
                     </div>
                   </div>
                   <div className="col-md-2">
-                    <div className="csm_sort_btn">
+                    <div class="csm_sort_btn">
                       <input
                         type="radio"
                         id="high_to_low"
-                        className="d-none"
+                        class="d-none"
                         value="high_to_low"
                         name="attr_option[0]"
                         checked={selectedOption === "high_to_low"}
@@ -416,7 +420,7 @@ const Shop = ({ product }) => {
                     </div>
                   </div>
                   <div className="col-md-2">
-                    <div className="csm_sort_btn">
+                    <div class="csm_sort_btn">
                       <input
                         type="radio"
                         id="highest_selling"
@@ -424,17 +428,17 @@ const Shop = ({ product }) => {
                         name="attr_option[0]"
                         checked={selectedOption === "highest_selling"}
                         onChange={handleRadioChange}
-                        className="d-none"
+                        class="d-none"
                       />
                       <label for="highest_selling">Top Seller</label>
                     </div>
                   </div>
                   <div className="col-md-2">
-                    <div className="csm_sort_btn">
+                    <div class="csm_sort_btn">
                       <input
                         type="radio"
                         id="clear_all"
-                        className="d-none"
+                        class="d-none"
                         value="clear_all"
                         name="attr_option[0]"
                         checked={selectedOption === "clear_all"}
@@ -485,11 +489,17 @@ const Shop = ({ product }) => {
                   gender.length === 0 &&
                   tag.length === 0 &&
                   PriceRange.minprice === null ? (
-                    <>
-                      {currentPosts?.length > 0 ? (
+                    <InfiniteScroll
+                      dataLength={displayedItems.length}
+                      next={FetchMoreData}
+                      hasMore={true}
+                      style={{ overflow: "hidden" }}
+                      loader={pageLoading ? <h4>Loading...</h4> : null}
+                    >
+                      {displayedItems?.length > 0 ? (
                         <>
                           <div className="row">
-                            {currentPosts?.map((product) => {
+                            {displayedItems?.map((product) => {
                               return (
                                 <div key={product.id} className="col-md-4">
                                   <Link
@@ -511,6 +521,36 @@ const Shop = ({ product }) => {
                                     )}
 
                                     <div className="edit">
+                                      {/* <div>
+                                        {Phone ? (
+                                          <>
+                                            <Link
+                                              to="#"
+                                              data-tooltip-id="my-tooltip-7"
+                                              onClick={() =>
+                                                handleAddToCart(product)
+                                              }
+                                            >
+                                              {cartItems.find(
+                                                (item) =>
+                                                  item.design_id === product.id
+                                              ) ? (
+                                                <Link
+                                                  to="/cart"
+                                                  className="mt-2"
+                                                >
+                                                  <BsFillCartCheckFill />
+                                                </Link>
+                                              ) : (
+                                                <BsHandbag />
+                                              )}
+                                            </Link>
+                                          </>
+                                        ) : (
+                                          ""
+                                        )}
+                                      </div> */}
+
                                       <div>
                                         {userType == 1 ? (
                                           <>
@@ -520,7 +560,7 @@ const Shop = ({ product }) => {
                                                 data-tooltip-id="my-tooltip-12"
                                                 onClick={() => {
                                                   if (
-                                                    DealerCollection?.find(
+                                                    DealercartItems?.find(
                                                       (item) =>
                                                         item.id === product.id
                                                     )
@@ -529,13 +569,13 @@ const Shop = ({ product }) => {
                                                       product
                                                     );
                                                   } else {
-                                                    AddToDealerWishlist(
+                                                    addToDealerWishList(
                                                       product
                                                     );
                                                   }
                                                 }}
                                               >
-                                                {DealerCollection?.find(
+                                                {DealercartItems?.find(
                                                   (item) =>
                                                     item.id === product.id
                                                 ) ? (
@@ -615,28 +655,13 @@ const Shop = ({ product }) => {
                           <p>No products available.</p>
                         </div>
                       )}
-                      <div className="pagination-container">
-                        <ReactPaginate
-                          previousLabel={"previous"}
-                          nextLabel={"next"}
-                          breakLabel={"..."}
-                          breakclassName={"break-me"}
-                          pageCount={Math.ceil(allData?.length / postsPerPage)}
-                          marginPagesDisplayed={2}
-                          pageRangeDisplayed={5}
-                          onPageChange={handlePageClick}
-                          containerclassName={"pagination"}
-                          activeclassName={"active"}
-                          onClick={scrollup}
-                        />
-                      </div>
-                    </>
+                    </InfiniteScroll>
                   ) : (
                     <>
-                      {filterData?.length > 0 ? (
+                      {filterData.length > 0 ? (
                         <>
                           <div className="row">
-                            {filterData?.map((data) => {
+                            {filterData.map((data) => {
                               return (
                                 <div className="col-md-4">
                                   <Link
@@ -658,6 +683,30 @@ const Shop = ({ product }) => {
                                       />
                                     )}
                                     <div className="edit">
+                                      {/* <div>
+                                        {Phone ? (
+                                          <Link
+                                            to="#"
+                                            data-tooltip-id="my-tooltip-7"
+                                            onClick={() =>
+                                              handleAddToCart(data)
+                                            }
+                                          >
+                                            {cartItems.find(
+                                              (item) =>
+                                                item.design_id === data.id
+                                            ) ? (
+                                              <Link to="/cart" className="mt-2">
+                                                <BsFillCartCheckFill />
+                                              </Link>
+                                            ) : (
+                                              <BsHandbag />
+                                            )}
+                                          </Link>
+                                        ) : (
+                                          ""
+                                        )}
+                                      </div> */}
                                       <div>
                                         {userType == 1 ? (
                                           <>
@@ -667,7 +716,7 @@ const Shop = ({ product }) => {
                                                 data-tooltip-id="my-tooltip-12"
                                                 onClick={() => {
                                                   if (
-                                                    DealerCollection?.find(
+                                                    DealercartItems?.find(
                                                       (item) =>
                                                         item?.id === data?.id
                                                     )
@@ -676,15 +725,15 @@ const Shop = ({ product }) => {
                                                       data
                                                     );
                                                   } else {
-                                                    AddToDealerWishlist(data);
+                                                    addToDealerWishList(data);
                                                   }
                                                 }}
                                               >
-                                                {DealerCollection?.find(
+                                                {DealercartItems.find(
                                                   (item) =>
                                                     item?.id === data?.id
                                                 ) ? (
-                                                  <FaStar />
+                                                  <FaRegStar />
                                                 ) : (
                                                   <FaRegStar />
                                                 )}

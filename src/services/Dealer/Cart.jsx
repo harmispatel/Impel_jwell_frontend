@@ -20,7 +20,7 @@ const RemovetoCart = async (data) => {
   return d;
 };
 
-const CartList = async (data) => {
+const DealerCartList = async (data) => {
   let d = await call({
     path: "dealer/cart-list",
     method: "POST",
@@ -55,7 +55,7 @@ const exportObject = {
   PlaceOrder,
   AddtoCart,
   RemovetoCart,
-  CartList,
+  DealerCartList,
 };
 
 export default exportObject;

@@ -342,23 +342,6 @@ const Navbar = () => {
               <ReactTooltip id="my-tooltip-1" place="top" content="user" />
               <ReactTooltip id="my-tooltip-2" place="top" content="wishlist" />
               <ReactTooltip id="my-tooltip-3" place="top" content="cart" />
-              {/* {(Dealer || Phone) && (
-                <li>
-                  {Dealer ? (
-                    // <Link className="icon cart_icon" to="/dealer_cart">
-                    //   <BsHandbag />
-                    //   {dealerCartCounts?.length > 0 && (
-                    //     <div className="cart_count">
-                    //       {dealerCartCounts?.length}
-                    //     </div>
-                    //   )}
-                    // </Link>
-                    <div></div>
-                  ) : (
-                   
-                  )}
-                </li>
-              )} */}
             </ul>
           </div>
         </div>

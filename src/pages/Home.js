@@ -22,7 +22,7 @@ const Home = () => {
   const [bannerSlider, SetBannerSlider] = useState([]);
   const [category, SetCategory] = useState([]);
   const [newAdd, SetNewAdd] = useState([]);
-  // const [Featured, SetFeatured] = useState([]); 
+  // const [Featured, SetFeatured] = useState([]);
   const [TopSell, SetTopSell] = useState([]);
 
   const videoEl = useRef(null);
@@ -49,7 +49,6 @@ const Home = () => {
       .slider()
       .then((res) => {
         SetBannerSlider(res.data);
-        console.log(res.data);
       })
       .catch((err) => {
         console.log(err);

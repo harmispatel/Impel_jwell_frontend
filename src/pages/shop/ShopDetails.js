@@ -75,7 +75,7 @@ const ShopDetails = () => {
   };
 
   const GetCarList = async () => {
-    DealeCartService.CartList({ email: Dealer })
+    DealeCartService.DealerCartList({ email: Dealer })
       .then((res) => {
         setDealerCartItems(res.data);
       })

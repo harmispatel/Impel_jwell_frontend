@@ -24,7 +24,6 @@ body {
   font-size: 25px
 }
 
-
 /* toast message css */
 .toast {
   width: 20rem;
@@ -41,7 +40,7 @@ body {
 
 /* navbar */
 .header {
-  background-color: transparent;
+  background-color: #fff;
   position: fixed;
   top: 0;
   left: 0;
@@ -1225,6 +1224,48 @@ input[type="file"] {
   color: #de9d6d !important;
 }
 
+/* Paginate css */
+.pagination-container {
+  display: flex;
+  justify-content: end;
+  margin-top: 20px;
+}
+
+.pagination {
+  display: flex;
+  list-style: none;
+  padding: 0;
+}
+
+.pagination li {
+  margin: 0 5px;
+}
+
+.pagination a {
+  text-decoration: none;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  color: #333;
+}
+
+.pagination li.active a {
+  background-color: #4caf50;
+}
+
+.pagination a:hover,
+.pagination a.active {
+  background-color: #4caf50;
+  color: #fff;
+  border: 1px solid #4caf50;
+}
+
+.pagination li.disabled a {
+  color: #ccc;
+  pointer-events: none;
+  cursor: default;
+}
+
 /* shop_details */
 
 .prodcuts-weight label {
@@ -1417,7 +1458,6 @@ input[type="file"] {
 /* profile */
 .profile {
   margin-top: 130px;
-  background-color: #fff;
 }
 
 .address-check-text {

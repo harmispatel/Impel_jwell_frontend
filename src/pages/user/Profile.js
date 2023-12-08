@@ -19,7 +19,9 @@ const Profile = () => {
   const [profileData, setProfileData] = useState([]);
   const [city, setcity] = useState();
   const [shipping_city, setShipping_city] = useState();
-  const [isChecked, setIsChecked] = useState(false);
+  const [isChecked, setIsChecked] = useState(
+    selectedData.address_same_as_company === 1 ? true : false
+  );
   const [userData, setUserData] = useState({
     name: "",
     email: "",
@@ -85,9 +87,8 @@ const Profile = () => {
   }, []);
 
   const handleCheckboxChange = (event) => {
-    const newValue = event.target.checked;
-    setIsChecked(newValue);
-    localStorage.setItem("isChecked", newValue.toString());
+    setIsChecked(event.target.checked);
+    localStorage.setItem("isChecked", setIsChecked.toString());
   };
 
   // user profile display function
@@ -345,15 +346,15 @@ const Profile = () => {
   return (
     <section className="profile">
       <div className="container">
-        <div class="row">
-          <div class="col-xl-4">
-            <div class="card mb-4 mb-xl-0">
+        <div className="row">
+          <div className="col-xl-4">
+            <div className="card mb-4 mb-xl-0">
               <div>
-                <div class="card-header">Profile Picture</div>
+                <div className="card-header">Profile Picture</div>
                 <div className="upload-btn">
-                  <div class="button-wrap py-3">
+                  <div className="button-wrap py-3">
                     <label
-                      class="new-button"
+                      className="new-button"
                       for="upload"
                       style={{ display: image ? "none" : "block" }}
                     >
@@ -391,18 +392,18 @@ const Profile = () => {
               </div>
             </div>
           </div>
-          <div class="col-xl-8">
-            <div class="card mb-4">
-              <div class="card-header">Account Details</div>
-              <div class="card-body">
+          <div className="col-xl-8">
+            <div className="card mb-4">
+              <div className="card-header">Account Details</div>
+              <div className="card-body">
                 <form>
-                  <div class="row gx-3 mb-3">
-                    <div class="col-md-6">
-                      <label class="small mb-1" for="inputFirstName">
+                  <div className="row gx-3 mb-3">
+                    <div className="col-md-6">
+                      <label className="small mb-1" for="inputFirstName">
                         First name
                       </label>
                       <input
-                        class="form-control"
+                        className="form-control"
                         id="inputFirstName"
                         type="text"
                         value={profileData.name}
@@ -410,12 +411,12 @@ const Profile = () => {
                       />
                     </div>
 
-                    <div class="col-md-6">
-                      <label class="small mb-1" for="inputLastName">
+                    <div className="col-md-6">
+                      <label className="small mb-1" for="inputLastName">
                         Email Id
                       </label>
                       <input
-                        class="form-control"
+                        className="form-control"
                         id="inputLastName"
                         type="text"
                         value={profileData.email}
@@ -424,13 +425,13 @@ const Profile = () => {
                     </div>
                   </div>
 
-                  <div class="row gx-3 mb-3">
-                    <div class="col-md-6">
-                      <label class="small mb-1" for="inputOrgName">
+                  <div className="row gx-3 mb-3">
+                    <div className="col-md-6">
+                      <label className="small mb-1" for="inputOrgName">
                         Mobile Number
                       </label>
                       <input
-                        class="form-control"
+                        className="form-control"
                         id="inputOrgName"
                         type="text"
                         value={profileData.phone}
@@ -438,12 +439,12 @@ const Profile = () => {
                       />
                     </div>
 
-                    <div class="col-md-6">
-                      <label class="small mb-1" for="inputLocation">
+                    <div className="col-md-6">
+                      <label className="small mb-1" for="inputLocation">
                         Billing Address
                       </label>
                       <input
-                        class="form-control"
+                        className="form-control"
                         id="inputLocation"
                         type="text"
                         value={profileData.address}
@@ -451,13 +452,13 @@ const Profile = () => {
                       />
                     </div>
                   </div>
-                  <div class="row gx-3 mb-3">
-                    <div class="col-md-6">
-                      <label class="small mb-1" for="inputOrgName">
+                  <div className="row gx-3 mb-3">
+                    <div className="col-md-6">
+                      <label className="small mb-1" for="inputOrgName">
                         City
                       </label>
                       <input
-                        class="form-control"
+                        className="form-control"
                         id="inputOrgName"
                         type="text"
                         value={profileData.city_name}
@@ -465,12 +466,12 @@ const Profile = () => {
                       />
                     </div>
 
-                    <div class="col-md-6">
-                      <label class="small mb-1" for="inputLocation">
+                    <div className="col-md-6">
+                      <label className="small mb-1" for="inputLocation">
                         State
                       </label>
                       <input
-                        class="form-control"
+                        className="form-control"
                         id="inputLocation"
                         type="text"
                         value={profileData.state_name}
@@ -478,13 +479,13 @@ const Profile = () => {
                       />
                     </div>
                   </div>
-                  <div class="row gx-3 mb-3">
-                    <div class="col-md-6">
-                      <label class="small mb-1" for="inputOrgName">
+                  <div className="row gx-3 mb-3">
+                    <div className="col-md-6">
+                      <label className="small mb-1" for="inputOrgName">
                         Pincode
                       </label>
                       <input
-                        class="form-control"
+                        className="form-control"
                         id="inputOrgName"
                         type="text"
                         value={profileData?.pincode}
@@ -492,12 +493,12 @@ const Profile = () => {
                       />
                     </div>
 
-                    <div class="col-md-6">
-                      <label class="small mb-1" for="inputLocation">
+                    <div className="col-md-6">
+                      <label className="small mb-1" for="inputLocation">
                         Pan Number
                       </label>
                       <input
-                        class="form-control"
+                        className="form-control"
                         id="inputLocation"
                         type="text"
                         value={profileData.pan_no}
@@ -506,7 +507,7 @@ const Profile = () => {
                     </div>
                   </div>
                   <button
-                    class="btn btn-primary"
+                    className="btn btn-primary"
                     type="button"
                     onClick={() => handleEdit(profileData)}
                   >
@@ -878,161 +879,3 @@ const Profile = () => {
 };
 
 export default Profile;
-// import React from "react";
-
-// const Profile = () => {
-//   return (
-//     <>
-//       <div className="profile">
-//         <div className="container">
-//           <div class="row">
-//             <div class="col-xl-4">
-//               <div class="card mb-4 mb-xl-0">
-//                 <div class="card-header">Profile Picture</div>
-//                 <div class="card-body text-center">
-//                   <img
-//                     class="img-account-profile rounded-circle mb-2"
-//                     src="http://bootdey.com/img/Content/avatar/avatar1.png"
-//                     alt=""
-//                   />
-
-//                   <div class="small font-italic text-muted mb-4">
-//                     JPG or PNG no larger than 5 MB
-//                   </div>
-
-//                   <input type="file" />
-//                 </div>
-//               </div>
-//             </div>
-//             <div class="col-xl-8">
-//               <div class="card mb-4">
-//                 <div class="card-header">Account Details</div>
-//                 <div class="card-body">
-//                   <form>
-//                     <div class="mb-3">
-//                       <label class="small mb-1" for="inputUsername">
-//                         Username (how your name will appear to other users on
-//                         the site)
-//                       </label>
-//                       <input
-//                         class="form-control"
-//                         id="inputUsername"
-//                         type="text"
-//                         placeholder="Enter your username"
-//                         value="username"
-//                       />
-//                     </div>
-
-//                     <div class="row gx-3 mb-3">
-//                       <div class="col-md-6">
-//                         <label class="small mb-1" for="inputFirstName">
-//                           First name
-//                         </label>
-//                         <input
-//                           class="form-control"
-//                           id="inputFirstName"
-//                           type="text"
-//                           placeholder="Enter your first name"
-//                           value="Valerie"
-//                         />
-//                       </div>
-
-//                       <div class="col-md-6">
-//                         <label class="small mb-1" for="inputLastName">
-//                           Last name
-//                         </label>
-//                         <input
-//                           class="form-control"
-//                           id="inputLastName"
-//                           type="text"
-//                           placeholder="Enter your last name"
-//                           value="Luna"
-//                         />
-//                       </div>
-//                     </div>
-
-//                     <div class="row gx-3 mb-3">
-//                       <div class="col-md-6">
-//                         <label class="small mb-1" for="inputOrgName">
-//                           Organization name
-//                         </label>
-//                         <input
-//                           class="form-control"
-//                           id="inputOrgName"
-//                           type="text"
-//                           placeholder="Enter your organization name"
-//                           value="Start Bootstrap"
-//                         />
-//                       </div>
-
-//                       <div class="col-md-6">
-//                         <label class="small mb-1" for="inputLocation">
-//                           Location
-//                         </label>
-//                         <input
-//                           class="form-control"
-//                           id="inputLocation"
-//                           type="text"
-//                           placeholder="Enter your location"
-//                           value="San Francisco, CA"
-//                         />
-//                       </div>
-//                     </div>
-
-//                     <div class="mb-3">
-//                       <label class="small mb-1" for="inputEmailAddress">
-//                         Email address
-//                       </label>
-//                       <input
-//                         class="form-control"
-//                         id="inputEmailAddress"
-//                         type="email"
-//                         placeholder="Enter your email address"
-//                         value="name@example.com"
-//                       />
-//                     </div>
-
-//                     <div class="row gx-3 mb-3">
-//                       <div class="col-md-6">
-//                         <label class="small mb-1" for="inputPhone">
-//                           Phone number
-//                         </label>
-//                         <input
-//                           class="form-control"
-//                           id="inputPhone"
-//                           type="tel"
-//                           placeholder="Enter your phone number"
-//                           value="555-123-4567"
-//                         />
-//                       </div>
-
-//                       <div class="col-md-6">
-//                         <label class="small mb-1" for="inputBirthday">
-//                           Birthday
-//                         </label>
-//                         <input
-//                           class="form-control"
-//                           id="inputBirthday"
-//                           type="text"
-//                           name="birthday"
-//                           placeholder="Enter your birthday"
-//                           value="06/10/1988"
-//                         />
-//                       </div>
-//                     </div>
-
-//                     <button class="btn btn-primary" type="button">
-//                       Save changes
-//                     </button>
-//                   </form>
-//                 </div>
-//               </div>
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-//     </>
-//   );
-// };
-
-// export default Profile;

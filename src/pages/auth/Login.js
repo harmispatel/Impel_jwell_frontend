@@ -166,7 +166,7 @@ const Login = () => {
                           </Link>
                         </div> */}
                         <div className="login_info_inr_title">
-                          <div class=" p-2 text-center">
+                          <div className=" p-2 text-center">
                             <div className="login_info_inr_title">
                               <h3>Welcome</h3>
                             </div>
@@ -196,7 +196,7 @@ const Login = () => {
                                 <div className="row">
                                   <div className="col-md-6">
                                     <button
-                                      class="button-60"
+                                      className="button-60"
                                       role="button"
                                       type="submit"
                                       id="sign-in-button"

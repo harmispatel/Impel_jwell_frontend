@@ -58,7 +58,7 @@ const DealerProfile = () => {
 
   return (
     <section className="profile">
-      <div className="container rounded bg-white mt-5 mb-5">
+      <div className="container rounded bg-white mb-5 p-5">
         <div className="row mb-4">
           {/* Owner_info */}
           <div className="d-flex justify-content-between align-items-center">

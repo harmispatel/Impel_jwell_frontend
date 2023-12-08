@@ -27,85 +27,92 @@ import About from "./components/About";
 import { Toaster } from "react-hot-toast";
 import ForgetPassword from "./pages/auth/ForgetPassword";
 import CartProvider from "./context/CartContext";
-// import Popup from "./components/common/Popup";
+import Errorpage from "./components/Errorpage";
+import Popup from "./components/common/Popup";
 
 function App() {
-  // const popupshow = localStorage.getItem("user_type");
-  const { tagId } = useParams();
+  const popupshow = localStorage.getItem("user_type");
+  const isComingSoon = false;
   return (
     <CartProvider>
       <ScrollToTop />
-      {/* {popupshow == null ? <Popup /> : <></>} */}
+      {popupshow == null ? <Popup /> : <></>}
       <Routes>
-        <Route path="/" element={<Layout />}>
-          {/* COMMON COMPONENT */}
-          <Route index element={<Home />} />
-          <Route path="shop" element={<Shop />} />
-          <Route path="shopdetails/:id" element={<ShopDetails />} />
-          <Route path="about" element={<About />} />
-          <Route path="categories" element={<Categories />} />
-          <Route path="categories/:id" element={<CategoriesItems />} />
-          <Route path="categoryDetail/:id" element={<CategoriesDetail />} />
-          {/* USER PROTECTED */}
-          <Route
-            path="wishlist"
-            element={
-              <ProtectedRoute>
-                <WishList />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="profile"
-            element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="orders"
-            element={
-              <ProtectedRoute>
-                <Orders />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="cart" element={<Cart />} />
-          <Route path="orders" element={<Orders />} />
-          {/* DEALER PROTECTED */}
-          <Route
-            path="dealer_wishlist"
-            element={
-              <DealerProtectedRoute>
-                <DealerWishList />
-              </DealerProtectedRoute>
-            }
-          />
-          <Route
-            path="dealer_profile"
-            element={
-              <DealerProtectedRoute>
-                <DealerProfile />
-              </DealerProtectedRoute>
-            }
-          />
-          <Route
-            path="dealer_orders"
-            element={
-              <DealerProtectedRoute>
-                <DealerOrders />
-              </DealerProtectedRoute>
-            }
-          />
-          <Route path="dealer_cart" element={<DealerCart />} />
-          {/* AUTH */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/Dealer_login" element={<DealerLogIN />} />
-          <Route path="/forget-password" element={<ForgetPassword />} />
-        </Route>
+        {isComingSoon ? (
+          <Route path="/" element={<Errorpage />} />
+        ) : (
+          <>
+            <Route path="/" element={<Layout />}>
+              {/* COMMON COMPONENT */}
+              <Route index element={<Home />} />
+              <Route path="shop" element={<Shop />} />
+              <Route path="shopdetails/:id" element={<ShopDetails />} />
+              <Route path="about" element={<About />} />
+              <Route path="categories" element={<Categories />} />
+              <Route path="categories/:id" element={<CategoriesItems />} />
+              <Route path="categoryDetail/:id" element={<CategoriesDetail />} />
+              {/* USER PROTECTED */}
+              <Route
+                path="wishlist"
+                element={
+                  <ProtectedRoute>
+                    <WishList />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="profile"
+                element={
+                  <ProtectedRoute>
+                    <Profile />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="orders"
+                element={
+                  <ProtectedRoute>
+                    <Orders />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="cart" element={<Cart />} />
+              <Route path="orders" element={<Orders />} />
+              {/* DEALER PROTECTED */}
+              <Route
+                path="dealer_wishlist"
+                element={
+                  <DealerProtectedRoute>
+                    <DealerWishList />
+                  </DealerProtectedRoute>
+                }
+              />
+              <Route
+                path="dealer_profile"
+                element={
+                  <DealerProtectedRoute>
+                    <DealerProfile />
+                  </DealerProtectedRoute>
+                }
+              />
+              <Route
+                path="dealer_orders"
+                element={
+                  <DealerProtectedRoute>
+                    <DealerOrders />
+                  </DealerProtectedRoute>
+                }
+              />
+              <Route path="dealer_cart" element={<DealerCart />} />
+              {/* AUTH */}
+              <Route path="/login" element={<Login />} />
+              <Route path="/Dealer_login" element={<DealerLogIN />} />
+              <Route path="/forget-password" element={<ForgetPassword />} />
+            </Route>
+          </>
+        )}
       </Routes>
-      <Toaster toastOptions={{ duration: 3000 }} />
+      <Toaster toastOptions={{ duration: 2000 }} />
     </CartProvider>
   );
 }
