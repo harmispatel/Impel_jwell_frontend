@@ -12,7 +12,7 @@ import toast from "react-hot-toast";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import { WishlistSystem } from "../../context/WishListContext";
 import { FaRegStar, FaStar } from "react-icons/fa";
-import ReactPaginate from "react-paginate";
+
 const Shop = ({ product }) => {
   const { dispatch: wishlistDispatch } = useContext(WishlistSystem);
   const { dispatch: wishlistRemoveDispatch } = useContext(WishlistSystem);
@@ -46,22 +46,74 @@ const Shop = ({ product }) => {
   const [UsercartItems, setUserCartItems] = useState([]);
   const [cartItems, setCartItems] = useState([]);
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage, setPostsPerPage] = useState(200);
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    dataShowLength: 50,
+  });
 
-  const indexOfLastPost = currentPage * postsPerPage;
-  const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = allData.slice(indexOfFirstPost, indexOfLastPost);
+  const totalPage = Math.ceil(allData.length / pagination.dataShowLength);
 
-  const pageNumbers = [];
-
-  for (let i = 1; i < Math.ceil(allData?.length / postsPerPage); i++) {
-    pageNumbers.push(i);
-  }
-  const handlePageClick = (data) => {
-    const selectedPage = data.selected + 1;
-    setCurrentPage(selectedPage);
+  const paginationPage = (page) => {
+    setPagination({ ...pagination, currentPage: page });
+    scrollup();
   };
+  const paginationArea = () => {
+    const items = [];
+    let threePoints = true;
+    for (let number = 1; number <= totalPage; number++) {
+      if (
+        number <= 1 ||
+        number >= totalPage ||
+        (number >= pagination.currentPage - 1 &&
+          number <= pagination.currentPage + 1)
+      ) {
+        items.push(
+          <li
+            key={number}
+            className={`page-item ${
+              pagination.currentPage === number ? "active" : ""
+            }`}
+            onClick={() => {
+              paginationPage(number);
+            }}
+          >
+            <a className="page-link">{number}</a>
+          </li>
+        );
+      } else {
+        if (threePoints === true) {
+          items.push(
+            <li key={number} className="page-item threePoints">
+              <a className="page-link">...</a>
+            </li>
+          );
+          threePoints = false;
+        }
+      }
+    }
+    return items;
+  };
+
+  const paginationPrev = () => {
+    if (pagination.currentPage > 1) {
+      setPagination({ ...pagination, currentPage: pagination.currentPage - 1 });
+      scrollup();
+    } else {
+      setPagination({ ...pagination, currentPage: 1 });
+      scrollup();
+    }
+  };
+
+  const paginationNext = () => {
+    if (pagination.currentPage < totalPage) {
+      setPagination({ ...pagination, currentPage: pagination.currentPage + 1 });
+      scrollup();
+    } else {
+      setPagination({ ...pagination, currentPage: totalPage });
+      scrollup();
+    }
+  };
+
   const scrollup = () => {
     window.scrollTo({
       top: 200,
@@ -235,16 +287,16 @@ const Shop = ({ product }) => {
         console.log(err);
       });
   };
-  // user cart API
-  const GetUserCartList = async () => {
-    UserCartService.CartList({ phone: Phone })
-      .then((res) => {
-        setCartItems(res.data.cart_items);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  // // user cart API
+  // const GetUserCartList = async () => {
+  //   UserCartService.CartList({ phone: Phone })
+  //     .then((res) => {
+  //       setCartItems(res.data.cart_items);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
 
   // Dealer wishlist API
   const collectionCheck = () => {
@@ -260,7 +312,7 @@ const Shop = ({ product }) => {
   useEffect(() => {
     AllData();
     collectionCheck();
-    GetUserCartList();
+    // GetUserCartList();
     GetCartList();
   }, []);
 
@@ -382,7 +434,7 @@ const Shop = ({ product }) => {
                         onChange={handleRadioChange}
                         value="new_added"
                       />
-                      <label for="new_added" className="">
+                      <label htmlFor="new_added" className="">
                         New Added
                       </label>
                     </div>
@@ -398,7 +450,7 @@ const Shop = ({ product }) => {
                         onChange={handleRadioChange}
                         className="d-none"
                       />
-                      <label for="low_to_high">Price : low to high</label>
+                      <label htmlFor="low_to_high">Price : low to high</label>
                     </div>
                   </div>
                   <div className="col-md-2">
@@ -412,7 +464,7 @@ const Shop = ({ product }) => {
                         checked={selectedOption === "high_to_low"}
                         onChange={handleRadioChange}
                       />
-                      <label for="high_to_low">Price : high to low</label>
+                      <label htmlFor="high_to_low">Price : high to low</label>
                     </div>
                   </div>
                   <div className="col-md-2">
@@ -426,7 +478,7 @@ const Shop = ({ product }) => {
                         onChange={handleRadioChange}
                         className="d-none"
                       />
-                      <label for="highest_selling">Top Seller</label>
+                      <label htmlFor="highest_selling">Top Seller</label>
                     </div>
                   </div>
                   <div className="col-md-2">
@@ -440,7 +492,7 @@ const Shop = ({ product }) => {
                         checked={selectedOption === "clear_all"}
                         onChange={handleRadioChange}
                       />
-                      <label for="clear_all">Clear All</label>
+                      <label htmlFor="clear_all">Clear All</label>
                     </div>
                   </div>
                 </div>
@@ -486,128 +538,139 @@ const Shop = ({ product }) => {
                   tag.length === 0 &&
                   PriceRange.minprice === null ? (
                     <>
-                      {currentPosts?.length > 0 ? (
+                      {allData?.length > 0 ? (
                         <>
                           <div className="row">
-                            {currentPosts?.map((product) => {
-                              return (
-                                <div key={product.id} className="col-md-4">
-                                  <Link
-                                    to={`/shopdetails/${product.id}`}
-                                    className="product_data"
-                                  >
-                                    {product?.image ? (
-                                      <img
-                                        src={product?.image}
-                                        alt={product?.name}
-                                        className="w-100"
-                                      />
-                                    ) : (
-                                      <img
-                                        src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg"
-                                        alt=""
-                                        className="w-100"
-                                      />
-                                    )}
+                            {allData
+                              ?.slice(
+                                (pagination.currentPage - 1) *
+                                  pagination.dataShowLength,
+                                pagination.dataShowLength *
+                                  pagination.currentPage
+                              )
+                              .map((product) => {
+                                return (
+                                  <div key={product.id} className="col-md-4">
+                                    <Link
+                                      to={`/shopdetails/${product.id}`}
+                                      className="product_data"
+                                    >
+                                      {product?.image ? (
+                                        <img
+                                          src={product?.image}
+                                          alt={product?.name}
+                                          className="w-100"
+                                        />
+                                      ) : (
+                                        <img
+                                          src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg"
+                                          alt=""
+                                          className="w-100"
+                                        />
+                                      )}
 
-                                    <div className="edit">
-                                      <div>
-                                        {userType == 1 ? (
-                                          <>
-                                            {email ? (
-                                              <Link
-                                                to="#"
-                                                data-tooltip-id="my-tooltip-12"
-                                                onClick={() => {
-                                                  if (
-                                                    DealerCollection?.find(
-                                                      (item) =>
-                                                        item.id === product.id
-                                                    )
-                                                  ) {
-                                                    removefromdealerwishlist(
-                                                      product
-                                                    );
-                                                  } else {
-                                                    AddToDealerWishlist(
-                                                      product
-                                                    );
-                                                  }
-                                                }}
-                                              >
-                                                {DealerCollection?.find(
-                                                  (item) =>
-                                                    item.id === product.id
-                                                ) ? (
-                                                  <FaStar />
-                                                ) : (
+                                      <div className="edit">
+                                        <div>
+                                          {userType == 1 ? (
+                                            <>
+                                              {email ? (
+                                                <Link
+                                                  to="#"
+                                                  data-tooltip-id="my-tooltip-12"
+                                                  onClick={() => {
+                                                    if (
+                                                      DealerCollection?.find(
+                                                        (item) =>
+                                                          item.id === product.id
+                                                      )
+                                                    ) {
+                                                      removefromdealerwishlist(
+                                                        product
+                                                      );
+                                                    } else {
+                                                      AddToDealerWishlist(
+                                                        product
+                                                      );
+                                                    }
+                                                  }}
+                                                >
+                                                  {DealerCollection?.find(
+                                                    (item) =>
+                                                      item.id === product.id
+                                                  ) ? (
+                                                    <FaStar />
+                                                  ) : (
+                                                    <FaRegStar />
+                                                  )}
+                                                </Link>
+                                              ) : (
+                                                <Link
+                                                  to="/Dealer_login"
+                                                  data-tooltip-id="my-tooltip-12"
+                                                >
                                                   <FaRegStar />
-                                                )}
-                                              </Link>
-                                            ) : (
-                                              <Link
-                                                to="/Dealer_login"
-                                                data-tooltip-id="my-tooltip-12"
-                                              >
-                                                <FaRegStar />
-                                              </Link>
-                                            )}
-                                          </>
-                                        ) : (
-                                          <>
-                                            {Phone ? (
-                                              <Link
-                                                to="#"
-                                                data-tooltip-id="my-tooltip-9"
-                                                onClick={() => {
-                                                  if (
-                                                    UsercartItems?.find(
-                                                      (item) =>
-                                                        item.id === product.id
-                                                    )
-                                                  ) {
-                                                    removeFromWishList(product);
-                                                  } else {
-                                                    addToUserWishList(product);
-                                                  }
-                                                }}
-                                              >
-                                                {UsercartItems?.find(
-                                                  (item) =>
-                                                    item.id === product.id
-                                                ) ? (
-                                                  <FcLike />
-                                                ) : (
+                                                </Link>
+                                              )}
+                                            </>
+                                          ) : (
+                                            <>
+                                              {Phone ? (
+                                                <Link
+                                                  to="#"
+                                                  data-tooltip-id="my-tooltip-9"
+                                                  onClick={() => {
+                                                    if (
+                                                      UsercartItems?.find(
+                                                        (item) =>
+                                                          item.id === product.id
+                                                      )
+                                                    ) {
+                                                      removeFromWishList(
+                                                        product
+                                                      );
+                                                    } else {
+                                                      addToUserWishList(
+                                                        product
+                                                      );
+                                                    }
+                                                  }}
+                                                >
+                                                  {UsercartItems?.find(
+                                                    (item) =>
+                                                      item.id === product.id
+                                                  ) ? (
+                                                    <FcLike />
+                                                  ) : (
+                                                    <BsHeart />
+                                                  )}
+                                                </Link>
+                                              ) : (
+                                                <Link
+                                                  to="/login"
+                                                  data-tooltip-id="my-tooltip-9"
+                                                >
                                                   <BsHeart />
-                                                )}
-                                              </Link>
-                                            ) : (
-                                              <Link
-                                                to="/login"
-                                                data-tooltip-id="my-tooltip-9"
-                                              >
-                                                <BsHeart />
-                                              </Link>
-                                            )}
-                                          </>
-                                        )}
+                                                </Link>
+                                              )}
+                                            </>
+                                          )}
+                                        </div>
                                       </div>
-                                    </div>
 
-                                    <div className="product_details">
-                                      <h4>{product?.name}</h4>
-                                      <p>{product?.category_name}</p>
-                                      <h5>
-                                        ₹
-                                        {product?.total_price_18k?.toLocaleString(
-                                          "en-US"
-                                        )}
-                                      </h5>
-                                    </div>
-                                  </Link>
-                                </div>
-                              );
-                            })}
+                                      <div className="product_details">
+                                        <h4>{product?.name}</h4>
+                                        <p>{product?.category_name}</p>
+                                        <h5>
+                                          ₹
+                                          {product?.total_price_18k?.toLocaleString(
+                                            "en-US"
+                                          )}
+                                        </h5>
+                                      </div>
+                                    </Link>
+                                  </div>
+                                );
+                              })}
                           </div>
                         </>
                       ) : (
@@ -615,20 +678,62 @@ const Shop = ({ product }) => {
                           <p>No products available.</p>
                         </div>
                       )}
-                      <div className="pagination-container">
-                        <ReactPaginate
-                          previousLabel={"previous"}
-                          nextLabel={"next"}
-                          breakLabel={"..."}
-                          breakclassName={"break-me"}
-                          pageCount={Math.ceil(allData?.length / postsPerPage)}
-                          marginPagesDisplayed={2}
-                          pageRangeDisplayed={5}
-                          onPageChange={handlePageClick}
-                          containerclassName={"pagination"}
-                          activeclassName={"active"}
-                          onClick={scrollup}
-                        />
+                      <div className="paginationArea">
+                        <nav aria-label="navigation" className="">
+                          <ul className="pagination">
+                            <li className="page-item previous">
+                              <a
+                                className="page-link"
+                                onClick={() => {
+                                  paginationPrev();
+                                }}
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  class="feather feather-chevron-left"
+                                >
+                                  <polyline points="15 18 9 12 15 6"></polyline>
+                                </svg>
+                                <span>Prev</span>
+                              </a>
+                            </li>
+
+                            {paginationArea()}
+
+                            <li className="page-item next">
+                              <a
+                                onClick={() => {
+                                  paginationNext();
+                                }}
+                                className="page-link"
+                              >
+                                <span>Next</span>
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  class="feather feather-chevron-right"
+                                >
+                                  <polyline points="9 18 15 12 9 6"></polyline>
+                                </svg>
+                              </a>
+                            </li>
+                          </ul>
+                        </nav>
                       </div>
                     </>
                   ) : (

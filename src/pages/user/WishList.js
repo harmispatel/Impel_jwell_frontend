@@ -113,12 +113,12 @@ const WishList = () => {
                   </div>
                 </>
               ) : (
-                <div class="row justify-content-center">
-                  <div class="col-md-4 text-center">
+                <div className="row justify-content-center">
+                  <div className="col-md-4 text-center">
                     <img
                       src={noWishlist}
                       alt=""
-                      class="text-center align-items-center"
+                      className="text-center align-items-center"
                       height="350px"
                       width="350px"
                     />

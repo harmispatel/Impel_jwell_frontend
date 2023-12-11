@@ -28,7 +28,7 @@ const ForgetPassword = () => {
             <h1>Forgot your password?</h1>
             <h3>Enter your email address to reset your password</h3>
             <form onSubmit={handlesubmit}>
-              <label for="mail">Email</label>
+              <label htmlFor="mail">Email</label>
               <input
                 type="email"
                 id="name"

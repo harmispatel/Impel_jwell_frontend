@@ -74,15 +74,15 @@ const ShopDetails = () => {
     }
   };
 
-  const GetCarList = async () => {
-    DealeCartService.DealerCartList({ email: Dealer })
-      .then((res) => {
-        setDealerCartItems(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  // const GetCarList = async () => {
+  //   DealeCartService.DealerCartList({ email: Dealer })
+  //     .then((res) => {
+  //       setDealerCartItems(res.data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
 
   const GetUserCartList = async () => {
     UserCartService.CartList({ phone: Phone })
@@ -118,7 +118,7 @@ const ShopDetails = () => {
     productData();
     Relatedproduct();
     GetUserCartList();
-    GetCarList();
+    // GetCarList();
     GetUserWishList();
     GetDealerWishList();
   }, []);
@@ -394,7 +394,7 @@ const ShopDetails = () => {
                                       checked={goldType === "22k"}
                                       onChange={handleGoldType}
                                     />
-                                    <label for="22k">22K</label>
+                                    <label htmlFor="22k">22K</label>
                                   </div>
                                   <div className="radio-item">
                                     <input
@@ -404,7 +404,7 @@ const ShopDetails = () => {
                                       checked={goldType === "20k"}
                                       onChange={handleGoldType}
                                     />
-                                    <label for="20k">20K</label>
+                                    <label htmlFor="20k">20K</label>
                                   </div>
                                   <div className="radio-item">
                                     <input
@@ -414,7 +414,7 @@ const ShopDetails = () => {
                                       defaultChecked={goldType === "18k"}
                                       onChange={handleGoldType}
                                     />
-                                    <label for="18k">18K</label>
+                                    <label htmlFor="18k">18K</label>
                                   </div>
                                   <div className="radio-item">
                                     <input
@@ -424,7 +424,7 @@ const ShopDetails = () => {
                                       checked={goldType === "14k"}
                                       onChange={handleGoldType}
                                     />
-                                    <label for="14k">14K</label>
+                                    <label htmlFor="14k">14K</label>
                                   </div>
                                 </div>
                               </>
@@ -440,7 +440,7 @@ const ShopDetails = () => {
                                       defaultChecked={goldType === "18k"}
                                       onChange={handleGoldType}
                                     />
-                                    <label for="18k">18K</label>
+                                    <label htmlFor="18k">18K</label>
                                   </div>
                                   <div className="radio-item ms-3">
                                     <input
@@ -450,7 +450,7 @@ const ShopDetails = () => {
                                       checked={goldType === "14k"}
                                       onChange={handleGoldType}
                                     />
-                                    <label for="14k">14K</label>
+                                    <label htmlFor="14k">14K</label>
                                   </div>
                                 </div>
                               </>
@@ -466,7 +466,7 @@ const ShopDetails = () => {
                                       defaultChecked={goldType === "18k"}
                                       onChange={handleGoldType}
                                     />
-                                    <label for="18k">18K</label>
+                                    <label htmlFor="18k">18K</label>
                                   </div>
                                   <div className="radio-item ms-3">
                                     <input
@@ -476,7 +476,7 @@ const ShopDetails = () => {
                                       checked={goldType === "14k"}
                                       onChange={handleGoldType}
                                     />
-                                    <label for="14k">14K</label>
+                                    <label htmlFor="14k">14K</label>
                                   </div>
                                 </div>
                               </>

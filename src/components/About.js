@@ -53,7 +53,7 @@ const About = () => {
                     name="full_name"
                     required="required"
                   />
-                  <label className="form-label" for="full_name">
+                  <label className="form-label" htmlFor="full_name">
                     Full Name
                   </label>
                 </div>
@@ -65,7 +65,7 @@ const About = () => {
                     name="email"
                     required="required"
                   />
-                  <label className="form-label" for="email">
+                  <label className="form-label" htmlFor="email">
                     Email
                   </label>
                 </div>
@@ -77,7 +77,7 @@ const About = () => {
                     name="phone_number"
                     required="required"
                   />
-                  <label className="form-label" for="phone_number">
+                  <label className="form-label" htmlFor="phone_number">
                     Phone number
                   </label>
                 </div>
@@ -85,12 +85,12 @@ const About = () => {
                 <div className="form-card">
                   <textarea
                     className="form-textarea"
-                    maxlength="420"
+                    maxLength="420"
                     rows="3"
                     name="phone_number"
                     required="required"
                   ></textarea>
-                  <label className="form-textarea-label" for="phone_number">
+                  <label className="form-textarea-label" htmlFor="phone_number">
                     Address
                   </label>
                 </div>

@@ -84,7 +84,7 @@ const SidebarFilter = (props) => {
                     <label
                       className="form-check-label ms-2"
                       style={{ cursor: "pointer" }}
-                      for={`Categorydata${index}`}
+                      htmlFor={`Categorydata${index}`}
                     >
                       {data.name}
                     </label>
@@ -111,7 +111,7 @@ const SidebarFilter = (props) => {
                     <label
                       className="form-check-label ms-2"
                       style={{ cursor: "pointer" }}
-                      for={`Genderdata${index}`}
+                      htmlFor={`Genderdata${index}`}
                     >
                       {data.name}
                     </label>
@@ -139,7 +139,7 @@ const SidebarFilter = (props) => {
                     <label
                       className="form-check-label ms-2"
                       style={{ cursor: "pointer" }}
-                      for={`Tagdata${index}`}
+                      htmlFor={`Tagdata${index}`}
                     >
                       {data.name}
                     </label>

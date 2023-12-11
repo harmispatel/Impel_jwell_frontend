@@ -1041,8 +1041,7 @@ input[type="file"] {
 .cart,
 .profile,
 .about-section,
-.forget-password,
-.my_orders {
+.forget-password {
   padding: 80px 0;
   margin-top: 130px;
 }
@@ -1225,45 +1224,140 @@ input[type="file"] {
 }
 
 /* Paginate css */
-.pagination-container {
-  display: flex;
-  justify-content: end;
-  margin-top: 20px;
+.cardArea {
+  max-width: 700px;
+  padding: 40px;
+  margin: auto;
+  width: 100%;
+}
+
+.cardItem {
+  border: 2px solid rgb(231, 231, 231);
+  padding: 16px;
+  min-height: 185px;
+  max-height: 185px;
+  border-radius: 10px;
+  box-shadow: 0 1px 6px 1px rgba(204, 204, 204, 0.3);
+  transition: all .2s ease;
+  background: rgb(252, 252, 252);
+}
+
+.cardItem:not(:last-child) {
+  margin-bottom: 20px;
+}
+
+.cardItem:hover {
+  box-shadow: 0 1px 12px 1px rgba(204, 204, 204, 0.5);
+  transform: scale(1.02)
+}
+
+.cardArea .cardHeader h2 {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+  line-height: 26px;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.cardBody p {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.paginationArea {
+  max-width: 700px;
+  margin: auto;
+  padding: 10px 0 60px 0;
 }
 
 .pagination {
   display: flex;
-  list-style: none;
+  justify-content: center;
+  align-items: center;
+  list-style-type: none;
   padding: 0;
+
 }
 
-.pagination li {
-  margin: 0 5px;
+.page-item:not(.threePoints) {
+  margin: 0 6px;
+  border: 2px solid #ecf0f1;
+  font-size: 18px;
+  line-height: 18px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all.2s ease;
 }
 
-.pagination a {
-  text-decoration: none;
-  padding: 8px 12px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  color: #333;
+.page-item:not(.threePoints, .active):hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 16px #dde0e169;
+  background: #bdc3c7;
+  color: #ecf0f1;
 }
 
-.pagination li.active a {
-  background-color: #4caf50;
+.page-item.threePoints {
+  font-size: 28px;
+  line-height: 28px;
+  height: 40px;
+  width: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: end;
 }
 
-.pagination a:hover,
-.pagination a.active {
-  background-color: #4caf50;
-  color: #fff;
-  border: 1px solid #4caf50;
+.page-item:not(:last-child, :first-child, .threePoints) {
+  width: 40px;
+  min-width: 40px;
+  height: 40px;
+  max-height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.pagination li.disabled a {
-  color: #ccc;
-  pointer-events: none;
-  cursor: default;
+.page-item:is(:last-child, :first-child) {
+  height: 40px;
+  max-height: 40px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #34495e;
+  color: #ecf0f1;
+  border: 3px solid #778797a8
+}
+
+.page-item:first-child {
+  padding: 0 16px 0 8px;
+}
+
+.page-item:last-child {
+  padding: 0 8px 0 16px;
+}
+
+
+.page-item.active {
+  background: #e74c3c;
+  color: #ecf0f1;
+  box-shadow: 0 4px 16px 0.2px #e74d3c55;
+  border: 3px solid #c0392b;
+}
+
+.page-link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.page-link svg {
+  margin-top: 3px;
 }
 
 /* shop_details */
@@ -1591,6 +1685,114 @@ input[type="file"] {
   color: #000;
 }
 
+/* order page css */
+.my_orders {
+  padding: 80px 0 0 0;
+  margin-top: 130px;
+}
+
+.text-danger strong {
+  color: #9f181c;
+}
+
+.receipt-main {
+  background: #ffffff none repeat scroll 0 0;
+  border-top: 12px;
+  margin-top: 5px;
+  margin-bottom: 50px;
+  padding: 40px 30px !important;
+  position: relative;
+  box-shadow: 0 1px 21px #acacac;
+  font-family: open sans;
+}
+
+.receipt-main p {
+  color: #333333;
+  font-family: open sans;
+  line-height: 1.42857;
+}
+
+.receipt-footer h1 {
+  font-size: 15px;
+  font-weight: 400 !important;
+  margin: 0 !important;
+}
+
+.receipt-main thead th {
+  background: #414143 none repeat scroll 0 0;
+}
+
+.receipt-main thead th {
+  color: #fff;
+}
+
+.receipt-right h5 {
+  font-size: 16px;
+  font-weight: bold;
+  margin: 0 0 7px 0;
+}
+
+.receipt-right p {
+  font-size: 12px;
+  margin: 0px;
+}
+
+.receipt-right p i {
+  text-align: center;
+  width: 18px;
+}
+
+.receipt-main td {
+  padding: 9px 20px !important;
+}
+
+.receipt-main th {
+  padding: 13px 20px !important;
+}
+
+.receipt-main td {
+  font-size: 13px;
+  font-weight: initial !important;
+}
+
+.receipt-main td p:last-child {
+  margin: 0;
+  padding: 0;
+}
+
+.receipt-main td h2 {
+  font-size: 20px;
+  font-weight: 900;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.receipt-header-mid .receipt-left h1 {
+  font-weight: 100;
+  margin: 34px 0 0;
+  text-align: right;
+  text-transform: uppercase;
+}
+
+.receipt-header-mid {
+  margin: 0 0 20px 0;
+  overflow: hidden;
+}
+
+.receipt-left h3 {
+  font-size: 25px;
+  font-weight: 300;
+  text-align: center !important;
+}
+
+.receipt-left h1 {
+  font-size: 20px;
+  font-weight: 400 !important;
+  margin: 0 !important;
+  text-align: right;
+  text-transform: uppercase;
+}
+
 /* profile page */
 
 .profile_name h3 {
@@ -1845,6 +2047,46 @@ input[type="file"] {
 }
 
 @media only screen and (max-width: 767px) {
+
+  /* pagination custom css */
+  .cardArea {
+    padding: 20px;
+  }
+
+  .page-item:not(.threePoints) {
+    font-size: 15px;
+    line-height: 15px;
+    margin: 0 3px;
+  }
+
+  .page-item.threePoints {
+    font-size: 16px;
+    line-height: 16px;
+    height: 32px;
+    width: 32px;
+  }
+
+  .page-item:not(:last-child, :first-child, .threePoints) {
+    width: 32px;
+    min-width: 32px;
+    height: 32px;
+    max-height: 32px;
+  }
+
+  .page-link span {
+    display: none;
+  }
+
+  .page-link svg {
+    margin-top: 0px;
+  }
+
+  .page-item:is(:last-child, :first-child) {
+    height: 32px;
+    max-height: 32px;
+    min-width: 32px;
+    padding: 0;
+  }
 
   .header_inner {
     padding: 10px 20px;

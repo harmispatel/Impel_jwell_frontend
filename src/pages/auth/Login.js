@@ -23,6 +23,7 @@ const Login = () => {
   const [spinner, setSpinner] = useState(false);
   const [minutes, setMinutes] = useState(1);
   const [seconds, setSeconds] = useState(30);
+  const [phonedata, setPhoneData] = useState();
 
   useEffect(() => {
     onCaptchVerify();
@@ -103,9 +104,7 @@ const Login = () => {
               .then((confirmationResult) => {
                 window.confirmationResult = confirmationResult;
                 toast.success("OTP sent successfully!");
-                localStorage.setItem("user_type", res.data.user_type);
-                localStorage.setItem("user_id", res.data.user_id);
-                localStorage.setItem("verification", res.data.verification);
+                setPhoneData(res.data);
                 setShow(true);
               })
               .catch((err) => {
@@ -125,7 +124,6 @@ const Login = () => {
         });
     }
   };
-
   const handleOtpVerification = (e) => {
     setSpinner(true);
     e.preventDefault();
@@ -135,8 +133,11 @@ const Login = () => {
       .then((result) => {
         if (result) {
           localStorage.setItem("phone", phoneNumber);
-          navigate("/");
           toast.success("Login Successfully...");
+          localStorage.setItem("user_type", phonedata?.user_type);
+          localStorage.setItem("user_id", phonedata?.user_id);
+          localStorage.setItem("verification", phonedata?.verification);
+          navigate("/");
         }
       })
       .catch((error) => {
