@@ -125,6 +125,9 @@ const Navbar = () => {
     <header className={colorChange ? "header sticky_header" : "header"}>
       <nav className="navbar navbar-expand-lg bg-body-tertiary">
         <div className="header_inner">
+          {/* <div className="position-relative">
+
+          </div> */}
           <button
             className="navbar-toggler"
             type="button"
@@ -254,9 +257,9 @@ const Navbar = () => {
                 {Phone && (
                   <ul>
                     <li className="user-name">
-                      {profileData.name ? (
+                      {profileData?.name ? (
                         <button type="submit" className="btn btn-outline-dark">
-                          {profileData.name}
+                          {profileData?.name}
                         </button>
                       ) : (
                         <>
@@ -284,7 +287,9 @@ const Navbar = () => {
                           <li>
                             <Link to="/profile">Profile</Link>
                           </li>
-                          {/* <li><Link to="/orders">My Orders</Link></li> */}
+                          <li>
+                            <Link to="/my_orders">My Orders</Link>
+                          </li>
                           <li>
                             <a href="#" onClick={handleLogout}>
                               LogOut

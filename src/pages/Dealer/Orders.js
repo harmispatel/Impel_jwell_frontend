@@ -6,6 +6,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import BreadCrumb from "../../components/common/BreadCrumb";
 import OrderService from "../../services/Dealer/Cart";
 import { useEffect } from "react";
+import { FaEye } from "react-icons/fa";
 
 const DealerOrders = () => {
   const [startDate, setStartDate] = useState("");
@@ -69,10 +70,11 @@ const DealerOrders = () => {
               <thead>
                 <tr>
                   <th>Order Date</th>
-                  <th>Order Number</th>
+                  <th>Design Number</th>
                   <th>Design Name</th>
-                  <th>No. of Quantity</th>
+                  <th>Customer Name</th>
                   <th>Order Status</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -82,10 +84,13 @@ const DealerOrders = () => {
                       return (
                         <tr>
                           <td>1</td>
-                          <td>{data?.id}</td>
-                          <td>{data?.design_name}</td>
-                          <td>{data?.quantity}</td>
-                          <td>{data?.status}</td>
+                          <td>12323</td>
+                          <td>vansh</td>
+                          <td>vansh</td>
+                          <td>pending</td>
+                          <td>
+                            <FaEye />
+                          </td>
                         </tr>
                       );
                     })}

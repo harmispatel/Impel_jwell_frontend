@@ -183,9 +183,9 @@ const Home = () => {
                 disableOnInteraction: false,
               }}
             >
-              {category.length ? (
+              {category?.length ? (
                 <>
-                  {category.map((data, index) => {
+                  {category?.map((data, index) => {
                     return (
                       <SwiperSlide key={index}>
                         <Link
@@ -273,9 +273,9 @@ const Home = () => {
                 disableOnInteraction: false,
               }}
             >
-              {newAdd.length ? (
+              {newAdd?.length ? (
                 <>
-                  {newAdd.slice(0, 6).map((data, index) => {
+                  {newAdd.slice(0, 50).map((data, index) => {
                     return (
                       <SwiperSlide key={index}>
                         <Link
@@ -387,7 +387,7 @@ const Home = () => {
             >
               {TopSell?.length ? (
                 <>
-                  {TopSell?.slice(0, 6).map((data, index) => {
+                  {TopSell?.slice(0, 50).map((data, index) => {
                     return (
                       <SwiperSlide key={index}>
                         <Link
@@ -415,7 +415,7 @@ const Home = () => {
       </section>
 
       {/* testimonials */}
-      <section className="testimonial">
+      {/* <section className="testimonial">
         <div className="container">
           <div className="testimonial_header">
             <img
@@ -470,7 +470,7 @@ const Home = () => {
             </Swiper>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Featured product */}
       {/* <section className="Featured_products">

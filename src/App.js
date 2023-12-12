@@ -29,6 +29,7 @@ import ForgetPassword from "./pages/auth/ForgetPassword";
 import CartProvider from "./context/CartContext";
 import Errorpage from "./components/Errorpage";
 import Popup from "./components/common/Popup";
+import MyOrders from "./pages/user/MyOrders";
 
 function App() {
   const popupshow = localStorage.getItem("user_type");
@@ -77,6 +78,7 @@ function App() {
                 }
               />
               <Route path="cart" element={<Cart />} />
+              <Route path="my_orders" element={<MyOrders />} />
               <Route path="orders" element={<Orders />} />
               {/* DEALER PROTECTED */}
               <Route

@@ -190,10 +190,15 @@ const Cart = () => {
                                 <>
                                   <div className="col-md-3" key={index}>
                                     <div className="d-flex">
-                                      <img
-                                        src={data.image}
-                                        className="border rounded me-3 w-100"
-                                      />
+                                      <Link
+                                        to={`/shopdetails/${data.design_id}`}
+                                        className="nav-link"
+                                      >
+                                        <img
+                                          src={data.image}
+                                          className="border rounded me-3 w-100"
+                                        />
+                                      </Link>
                                     </div>
                                   </div>
                                   <div className="col-md-4">

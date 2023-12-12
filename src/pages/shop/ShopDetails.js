@@ -206,7 +206,6 @@ const ShopDetails = () => {
     price_22k: product?.price_22k?.toFixed(2),
     cz_stone_price: product?.cz_stone_price?.toFixed(2),
     gemstone_price: product?.gemstone_price?.toFixed(2),
-    percentage: product?.percentage,
     making_charge: product?.making_charge?.toFixed(2),
     total_price_22k: product?.total_price_22k?.toLocaleString("en-US"),
 
@@ -218,7 +217,6 @@ const ShopDetails = () => {
     price_20k: product?.price_20k?.toFixed(2),
     cz_stone_price: product?.cz_stone_price?.toFixed(2),
     gemstone_price: product?.gemstone_price?.toFixed(2),
-    percentage: product?.percentage,
     making_charge: product?.making_charge?.toFixed(2),
     total_price_20k: product?.total_price_20k?.toLocaleString("en-US"),
 
@@ -230,7 +228,6 @@ const ShopDetails = () => {
     price_18k: product?.price_18k?.toFixed(2),
     cz_stone_price: product?.cz_stone_price?.toFixed(2),
     gemstone_price: product?.gemstone_price?.toFixed(2),
-    percentage: product?.percentage,
     making_charge: product?.making_charge?.toFixed(2),
     total_price_18k: product?.total_price_18k?.toLocaleString("en-US"),
 
@@ -242,7 +239,6 @@ const ShopDetails = () => {
     price_14k: product?.price_14k?.toFixed(2),
     cz_stone_price: product?.cz_stone_price?.toFixed(2),
     gemstone_price: product?.gemstone_price?.toFixed(2),
-    percentage: product?.percentage,
     making_charge: product?.making_charge?.toFixed(2),
     total_price_14k: product?.total_price_14k?.toLocaleString("en-US"),
   };
@@ -252,12 +248,6 @@ const ShopDetails = () => {
         <div className="Shop_product">
           <div className="row justify-content-center">
             <div className="col-md-10">
-              <div className="pb-3">
-                <Link className="btn btn-outline-dark" to="/shop">
-                  <FaLongArrowAltLeft className="me-2" />
-                  Back to shop
-                </Link>
-              </div>
               <BreadCrumb
                 firstName="Home"
                 firstUrl="/"
@@ -523,7 +513,7 @@ const ShopDetails = () => {
                                           </td>
                                         </tr>
                                         <tr>
-                                          <th>Price</th>
+                                          <th>Metal price</th>
                                           <td>₹ {productdetail?.price_22k}</td>
                                         </tr>
                                         <tr>
@@ -539,13 +529,7 @@ const ShopDetails = () => {
                                           </td>
                                         </tr>
                                         <tr>
-                                          <th>
-                                            Making charge (
-                                            {productdetail?.percentage?.length
-                                              ? product?.percentage
-                                              : 0}
-                                            %)
-                                          </th>
+                                          <th>Making charge</th>
                                           <td>
                                             ₹{productdetail?.making_charge}
                                           </td>
@@ -590,7 +574,7 @@ const ShopDetails = () => {
                                           </td>
                                         </tr>
                                         <tr>
-                                          <th>Price</th>
+                                          <th>Metal price</th>
                                           <td>₹ {productdetail?.price_20k}</td>
                                         </tr>
                                         <tr>
@@ -606,13 +590,7 @@ const ShopDetails = () => {
                                           </td>
                                         </tr>
                                         <tr>
-                                          <th>
-                                            Making charge (
-                                            {productdetail?.percentage?.length
-                                              ? product?.percentage
-                                              : 0}
-                                            %)
-                                          </th>
+                                          <th>Making charge</th>
                                           <td>
                                             ₹{productdetail?.making_charge}
                                           </td>
@@ -657,7 +635,7 @@ const ShopDetails = () => {
                                           </td>
                                         </tr>
                                         <tr>
-                                          <th>Price</th>
+                                          <th>Metal price</th>
                                           <td>₹ {productdetail?.price_18k}</td>
                                         </tr>
                                         <tr>
@@ -673,13 +651,7 @@ const ShopDetails = () => {
                                           </td>
                                         </tr>
                                         <tr>
-                                          <th>
-                                            Making charge (
-                                            {productdetail?.percentage?.length
-                                              ? product?.percentage
-                                              : 0}
-                                            %)
-                                          </th>
+                                          <th>Making charge</th>
                                           <td>
                                             ₹{productdetail?.making_charge}
                                           </td>
@@ -724,7 +696,7 @@ const ShopDetails = () => {
                                           </td>
                                         </tr>
                                         <tr>
-                                          <th>Price</th>
+                                          <th>Metal price</th>
                                           <td>₹ {productdetail?.price_14k}</td>
                                         </tr>
                                         <tr>
@@ -740,13 +712,7 @@ const ShopDetails = () => {
                                           </td>
                                         </tr>
                                         <tr>
-                                          <th>
-                                            Making charge (
-                                            {productdetail?.percentage?.length
-                                              ? product?.percentage
-                                              : 0}
-                                            %)
-                                          </th>
+                                          <th>Making charge</th>
                                           <td>
                                             ₹{productdetail?.making_charge}
                                           </td>

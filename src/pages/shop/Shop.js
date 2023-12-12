@@ -149,7 +149,7 @@ const Shop = ({ product }) => {
   }, [category, tag?.length, gender, searchInput, PriceRange, selectedOption]);
 
   // sort by searching
-  const serchbar = (e) => {
+  const searchbar = (e) => {
     setIsLoading(true);
     setSearchInput(e.target.value);
   };
@@ -409,19 +409,6 @@ const Shop = ({ product }) => {
           <div className="filters">
             <div className="row">
               <div className="col-md-12">
-                <div className="search_bar">
-                  <input
-                    className="form-control"
-                    placeholder="Search any product"
-                    onChange={(e) => serchbar(e)}
-                    type="search"
-                  />
-                  {searchInput.length === 0 && (
-                    <BsSearch className="search-icon" />
-                  )}
-                </div>
-              </div>
-              <div className="col-md-12">
                 <div className="row justify-content-center">
                   <div className="col-md-2">
                     <div className="csm_sort_btn">
@@ -502,6 +489,17 @@ const Shop = ({ product }) => {
           <hr />
           <div className="row">
             <div className="col-md-3">
+              <div className="search_bar">
+                <input
+                  className="form-control"
+                  placeholder="Please enter a design code"
+                  onChange={(e) => searchbar(e)}
+                  type="search"
+                />
+                {searchInput.length === 0 && (
+                  <BsSearch className="search-icon" />
+                )}
+              </div>
               <div className="sidebar">
                 <SidebarFilter
                   Categoryheader="Shop by category"
@@ -554,6 +552,7 @@ const Shop = ({ product }) => {
                                     <Link
                                       to={`/shopdetails/${product.id}`}
                                       className="product_data"
+                                      target="_blank"
                                     >
                                       {product?.image ? (
                                         <img
@@ -656,10 +655,20 @@ const Shop = ({ product }) => {
                                           )}
                                         </div>
                                       </div>
-
+                                      <div className="row">
+                                        <div className="col-md-6">
+                                          <div className="product_details">
+                                            {" "}
+                                            <h4>{product?.name}</h4>
+                                          </div>
+                                        </div>
+                                        <div className="col-md-6">
+                                          <div className="product_details text-end">
+                                            <p>{product?.code}</p>
+                                          </div>
+                                        </div>
+                                      </div>
                                       <div className="product_details">
-                                        <h4>{product?.name}</h4>
-                                        <p>{product?.category_name}</p>
                                         <h5>
                                           ₹
                                           {product?.total_price_18k?.toLocaleString(
