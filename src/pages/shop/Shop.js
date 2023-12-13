@@ -116,7 +116,7 @@ const Shop = ({ product }) => {
 
   const scrollup = () => {
     window.scrollTo({
-      top: 200,
+      top: 150,
       behavior: "smooth",
     });
   };
@@ -176,35 +176,37 @@ const Shop = ({ product }) => {
   // side filter 4 functions
   const handleCategory = (e) => {
     setIsLoading(true);
+    const selectedCategory = e.target.value;
     if (e.target.checked) {
-      setCategory([...category, e.target.value]);
+      setCategory([selectedCategory]);
       scrollup();
     } else {
-      setCategory(category.filter((item) => item !== e.target.value));
-      if (category.filter((item) => item !== e.target.value)?.length === 0) {
-        AllData();
-        scrollup();
-      }
-    }
-  };
-  const handleGender = (e) => {
-    setIsLoading(true);
-    if (e.target.checked) {
-      setGender([...gender, e.target.value]);
-      scrollup();
-    } else {
-      setGender(gender.filter((item) => item !== e.target.value));
+      setCategory([]);
       AllData();
       scrollup();
     }
   };
+  const handleGender = (e) => {
+    setIsLoading(true);
+    const selectedGender = e.target.value;
+    if (e.target.checked) {
+      setGender([selectedGender]);
+      scrollup();
+    } else {
+      setGender([]);
+      AllData();
+      scrollup();
+    }
+  };
+
   // const handleTag = (e) => {
   //   setIsLoading(true);
+  //   const selectedTag = e.target.value;
   //   if (e.target.checked) {
-  //     setTag([...tag, e.target.value]);
+  //     setTag([selectedTag]);
   //     scrollup();
   //   } else {
-  //     setTag(tag.filter((item) => item !== e.target.value));
+  //     setTag([]);
   //     AllData();
   //     scrollup();
   //   }
@@ -658,7 +660,6 @@ const Shop = ({ product }) => {
                                       <div className="row">
                                         <div className="col-md-6">
                                           <div className="product_details">
-                                            {" "}
                                             <h4>{product?.name}</h4>
                                           </div>
                                         </div>
@@ -852,9 +853,19 @@ const Shop = ({ product }) => {
                                       </div>
                                     </div>
 
+                                    <div className="row">
+                                      <div className="col-md-6">
+                                        <div className="product_details">
+                                          <h4>{data?.name}</h4>
+                                        </div>
+                                      </div>
+                                      <div className="col-md-6">
+                                        <div className="product_details text-end">
+                                          <p>{data?.code}</p>
+                                        </div>
+                                      </div>
+                                    </div>
                                     <div className="product_details">
-                                      <h4>{data?.name}</h4>
-                                      <p>{data?.category_name}</p>
                                       <h5>
                                         ₹
                                         {data?.total_price_18k?.toLocaleString(

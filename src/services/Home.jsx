@@ -1,8 +1,8 @@
 import call from "./Call";
 
-const slider = async () => {
+const banners = async () => {
   let d = await call({
-    path: "slider",
+    path: "banners",
     method: "GET",
   });
   return d;
@@ -48,7 +48,7 @@ const SiteSetting = async () => {
   return d;
 };
 const exportObject = {
-  slider,
+  banners,
   category,
   TopSelling,
   RecentAdd,

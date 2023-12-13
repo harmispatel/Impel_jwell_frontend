@@ -46,7 +46,7 @@ const Home = () => {
 
   const banners = () => {
     homeService
-      .slider()
+      .banners()
       .then((res) => {
         SetBannerSlider(res.data);
       })
@@ -223,16 +223,41 @@ const Home = () => {
                 <div className="info_img">
                   <img src={Ring} width="100px" alt="" />
                 </div>
-                <h2>Exquisite Jewelry for Everyone</h2>
-                <label></label>
-                <p>Discover our awesome rings collection</p>
-                <button className="btn discover_btn">
+                {bannerSlider &&
+                bannerSlider?.middle_banners &&
+                bannerSlider?.middle_banners[0] ? (
+                  <>
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: bannerSlider?.middle_banners[0]?.description,
+                      }}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <h2>Exquisite Jewelry for Everyone</h2>
+                    <label></label>
+                    <p>Discover our awesome rings collection</p>
+                  </>
+                )}
+
+                <Link to="/shop" className="btn discover_btn">
                   Discover The Collection
-                </button>
+                </Link>
               </div>
             </div>
             <div className="banner_img">
-              <img src={banner_1} className="w-100" alt="" />
+              {bannerSlider &&
+              bannerSlider?.middle_banners &&
+              bannerSlider?.middle_banners[0] ? (
+                <img
+                  src={bannerSlider?.middle_banners[0]?.image}
+                  className="w-100"
+                  alt=""
+                />
+              ) : (
+                <img src={banner_1} className="w-100" alt="" />
+              )}
             </div>
           </div>
         </div>
@@ -275,7 +300,7 @@ const Home = () => {
             >
               {newAdd?.length ? (
                 <>
-                  {newAdd.slice(0, 50).map((data, index) => {
+                  {newAdd?.slice(0, 50).map((data, index) => {
                     return (
                       <SwiperSlide key={index}>
                         <Link
@@ -330,16 +355,41 @@ const Home = () => {
         <div className="container">
           <div className="banner_info">
             <div className="banner_img">
-              <img src={Kada} className="w-100" alt="" />
+              {bannerSlider &&
+              bannerSlider?.bottom_banners &&
+              bannerSlider?.bottom_banners[0] ? (
+                <img
+                  src={bannerSlider?.bottom_banners[0]?.image}
+                  className="w-100"
+                  alt=""
+                />
+              ) : (
+                <img src={Kada} className="w-100" alt="" />
+              )}
             </div>
             <div className="banner_info_inr">
               <div className="banner_detail text-center">
-                <h2>Exquisite Jewelry for Everyone</h2>
-                <label></label>
-                <p>Discover our awesome rings collection</p>
-                <div className="info_img">
-                  <img src={Gold_Ring} width="150px" alt="" />
-                </div>
+                {bannerSlider &&
+                bannerSlider?.bottom_banners &&
+                bannerSlider?.bottom_banners[0] ? (
+                  <>
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: bannerSlider?.bottom_banners[0]?.description,
+                      }}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <h2>Exquisite Jewelry for Everyone</h2>
+                    <label></label>
+                    <p>Discover our awesome rings collection</p>
+                    <div className="info_img">
+                      <img src={Gold_Ring} width="150px" alt="" />
+                    </div>
+                  </>
+                )}
+
                 <button className="btn discover_btn">
                   Discover The Collection
                 </button>

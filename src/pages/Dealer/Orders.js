@@ -78,9 +78,9 @@ const DealerOrders = () => {
                 </tr>
               </thead>
               <tbody>
-                {orders.length > 0 ? (
+                {orders?.length > 0 ? (
                   <>
-                    {orders.map((data) => {
+                    {orders?.map((data) => {
                       return (
                         <tr>
                           <td>1</td>
