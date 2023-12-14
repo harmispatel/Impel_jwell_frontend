@@ -163,7 +163,7 @@ const Navbar = () => {
                 </Link>
                 <div className="tags-dropdown">
                   <div className="row">
-                    {tags.length ? (
+                    {tags?.length ? (
                       <>
                         {tags?.map((multitags, index) => (
                           <div className="col-md-2" key={index}>
@@ -174,7 +174,7 @@ const Navbar = () => {
                                     ? tagIds
                                     : [...tagIds, multitags?.id]
                                 }`}
-                                onChange={(e) => handleTag(e)}
+                                onClick={(e) => handleTag(e)}
                               >
                                 {multitags.name}
                               </Link>

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
+import FilterServices from "../services/Filter";
 import {
   Navigation,
   Pagination,
@@ -15,15 +16,29 @@ import Ring from "../assets/images/ring.png";
 import Kada from "../assets/images/kada.jpg";
 import Gold_Ring from "../assets/images/gold_ring.png";
 import homeService from "../services/Home";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import gif from "../assets/images/intro.gif";
 
 const Home = () => {
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  let tagIds = searchParams.getAll("tag_id");
+  tagIds =
+    Array.isArray(tagIds) && tagIds?.length > 0
+      ? tagIds[0].split(",")
+      : tagIds
+      ? tagIds
+      : [];
+  tagIds = tagIds.map((i) => parseFloat(i));
+  const currentRoute = location.pathname;
+
   const [bannerSlider, SetBannerSlider] = useState([]);
   const [category, SetCategory] = useState([]);
   const [newAdd, SetNewAdd] = useState([]);
   // const [Featured, SetFeatured] = useState([]);
   const [TopSell, SetTopSell] = useState([]);
+  const [tags, setTags] = useState([]);
+  const [tag, setTag] = useState([]);
 
   const videoEl = useRef(null);
 
@@ -35,9 +50,23 @@ const Home = () => {
       });
   };
 
+  const Tags = () => {
+    FilterServices.headerTags()
+      .then((res) => {
+        setTags(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleTag = (e) => {
+    setTag([...tag, parseFloat(e.target.value)]);
+  };
   useEffect(() => {
     banners();
     Category();
+    Tags();
     RecentAdd();
     // FeaturedProduct();
     HighSell();
@@ -98,6 +127,16 @@ const Home = () => {
         console.log(err);
       });
   };
+
+  const Middle_banner_tag =
+    bannerSlider &&
+    bannerSlider?.middle_banners &&
+    bannerSlider?.middle_banners[0].tag_id;
+
+  const Bottom_banner_tag =
+    bannerSlider &&
+    bannerSlider?.bottom_banners &&
+    bannerSlider?.bottom_banners[0].tag_id;
 
   return (
     <>
@@ -241,9 +280,23 @@ const Home = () => {
                   </>
                 )}
 
-                <Link to="/shop" className="btn discover_btn">
-                  Discover The Collection
-                </Link>
+                {tags &&
+                  tags.length > 0 &&
+                  bannerSlider &&
+                  bannerSlider?.middle_banners &&
+                  bannerSlider?.middle_banners[0] && (
+                    <Link
+                      to={`/shop?tag_id=${
+                        tagIds?.includes(Middle_banner_tag)
+                          ? tagIds
+                          : [...tagIds, Middle_banner_tag]
+                      }`}
+                      onClick={(e) => handleTag(e)}
+                      className="btn discover_btn"
+                    >
+                      Discover The Collection
+                    </Link>
+                  )}
               </div>
             </div>
             <div className="banner_img">
@@ -390,9 +443,23 @@ const Home = () => {
                   </>
                 )}
 
-                <button className="btn discover_btn">
-                  Discover The Collection
-                </button>
+                {tags &&
+                  tags?.length > 0 &&
+                  bannerSlider &&
+                  bannerSlider?.bottom_banners &&
+                  bannerSlider?.bottom_banners[0] && (
+                    <Link
+                      to={`/shop?tag_id=${
+                        tagIds?.includes(Bottom_banner_tag)
+                          ? tagIds
+                          : [...tagIds, Bottom_banner_tag]
+                      }`}
+                      onClick={(e) => handleTag(e)}
+                      className="btn discover_btn"
+                    >
+                      Discover The Collection
+                    </Link>
+                  )}
               </div>
             </div>
           </div>

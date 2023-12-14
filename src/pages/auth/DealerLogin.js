@@ -127,7 +127,7 @@ const DealerLogin = () => {
                                   className="animate_spin me-2"
                                 />
                               )}
-                              Login
+                              {spinner ? "" : "Login"}
                             </button>
                             <div className="d-flex justify-content-between">
                               <Link

@@ -19,9 +19,11 @@ const Errorpage = () => {
         <video
           style={{
             maxWidth: "100%",
-            width: "800px",
-            height: "800px",
+            width: "100%",
+            height: "660px",
             margin: "0 auto",
+            backgroundColor: "black",
+            border: "none",
           }}
           playsInline
           loop

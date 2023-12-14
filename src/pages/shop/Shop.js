@@ -43,6 +43,8 @@ const Shop = ({ product }) => {
   const [DealerCollection, setDealerCollection] = useState([]);
 
   const [userWishlist, setUserWishlist] = useState(false);
+  const [goldColor, setGoldColor] = useState("yellow_gold");
+  const [goldType, setGoldType] = useState("18k");
   const [UsercartItems, setUserCartItems] = useState([]);
   const [cartItems, setCartItems] = useState([]);
 
@@ -138,7 +140,7 @@ const Shop = ({ product }) => {
   useEffect(() => {
     if (
       category.length > 0 ||
-      tag.length > 0 ||
+      tag?.length > 0 ||
       gender.length > 0 ||
       searchInput.length > 0 ||
       PriceRange.minprice !== null ||
@@ -325,6 +327,8 @@ const Shop = ({ product }) => {
       UserWishlist.addtoWishlist({
         phone: Phone,
         design_id: product.id,
+        gold_color: goldColor,
+        gold_type: goldType,
       })
         .then((res) => {
           if (res.success === true) {
@@ -349,6 +353,8 @@ const Shop = ({ product }) => {
     UserWishlist.removetoWishlist({
       phone: Phone,
       design_id: product.id,
+      gold_color: goldColor,
+      gold_type: goldType,
     })
       .then((res) => {
         if (res.success === true) {
@@ -367,10 +373,10 @@ const Shop = ({ product }) => {
 
   // Dealer Wishlist products add
   const AddToDealerWishlist = async (product) => {
-    if (!DealerCollection.some((item) => item.id === product.id)) {
+    if (!DealerCollection.some((item) => item.id === product?.id)) {
       DealerWishlist.addtoDealerWishlist({
         email: email,
-        design_id: product.id,
+        design_id: product?.id,
       })
         .then((res) => {
           if (res.success === true) {
@@ -757,6 +763,7 @@ const Shop = ({ product }) => {
                                   <Link
                                     to={`/shopdetails/${data.id}`}
                                     className="product_data"
+                                    target="_blank"
                                   >
                                     {data.image ? (
                                       <img

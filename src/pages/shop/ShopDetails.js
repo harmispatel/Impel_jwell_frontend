@@ -129,6 +129,8 @@ const ShopDetails = () => {
       phone: localStorage.getItem("phone"),
       design_id: product.id,
       quantity: productQuantity,
+      gold_color: goldColor,
+      gold_type: goldType,
     })
       .then((res) => {
         if (res.success === true) {

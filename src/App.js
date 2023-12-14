@@ -79,7 +79,7 @@ function App() {
               />
               <Route path="cart" element={<Cart />} />
               <Route path="my_orders" element={<MyOrders />} />
-              <Route path="orders" element={<Orders />} />
+              <Route path="order-details" element={<Orders />} />
               {/* DEALER PROTECTED */}
               <Route
                 path="dealer_wishlist"
@@ -113,6 +113,7 @@ function App() {
             </Route>
           </>
         )}
+        <Route path="*" element={<Errorpage />} />
       </Routes>
       <Toaster toastOptions={{ duration: 2000 }} />
     </CartProvider>

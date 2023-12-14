@@ -208,7 +208,7 @@ const Login = () => {
                                           className="animate_spin me-2"
                                         />
                                       )}
-                                      Login
+                                      {spinner ? "" : "Login"}
                                     </button>
                                   </div>
                                   <div className="col-md-6 text-end">

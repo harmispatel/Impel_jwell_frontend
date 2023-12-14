@@ -20,7 +20,7 @@ const WishList = () => {
   const [spinner, setSpinner] = useState(false);
   const [cartItems, setCartItems] = useState([]);
 
-  const GetCarList = async () => {
+  const GetUserWishlist = async () => {
     Userservice.userWishlist({ phone: phone })
       .then((res) => {
         setItems(res.data);
@@ -47,7 +47,7 @@ const WishList = () => {
     Userservice.removetoWishlist({ phone: phone, design_id: product })
       .then((res) => {
         if (res.success === true) {
-          GetCarList();
+          GetUserWishlist();
           dispatch({
             type: "REMOVE_FROM_WISHLIST",
             payload: { id: product.id },
@@ -68,7 +68,7 @@ const WishList = () => {
       phone: phone,
       design_name: product.name,
       design_id: product.id,
-      quantity: productQuantity,  
+      quantity: productQuantity,
       // gold_color: goldColor,
       // gold_type: goldType,
     };
@@ -93,7 +93,7 @@ const WishList = () => {
   };
 
   useEffect(() => {
-    GetCarList();
+    GetUserWishlist();
     GetUserCartList();
   }, []);
 
