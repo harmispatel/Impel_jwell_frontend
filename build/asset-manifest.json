@@ -1,22 +1,23 @@
 {
   "files": {
-    "main.css": "/static/css/main.a3782ec8.css",
-    "main.js": "/static/js/main.03855456.js",
+    "main.css": "/static/css/main.1a0dcabb.css",
+    "main.js": "/static/js/main.ba9bcaba.js",
     "static/js/787.c4e7f8f9.chunk.js": "/static/js/787.c4e7f8f9.chunk.js",
     "static/media/intro.gif": "/static/media/intro.4d76be8e43539460cf9f.gif",
     "static/media/Lato-Semibold.ttf": "/static/media/Lato-Semibold.d585c7df44df3024c49b.ttf",
     "static/media/Lato-Regular.ttf": "/static/media/Lato-Regular.80c07943565d91b976e1.ttf",
     "static/media/wishlist.png": "/static/media/wishlist.5776c90e087c6252afc7.png",
+    "static/media/video.mp4": "/static/media/video.95e867424865feb6a38f.mp4",
     "static/media/bg-01.jpeg": "/static/media/bg-01.bf8cd203a9c6445ff403.jpeg",
     "static/media/kada.jpg": "/static/media/kada.b79ea5404bef4b5f77f5.jpg",
     "static/media/logo.png": "/static/media/logo.4b7825a638146a1cdf28.png",
     "index.html": "/index.html",
-    "main.a3782ec8.css.map": "/static/css/main.a3782ec8.css.map",
-    "main.03855456.js.map": "/static/js/main.03855456.js.map",
+    "main.1a0dcabb.css.map": "/static/css/main.1a0dcabb.css.map",
+    "main.ba9bcaba.js.map": "/static/js/main.ba9bcaba.js.map",
     "787.c4e7f8f9.chunk.js.map": "/static/js/787.c4e7f8f9.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.a3782ec8.css",
-    "static/js/main.03855456.js"
+    "static/css/main.1a0dcabb.css",
+    "static/js/main.ba9bcaba.js"
   ]
 }

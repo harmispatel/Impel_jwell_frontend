@@ -1,24 +1,25 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { BsBehance, BsHeart } from "react-icons/bs";
 import { Link, useNavigate } from "react-router-dom";
 import UserService from "../../services/Cart";
-import { useEffect } from "react";
+import profileService from "../../services/Auth";
 import ReactLoading from "react-loading";
 import toast from "react-hot-toast";
 import { Button, Col, Form, Modal } from "react-bootstrap";
 import { CgSpinner } from "react-icons/cg";
-import profileService from "../../services/Auth";
 import { CartSystem } from "../../context/CartContext";
 
 const Cart = () => {
   const { dispatch } = useContext(CartSystem);
   const navigate = useNavigate();
+
   const Phone = localStorage.getItem("phone");
   const user_id = localStorage.getItem("user_id");
   const Verification = localStorage.getItem("verification");
-  const [Items, setItems] = useState([]);
+
   const [isLoading, setIsLoading] = useState(true);
-  const [dealer_code, setDealerCode] = useState("");
+  const [Items, setItems] = useState([]);
+  const [dealer_code, setDealer_Code] = useState("");
   const [code, setCode] = useState("");
   const [isFormEmpty, setIsFormEmpty] = useState("");
   const [show, setShow] = useState(false);
@@ -30,9 +31,7 @@ const Cart = () => {
   const [selectedData, setSelectedData] = useState([]);
   const [city, setcity] = useState();
   const [shipping_city, setShipping_city] = useState();
-  const [isChecked, setIsChecked] = useState(
-    selectedData.address_same_as_company === 1 ? true : false
-  );
+  const [isChecked, setIsChecked] = useState(false);
   const [userData, setUserData] = useState({
     name: "",
     email: "",
@@ -76,6 +75,7 @@ const Cart = () => {
         console.log(err);
       });
   };
+
   const fetchShippingCity = async (cityId) => {
     await profileService
       .getCity({ state_id: cityId })
@@ -86,6 +86,7 @@ const Cart = () => {
         console.log(err);
       });
   };
+
   const getProfile = async () => {
     await profileService
       .getProfile({ phone: Phone })
@@ -118,10 +119,12 @@ const Cart = () => {
         console.log(err);
       });
   };
-  const handleEdit = async (data) => {
+
+  const handleProfileData = async (data) => {
     setSelectedData(data);
   };
-  const handleEditChange = (e) => {
+
+  const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === "state") {
       setUserData({
@@ -142,16 +145,18 @@ const Cart = () => {
       });
     }
   };
+
   const handleCheckboxChange = (event) => {
     setIsChecked(event.target.checked);
-    localStorage.setItem("isChecked", setIsChecked.toString());
   };
+
   const pincodeRegex = /^\d{6}$/;
   const isValidPan = (panNumber) => {
     const panRegex = /[A-Z]{5}[0-9]{4}[A-Z]{1}/;
     return panRegex.test(panNumber);
   };
-  const validateForm = () => {
+
+  const FormValidation = () => {
     let isValid = true;
     const validationErrors = { ...error };
     if (!userData.name.trim()) {
@@ -248,9 +253,10 @@ const Cart = () => {
     setError(validationErrors);
     return isValid;
   };
-  const handleUpdate = async (e) => {
+
+  const handleUpdateProfile = async (e) => {
     e.preventDefault();
-    const isFormValid = validateForm();
+    const isFormValid = FormValidation();
     localStorage.setItem("verification", profileData.verification);
     if (isFormValid) {
       const formData = new FormData();
@@ -268,11 +274,7 @@ const Cart = () => {
       formData.append("city", userData.city ? userData.city : "");
 
       // checkbox update
-      if (isChecked) {
-        formData.append("address_same_as_company", 1);
-      } else {
-        formData.append("address_same_as_company", 0);
-      }
+      formData.append("address_same_as_company", isChecked ? "1" : "0");
 
       // shipping address update
       formData.append(
@@ -309,6 +311,7 @@ const Cart = () => {
     } else {
     }
   };
+
   // cart all functiolity
   const UserCartItems = () => {
     UserService.CartList({ phone: Phone })
@@ -321,9 +324,11 @@ const Cart = () => {
         setIsLoading(false);
       });
   };
-  const handlechange = (e) => {
-    setDealerCode(e.target.value);
+
+  const handleDealercode = (e) => {
+    setDealer_Code(e.target.value);
   };
+
   useEffect(() => {
     const savedDiscount = localStorage.getItem("savedDiscount");
     if (savedDiscount) {
@@ -331,6 +336,10 @@ const Cart = () => {
       setShow(true);
     }
   }, []);
+
+  useEffect(() => {
+    setIsChecked(profileData?.address_same_as_company === 1);
+  }, [profileData?.address_same_as_company]);
 
   const SubTotal = () => {
     let subTotal = 0;
@@ -341,6 +350,7 @@ const Cart = () => {
     });
     return subTotal;
   };
+
   const SubCharge = () => {
     let subCharge = 0;
     Items.forEach((data) => {
@@ -558,7 +568,7 @@ const Cart = () => {
                                   className="form-control border"
                                   placeholder="Dealer coupon code"
                                   value={dealer_code}
-                                  onChange={(e) => handlechange(e)}
+                                  onChange={(e) => handleDealercode(e)}
                                 />
                                 <button
                                   className="btn btn-light border"
@@ -647,7 +657,7 @@ const Cart = () => {
                             className="btn btn-success w-100 shadow-0 mb-2"
                             onClick={(e) => {
                               Orderplacing(e);
-                              handleEdit(profileData);
+                              handleProfileData(profileData);
                             }}
                           >
                             Place Order
@@ -694,8 +704,8 @@ const Cart = () => {
 
             <Modal.Body>
               <Form
-                onSubmit={(e) => handleUpdate(e, selectedData)}
-                onKeyUp={(e) => validateForm(e)}
+                onSubmit={(e) => handleUpdateProfile(e, selectedData)}
+                onKeyUp={(e) => FormValidation(e)}
               >
                 <div className="row">
                   <div className="col-md-6">
@@ -710,7 +720,7 @@ const Cart = () => {
                       <Form.Control
                         name="name"
                         defaultValue={selectedData.name}
-                        onChange={(e) => handleEditChange(e)}
+                        onChange={(e) => handleChange(e)}
                         placeholder="Enter Your Name"
                       />
                       {error.nameErr && (
@@ -730,7 +740,7 @@ const Cart = () => {
                       <Form.Control
                         name="email"
                         defaultValue={selectedData.email}
-                        onChange={(e) => handleEditChange(e)}
+                        onChange={(e) => handleChange(e)}
                         placeholder="Enter Your Email"
                       />
                       <span className="text-danger">{error.emailErr}</span>
@@ -747,7 +757,7 @@ const Cart = () => {
                         name="phone"
                         defaultValue={selectedData.phone}
                         disabled
-                        onChange={(e) => handleEditChange(e)}
+                        onChange={(e) => handleChange(e)}
                         placeholder="Enter Your Phone"
                       />
                       <span className="text-danger">{error.phoneErr}</span>
@@ -760,7 +770,7 @@ const Cart = () => {
                       <Form.Control
                         name="pan_no"
                         defaultValue={selectedData.pan_no}
-                        onChange={(e) => handleEditChange(e)}
+                        onChange={(e) => handleChange(e)}
                         placeholder="Enter Your Pancard number"
                       />
                     </Form.Group>
@@ -771,7 +781,7 @@ const Cart = () => {
                   <Form.Control
                     name="gst_no"
                     defaultValue={selectedData.gst_no}
-                    onChange={(e) => handleEditChange(e)}
+                    onChange={(e) => handleChange(e)}
                     placeholder="Enter Your GST number"
                   />
                   <span className="text-danger">{error.gstErr}</span>
@@ -792,7 +802,7 @@ const Cart = () => {
                         className="form-control"
                         defaultValue={selectedData.address}
                         onChange={(e) => {
-                          handleEditChange(e);
+                          handleChange(e);
                         }}
                         placeholder="Enter Your Address"
                       />
@@ -810,7 +820,7 @@ const Cart = () => {
                         className="form-control"
                         name="state"
                         onChange={(e) => {
-                          handleEditChange(e);
+                          handleChange(e);
                           fetchCity(e.target.value);
                         }}
                         value={userData.state}
@@ -834,7 +844,7 @@ const Cart = () => {
                         className="form-control"
                         name="city"
                         onChange={(e) => {
-                          handleEditChange(e);
+                          handleChange(e);
                         }}
                         value={userData.city}
                       >
@@ -856,7 +866,7 @@ const Cart = () => {
                       <Form.Control
                         name="pincode"
                         defaultValue={selectedData.pincode}
-                        onChange={(e) => handleEditChange(e)}
+                        onChange={(e) => handleChange(e)}
                         placeholder="Enter Your Pincode"
                         maxLength={6}
                       />
@@ -894,7 +904,7 @@ const Cart = () => {
                         className="form-control"
                         defaultValue={selectedData.shipping_address}
                         onChange={(e) => {
-                          handleEditChange(e);
+                          handleChange(e);
                         }}
                         placeholder="Enter Your Address"
                       />
@@ -912,7 +922,7 @@ const Cart = () => {
                         className="form-control"
                         name="shipping_state"
                         onChange={(e) => {
-                          handleEditChange(e);
+                          handleChange(e);
                           fetchShippingCity(e.target.value);
                         }}
                         value={userData.shipping_state}
@@ -938,7 +948,7 @@ const Cart = () => {
                         className="form-control"
                         name="shipping_city"
                         onChange={(e) => {
-                          handleEditChange(e);
+                          handleChange(e);
                         }}
                         value={userData.shipping_city}
                       >
@@ -962,7 +972,7 @@ const Cart = () => {
                       <Form.Control
                         name="shipping_pincode"
                         defaultValue={selectedData.shipping_pincode}
-                        onChange={(e) => handleEditChange(e)}
+                        onChange={(e) => handleChange(e)}
                         placeholder="Enter Your Pincode"
                         maxLength={6}
                       />

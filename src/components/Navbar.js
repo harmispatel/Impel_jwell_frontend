@@ -30,6 +30,7 @@ const Navbar = () => {
   const Dealer = localStorage.getItem("token");
   const DealerEmail = localStorage.getItem("email");
   const Phone = localStorage.getItem("phone");
+  const userType = localStorage.getItem("user_type");
 
   const [colorChange, setColorchange] = useState(false);
   const [isLoggedOut, setIsLoggedOut] = useState(false);
@@ -152,6 +153,24 @@ const Navbar = () => {
                   Home
                 </Link>
               </li>
+              <li className="nav-item">
+                <div>
+                  {userType !== "1" ? (
+                    <Link
+                      className={
+                        currentRoute === "#" ? "nav-link active" : "nav-link"
+                      }
+                      aria-current="page"
+                      to="#"
+                    >
+                      Ready To Dispatch
+                    </Link>
+                  ) : (
+                    ""
+                  )}
+                </div>
+              </li>
+
               <li className="nav-item main-tags">
                 <Link
                   // to={`/shop${tagIds?.length > 0 ? `?tag_id=${tagIds}` : ""}`}

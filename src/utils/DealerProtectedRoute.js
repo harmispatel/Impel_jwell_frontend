@@ -1,28 +1,27 @@
-import React from 'react'
+import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const DealerProtectedRoute = (props) => {
-    const navigate = useNavigate();
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    const userToken = localStorage.getItem("token");
+  const userToken = localStorage.getItem("token");
 
-    const checkDealer = () => {
+  const checkDealer = () => {
+    if (!userToken) {
+      setIsLoggedIn(false);
+      return navigate("/login");
+    }
+    setIsLoggedIn(true);
+  };
 
-        if (!userToken) {
-          setIsLoggedIn(false);
-          return navigate("/login");
-        }
-        setIsLoggedIn(true);
-      };
-    
-      useEffect(() => {
-        checkDealer();
-      }, [isLoggedIn]);
+  useEffect(() => {
+    checkDealer();
+  }, [isLoggedIn]);
 
-  return<>{isLoggedIn ? props.children : null}</>;
-}
+  return <>{isLoggedIn ? props.children : null}</>;
+};
 
-export default DealerProtectedRoute
+export default DealerProtectedRoute;

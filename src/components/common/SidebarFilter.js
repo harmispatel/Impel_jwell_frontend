@@ -250,14 +250,6 @@ const SidebarFilter = (props) => {
         </div>
       )}
 
-      {userType !== "1" ? (
-        <button className="btn dispatch_btn w-100 mb-2 p-2">
-          Ready To Dispatch
-        </button>
-      ) : (
-        ""
-      )}
-
       <Accordion>
         <Accordion.Item eventKey="0">
           <Accordion.Header>{props.Categoryheader}</Accordion.Header>

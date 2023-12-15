@@ -14,14 +14,12 @@ const Profile = () => {
   const [showEdit, setShowEdit] = useState(false);
   const [show, setShow] = useState(false);
   const [selectedData, setSelectedData] = useState([]);
+  const [profileData, setProfileData] = useState([]);
   const [profileImg, setProfileImg] = useState({ preview: "", raw: "" });
   const [image, setImage] = useState(null);
-  const [profileData, setProfileData] = useState([]);
   const [city, setcity] = useState();
   const [shipping_city, setShipping_city] = useState();
-  const [isChecked, setIsChecked] = useState(
-    selectedData.address_same_as_company === 1 ? true : false
-  );
+  const [isChecked, setIsChecked] = useState(false);
   const [userData, setUserData] = useState({
     name: "",
     email: "",
@@ -88,7 +86,6 @@ const Profile = () => {
 
   const handleCheckboxChange = (event) => {
     setIsChecked(event.target.checked);
-    localStorage.setItem("isChecked", setIsChecked.toString());
   };
 
   // user profile display function
@@ -278,7 +275,7 @@ const Profile = () => {
   const handleUpdate = async (e) => {
     e.preventDefault();
     const isFormValid = validateForm();
-    localStorage.setItem("verification", profileData.verification);
+    localStorage.setItem("verification", profileData?.verification);
     if (isFormValid) {
       const formData = new FormData();
       formData.append("id", selectedData.id);
@@ -295,11 +292,7 @@ const Profile = () => {
       formData.append("city", userData.city ? userData.city : "");
 
       // checkbox update
-      if (isChecked) {
-        formData.append("address_same_as_company", 1);
-      } else {
-        formData.append("address_same_as_company", 0);
-      }
+      formData.append("address_same_as_company", isChecked ? "1" : "0");
 
       // shipping address update
       formData.append(
@@ -336,11 +329,12 @@ const Profile = () => {
     } else {
     }
   };
+  useEffect(() => {
+    setIsChecked(profileData?.address_same_as_company === 1);
+  }, [profileData?.address_same_as_company]);
 
   useEffect(() => {
     getProfile();
-    const storedCheckboxState = localStorage.getItem("isChecked");
-    setIsChecked(storedCheckboxState === "true");
   }, []);
 
   return (
