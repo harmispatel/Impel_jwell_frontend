@@ -4,8 +4,6 @@ import { useState } from "react";
 import { Button, Col, Form, Modal } from "react-bootstrap";
 import toast from "react-hot-toast";
 import { useLocation } from "react-router-dom";
-import { MdDelete } from "react-icons/md";
-import { FaImage, FaImages } from "react-icons/fa";
 
 const Profile = () => {
   const { state } = useLocation();
@@ -16,6 +14,7 @@ const Profile = () => {
   const [selectedData, setSelectedData] = useState([]);
   const [profileData, setProfileData] = useState([]);
   const [profileImg, setProfileImg] = useState({ preview: "", raw: "" });
+
   const [image, setImage] = useState(null);
   const [city, setcity] = useState();
   const [shipping_city, setShipping_city] = useState();
@@ -59,13 +58,45 @@ const Profile = () => {
     setShowEdit(false);
   };
   const handleImageChange = (e) => {
+    const fileInput = document.getElementById("upload");
     const file = e.target.files[0];
+    const maxSize = 5 * 1024 * 1024;
+
+    if (file.size > maxSize) {
+      toast.error("File size exceeds the 5 MB limit");
+      fileInput.value = "";
+      return;
+    }
+
+    const allowedTypes = ["image/png", "image/jpeg", "image/jpg", "image/gif"];
+    if (!allowedTypes.includes(file.type)) {
+      toast.error(
+        "Invalid file type. Please upload a PNG, JPEG, JPG, or GIF file."
+      );
+      fileInput.value = "";
+      return;
+    }
+
     const reader = new FileReader();
+    const myFormData = new FormData(
+      document.getElementById("user-profile-form")
+    );
 
     reader.onloadend = () => {
-      const imageDataUrl = reader.result;
-      setImage(imageDataUrl);
-      localStorage.setItem("userImage", imageDataUrl);
+      profileService
+        .UserProfileImage(myFormData)
+        .then((res) => {
+          if (res.status === true) {
+            getProfile();
+            toast.success(res.message);
+          } else {
+            getProfile();
+            toast.error(res.message);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     };
 
     if (file) {
@@ -346,43 +377,54 @@ const Profile = () => {
               <div>
                 <div className="card-header">Profile Picture</div>
                 <div className="upload-btn">
-                  <div className="button-wrap py-3">
-                    <label
-                      className="new-button"
-                      for="upload"
-                      style={{ display: image ? "none" : "block" }}
-                    >
-                      <FaImage />
-                      &nbsp; Click to upload image here
-                    </label>
-                    <input
-                      id="upload"
-                      name="file"
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageChange}
-                      style={{ display: image ? "none" : "block" }}
-                    />
-                  </div>
+                  <div className="button-wrap py-3"></div>
                 </div>
-                {image && (
-                  <>
-                    <div className="imagesss pb-4">
-                      <div className="profile-image">
-                        <img
-                          src={image}
-                          alt="Uploaded"
-                          accept="image/*"
-                          className="uploaded-image"
-                        />
-                        <MdDelete
-                          className="remove-icon"
-                          onClick={handleRemoveImage}
-                        />
+                <>
+                  {profileData?.profile && (
+                    <>
+                      <div className="imagesss pb-4">
+                        <div className="profile-image">
+                          <form
+                            id="user-profile-form"
+                            method="POST"
+                            encType="multipart/form-data"
+                          >
+                            <input
+                              type="hidden"
+                              name="user_id"
+                              value={profileData?.id}
+                            />
+                            <input
+                              id="upload"
+                              name="user_image"
+                              type="file"
+                              accept="image/*"
+                              onChange={handleImageChange}
+                              style={{ display: "none" }}
+                            />
+
+                            <label
+                              className="new-button"
+                              htmlFor="upload"
+                              style={{
+                                cursor: "pointer",
+                                display: "inline-block",
+                                border: "1px solid #ccc",
+                                borderRadius: "5px",
+                              }}
+                            >
+                              <img
+                                src={profileData?.profile}
+                                alt="Uploaded"
+                                className="uploaded-image"
+                              />
+                            </label>
+                          </form>
+                        </div>
                       </div>
-                    </div>
-                  </>
-                )}
+                    </>
+                  )}
+                </>
               </div>
             </div>
           </div>

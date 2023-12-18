@@ -131,6 +131,7 @@ const ShopDetails = () => {
       quantity: productQuantity,
       gold_color: goldColor,
       gold_type: goldType,
+      design_name: product?.name,
     })
       .then((res) => {
         if (res.success === true) {

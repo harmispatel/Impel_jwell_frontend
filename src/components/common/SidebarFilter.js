@@ -251,7 +251,7 @@ const SidebarFilter = (props) => {
       )}
 
       <Accordion>
-        <Accordion.Item eventKey="0">
+        {/* <Accordion.Item eventKey="0">
           <Accordion.Header>{props.Categoryheader}</Accordion.Header>
 
           <Accordion.Body>
@@ -335,7 +335,7 @@ const SidebarFilter = (props) => {
               })}
             </ul>
           </Accordion.Body>
-        </Accordion.Item>
+        </Accordion.Item> */}
         <Accordion.Item eventKey="3" className="my-2">
           <Accordion.Header>{props.Priceheader}</Accordion.Header>
           <Accordion.Body className="p-4 mb-2">

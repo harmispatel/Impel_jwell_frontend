@@ -73,6 +73,15 @@ const userWishlist = async (data) => {
   });
   return d;
 };
+const UserProfileImage = async (data) => {
+  let d = await Call({
+    path: "upload-user-image",
+    method: "post",
+    data,
+    enctype: "multipart/form-data",
+  });
+  return d;
+};
 
 const removetoWishlist = async (data) => {
   let d = await Call({
@@ -98,6 +107,7 @@ const exportObject = {
   addtoWishlist,
   login,
   checkUser,
+  UserProfileImage,
   updateProfile,
   profile,
   forget,

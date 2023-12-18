@@ -947,12 +947,21 @@ const Shop = ({ product }) => {
   const Phone = localStorage.getItem("phone");
 
   const [searchInput, setSearchInput] = useState([]);
+
   const [selectedOption, setSelectedOption] = useState([]);
+
   const [categoryData, setCategoryData] = useState([]);
   const [category, setCategory] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
+
+  const [genderData, setGenderData] = useState([]);
   const [gender, setGender] = useState([]);
+  const [selectedGender, setSelectedGender] = useState(null);
+
+  const [tagData, setTagData] = useState([]);
   const [tag, setTag] = useState([]);
+  const [selectedTag, setSelectedTag] = useState(null);
+
   const [PriceRange, setPriceRange] = useState({
     minprice: null,
     maxprice: null,
@@ -973,7 +982,7 @@ const Shop = ({ product }) => {
 
   const [pagination, setPagination] = useState({
     currentPage: 1,
-    dataShowLength: 50,
+    dataShowLength: 450,
   });
 
   const totalPage = Math.ceil(allData.length / pagination.dataShowLength);
@@ -1053,7 +1062,21 @@ const Shop = ({ product }) => {
       })
       .catch((error) => console.log("Error in category filter"));
   }, []);
+  useEffect(() => {
+    FilterServices.genderFilter()
+      .then((res) => {
+        setGenderData(res.data);
+      })
+      .catch((error) => console.log("Error in gender filter"));
+  }, []);
 
+  useEffect(() => {
+    FilterServices.TagFilter()
+      .then((res) => {
+        setTagData(res.data);
+      })
+      .catch((error) => console.log("Error in tag filter"));
+  }, []);
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     let tagIds = searchParams.getAll("tag_id");
@@ -1075,7 +1098,7 @@ const Shop = ({ product }) => {
       gender.length > 0 ||
       searchInput.length > 0 ||
       PriceRange.minprice !== null ||
-      selectedOption.length > 0
+      selectedOption !== null
     ) {
       FilterData();
     }
@@ -1088,22 +1111,32 @@ const Shop = ({ product }) => {
   };
 
   // sort by filters
-  const handleRadioChange = (event) => {
-    setSelectedOption(event.target.value);
-    const sortfield = event.target.value;
-    let sorted = [...allData];
-    switch (sortfield) {
-      case "new_added":
-      case "low_to_high":
-      case "high_to_low":
-      case "highest_selling":
-      case "clear_all":
-        setIsLoading(true);
-        break;
-      default:
-        break;
-    }
-    setFilterData(sorted);
+  // const handleRadioChange = (event) => {
+  //   setSelectedOption(event.target.value);
+  //   const sortfield = event.target.value;
+  //   let sorted = [...allData];
+  //   switch (sortfield) {
+  //     case "new_added":
+  //     case "low_to_high":
+  //     case "high_to_low":
+  //     case "highest_selling":
+  //     case "clear_all":
+  //       setIsLoading(true);
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  //   setFilterData(sorted);
+  // };
+  const options = [
+    { value: "new_added", label: "New Added" },
+    { value: "low_to_high", label: "Price,low to high" },
+    { value: "high_to_low", label: "Price,high to low" },
+    { value: "highest_selling", label: "Top Seller" },
+  ];
+  const handleSelectChange = (selectedOption) => {
+    setIsLoading(true);
+    setSelectedOption(selectedOption);
   };
   const handleSelectCategory = (selectedOption) => {
     setIsLoading(true);
@@ -1113,13 +1146,32 @@ const Shop = ({ product }) => {
     setSelectedCategory(selectedOption);
 
     if (selectedOption) {
-      // Handle the case when an option is selected
-      // Perform additional actions if needed
-      scrollup();
     } else {
-      // Handle the case when no option is selected
       AllData();
-      scrollup();
+    }
+  };
+  const handleSelectGender = (selectedOption) => {
+    setIsLoading(true);
+    const selectedTags = selectedOption ? [selectedOption.value] : [];
+
+    setGender(selectedTags);
+    setSelectedGender(selectedOption);
+
+    if (selectedOption) {
+    } else {
+      AllData();
+    }
+  };
+  const handleSelectTag = (selectedOption) => {
+    setIsLoading(true);
+    const selectedTags = selectedOption ? [selectedOption.value] : [];
+
+    setTag(selectedTags);
+    setSelectedTag(selectedOption);
+
+    if (selectedOption) {
+    } else {
+      AllData();
     }
   };
 
@@ -1214,7 +1266,7 @@ const Shop = ({ product }) => {
       search: searchInput,
       MinPrice: PriceRange?.minprice,
       MaxPrice: PriceRange?.maxprice,
-      sort_by: selectedOption,
+      sort_by: selectedOption?.value,
       userType: userType,
     };
 
@@ -1261,7 +1313,6 @@ const Shop = ({ product }) => {
       });
   };
 
-  const categoryData12 = categoryData.map((datas) => datas);
   useEffect(() => {
     AllData();
     collectionCheck();
@@ -1278,6 +1329,7 @@ const Shop = ({ product }) => {
         design_id: product.id,
         gold_color: goldColor,
         gold_type: goldType,
+        design_name: product?.name,
       })
         .then((res) => {
           if (res.success === true) {
@@ -1304,6 +1356,7 @@ const Shop = ({ product }) => {
       design_id: product.id,
       gold_color: goldColor,
       gold_type: goldType,
+      design_name: product?.name,
     })
       .then((res) => {
         if (res.success === true) {
@@ -1363,16 +1416,33 @@ const Shop = ({ product }) => {
     <section className="shop">
       <div className="container">
         <div className="shopping_data">
-          <div className="search_bar">
-            <input
-              className="form-control"
-              placeholder="Search by design code"
-              onChange={(e) => searchbar(e)}
-              type="search"
-            />
-            {searchInput.length === 0 && <BsSearch className="search-icon" />}
+          <div className="row">
+            <div className="col-md-10 col-7">
+              <div className="search_bar">
+                <input
+                  className="form-control"
+                  placeholder="Search by design code"
+                  onChange={(e) => searchbar(e)}
+                  type="search"
+                />
+                {searchInput.length === 0 && (
+                  <BsSearch className="search-icon" />
+                )}
+              </div>
+            </div>
+            <div className="col-md-2 col-5">
+              <Select
+                value={selectedOption}
+                onChange={handleSelectChange}
+                isClearable={true}
+                isSearchable={false}
+                options={options}
+                placeholder="Sort By"
+              />
+            </div>
           </div>
-          <div className="filters">
+
+          {/* <div className="filters">
             <div className="row">
               <div className="col-md-12">
                 <div className="row justify-content-center">
@@ -1451,27 +1521,64 @@ const Shop = ({ product }) => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
 
           <div className="">
             <div className="row">
-              <div className="col-md-3">
+              <div className="col-md-3 col-12 mt-2 mt-md-2">
                 <Select
                   placeholder="Shop by category"
                   isClearable
+                  isSearchable={false}
                   value={selectedCategory}
                   options={categoryData.map((data) => ({
-                    value: data.id,
-                    label: data.name,
+                    value: data?.id,
+                    label: data?.name,
                   }))}
                   onChange={handleSelectCategory}
                 />
+              </div>
+              <div className="col-md-3 col-6 mt-2 mt-md-2">
+                <Select
+                  placeholder="Shop by Gender"
+                  isClearable
+                  isSearchable={false}
+                  value={selectedGender}
+                  options={genderData?.map((data) => ({
+                    value: data?.id,
+                    label: data?.name,
+                  }))}
+                  onChange={handleSelectGender}
+                />
+              </div>
+              <div className="col-md-3 col-6 mt-2 mt-md-2">
+                <Select
+                  placeholder="Shop by Tag"
+                  isClearable
+                  isSearchable={false}
+                  value={selectedTag}
+                  options={tagData.map((data) => ({
+                    value: data?.id,
+                    label: data?.name,
+                  }))}
+                  onChange={handleSelectTag}
+                />
+              </div>
+              <div className="col-md-3 col-12 mt-md-0">
+                <div className="sidebar">
+                  <SidebarFilter
+                    Priceheader="Shop by Price"
+                    minprice={PriceRange.minprice}
+                    maxprice={PriceRange.maxprice}
+                    onHandleSliderChange={(e) => handleSliderChange(e)}
+                  />
+                </div>
               </div>
             </div>
           </div>
           <hr />
           <div className="row">
-            <div className="col-md-3">
+            {/* <div className="col-md-3">
               <div className="sidebar">
                 <SidebarFilter
                   Categoryheader="Shop by category"
@@ -1487,8 +1594,8 @@ const Shop = ({ product }) => {
                   tag={tag}
                 />
               </div>
-            </div>
-            <div className="col-md-9">
+            </div> */}
+            <div className="col-md-12">
               {isLoading ? (
                 <div className="h-100 d-flex justify-content-center">
                   <ReactLoading
@@ -1502,7 +1609,7 @@ const Shop = ({ product }) => {
               ) : (
                 <>
                   {searchInput.length === 0 &&
-                  selectedOption.length === 0 &&
+                  selectedOption === null &&
                   category.length === 0 &&
                   gender.length === 0 &&
                   tag.length === 0 &&
@@ -1520,7 +1627,7 @@ const Shop = ({ product }) => {
                               )
                               .map((product) => {
                                 return (
-                                  <div key={product.id} className="col-md-4">
+                                  <div key={product.id} className="col-md-3">
                                     <Link
                                       to={`/shopdetails/${product.id}`}
                                       className="product_data"
@@ -1723,7 +1830,7 @@ const Shop = ({ product }) => {
                           <div className="row">
                             {filterData?.map((data) => {
                               return (
-                                <div className="col-md-4">
+                                <div className="col-md-3">
                                   <Link
                                     to={`/shopdetails/${data.id}`}
                                     className="product_data"

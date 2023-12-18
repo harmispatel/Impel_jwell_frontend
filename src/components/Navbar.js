@@ -10,6 +10,7 @@ import FilterServices from "../services/Filter";
 import profileService from "../services/Auth";
 import { CartSystem } from "../context/CartContext";
 import { WishlistSystem } from "../context/WishListContext";
+import { IoMdArrowDropdown } from "react-icons/io";
 
 const Navbar = () => {
   const { state: cartState } = useContext(CartSystem);
@@ -125,248 +126,271 @@ const Navbar = () => {
   return (
     <header className={colorChange ? "header sticky_header" : "header"}>
       <nav className="navbar navbar-expand-lg bg-body-tertiary">
-        <div className="header_inner">
-          {/* <div className="position-relative">
+        <div className="container">
+          <div className="header_inner">
+            {/* <div className="position-relative">
 
           </div> */}
-          <button
-            className="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span className="navbar-toggler-icon"></span>
-          </button>
-          <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul className="navbar-nav mb-2 mb-lg-0 position-relative w-100">
-              <li className="nav-item">
-                <Link
-                  className={
-                    currentRoute === "/" ? "nav-link active" : "nav-link"
-                  }
-                  aria-current="page"
-                  to="/"
-                >
-                  Home
-                </Link>
-              </li>
-              <li className="nav-item">
-                <div>
-                  {userType !== "1" ? (
-                    <Link
-                      className={
-                        currentRoute === "#" ? "nav-link active" : "nav-link"
-                      }
-                      aria-current="page"
-                      to="#"
-                    >
-                      Ready To Dispatch
-                    </Link>
-                  ) : (
-                    ""
-                  )}
-                </div>
-              </li>
-
-              <li className="nav-item main-tags">
-                <Link
-                  // to={`/shop${tagIds?.length > 0 ? `?tag_id=${tagIds}` : ""}`}
-                  to="#"
-                  className="nav-link"
-                  aria-current="page"
-                >
-                  Tags
-                </Link>
-                <div className="tags-dropdown">
-                  <div className="row">
-                    {tags?.length ? (
-                      <>
-                        {tags?.map((multitags, index) => (
-                          <div className="col-md-2" key={index}>
-                            <div className="tags-links">
-                              <Link
-                                to={`/shop?tag_id=${
-                                  tagIds?.includes(multitags?.id)
-                                    ? tagIds
-                                    : [...tagIds, multitags?.id]
-                                }`}
-                                onClick={(e) => handleTag(e)}
-                              >
-                                {multitags.name}
-                              </Link>
-                            </div>
-                          </div>
-                        ))}
-                      </>
-                    ) : (
-                      <></>
-                    )}
-                  </div>
-                </div>
-              </li>
-              <li className="nav-item">
-                <Link
-                  className={
-                    currentRoute === "/shop" ? "nav-link active" : "nav-link"
-                  }
-                  to="/shop"
-                >
-                  Shop
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link
-                  className={
-                    currentRoute === "/about" ? "nav-link active" : "nav-link"
-                  }
-                  to="/about"
-                >
-                  About
-                </Link>
-              </li>
-            </ul>
-          </div>
-          <Link className="navbar-brand m-0" to="/">
-            <img src={Logo} alt="logo" width={100} />
-          </Link>
-          <div className="header_icon">
-            <ul>
-              <li className="m-0">
-                {Dealer && (
-                  <ul>
-                    <li className="user-name">
-                      <button type="submit" className="btn btn-outline-dark">
-                        Hello! Dealer
-                      </button>
-                    </li>
-
-                    <li className="login_user">
-                      <Link
-                        className="icon"
-                        to="#"
-                        data-tooltip-id="my-tooltip-1"
-                      >
-                        <FaUserAlt />
-                      </Link>
-
-                      <div className="login_dropdown dealer_dropdown">
-                        <ul>
-                          <li>
-                            <Link to="/dealer_profile">My Profile</Link>
-                          </li>
-                          <li>
-                            <Link to="/dealer_orders">My Orders</Link>
-                          </li>
-                          <li>
-                            <Link to="/dealer_wishlist">My Selections</Link>
-                          </li>
-                          <li>
-                            <a href="#" onClick={handleLogout}>
-                              LogOut
-                            </a>
-                          </li>
-                        </ul>
-                      </div>
-                    </li>
-                  </ul>
-                )}
-                {Phone && (
-                  <ul>
-                    <li className="user-name">
-                      {profileData?.name ? (
-                        <button type="submit" className="btn btn-outline-dark">
-                          {profileData?.name}
-                        </button>
-                      ) : (
-                        <>
-                          <button
-                            type="submit"
-                            className="btn btn-outline-dark"
-                          >
-                            Hello! user
-                          </button>
-                        </>
-                      )}
-                    </li>
-
-                    <li className="login_user">
-                      <Link
-                        className="icon"
-                        to="#"
-                        data-tooltip-id="my-tooltip-1"
-                      >
-                        <FaUserAlt />
-                      </Link>
-
-                      <div className="login_dropdown">
-                        <ul>
-                          <li>
-                            <Link to="/profile">Profile</Link>
-                          </li>
-                          <li>
-                            <Link to="/my_orders">My Orders</Link>
-                          </li>
-                          <li>
-                            <a href="#" onClick={handleLogout}>
-                              LogOut
-                            </a>
-                          </li>
-                        </ul>
-                      </div>
-                    </li>
-                  </ul>
-                )}
-              </li>
-
-              {!(Dealer || Phone) && (
-                <li className="login_user">
+            <button
+              className="navbar-toggler"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarSupportedContent"
+              aria-controls="navbarSupportedContent"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <span className="navbar-toggler-icon"></span>
+            </button>
+            <div
+              className="collapse navbar-collapse navbar-collapse-start"
+              id="navbarSupportedContent"
+            >
+              <ul className="navbar-nav mb-2 mb-lg-0 w-100">
+                <li className="nav-item">
                   <Link
-                    className="icon"
-                    to="/login"
-                    data-tooltip-id="my-tooltip-1"
+                    className={
+                      currentRoute === "/" ? "nav-link active" : "nav-link"
+                    }
+                    aria-current="page"
+                    to="/"
                   >
-                    <FaUserAlt />
+                    Home
                   </Link>
                 </li>
-              )}
+                <li className="nav-item">
+                  <div>
+                    {userType !== "1" ? (
+                      <Link
+                        className={
+                          currentRoute === "#" ? "nav-link active" : "nav-link"
+                        }
+                        aria-current="page"
+                        to="#"
+                      >
+                        Ready To Dispatch
+                      </Link>
+                    ) : (
+                      ""
+                    )}
+                  </div>
+                </li>
 
-              <li>
-                {Phone && (
+                <li className="nav-item main-tags">
                   <Link
-                    className="icon"
-                    to="/wishlist"
-                    data-tooltip-id="my-tooltip-2"
+                    // to={`/shop${tagIds?.length > 0 ? `?tag_id=${tagIds}` : ""}`}
+                    to="#"
+                    className="nav-link"
+                    aria-current="page"
                   >
-                    <BsHeart />
-                    {wishliststate.wishlistItems > 0 && (
-                      <div className="cart_count">
-                        {wishliststate.wishlistItems}
-                      </div>
-                    )}
+                    Tags
                   </Link>
-                )}
-              </li>
-              <li>
-                {Phone && (
+                  <div className="tags-dropdown">
+                    <div className="row">
+                      {tags?.length ? (
+                        <>
+                          <div className="col-md-2">
+                            <Link
+                              className={
+                                currentRoute === "/shop"
+                                  ? "nav-link active tag-shop-link"
+                                  : "nav-link"
+                              }
+                              style={{ fontSize: "17px", fontWeight: "800" }}
+                              to="/shop"
+                            >
+                              All jewellery
+                            </Link>
+                          </div>
+
+                          {tags?.map((multitags, index) => (
+                            <div className="col-md-2" key={index}>
+                              <div className="tags-links">
+                                <Link
+                                  to={`/shop?tag_id=${
+                                    tagIds?.includes(multitags?.id)
+                                      ? tagIds
+                                      : [...tagIds, multitags?.id]
+                                  }`}
+                                  onClick={(e) => handleTag(e)}
+                                >
+                                  {multitags.name}
+                                </Link>
+                              </div>
+                            </div>
+                          ))}
+                        </>
+                      ) : (
+                        <></>
+                      )}
+                    </div>
+                  </div>
+                </li>
+                <li className="nav-item"></li>
+                <li className="nav-item">
                   <Link
-                    className="icon cart_icon"
-                    to="/cart"
-                    data-tooltip-id="my-tooltip-3"
+                    className={
+                      currentRoute === "/about" ? "nav-link active" : "nav-link"
+                    }
+                    to="/about"
                   >
-                    <BsHandbag style={{ fontSize: "20px", color: "black" }} />
-                    {cartState.cartItems > 0 && (
-                      <div className="cart_count">{cartState.cartItems}</div>
-                    )}
+                    About
                   </Link>
+                </li>
+              </ul>
+            </div>
+            <Link className="navbar-brand m-0" to="/">
+              <img src={Logo} alt="logo" width={100} />
+            </Link>
+            <div className="header_icon">
+              <ul>
+                <li className="m-0">
+                  {Dealer && (
+                    <ul>
+                      <li className="user-name">
+                        <button type="submit" className="btn btn-outline-dark">
+                          Hello! Dealer
+                        </button>
+                      </li>
+
+                      <li className="login_user">
+                        <Link className="icon" to="#">
+                          <FaUserAlt />
+                        </Link>
+
+                        <div className="login_dropdown dealer_dropdown">
+                          <ul>
+                            <li>
+                              <Link to="/dealer_profile">My Profile</Link>
+                            </li>
+                            <li>
+                              <Link to="/dealer_orders">My Orders</Link>
+                            </li>
+                            <li>
+                              <Link to="/dealer_wishlist">My Selections</Link>
+                            </li>
+                            <li>
+                              <a href="#" onClick={handleLogout}>
+                                LogOut
+                              </a>
+                            </li>
+                          </ul>
+                        </div>
+                      </li>
+                    </ul>
+                  )}
+                  {Phone && (
+                    <ul>
+                      <li>
+                        {Phone && (
+                          <Link
+                            className="icon"
+                            to="/wishlist"
+                            data-tooltip-id="my-tooltip-2"
+                          >
+                            <BsHeart />
+                            {wishliststate.wishlistItems > 0 && (
+                              <div className="cart_count">
+                                {wishliststate.wishlistItems}
+                              </div>
+                            )}
+                          </Link>
+                        )}
+                      </li>
+                      <li>
+                        {Phone && (
+                          <Link
+                            className="icon cart_icon"
+                            to="/cart"
+                            data-tooltip-id="my-tooltip-3"
+                          >
+                            <BsHandbag
+                              style={{ fontSize: "20px", color: "black" }}
+                            />
+                            {cartState.cartItems > 0 && (
+                              <div className="cart_count">
+                                {cartState.cartItems}
+                              </div>
+                            )}
+                          </Link>
+                        )}
+                      </li>
+
+                      <li className="login_user">
+                        <Link
+                          className="icon"
+                          to="#"
+                          style={{ textDecoration: "none" }}
+                        >
+                          <img
+                            src={profileData?.profile}
+                            alt=""
+                            className="uploaded-image"
+                            style={{
+                              width: "40px",
+                              height: "40px",
+                              borderRadius: "50%",
+                            }}
+                          />
+                          {profileData?.name ? (
+                            <span className="ms-2">
+                              <b
+                                style={{
+                                  fontSize: "20px",
+                                }}
+                              >
+                                {profileData?.name}
+                                <IoMdArrowDropdown />
+                              </b>
+                            </span>
+                          ) : (
+                            <>
+                              <button
+                                type="submit"
+                                className="btn btn-outline-dark ms-2"
+                              >
+                                Hello! user <IoMdArrowDropdown />
+                              </button>
+                            </>
+                          )}
+                        </Link>
+
+                        <div className="login_dropdown">
+                          <ul>
+                            <li>
+                              <Link to="/profile">Profile</Link>
+                            </li>
+                            <li>
+                              <Link to="/my_orders">My Orders</Link>
+                            </li>
+                            <li>
+                              <a href="#" onClick={handleLogout}>
+                                LogOut
+                              </a>
+                            </li>
+                          </ul>
+                        </div>
+                      </li>
+                    </ul>
+                  )}
+                </li>
+
+                {!(Dealer || Phone) && (
+                  <li className="login_user">
+                    <Link className="icon" to="/login">
+                      <FaUserAlt />
+                    </Link>
+                  </li>
                 )}
-              </li>
-              <ReactTooltip id="my-tooltip-1" place="top" content="user" />
-              <ReactTooltip id="my-tooltip-2" place="top" content="wishlist" />
-              <ReactTooltip id="my-tooltip-3" place="top" content="cart" />
-            </ul>
+
+                <ReactTooltip
+                  id="my-tooltip-2"
+                  place="top"
+                  content="wishlist"
+                />
+                <ReactTooltip id="my-tooltip-3" place="top" content="cart" />
+              </ul>
+            </div>
           </div>
         </div>
       </nav>

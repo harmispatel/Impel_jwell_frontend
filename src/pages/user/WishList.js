@@ -17,8 +17,8 @@ const WishList = () => {
   const [removingItemId, setRemovingItemId] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [productQuantity, setProductQuantity] = useState(1);
-  const [spinner, setSpinner] = useState(false);
   const [cartItems, setCartItems] = useState([]);
+  const [removeCartItems, setRemoveCartItems] = useState(null);
 
   const GetUserWishlist = async () => {
     Userservice.userWishlist({ phone: phone })
@@ -48,6 +48,7 @@ const WishList = () => {
       .then((res) => {
         if (res.success === true) {
           GetUserWishlist();
+          setIsLoading(true);
           dispatch({
             type: "REMOVE_FROM_WISHLIST",
             payload: { id: product.id },
@@ -63,14 +64,14 @@ const WishList = () => {
   };
 
   const handleAddToCart = (product) => {
-    setSpinner(true);
+    setRemoveCartItems(product);
     const CartData = {
       phone: phone,
       design_name: product.name,
       design_id: product.id,
       quantity: productQuantity,
-      // gold_color: goldColor,
-      // gold_type: goldType,
+      gold_color: product?.gold_color,
+      gold_type: product?.gold_type,
     };
 
     UserCartService.AddtoCart(CartData)
@@ -78,17 +79,23 @@ const WishList = () => {
         if (res.status === true) {
           GetUserCartList();
           toast.success(res.message);
+          GetUserWishlist();
+          setIsLoading(true);
           // cartDispatch({
           //   type: "ADD_TO_CART",
           //   payload: { design_id: CartData.design_id },
           // });
+        } else {
+          toast.error(res.message);
+          GetUserWishlist();
+          setIsLoading(true);
         }
       })
       .catch((err) => {
         console.log(err);
       })
       .finally(() => {
-        setSpinner(false);
+        setRemoveCartItems(null);
       });
   };
 
@@ -137,7 +144,14 @@ const WishList = () => {
                                 to={`/shopdetails/${product?.id}`}
                                 className="product_data"
                               >
-                                <h3>{product?.name}</h3>
+                                <h3>
+                                  <b>{product?.name}</b>
+                                </h3>
+
+                                <div className="d-flex justify-content-around align-items-center">
+                                  <span>{product?.gold_color}</span>
+                                  <span>{product?.gold_type}</span>
+                                </div>
                               </Link>
                             </div>
                             <div className="move_bag_btn d-flex">
@@ -156,15 +170,16 @@ const WishList = () => {
                               <button
                                 className="btn w-100"
                                 onClick={() => handleAddToCart(product)}
-                                disabled={spinner}
                               >
-                                {spinner && (
+                                {removeCartItems === product && (
                                   <CgSpinner
                                     size={20}
                                     className="animate_spin me-2"
                                   />
                                 )}
-                                {!spinner && <BsHandbagFill className="me-2" />}
+                                {!removeCartItems === product && (
+                                  <BsHandbagFill className="me-2" />
+                                )}
                                 Move To Cart
                               </button>
                             </div>
