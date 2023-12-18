@@ -63,6 +63,7 @@ body {
   transform: perspective(600px) rotateX(0deg);
   opacity: 1;
   visibility: visible;
+  z-index: 9;
 }
 
 .tags-dropdown {
