@@ -34,7 +34,6 @@ const Categories = () => {
             <ReactLoading
               type={"spinningBubbles"}
               color={"#053961"}
-              
               height={"20%"}
               width={"10%"}
               className="loader"
@@ -43,7 +42,7 @@ const Categories = () => {
         ) : (
           <div className="categories_data">
             <div className="row">
-              {allCategories.map((data,index) => {
+              {allCategories.map((data, index) => {
                 return (
                   <div className="col-md-3" key={index}>
                     <Link

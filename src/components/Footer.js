@@ -7,9 +7,11 @@ import profileService from "../services/Home";
 
 const Footer = () => {
   const [siteSetting, setSiteSetting] = useState("");
+  const [customePages, setCustomePages] = useState([]);
   const currentYear = new Date().getFullYear();
   const copyrightText = siteSetting?.frontend_copyright;
   const updatedCopyrightText = copyrightText?.replace("{year}", currentYear);
+
   const SiteSetting = async () => {
     await profileService
       .SiteSetting()
@@ -20,8 +22,19 @@ const Footer = () => {
         console.log(err);
       });
   };
+  const CustomPages = () => {
+    profileService
+      .CustomPages()
+      .then((res) => {
+        setCustomePages(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   useEffect(() => {
     SiteSetting();
+    CustomPages();
   }, []);
   return (
     <footer className="footer">
@@ -33,27 +46,15 @@ const Footer = () => {
 
           <div className="footer_list">
             <ul>
-              <li>
-                <Link to="#">FAQ</Link>
-              </li>
-              <li>
-                <Link to="#">Virtual Shopping</Link>
-              </li>
-              <li>
-                <Link to="#">Shopping & Returns</Link>
-              </li>
-              <li>
-                <Link to="#">Create Your Jewellery</Link>
-              </li>
-              <li>
-                <Link to="#">Ring Sizer</Link>
-              </li>
-              <li>
-                <Link to="#">Stores</Link>
-              </li>
+              {customePages?.map((pages, index) => (
+                <li>
+                  <Link key={index} to={`page/${pages?.slug}`} target="_blank">
+                    <b>{pages?.name}</b>
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
-
           <div className="footer_social_list">
             <ul>
               {siteSetting?.instagram_link ? (

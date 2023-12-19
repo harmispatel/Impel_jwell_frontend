@@ -3,6 +3,7 @@ import profileService from "../../services/Auth";
 import { useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { IconName, ImCross } from "react-icons/im";
+import toast from "react-hot-toast";
 
 const DealerProfile = () => {
   const email = localStorage.getItem("email");
@@ -40,6 +41,52 @@ const DealerProfile = () => {
     onDrop,
   });
 
+  const handleImageChange = (e) => {
+    const fileInput = document.getElementById("upload");
+    const file = e.target.files[0];
+    const maxSize = 5 * 1024 * 1024;
+
+    if (file?.size > maxSize) {
+      toast.error("File size exceeds the 5 MB limit");
+      fileInput.value = "";
+      return;
+    }
+
+    const allowedTypes = ["image/png", "image/jpeg", "image/jpg", "image/gif"];
+    if (!allowedTypes?.includes(file?.type)) {
+      toast.error(
+        "Invalid file type. Please upload a PNG, JPEG, JPG, or GIF file."
+      );
+      fileInput.value = "";
+      return;
+    }
+
+    const reader = new FileReader();
+    const myFormData = new FormData(
+      document.getElementById("user-profile-form")
+    );
+
+    reader.onloadend = () => {
+      profileService
+        .UserProfileImage(myFormData)
+        .then((res) => {
+          if (res.status === true) {
+            getProfileData();
+            toast.success(res.message);
+          } else {
+            getProfileData();
+            toast.error(res.message);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+  };
   const getProfileData = () => {
     profileService
       .profile({ email: email, token: token })
@@ -174,9 +221,59 @@ const DealerProfile = () => {
             <h4 className="text-right">Logo & Documents</h4>
           </div>
           <div className="row">
-            <div className="col-md-5">
+            <div className="col-md-4">
               <label className="labels">
-                <strong>Your Logo</strong>
+                <strong>Profile picture</strong>
+              </label>
+              <br />
+              {profileData?.profile && (
+                <>
+                  <div className="imagesss">
+                    <div className="profile-image">
+                      <form
+                        id="user-profile-form"
+                        method="POST"
+                        encType="multipart/form-data"
+                      >
+                        <input
+                          type="hidden"
+                          name="user_id"
+                          value={profileData?.id}
+                        />
+                        <input
+                          id="upload"
+                          name="user_image"
+                          type="file"
+                          accept="image/*"
+                          onChange={handleImageChange}
+                          style={{ display: "none" }}
+                        />
+
+                        <label
+                          className="new-button"
+                          htmlFor="upload"
+                          style={{
+                            cursor: "pointer",
+                            display: "inline-block",
+                            border: "1px solid #ccc",
+                            borderRadius: "5px",
+                          }}
+                        >
+                          <img
+                            src={profileData?.profile}
+                            alt="Uploaded"
+                            className="uploaded-image"
+                          />
+                        </label>
+                      </form>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+            <div className="col-md-4">
+              <label className="labels">
+                <strong>Company Logo</strong>
               </label>
               {/* <input
                     type="file"
@@ -185,9 +282,14 @@ const DealerProfile = () => {
                     disabled
                   /> */}
               <br />
-              <img src={profileData.logo} className="mt-3" width={200} alt="" />
+              <img
+                src={profileData?.company_logo}
+                className="mt-3"
+                width={200}
+                alt=""
+              />
             </div>
-            <div className="col-md-7">
+            <div className="col-md-4">
               <label className="labels">
                 <strong>Your Documents</strong>
               </label>

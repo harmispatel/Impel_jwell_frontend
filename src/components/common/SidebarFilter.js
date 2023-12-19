@@ -203,9 +203,6 @@ const SidebarFilter = (props) => {
   });
 
   useEffect(() => {
-    CategoryFilter();
-    GenderFilter();
-    TagFilter();
     priceRange();
   }, []);
 

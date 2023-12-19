@@ -38,6 +38,7 @@ const Navbar = () => {
   // const [dealerCartCounts, setDealerCartCounts] = useState();
   // const [userCartCounts, setUsererCartCounts] = useState();
   const [profileData, setProfileData] = useState([]);
+  const [dealerData, setDealerData] = useState([]);
   const [tags, setTags] = useState([]);
   const [tag, setTag] = useState([]);
 
@@ -92,11 +93,21 @@ const Navbar = () => {
         console.log(err);
       });
   };
-
+  const getProfileData = () => {
+    profileService
+      .profile({ email: DealerEmail, token: Dealer })
+      .then((res) => {
+        setDealerData(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   useEffect(() => {
     // DealerCart();
     // UserCartItems();
     getProfile();
+    getProfileData();
     Tags();
   }, []);
 
@@ -247,15 +258,46 @@ const Navbar = () => {
                 <li className="m-0">
                   {Dealer && (
                     <ul>
-                      <li className="user-name">
-                        <button type="submit" className="btn btn-outline-dark">
-                          Hello! Dealer
-                        </button>
-                      </li>
-
                       <li className="login_user">
-                        <Link className="icon" to="#">
-                          <FaUserAlt />
+                        <Link
+                          className="icon"
+                          to="#"
+                          style={{ textDecoration: "none" }}
+                        >
+                          <img
+                            src={dealerData?.profile}
+                            alt=""
+                            className="uploaded-image"
+                            style={{
+                              width: "40px",
+                              height: "40px",
+                              borderRadius: "50%",
+                            }}
+                          />
+                          {dealerData?.name ? (
+                            <span className="ms-2">
+                              <b
+                                style={{
+                                  fontSize: "20px",
+                                }}
+                              >
+                                {dealerData?.name}
+                                <IoMdArrowDropdown />
+                              </b>
+                            </span>
+                          ) : (
+                            <>
+                              <span className="ms-2">
+                                <b
+                                  style={{
+                                    fontSize: "20px",
+                                  }}
+                                >
+                                  Hello! Dealer <IoMdArrowDropdown />
+                                </b>
+                              </span>
+                            </>
+                          )}
                         </Link>
 
                         <div className="login_dropdown dealer_dropdown">
@@ -345,12 +387,15 @@ const Navbar = () => {
                             </span>
                           ) : (
                             <>
-                              <button
-                                type="submit"
-                                className="btn btn-outline-dark ms-2"
-                              >
-                                Hello! user <IoMdArrowDropdown />
-                              </button>
+                              <span className="ms-2">
+                                <b
+                                  style={{
+                                    fontSize: "20px",
+                                  }}
+                                >
+                                  Hello! user <IoMdArrowDropdown />
+                                </b>
+                              </span>
                             </>
                           )}
                         </Link>

@@ -3,19 +3,19 @@ import { IoMdPrint } from "react-icons/io";
 import { useReactToPrint } from "react-to-print";
 
 const Orders = () => {
-  const current = new Date();
-  const date = `${current.getDate()}/${
-    current.getMonth() + 1
-  }/${current.getFullYear()}`;
+  // const current = new Date();
+  // const date = `${current.getDate()}/${
+  //   current.getMonth() + 1
+  // }/${current.getFullYear()}`;
 
-  const printRef = useRef();
+  // const printRef = useRef();
 
-  const handlePrint = useReactToPrint({
-    content: () => printRef.current,
-  });
+  // const handlePrint = useReactToPrint({
+  //   content: () => printRef.current,
+  // });
   return (
     <section className="my_orders">
-      <div className="container">
+      {/* <div className="container">
         <div className="row justify-content-center">
           <div className="col-md-9">
             <div className="text-end">
@@ -159,7 +159,7 @@ const Orders = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </section>
   );
 };

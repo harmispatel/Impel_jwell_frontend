@@ -12,8 +12,6 @@
 // import { Tooltip as ReactTooltip } from "react-tooltip";
 // import { WishlistSystem } from "../../context/WishListContext";
 // import { FaRegStar, FaStar } from "react-icons/fa";
-// import FilterServices from "../../services/Filter";
-// import Select from "react-select";
 
 // const Shop = ({ product }) => {
 //   const { dispatch: wishlistDispatch } = useContext(WishlistSystem);
@@ -29,9 +27,7 @@
 
 //   const [searchInput, setSearchInput] = useState([]);
 //   const [selectedOption, setSelectedOption] = useState([]);
-//   const [categoryData, setCategoryData] = useState([]);
 //   const [category, setCategory] = useState([]);
-//   const [selectedCategory, setSelectedCategory] = useState(null);
 //   const [gender, setGender] = useState([]);
 //   const [tag, setTag] = useState([]);
 //   const [PriceRange, setPriceRange] = useState({
@@ -128,14 +124,6 @@
 //   };
 
 //   useEffect(() => {
-//     FilterServices.categoryFilter()
-//       .then((res) => {
-//         setCategoryData(res.data);
-//       })
-//       .catch((error) => console.log("Error in category filter"));
-//   }, []);
-
-//   useEffect(() => {
 //     const searchParams = new URLSearchParams(location.search);
 //     let tagIds = searchParams.getAll("tag_id");
 //     setIsLoading(true);
@@ -185,23 +173,6 @@
 //         break;
 //     }
 //     setFilterData(sorted);
-//   };
-//   const handleSelectCategory = (selectedOption) => {
-//     setIsLoading(true);
-//     const selectedCategory1 = selectedOption ? [selectedOption.value] : [];
-
-//     setCategory(selectedCategory1);
-//     setSelectedCategory(selectedOption);
-
-//     if (selectedOption) {
-//       // Handle the case when an option is selected
-//       // Perform additional actions if needed
-//       scrollup();
-//     } else {
-//       // Handle the case when no option is selected
-//       AllData();
-//       scrollup();
-//     }
 //   };
 
 //   // side filter 4 functions
@@ -342,7 +313,6 @@
 //       });
 //   };
 
-//   const categoryData12 = categoryData.map((datas) => datas);
 //   useEffect(() => {
 //     AllData();
 //     collectionCheck();
@@ -444,35 +414,6 @@
 //     <section className="shop">
 //       <div className="container">
 //         <div className="shopping_data">
-//           <div className="row">
-//             <div className="col-md-8">
-//               <div className="search_bar">
-//                 <input
-//                   className="form-control"
-//                   placeholder="Search by design code"
-//                   onChange={(e) => searchbar(e)}
-//                   type="search"
-//                 />
-//                 {searchInput.length === 0 && (
-//                   <BsSearch className="search-icon" />
-//                 )}
-//               </div>
-//             </div>
-//             <div className="col-md-4">
-//               <div className="search_bar">
-//                 <input
-//                   className="form-control"
-//                   placeholder="Search by design code"
-//                   onChange={(e) => searchbar(e)}
-//                   type="search"
-//                 />
-//                 {searchInput.length === 0 && (
-//                   <BsSearch className="search-icon" />
-//                 )}
-//               </div>
-//             </div>
-//           </div>
-
 //           <div className="filters">
 //             <div className="row">
 //               <div className="col-md-12">
@@ -553,26 +494,20 @@
 //               </div>
 //             </div>
 //           </div>
-
-//           <div className="">
-//             <div className="row">
-//               <div className="col-md-3">
-//                 <Select
-//                   placeholder="Shop by category"
-//                   isClearable
-//                   value={selectedCategory}
-//                   options={categoryData.map((data) => ({
-//                     value: data.id,
-//                     label: data.name,
-//                   }))}
-//                   onChange={handleSelectCategory}
-//                 />
-//               </div>
-//             </div>
-//           </div>
 //           <hr />
 //           <div className="row">
 //             <div className="col-md-3">
+//               <div className="search_bar">
+//                 <input
+//                   className="form-control"
+//                   placeholder="Please enter a design code"
+//                   onChange={(e) => searchbar(e)}
+//                   type="search"
+//                 />
+//                 {searchInput.length === 0 && (
+//                   <BsSearch className="search-icon" />
+//                 )}
+//               </div>
 //               <div className="sidebar">
 //                 <SidebarFilter
 //                   Categoryheader="Shop by category"

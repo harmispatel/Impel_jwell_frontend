@@ -35,6 +35,7 @@ const ShopDetails = () => {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [cartItems, setCartItems] = useState([]);
+  const [cartCounts, setCartCounts] = useState();
   const [DealercartItems, setDealerCartItems] = useState([]);
   const [userWishlist, setUserWishlist] = useState(false);
   const [UserWishlistItems, setUserWishlistItems] = useState([]);

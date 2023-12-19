@@ -413,7 +413,7 @@ const Cart = () => {
   };
 
   const Orderplacing = () => {
-    if (Verification == 3) {
+    if (Verification == 2) {
       navigate("/order-details");
       UserService.Placeorder({
         user_id: user_id,

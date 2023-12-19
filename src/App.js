@@ -30,6 +30,7 @@ import CartProvider from "./context/CartContext";
 import Errorpage from "./components/Errorpage";
 import Popup from "./components/common/Popup";
 import MyOrders from "./pages/user/MyOrders";
+import CustomPageView from "./components/CustomPageView";
 
 function App() {
   const popupshow = localStorage.getItem("user_type");
@@ -52,6 +53,8 @@ function App() {
               <Route path="categories" element={<Categories />} />
               <Route path="categories/:id" element={<CategoriesItems />} />
               <Route path="categoryDetail/:id" element={<CategoriesDetail />} />
+              <Route path="page/:slug" element={<CustomPageView />} />
+
               {/* USER PROTECTED */}
               <Route
                 path="wishlist"

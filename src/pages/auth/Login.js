@@ -4,6 +4,7 @@ import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 import OTPInput from "react-otp-input";
 import firebase from "./firebase.config";
+
 import {
   RecaptchaVerifier,
   getAuth,
@@ -187,6 +188,7 @@ const Login = () => {
                                     value={phoneNumber}
                                     onChange={handlePhoneNumberChange}
                                     placeholder="Enter Your Phone Number"
+                                    maxLength={15}
                                   />
                                   {phoneError && (
                                     <div className="text-danger">
@@ -205,7 +207,7 @@ const Login = () => {
                                       {spinner && (
                                         <CgSpinner
                                           size={20}
-                                          className="animate_spin me-2"
+                                          className="animate_spin me-2  text-center"
                                         />
                                       )}
                                       {spinner ? "" : "Login"}
@@ -258,7 +260,7 @@ const Login = () => {
                                     )}
                                     Verfy OTP
                                   </button>
-                                  <div>
+                                  {/* <div>
                                     {seconds > 0 || minutes > 0 ? (
                                       <p>
                                         Time Remaining:{" "}
@@ -269,7 +271,7 @@ const Login = () => {
                                     ) : (
                                       <p>Didn't recieve code?</p>
                                     )}
-                                  </div>
+                                  </div> */}
                                   <button
                                     id="sign-in-button"
                                     type="button"

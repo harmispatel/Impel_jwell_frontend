@@ -47,11 +47,21 @@ const SiteSetting = async () => {
   });
   return d;
 };
+
+const CustomPages = async (data) => {
+  let d = await call({
+    path: "custom-pages",
+    method: "POST",
+    data,
+  });
+  return d;
+};
 const exportObject = {
   banners,
   category,
   TopSelling,
   RecentAdd,
+  CustomPages,
   Featured,
   SiteSetting,
 };
