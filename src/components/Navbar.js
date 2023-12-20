@@ -12,7 +12,8 @@ import { CartSystem } from "../context/CartContext";
 import { WishlistSystem } from "../context/WishListContext";
 import { IoMdArrowDropdown } from "react-icons/io";
 
-const Navbar = () => {
+const Navbar = (props) => {
+  const { profileData } = props;
   const { state: cartState } = useContext(CartSystem);
   const { state: wishliststate } = useContext(WishlistSystem);
   const location = useLocation();
@@ -37,7 +38,7 @@ const Navbar = () => {
   const [isLoggedOut, setIsLoggedOut] = useState(false);
   // const [dealerCartCounts, setDealerCartCounts] = useState();
   // const [userCartCounts, setUsererCartCounts] = useState();
-  const [profileData, setProfileData] = useState([]);
+
   const [dealerData, setDealerData] = useState([]);
   const [tags, setTags] = useState([]);
   const [tag, setTag] = useState([]);
@@ -85,14 +86,6 @@ const Navbar = () => {
       });
   };
 
-  const getProfile = async () => {
-    await profileService
-      .getProfile({ phone: Phone })
-      .then((res) => setProfileData(res.data))
-      .catch((err) => {
-        console.log(err);
-      });
-  };
   const getProfileData = () => {
     profileService
       .profile({ email: DealerEmail, token: Dealer })
@@ -106,7 +99,6 @@ const Navbar = () => {
   useEffect(() => {
     // DealerCart();
     // UserCartItems();
-    getProfile();
     getProfileData();
     Tags();
   }, []);
@@ -171,19 +163,15 @@ const Navbar = () => {
                 </li>
                 <li className="nav-item">
                   <div>
-                    {userType !== "1" ? (
-                      <Link
-                        className={
-                          currentRoute === "#" ? "nav-link active" : "nav-link"
-                        }
-                        aria-current="page"
-                        to="#"
-                      >
-                        Ready To Dispatch
-                      </Link>
-                    ) : (
-                      ""
-                    )}
+                    <Link
+                      className={
+                        currentRoute === "#" ? "nav-link active" : "nav-link"
+                      }
+                      aria-current="page"
+                      to="#"
+                    >
+                      Ready To Dispatch
+                    </Link>
                   </div>
                 </li>
 

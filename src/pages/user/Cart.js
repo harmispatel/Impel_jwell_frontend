@@ -149,12 +149,49 @@ const Cart = () => {
   const handleCheckboxChange = (event) => {
     setIsChecked(event.target.checked);
   };
+  const SubTotal = () => {
+    let subTotal = 0;
+    Items.forEach((data) => {
+      const Pricekey = "metal_price_" + data.gold_type;
+      const price = parseFloat(data[Pricekey]);
+      subTotal += price;
+    });
+    return subTotal;
+  };
+
+  const SubCharge = () => {
+    let subCharge = 0;
+    Items.forEach((data) => {
+      const czStoneCharge = parseFloat(data.cz_stone_charge) || 0;
+      const gemstoneCharge = parseFloat(data.gemstone_charge) || 0;
+      const makingCharge = parseFloat(data.making_charge) || 0;
+
+      const totalCharge = czStoneCharge + gemstoneCharge + makingCharge;
+      subCharge += totalCharge;
+    });
+
+    return subCharge;
+  };
+
+  const goldColor = {
+    yellow_gold: "Yellow Gold",
+    rose_gold: "Rose Gold",
+    white_gold: "White Gold",
+  };
 
   const pincodeRegex = /^\d{6}$/;
   const isValidPan = (panNumber) => {
     const panRegex = /[A-Z]{5}[0-9]{4}[A-Z]{1}/;
     return panRegex.test(panNumber);
   };
+
+  const totalPrice = code.discount_value
+    ? code.discount_type === "percentage"
+      ? SubTotal() + SubCharge() - (SubCharge() * code.discount_value) / 100
+      : SubTotal() + SubCharge() - code.discount_value
+    : SubTotal() + SubCharge();
+
+  const isPriceAboveLimit = totalPrice >= 200000;
 
   const FormValidation = () => {
     let isValid = true;
@@ -179,6 +216,21 @@ const Cart = () => {
       isValid = false;
     } else {
       validationErrors.emailErr = "";
+    }
+
+    if (isPriceAboveLimit) {
+      if (!userData || !userData.pan_no || !userData.pan_no.trim()) {
+        validationErrors.pancardErr =
+          "Pancard is required for your total amount is more than 2 lakh or above";
+        isValid = false;
+      } else if (!isValidPan(userData.pan_no)) {
+        validationErrors.pancardErr = "Invalid pan-card Format";
+        isValid = false;
+      } else {
+        validationErrors.pancardErr = "";
+      }
+    } else {
+      validationErrors.pancardErr = "";
     }
 
     if (!userData.address.trim()) {
@@ -257,7 +309,6 @@ const Cart = () => {
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
     const isFormValid = FormValidation();
-    localStorage.setItem("verification", profileData.verification);
     if (isFormValid) {
       const formData = new FormData();
       formData.append("id", selectedData.id);
@@ -311,6 +362,9 @@ const Cart = () => {
     } else {
     }
   };
+  useEffect(() => {
+    setIsChecked(profileData?.address_same_as_company === 1);
+  }, [profileData?.address_same_as_company]);
 
   // cart all functiolity
   const UserCartItems = () => {
@@ -336,40 +390,6 @@ const Cart = () => {
       setShow(true);
     }
   }, []);
-
-  useEffect(() => {
-    setIsChecked(profileData?.address_same_as_company === 1);
-  }, [profileData?.address_same_as_company]);
-
-  const SubTotal = () => {
-    let subTotal = 0;
-    Items.forEach((data) => {
-      const Pricekey = "metal_price_" + data.gold_type;
-      const price = parseFloat(data[Pricekey]);
-      subTotal += price;
-    });
-    return subTotal;
-  };
-
-  const SubCharge = () => {
-    let subCharge = 0;
-    Items.forEach((data) => {
-      const czStoneCharge = parseFloat(data.cz_stone_charge) || 0;
-      const gemstoneCharge = parseFloat(data.gemstone_charge) || 0;
-      const makingCharge = parseFloat(data.making_charge) || 0;
-
-      const totalCharge = czStoneCharge + gemstoneCharge + makingCharge;
-      subCharge += totalCharge;
-    });
-
-    return subCharge;
-  };
-
-  const goldColor = {
-    yellow_gold: "Yellow Gold",
-    rose_gold: "Rose Gold",
-    white_gold: "White Gold",
-  };
 
   const Applycoupen = (e) => {
     e.preventDefault();
@@ -413,15 +433,34 @@ const Cart = () => {
   };
 
   const Orderplacing = () => {
+    const totalPrice = code?.discount_value
+      ? code.discount_type === "percentage"
+        ? SubTotal() + SubCharge() - (SubCharge() * code.discount_value) / 100
+        : SubTotal() + SubCharge() - code.discount_value
+      : SubTotal() + SubCharge();
+
     if (Verification == 2) {
-      navigate("/order-details");
-      UserService.Placeorder({
-        user_id: user_id,
-        dealer_code: code?.dealer_code,
-        discount_type: code?.discount_type,
-        discount_value: code?.discount_value,
-        cart_items_Ids: Items?.map((item) => item?.id),
-      });
+      if (totalPrice >= 200000 && userData?.pan_no?.length == 0) {
+        setShowEdit(true);
+      } else if (totalPrice < 200000) {
+        navigate("/order-details");
+        UserService.Placeorder({
+          user_id: user_id,
+          dealer_code: code?.dealer_code,
+          discount_type: code?.discount_type,
+          discount_value: code?.discount_value,
+          cart_items_Ids: Items?.map((item) => item?.id),
+        });
+      } else {
+        navigate("/order-details");
+        UserService.Placeorder({
+          user_id: user_id,
+          dealer_code: code?.dealer_code,
+          discount_type: code?.discount_type,
+          discount_value: code?.discount_value,
+          cart_items_Ids: Items?.map((item) => item?.id),
+        });
+      }
     } else {
       setShowEdit(true);
     }
@@ -766,13 +805,23 @@ const Cart = () => {
 
                   <div className="col-md-6 mb-3">
                     <Form.Group className="mb-2" controlId="formGridAddress1">
-                      <Form.Label>Pan-card</Form.Label>
+                      <Form.Label>
+                        Pan-card
+                        {isPriceAboveLimit ? (
+                          <span className="text-danger">*</span>
+                        ) : (
+                          ""
+                        )}
+                      </Form.Label>
                       <Form.Control
                         name="pan_no"
                         defaultValue={selectedData.pan_no}
                         onChange={(e) => handleChange(e)}
                         placeholder="Enter Your Pancard number"
                       />
+                      <span className="text-danger">
+                        {isPriceAboveLimit ? error.pancardErr : ""}
+                      </span>
                     </Form.Group>
                   </div>
                   {/* <div className="col-md-6 mb-3">

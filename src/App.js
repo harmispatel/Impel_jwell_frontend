@@ -31,8 +31,24 @@ import Errorpage from "./components/Errorpage";
 import Popup from "./components/common/Popup";
 import MyOrders from "./pages/user/MyOrders";
 import CustomPageView from "./components/CustomPageView";
+import { useEffect, useState } from "react";
+import profileService from "./services/Auth";
 
 function App() {
+  const Phone = localStorage.getItem("phone");
+  const [profileData, setProfileData] = useState([]);
+  const getProfile = async () => {
+    await profileService
+      .getProfile({ phone: Phone })
+      .then((res) => setProfileData(res.data))
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    getProfile();
+  }, []);
   const popupshow = localStorage.getItem("user_type");
   const isComingSoon = false;
   return (
@@ -44,7 +60,7 @@ function App() {
           <Route path="/" element={<Errorpage />} />
         ) : (
           <>
-            <Route path="/" element={<Layout />}>
+            <Route path="/" element={<Layout profileData={profileData} />}>
               {/* COMMON COMPONENT */}
               <Route index element={<Home />} />
               <Route path="shop" element={<Shop />} />

@@ -4,6 +4,7 @@ import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 import OTPInput from "react-otp-input";
 import firebase from "./firebase.config";
+import profileService from "../../services/Auth";
 
 import {
   RecaptchaVerifier,
@@ -25,6 +26,20 @@ const Login = () => {
   const [minutes, setMinutes] = useState(1);
   const [seconds, setSeconds] = useState(30);
   const [phonedata, setPhoneData] = useState();
+  const [profileData, setProfileData] = useState([]);
+  const Phone = localStorage.getItem("phone");
+  const getProfile = async () => {
+    await profileService
+      .getProfile({ phone: Phone })
+      .then((res) => setProfileData(res.data))
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    getProfile();
+  }, []);
 
   useEffect(() => {
     onCaptchVerify();
@@ -98,6 +113,9 @@ const Login = () => {
           if (response.status === 0) {
             toast.error(response.message);
             navigate("/login");
+            setTimeout(() => {
+              window.location.reload(true);
+            }, 1000);
             return;
           } else {
             const auth = getAuth();
@@ -133,12 +151,13 @@ const Login = () => {
       .confirm(code)
       .then((result) => {
         if (result) {
-          localStorage.setItem("phone", phoneNumber);
           toast.success("Login Successfully...");
+          localStorage.setItem("phone", phoneNumber);
           localStorage.setItem("user_type", phonedata?.user_type);
           localStorage.setItem("user_id", phonedata?.user_id);
           localStorage.setItem("verification", phonedata?.verification);
           navigate("/");
+          getProfile();
         }
       })
       .catch((error) => {
@@ -152,115 +171,116 @@ const Login = () => {
   };
 
   return (
-    <section className="login">
-      <div className="login_main">
-        <div className="container">
-          <div className="row justify-content-center">
-            <div className="col-md-9">
-              <div className="login_inr">
-                <div className="row justify-content-center">
-                  <div className="col-md-8">
-                    <div className="login_info">
-                      <div className="login_info_inr">
-                        {/* <div className="login_header">
+    <>
+      <section className="login">
+        <div className="login_main">
+          <div className="container">
+            <div className="row justify-content-center">
+              <div className="col-md-9">
+                <div className="login_inr">
+                  <div className="row justify-content-center">
+                    <div className="col-md-8">
+                      <div className="login_info">
+                        <div className="login_info_inr">
+                          {/* <div className="login_header">
                           <Link to="#">
                             <img src={Logo} height="80" alt="logo" />
                           </Link>
                         </div> */}
-                        <div className="login_info_inr_title">
-                          <div className=" p-2 text-center">
-                            <div className="login_info_inr_title">
-                              <h3>Welcome</h3>
+                          <div className="login_info_inr_title">
+                            <div className=" p-2 text-center">
+                              <div className="login_info_inr_title">
+                                <h3>Welcome</h3>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                        <div id="recaptcha-container">
-                          {show === false && (
-                            <>
-                              <form onSubmit={sendOtp}>
-                                <div className="form-group my-3">
-                                  <PhoneInput
-                                    international
-                                    countryCallingCodeEditable={false}
-                                    defaultCountry="IN"
-                                    className="form-control phone_input"
-                                    name="phoneNumber"
-                                    value={phoneNumber}
-                                    onChange={handlePhoneNumberChange}
-                                    placeholder="Enter Your Phone Number"
-                                    maxLength={15}
-                                  />
-                                  {phoneError && (
-                                    <div className="text-danger">
-                                      {phoneError}
+                          <div id="recaptcha-container">
+                            {show === false && (
+                              <>
+                                <form onSubmit={sendOtp}>
+                                  <div className="form-group my-3">
+                                    <PhoneInput
+                                      international
+                                      countryCallingCodeEditable={false}
+                                      defaultCountry="IN"
+                                      className="form-control phone_input"
+                                      name="phoneNumber"
+                                      value={phoneNumber}
+                                      onChange={handlePhoneNumberChange}
+                                      placeholder="Enter Your Phone Number"
+                                      maxLength={15}
+                                    />
+                                    {phoneError && (
+                                      <div className="text-danger">
+                                        {phoneError}
+                                      </div>
+                                    )}
+                                  </div>
+                                  <div className="row">
+                                    <div className="col-md-6">
+                                      <button
+                                        className="button-60"
+                                        role="button"
+                                        type="submit"
+                                        id="sign-in-button"
+                                      >
+                                        {spinner && (
+                                          <CgSpinner
+                                            size={20}
+                                            className="animate_spin me-2  text-center"
+                                          />
+                                        )}
+                                        {spinner ? "" : "Login"}
+                                      </button>
                                     </div>
-                                  )}
-                                </div>
-                                <div className="row">
-                                  <div className="col-md-6">
+                                    <div className="col-md-6 text-end">
+                                      <Link
+                                        to="/Dealer_login"
+                                        className="text-decoration-none"
+                                        style={{
+                                          color: "#db9662",
+                                          "font-size": "15px !important",
+                                        }}
+                                      >
+                                        Dealer Login ?
+                                      </Link>
+                                    </div>
+                                  </div>
+                                </form>
+                              </>
+                            )}
+
+                            {show === true && (
+                              <>
+                                <form onSubmit={handleOtpVerification}>
+                                  <div className="form-group my-3 otp_box">
+                                    <OTPInput
+                                      value={otp}
+                                      className="form-control"
+                                      onChange={setOtp}
+                                      shouldAutoFocus={true}
+                                      numInputs={6}
+                                      renderSeparator={<span>-</span>}
+                                      renderInput={(props) => (
+                                        <input {...props} />
+                                      )}
+                                    />
+                                  </div>
+                                  <div className="d-flex justify-content-between">
                                     <button
-                                      className="button-60"
-                                      role="button"
-                                      type="submit"
                                       id="sign-in-button"
+                                      type="submit"
+                                      className="btn btn-outline-warning"
                                     >
                                       {spinner && (
                                         <CgSpinner
                                           size={20}
-                                          className="animate_spin me-2  text-center"
+                                          className="animate_spin me-2"
                                         />
                                       )}
-                                      {spinner ? "" : "Login"}
+                                      Verfy OTP
                                     </button>
-                                  </div>
-                                  <div className="col-md-6 text-end">
-                                    <Link
-                                      to="/Dealer_login"
-                                      className="text-decoration-none"
-                                      style={{
-                                        color: "#db9662",
-                                        "font-size": "15px !important",
-                                      }}
-                                    >
-                                      Dealer Login ?
-                                    </Link>
-                                  </div>
-                                </div>
-                              </form>
-                            </>
-                          )}
-
-                          {show === true && (
-                            <>
-                              <form onSubmit={handleOtpVerification}>
-                                <div className="form-group my-3 otp_box">
-                                  <OTPInput
-                                    value={otp}
-                                    className="form-control"
-                                    onChange={setOtp}
-                                    shouldAutoFocus={true}
-                                    numInputs={6}
-                                    renderSeparator={<span>-</span>}
-                                    renderInput={(props) => (
-                                      <input {...props} />
-                                    )}
-                                  />
-                                </div>
-                                <div className="d-flex justify-content-between">
-                                  <button
-                                    id="sign-in-button"
-                                    type="submit"
-                                    className="btn btn-outline-warning"
-                                  >
-                                    {spinner && (
-                                      <CgSpinner
-                                        size={20}
-                                        className="animate_spin me-2"
-                                      />
-                                    )}
-                                    Verfy OTP
-                                  </button>
-                                  {/* <div>
+                                    {/* <div>
                                     {seconds > 0 || minutes > 0 ? (
                                       <p>
                                         Time Remaining:{" "}
@@ -272,19 +292,20 @@ const Login = () => {
                                       <p>Didn't recieve code?</p>
                                     )}
                                   </div> */}
-                                  <button
-                                    id="sign-in-button"
-                                    type="button"
-                                    onClick={sendOtp}
-                                    className="btn btn-outline-warning"
-                                    disabled={seconds > 0 || minutes > 0}
-                                  >
-                                    Resend OTP
-                                  </button>
-                                </div>
-                              </form>
-                            </>
-                          )}
+                                    <button
+                                      id="sign-in-button"
+                                      type="button"
+                                      onClick={sendOtp}
+                                      className="btn btn-outline-warning"
+                                      disabled={seconds > 0 || minutes > 0}
+                                    >
+                                      Resend OTP
+                                    </button>
+                                  </div>
+                                </form>
+                              </>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -294,8 +315,8 @@ const Login = () => {
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 };
 

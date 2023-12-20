@@ -306,7 +306,6 @@ const Profile = () => {
   const handleUpdate = async (e) => {
     e.preventDefault();
     const isFormValid = validateForm();
-    localStorage.setItem("verification", profileData?.verification);
     if (isFormValid) {
       const formData = new FormData();
       formData.append("id", selectedData.id);
