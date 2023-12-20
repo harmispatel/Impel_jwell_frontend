@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.ee853996.css",
-    "main.js": "/static/js/main.54922db5.js",
+    "main.css": "/static/css/main.2765f2a1.css",
+    "main.js": "/static/js/main.16d85361.js",
     "static/js/787.c4e7f8f9.chunk.js": "/static/js/787.c4e7f8f9.chunk.js",
     "static/media/intro.gif": "/static/media/intro.4d76be8e43539460cf9f.gif",
     "static/media/Lato-Semibold.ttf": "/static/media/Lato-Semibold.d585c7df44df3024c49b.ttf",
@@ -12,12 +12,12 @@
     "static/media/kada.jpg": "/static/media/kada.b79ea5404bef4b5f77f5.jpg",
     "static/media/logo.png": "/static/media/logo.4b7825a638146a1cdf28.png",
     "index.html": "/index.html",
-    "main.ee853996.css.map": "/static/css/main.ee853996.css.map",
-    "main.54922db5.js.map": "/static/js/main.54922db5.js.map",
+    "main.2765f2a1.css.map": "/static/css/main.2765f2a1.css.map",
+    "main.16d85361.js.map": "/static/js/main.16d85361.js.map",
     "787.c4e7f8f9.chunk.js.map": "/static/js/787.c4e7f8f9.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.ee853996.css",
-    "static/js/main.54922db5.js"
+    "static/css/main.2765f2a1.css",
+    "static/js/main.16d85361.js"
   ]
 }
