@@ -1223,50 +1223,20 @@ input[type="file"] {
   color: #de9d6d !important;
 }
 
-/* Paginate css */
-.cardArea {
-  max-width: 700px;
-  padding: 40px;
-  margin: auto;
-  width: 100%;
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
 }
 
-.cardItem {
-  border: 2px solid rgb(231, 231, 231);
-  padding: 16px;
-  min-height: 185px;
-  max-height: 185px;
-  border-radius: 10px;
-  box-shadow: 0 1px 6px 1px rgba(204, 204, 204, 0.3);
-  transition: all .2s ease;
-  background: rgb(252, 252, 252);
-}
-
-.cardItem:not(:last-child) {
-  margin-bottom: 20px;
-}
-
-.cardItem:hover {
-  box-shadow: 0 1px 12px 1px rgba(204, 204, 204, 0.5);
-  transform: scale(1.02)
-}
-
-.cardArea .cardHeader h2 {
-  font-size: 24px;
-  font-weight: 600;
-  margin: 0;
-  line-height: 26px;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.cardBody p {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+.arrow {
+  background-color: #f5f5f5;
+  border: none;
+  padding: 10px 15px;
+  margin: 0 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 .paginationArea {
@@ -1358,6 +1328,40 @@ input[type="file"] {
 
 .page-link svg {
   margin-top: 3px;
+}
+
+.arrow:hover {
+  background-color: #e0e0e0;
+}
+
+.pages {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.page-number {
+  background-color: #f5f5f5;
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.page-number:hover,
+.page-number.active {
+  background-color: #e0e0e0;
+}
+
+.page-number:last-child {
+  margin-right: 5px;
+}
+
+.page-number:last-child:hover {
+  background-color: #f5f5f5;
+}
+
+.page-number:last-child.active {
+  background-color: #e0e0e0;
 }
 
 /* shop_details */
@@ -1595,23 +1599,7 @@ input[type="file"] {
   color: #db9662;
 }
 
-/* pagenation */
-.pagination_main {
-  display: flex;
-  justify-content: end;
-  align-items: center;
-}
 
-.pagination_main .page-item.active .page-link {
-  background-color: #db9662;
-  color: #fff;
-  border-color: #db9662;
-}
-
-.pagination_main .page-item .page-link {
-  /* color: #000; */
-  color: #db9662;
-}
 
 /* sub_category */
 
@@ -2045,45 +2033,7 @@ input[type="file"] {
 
 @media only screen and (max-width: 767px) {
 
-  /* pagination custom css */
-  .cardArea {
-    padding: 20px;
-  }
 
-  .page-item:not(.threePoints) {
-    font-size: 15px;
-    line-height: 15px;
-    margin: 0 3px;
-  }
-
-  .page-item.threePoints {
-    font-size: 16px;
-    line-height: 16px;
-    height: 32px;
-    width: 32px;
-  }
-
-  .page-item:not(:last-child, :first-child, .threePoints) {
-    width: 32px;
-    min-width: 32px;
-    height: 32px;
-    max-height: 32px;
-  }
-
-  .page-link span {
-    display: none;
-  }
-
-  .page-link svg {
-    margin-top: 0px;
-  }
-
-  .page-item:is(:last-child, :first-child) {
-    height: 32px;
-    max-height: 32px;
-    min-width: 32px;
-    padding: 0;
-  }
 
   .header_inner {
     padding: 10px 20px;

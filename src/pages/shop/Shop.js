@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { BsHeart, BsSearch } from "react-icons/bs";
+import { BsHeart, BsNutFill, BsSearch } from "react-icons/bs";
 import ReactLoading from "react-loading";
 import ShopServices from "../../services/Shop";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -12,9 +12,7 @@ import { WishlistSystem } from "../../context/WishListContext";
 import { FaRegStar, FaStar } from "react-icons/fa";
 import FilterServices from "../../services/Filter";
 import Select from "react-select";
-import Slider from "rc-slider";
-import "rc-slider/assets/index.css";
-import Accordion from "react-bootstrap/Accordion";
+import SidebarFilter from "../../components/common/SidebarFilter";
 
 const Shop = ({ product }) => {
   const { dispatch: wishlistDispatch } = useContext(WishlistSystem);
@@ -28,16 +26,16 @@ const Shop = ({ product }) => {
   const email = localStorage.getItem("email");
   const Phone = localStorage.getItem("phone");
 
-  const [searchInput, setSearchInput] = useState([]);
+  const [searchInput, setSearchInput] = useState();
 
   const [selectedOption, setSelectedOption] = useState([]);
 
   const [categoryData, setCategoryData] = useState([]);
-  const [category, setCategory] = useState([]);
+  const [category, setCategory] = useState();
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   const [genderData, setGenderData] = useState([]);
-  const [gender, setGender] = useState([]);
+  const [gender, setGender] = useState();
   const [selectedGender, setSelectedGender] = useState(null);
 
   const [tagData, setTagData] = useState([]);
@@ -53,6 +51,8 @@ const Shop = ({ product }) => {
   const [allData, setAllData] = useState([]);
   const [filterData, setFilterData] = useState([]);
   const [filterTag, setFilterTag] = useState([]);
+  const [paginate, setPaginate] = useState();
+  const [currentPage, setCurrentPage] = useState(1);
 
   const [collection_status, setCollectionStatus] = useState(false);
   const [DealerCollection, setDealerCollection] = useState([]);
@@ -61,75 +61,6 @@ const Shop = ({ product }) => {
   const [goldColor, setGoldColor] = useState("yellow_gold");
   const [goldType, setGoldType] = useState("18k");
   const [UsercartItems, setUserCartItems] = useState([]);
-
-  // Pagination function
-  const [pagination, setPagination] = useState({
-    currentPage: 1,
-    dataShowLength: 50,
-  });
-
-  const totalPage = Math.ceil(allData.length / pagination.dataShowLength);
-
-  const paginationPage = (page) => {
-    setPagination({ ...pagination, currentPage: page });
-    scrollup();
-  };
-  const paginationArea = () => {
-    const items = [];
-    let threePoints = true;
-    for (let number = 1; number <= totalPage; number++) {
-      if (
-        number <= 1 ||
-        number >= totalPage ||
-        (number >= pagination.currentPage - 1 &&
-          number <= pagination.currentPage + 1)
-      ) {
-        items.push(
-          <li
-            key={number}
-            className={`page-item ${
-              pagination.currentPage === number ? "active" : ""
-            }`}
-            onClick={() => {
-              paginationPage(number);
-            }}
-          >
-            <a className="page-link">{number}</a>
-          </li>
-        );
-      } else {
-        if (threePoints === true) {
-          items.push(
-            <li key={number} className="page-item threePoints">
-              <a className="page-link">...</a>
-            </li>
-          );
-          threePoints = false;
-        }
-      }
-    }
-    return items;
-  };
-
-  const paginationPrev = () => {
-    if (pagination.currentPage > 1) {
-      setPagination({ ...pagination, currentPage: pagination.currentPage - 1 });
-      scrollup();
-    } else {
-      setPagination({ ...pagination, currentPage: 1 });
-      scrollup();
-    }
-  };
-
-  const paginationNext = () => {
-    if (pagination.currentPage < totalPage) {
-      setPagination({ ...pagination, currentPage: pagination.currentPage + 1 });
-      scrollup();
-    } else {
-      setPagination({ ...pagination, currentPage: totalPage });
-      scrollup();
-    }
-  };
 
   const scrollup = () => {
     window.scrollTo({
@@ -193,14 +124,14 @@ const Shop = ({ product }) => {
 
   const handleSelectCategory = (selectedCategory) => {
     setIsLoading(true);
-    setCategory(selectedCategory ? [selectedCategory.value] : []);
+    setCategory(selectedCategory ? selectedCategory.value : "");
     setSelectedCategory(selectedCategory);
     console.log(filterTag);
   };
 
   const handleSelectGender = (selectedGender) => {
     setIsLoading(true);
-    setGender(selectedGender ? [selectedGender.value] : []);
+    setGender(selectedGender ? selectedGender.value : "");
     setSelectedGender(selectedGender);
   };
 
@@ -213,7 +144,6 @@ const Shop = ({ product }) => {
   const handleSliderChange = (e) => {
     setIsLoading(true);
     setPriceRange({ minprice: e[0], maxprice: e[1] });
-    scrollup();
   };
 
   useEffect(() => {
@@ -239,19 +169,20 @@ const Shop = ({ product }) => {
       category !== null ||
       tag !== null ||
       gender !== null ||
-      searchInput.length > 0 ||
+      searchInput?.length > 0 ||
       PriceRange.minprice !== null ||
       selectedOption !== null
     ) {
       const userData = {
-        categoryIds: category,
-        GenderIds: gender,
-        TagIds: tag,
+        category_id: category,
+        gender_id: gender,
+        tag_id: tag,
         search: searchInput,
-        MinPrice: PriceRange?.minprice,
-        MaxPrice: PriceRange?.maxprice,
+        min_price: PriceRange?.minprice,
+        max_price: PriceRange?.maxprice,
         sort_by: selectedOption?.value,
         userType: userType,
+        offset: null,
       };
 
       ShopServices.allfilterdesigns(userData)
@@ -259,6 +190,7 @@ const Shop = ({ product }) => {
           setIsLoading(false);
           setFilterData(res.data?.designs);
           setFilterTag(res.data?.tags);
+          setPaginate(res.data);
         })
         .catch((err) => {
           console.log(err);
@@ -276,7 +208,6 @@ const Shop = ({ product }) => {
       .then((res) => {
         setIsLoading(false);
         setAllData(res.data);
-        setPriceRange({ minprice: res.minprice, maxprice: res.maxprice });
       })
       .catch((err) => {
         console.log(err);
@@ -401,6 +332,99 @@ const Shop = ({ product }) => {
       });
   };
 
+  // PAGINATION FUNCTION
+
+  const totalPages = Math.round(paginate?.total_records / 20);
+
+  const handlePageClick = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    console.log(pageNumber);
+  };
+
+  const handlePrevClick = () => {
+    if (currentPage > 1) {
+      setCurrentPage((prev) => prev - 1);
+    }
+  };
+
+  const handleNextClick = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage((prev) => prev + 1);
+    }
+  };
+
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    dataShowLength: 10,
+  });
+
+  const totalPage = Math.ceil(allData.length / pagination.dataShowLength);
+
+  const paginationPage = (page) => {
+    setPagination({ ...pagination, currentPage: page });
+    // scrollup();
+  };
+  const paginationArea = () => {
+    const items = [];
+    let threePoints = true;
+
+    for (let number = 1; number <= totalPages; number++) {
+      if (
+        number <= 1 ||
+        number >= totalPages ||
+        (number >= pagination.currentPage - 1 &&
+          number <= pagination.currentPage + 1)
+      ) {
+        items.push(
+          <li
+            key={number}
+            className={`page-item ${
+              pagination.currentPage === number ? "active" : ""
+            }`}
+            onClick={() => {
+              paginationPage(number);
+            }}
+          >
+            <a className="page-link">{number}</a>
+          </li>
+        );
+      } else {
+        if (threePoints === true) {
+          items.push(
+            <li key={number} className="page-item threePoints">
+              <a className="page-link">...</a>
+            </li>
+          );
+          threePoints = false;
+        }
+      }
+    }
+
+    return items;
+  };
+  // const handleNextClick = () => {
+  //   if (currentPage < totalPages) {
+  //     setCurrentPage((prev) => prev + 1);
+  //   }
+  // };
+  const paginationPrev = () => {
+    if (pagination.currentPage > 1) {
+      setPagination({ ...pagination, currentPage: pagination.currentPage - 1 });
+      // scrollup();
+    } else {
+      setPagination({ ...pagination, currentPage: 1 });
+    }
+  };
+
+  const paginationNext = () => {
+    if (pagination.currentPage < totalPage) {
+      setPagination({ ...pagination, currentPage: pagination.currentPage + 1 });
+      // scrollup();
+    } else {
+      setPagination({ ...pagination, currentPage: pagination.currentPage + 1 });
+    }
+  };
+
   return (
     <section className="shop">
       <div className="container">
@@ -414,7 +438,7 @@ const Shop = ({ product }) => {
                   onChange={(e) => searchbar(e)}
                   type="search"
                 />
-                {searchInput.length === 0 && (
+                {searchInput?.length === 0 && (
                   <BsSearch className="search-icon" />
                 )}
               </div>
@@ -474,32 +498,12 @@ const Shop = ({ product }) => {
               </div>
               <div className="col-md-3 col-12 mt-md-0">
                 <div className="sidebar">
-                  <Accordion>
-                    <Accordion.Item eventKey="3" className="my-2">
-                      <Accordion.Header>Shop by Price</Accordion.Header>
-                      <Accordion.Body className="p-4 mb-2">
-                        <div className="d-flex justify-content-between">
-                          <p>
-                            From: <strong>₹ {PriceRange.minprice}</strong>
-                          </p>
-                          <p>
-                            To: <strong>₹ {PriceRange.maxprice}</strong>
-                          </p>
-                        </div>
-                        <Slider
-                          range
-                          allowCross={false}
-                          min={PriceRange.minprice}
-                          max={PriceRange.maxprice}
-                          marks={{
-                            [PriceRange.minprice]: "Min",
-                            [PriceRange.maxprice]: "Max",
-                          }}
-                          onAfterChange={handleSliderChange}
-                        />
-                      </Accordion.Body>
-                    </Accordion.Item>
-                  </Accordion>
+                  <SidebarFilter
+                    Priceheader="Shop by Price"
+                    minprice={PriceRange.minprice}
+                    maxprice={PriceRange.maxprice}
+                    onHandleSliderChange={(e) => handleSliderChange(e)}
+                  />
                 </div>
               </div>
             </div>
@@ -519,7 +523,7 @@ const Shop = ({ product }) => {
                 </div>
               ) : (
                 <>
-                  {searchInput.length === 0 &&
+                  {searchInput?.length === 0 &&
                   selectedOption === null &&
                   category.length === 0 &&
                   gender.length === 0 &&
@@ -529,146 +533,135 @@ const Shop = ({ product }) => {
                       {allData?.length > 0 ? (
                         <>
                           <div className="row">
-                            {allData
-                              ?.slice(
-                                (pagination.currentPage - 1) *
-                                  pagination.dataShowLength,
-                                pagination.dataShowLength *
-                                  pagination.currentPage
-                              )
-                              .map((product) => {
-                                return (
-                                  <div key={product.id} className="col-md-3">
-                                    <Link
-                                      to={`/shopdetails/${product.id}`}
-                                      className="product_data"
-                                      target="_blank"
-                                    >
-                                      {product?.image ? (
-                                        <img
-                                          src={product?.image}
-                                          alt={product?.name}
-                                          className="w-100"
-                                        />
-                                      ) : (
-                                        <img
-                                          src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg"
-                                          alt=""
-                                          className="w-100"
-                                        />
-                                      )}
+                            {allData.map((product) => {
+                              return (
+                                <div key={product.id} className="col-md-3">
+                                  <Link
+                                    to={`/shopdetails/${product.id}`}
+                                    className="product_data"
+                                    target="_blank"
+                                  >
+                                    {product?.image ? (
+                                      <img
+                                        src={product?.image}
+                                        alt={product?.name}
+                                        className="w-100"
+                                      />
+                                    ) : (
+                                      <img
+                                        src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg"
+                                        alt=""
+                                        className="w-100"
+                                      />
+                                    )}
 
-                                      <div className="edit">
-                                        <div>
-                                          {userType == 1 ? (
-                                            <>
-                                              {email ? (
-                                                <Link
-                                                  to="#"
-                                                  data-tooltip-id="my-tooltip-12"
-                                                  onClick={() => {
-                                                    if (
-                                                      DealerCollection?.find(
-                                                        (item) =>
-                                                          item.id === product.id
-                                                      )
-                                                    ) {
-                                                      removefromdealerwishlist(
-                                                        product
-                                                      );
-                                                    } else {
-                                                      AddToDealerWishlist(
-                                                        product
-                                                      );
-                                                    }
-                                                  }}
-                                                >
-                                                  {DealerCollection?.find(
-                                                    (item) =>
-                                                      item.id === product.id
-                                                  ) ? (
-                                                    <FaStar />
-                                                  ) : (
-                                                    <FaRegStar />
-                                                  )}
-                                                </Link>
-                                              ) : (
-                                                <Link
-                                                  to="/Dealer_login"
-                                                  data-tooltip-id="my-tooltip-12"
-                                                >
+                                    <div className="edit">
+                                      <div>
+                                        {userType == 1 ? (
+                                          <>
+                                            {email ? (
+                                              <Link
+                                                to="#"
+                                                data-tooltip-id="my-tooltip-12"
+                                                onClick={() => {
+                                                  if (
+                                                    DealerCollection?.find(
+                                                      (item) =>
+                                                        item.id === product.id
+                                                    )
+                                                  ) {
+                                                    removefromdealerwishlist(
+                                                      product
+                                                    );
+                                                  } else {
+                                                    AddToDealerWishlist(
+                                                      product
+                                                    );
+                                                  }
+                                                }}
+                                              >
+                                                {DealerCollection?.find(
+                                                  (item) =>
+                                                    item.id === product.id
+                                                ) ? (
+                                                  <FaStar />
+                                                ) : (
                                                   <FaRegStar />
-                                                </Link>
-                                              )}
-                                            </>
-                                          ) : (
-                                            <>
-                                              {Phone ? (
-                                                <Link
-                                                  to="#"
-                                                  data-tooltip-id="my-tooltip-9"
-                                                  onClick={() => {
-                                                    if (
-                                                      UsercartItems?.find(
-                                                        (item) =>
-                                                          item.id === product.id
-                                                      )
-                                                    ) {
-                                                      removeFromWishList(
-                                                        product
-                                                      );
-                                                    } else {
-                                                      addToUserWishList(
-                                                        product
-                                                      );
-                                                    }
-                                                  }}
-                                                >
-                                                  {UsercartItems?.find(
-                                                    (item) =>
-                                                      item.id === product.id
-                                                  ) ? (
-                                                    <FcLike />
-                                                  ) : (
-                                                    <BsHeart />
-                                                  )}
-                                                </Link>
-                                              ) : (
-                                                <Link
-                                                  to="/login"
-                                                  data-tooltip-id="my-tooltip-9"
-                                                >
+                                                )}
+                                              </Link>
+                                            ) : (
+                                              <Link
+                                                to="/Dealer_login"
+                                                data-tooltip-id="my-tooltip-12"
+                                              >
+                                                <FaRegStar />
+                                              </Link>
+                                            )}
+                                          </>
+                                        ) : (
+                                          <>
+                                            {Phone ? (
+                                              <Link
+                                                to="#"
+                                                data-tooltip-id="my-tooltip-9"
+                                                onClick={() => {
+                                                  if (
+                                                    UsercartItems?.find(
+                                                      (item) =>
+                                                        item.id === product.id
+                                                    )
+                                                  ) {
+                                                    removeFromWishList(product);
+                                                  } else {
+                                                    addToUserWishList(product);
+                                                  }
+                                                }}
+                                              >
+                                                {UsercartItems?.find(
+                                                  (item) =>
+                                                    item.id === product.id
+                                                ) ? (
+                                                  <FcLike />
+                                                ) : (
                                                   <BsHeart />
-                                                </Link>
-                                              )}
-                                            </>
-                                          )}
+                                                )}
+                                              </Link>
+                                            ) : (
+                                              <Link
+                                                to="/login"
+                                                data-tooltip-id="my-tooltip-9"
+                                              >
+                                                <BsHeart />
+                                              </Link>
+                                            )}
+                                          </>
+                                        )}
+                                      </div>
+                                    </div>
+                                    <div className="row">
+                                      <div className="col-md-6">
+                                        <div className="product_details">
+                                          <h4>{product?.name}</h4>
                                         </div>
                                       </div>
-                                      <div className="row">
-                                        <div className="col-md-6">
-                                          <div className="product_details">
-                                            <h4>{product?.name}</h4>
-                                          </div>
-                                        </div>
-                                        <div className="col-md-6">
-                                          <div className="product_details text-end">
-                                            <p>{product?.code}</p>
-                                          </div>
+                                      <div className="col-md-6">
+                                        <div className="product_details text-end">
+                                          <p>{product?.code}</p>
                                         </div>
                                       </div>
-                                      <div className="product_details">
-                                        <h5>
-                                          ₹
-                                          {product?.total_price_18k?.toLocaleString(
-                                            "en-US"
-                                          )}
-                                        </h5>
-                                      </div>
-                                    </Link>
-                                  </div>
-                                );
-                              })}
+                                    </div>
+                                    <div className="product_details">
+                                      <h5>
+                                        ₹
+                                        {product?.total_price_18k?.toLocaleString(
+                                          "en-US"
+                                        )}
+                                      </h5>
+                                    </div>
+                                  </Link>
+                                </div>
+                              );
+                            })}
                           </div>
                         </>
                       ) : (
@@ -676,63 +669,6 @@ const Shop = ({ product }) => {
                           <p>No products available.</p>
                         </div>
                       )}
-                      <div className="paginationArea">
-                        <nav aria-label="navigation" className="">
-                          <ul className="pagination">
-                            <li className="page-item previous">
-                              <a
-                                className="page-link"
-                                onClick={() => {
-                                  paginationPrev();
-                                }}
-                              >
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="24"
-                                  height="24"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  stroke-width="2"
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  class="feather feather-chevron-left"
-                                >
-                                  <polyline points="15 18 9 12 15 6"></polyline>
-                                </svg>
-                                <span>Prev</span>
-                              </a>
-                            </li>
-
-                            {paginationArea()}
-
-                            <li className="page-item next">
-                              <a
-                                onClick={() => {
-                                  paginationNext();
-                                }}
-                                className="page-link"
-                              >
-                                <span>Next</span>
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="24"
-                                  height="24"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  stroke-width="2"
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  class="feather feather-chevron-right"
-                                >
-                                  <polyline points="9 18 15 12 9 6"></polyline>
-                                </svg>
-                              </a>
-                            </li>
-                          </ul>
-                        </nav>
-                      </div>
                     </>
                   ) : (
                     <>
@@ -877,6 +813,145 @@ const Shop = ({ product }) => {
                       )}
                     </>
                   )}
+                  <>
+                    {totalPages > 20 && (
+                      <div className="pagination">
+                        <button
+                          className="arrow"
+                          id="prevPage"
+                          onClick={handlePrevClick}
+                          disabled={currentPage === 1}
+                          style={{
+                            display: currentPage === 1 ? "none" : "block",
+                          }}
+                        >
+                          ← <span className="nav-text">PREV</span>
+                        </button>
+                        <div className="pages">
+                          {[...Array(totalPages)]
+                            .filter((_, index) => {
+                              return (
+                                (index + 1 <= 8 && index + 1 !== totalPages) ||
+                                (currentPage <= 8 && index + 1 <= 10) ||
+                                (index + 1 >= currentPage - 3 &&
+                                  index + 1 <= currentPage + 3) ||
+                                index + 1 >= totalPages - 1
+                              );
+                            })
+                            .map((_, index) => (
+                              <div
+                                className={`page-number ${
+                                  index + 1 === currentPage ? "active" : ""
+                                }`}
+                                key={index}
+                                onClick={() => handlePageClick(index + 1)}
+                              >
+                                {index + 1}
+                              </div>
+                            ))}
+                          {currentPage < totalPages - 8 && (
+                            <div className="page-number">.....</div>
+                          )}
+                          {totalPages !== currentPage && (
+                            <div
+                              className={`page-number ${
+                                totalPages === currentPage ? "active" : ""
+                              }`}
+                            >
+                              {totalPages}
+                            </div>
+                          )}
+                        </div>
+                        <button
+                          className="arrow"
+                          id="nextPage"
+                          onClick={handleNextClick}
+                          disabled={currentPage === totalPages}
+                          style={{
+                            display:
+                              currentPage === totalPages ? "none" : "block",
+                          }}
+                        >
+                          <span className="nav-text">NEXT</span> →
+                        </button>
+                      </div>
+                    )}
+                    {totalPages > 1 && (
+                      <div className="paginationArea">
+                        <nav aria-label="navigation" className="">
+                          <ul className="pagination">
+                            <li
+                              className="page-item previous"
+                              style={{
+                                display:
+                                  pagination.currentPage === 1
+                                    ? "none"
+                                    : "block",
+                              }}
+                            >
+                              <a
+                                className="page-link"
+                                onClick={() => {
+                                  paginationPrev();
+                                }}
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  class="feather feather-chevron-left"
+                                >
+                                  <polyline points="15 18 9 12 15 6"></polyline>
+                                </svg>
+                                <span>Prev</span>
+                              </a>
+                            </li>
+
+                            {paginationArea()}
+
+                            <li
+                              className="page-item next"
+                              tyle={{
+                                display:
+                                  pagination.currentPage === totalPages
+                                    ? "none"
+                                    : "block",
+                              }}
+                            >
+                              <a
+                                onClick={() => {
+                                  paginationNext();
+                                }}
+                                className="page-link"
+                              >
+                                <span>Next</span>
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  class="feather feather-chevron-right"
+                                >
+                                  <polyline points="9 18 15 12 9 6"></polyline>
+                                </svg>
+                              </a>
+                            </li>
+                          </ul>
+                        </nav>
+                      </div>
+                    )}
+                  </>
                 </>
               )}
               <ReactTooltip id="my-tooltip-7" place="top" content="cart" />

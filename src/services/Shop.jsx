@@ -2,8 +2,9 @@ import call from "./Call";
 
 const alldesigns = async (data) => {
   let d = await call({
-    path: "alldesigns",
+    path: "filter-design",
     method: "POST",
+    enctype: "multipart/form-data",
     data,
   });
   return d;
