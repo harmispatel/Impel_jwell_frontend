@@ -12,12 +12,9 @@ import { WishlistSystem } from "../../context/WishListContext";
 import { FaRegStar, FaStar } from "react-icons/fa";
 import FilterServices from "../../services/Filter";
 import Select from "react-select";
-import SidebarFilter from "../../components/common/SidebarFilter";
 import Accordion from "react-bootstrap/Accordion";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
-import Tooltip from "rc-tooltip";
-import "rc-tooltip/assets/bootstrap.css";
 
 const Shop = ({ product }) => {
   const { dispatch: wishlistDispatch } = useContext(WishlistSystem);
