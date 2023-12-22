@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { BsHeart, BsNutFill, BsSearch } from "react-icons/bs";
 import ReactLoading from "react-loading";
 import ShopServices from "../../services/Shop";
@@ -13,6 +13,11 @@ import { FaRegStar, FaStar } from "react-icons/fa";
 import FilterServices from "../../services/Filter";
 import Select from "react-select";
 import SidebarFilter from "../../components/common/SidebarFilter";
+import Accordion from "react-bootstrap/Accordion";
+import Slider from "rc-slider";
+import "rc-slider/assets/index.css";
+import Tooltip from "rc-tooltip";
+import "rc-tooltip/assets/bootstrap.css";
 
 const Shop = ({ product }) => {
   const { dispatch: wishlistDispatch } = useContext(WishlistSystem);
@@ -26,16 +31,16 @@ const Shop = ({ product }) => {
   const email = localStorage.getItem("email");
   const Phone = localStorage.getItem("phone");
 
-  const [searchInput, setSearchInput] = useState();
+  const [searchInput, setSearchInput] = useState(null);
 
   const [selectedOption, setSelectedOption] = useState([]);
 
   const [categoryData, setCategoryData] = useState([]);
-  const [category, setCategory] = useState();
+  const [category, setCategory] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   const [genderData, setGenderData] = useState([]);
-  const [gender, setGender] = useState();
+  const [gender, setGender] = useState(null);
   const [selectedGender, setSelectedGender] = useState(null);
 
   const [tagData, setTagData] = useState([]);
@@ -47,12 +52,18 @@ const Shop = ({ product }) => {
     maxprice: null,
   });
 
+  const [FilterPriceRange, setFilterPriceRange] = useState({
+    minprice: 0,
+    maxprice: 0,
+  });
+
   const [isLoading, setIsLoading] = useState(true);
   const [allData, setAllData] = useState([]);
   const [filterData, setFilterData] = useState([]);
   const [filterTag, setFilterTag] = useState([]);
   const [paginate, setPaginate] = useState();
-  const [currentPage, setCurrentPage] = useState(1);
+
+  const [offset, setOffset] = useState();
 
   const [collection_status, setCollectionStatus] = useState(false);
   const [DealerCollection, setDealerCollection] = useState([]);
@@ -64,7 +75,7 @@ const Shop = ({ product }) => {
 
   const scrollup = () => {
     window.scrollTo({
-      top: 150,
+      top: 70,
       behavior: "smooth",
     });
   };
@@ -112,8 +123,8 @@ const Shop = ({ product }) => {
   // sort by dropdown functions
   const options = [
     { value: "new_added", label: "New Added" },
-    { value: "low_to_high", label: "Price,low to high" },
-    { value: "high_to_low", label: "Price,high to low" },
+    { value: "low_to_high", label: "Price : low to high" },
+    { value: "high_to_low", label: "Price : high to low" },
     { value: "highest_selling", label: "Top Seller" },
   ];
 
@@ -126,7 +137,6 @@ const Shop = ({ product }) => {
     setIsLoading(true);
     setCategory(selectedCategory ? selectedCategory.value : "");
     setSelectedCategory(selectedCategory);
-    console.log(filterTag);
   };
 
   const handleSelectGender = (selectedGender) => {
@@ -160,44 +170,39 @@ const Shop = ({ product }) => {
     setTag(tagIds);
   }, [location.search]);
 
-  useEffect(() => {
-    FilterData();
-  }, [category, tag, gender, searchInput, PriceRange, selectedOption]);
+  const FilterData = (offset = 0) => {
+    const userData = {
+      category_id: category,
+      gender_id: gender,
+      tag_id: tag,
+      search: searchInput,
+      min_price: PriceRange?.minprice,
+      max_price: PriceRange?.maxprice,
+      sort_by: selectedOption?.value,
+      userType: userType,
+      offset: offset,
+    };
 
-  const FilterData = () => {
-    if (
-      category !== null ||
-      tag !== null ||
-      gender !== null ||
-      searchInput?.length > 0 ||
-      PriceRange.minprice !== null ||
-      selectedOption !== null
-    ) {
-      const userData = {
-        category_id: category,
-        gender_id: gender,
-        tag_id: tag,
-        search: searchInput,
-        min_price: PriceRange?.minprice,
-        max_price: PriceRange?.maxprice,
-        sort_by: selectedOption?.value,
-        userType: userType,
-        offset: null,
-      };
-
-      ShopServices.allfilterdesigns(userData)
-        .then((res) => {
-          setIsLoading(false);
-          setFilterData(res.data?.designs);
-          setFilterTag(res.data?.tags);
-          setPaginate(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-          setIsLoading(false);
+    ShopServices.allfilterdesigns(userData)
+      .then((res) => {
+        setIsLoading(false);
+        setFilterData(res.data?.designs);
+        setFilterTag(res.data?.tags);
+        setPaginate(res.data);
+        setFilterPriceRange({
+          minprice: res.data.minprice,
+          maxprice: res.data.maxprice,
         });
-    }
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsLoading(false);
+      });
   };
+
+  useEffect(() => {
+    FilterData(0);
+  }, [category, tag, gender, searchInput, PriceRange, selectedOption]);
 
   const AllData = () => {
     const userData = {
@@ -208,6 +213,9 @@ const Shop = ({ product }) => {
       .then((res) => {
         setIsLoading(false);
         setAllData(res.data);
+        setFilterData(res.data?.designs);
+        setFilterTag(res.data?.tags);
+        setPaginate(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -336,95 +344,81 @@ const Shop = ({ product }) => {
 
   const totalPages = Math.round(paginate?.total_records / 20);
 
-  const handlePageClick = (pageNumber) => {
-    setCurrentPage(pageNumber);
-    console.log(pageNumber);
-  };
-
-  const handlePrevClick = () => {
-    if (currentPage > 1) {
-      setCurrentPage((prev) => prev - 1);
-    }
-  };
-
-  const handleNextClick = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage((prev) => prev + 1);
-    }
-  };
-
   const [pagination, setPagination] = useState({
     currentPage: 1,
-    dataShowLength: 10,
+    dataShowLength: 20,
   });
 
-  const totalPage = Math.ceil(allData.length / pagination.dataShowLength);
-
   const paginationPage = (page) => {
+    const calculatedOffset = (page - 1) * pagination.dataShowLength;
+    setOffset(calculatedOffset);
+    FilterData(calculatedOffset);
     setPagination({ ...pagination, currentPage: page });
-    // scrollup();
+    scrollup();
+    setIsLoading(true);
   };
-  const paginationArea = () => {
-    const items = [];
-    let threePoints = true;
+  // const paginationArea = () => {
+  //   const items = [];
+  //   let threePoints = true;
 
-    for (let number = 1; number <= totalPages; number++) {
-      if (
-        number <= 1 ||
-        number >= totalPages ||
-        (number >= pagination.currentPage - 1 &&
-          number <= pagination.currentPage + 1)
-      ) {
-        items.push(
-          <li
-            key={number}
-            className={`page-item ${
-              pagination.currentPage === number ? "active" : ""
-            }`}
-            onClick={() => {
-              paginationPage(number);
-            }}
-          >
-            <a className="page-link">{number}</a>
-          </li>
-        );
-      } else {
-        if (threePoints === true) {
-          items.push(
-            <li key={number} className="page-item threePoints">
-              <a className="page-link">...</a>
-            </li>
-          );
-          threePoints = false;
-        }
-      }
-    }
-
-    return items;
-  };
-  // const handleNextClick = () => {
-  //   if (currentPage < totalPages) {
-  //     setCurrentPage((prev) => prev + 1);
+  //   for (let number = 1; number <= totalPages; number++) {
+  //     if (
+  //       number <= 1 ||
+  //       number >= totalPages ||
+  //       (number >= pagination.currentPage - 1 &&
+  //         number <= pagination.currentPage + 1)
+  //     ) {
+  //       items.push(
+  //         <li
+  //           key={number}
+  //           className={`page-item ${
+  //             pagination.currentPage === number ? "active disabled" : ""
+  //           }`}
+  //           onClick={() => {
+  //             paginationPage(number);
+  //           }}
+  //         >
+  //           <a className="page-link">{number}</a>
+  //         </li>
+  //       );
+  //     } else {
+  //       if (threePoints === true) {
+  //         items.push(
+  //           <li key={number} className="page-item threePoints">
+  //             <a className="page-link">...</a>
+  //           </li>
+  //         );
+  //         threePoints = false;
+  //       }
+  //     }
   //   }
+
+  //   return items;
   // };
+
   const paginationPrev = () => {
     if (pagination.currentPage > 1) {
-      setPagination({ ...pagination, currentPage: pagination.currentPage - 1 });
-      // scrollup();
-    } else {
-      setPagination({ ...pagination, currentPage: 1 });
+      const prevPage = pagination.currentPage - 1;
+      const calculatedOffset = (prevPage - 1) * pagination.dataShowLength;
+      setPagination({ ...pagination, currentPage: prevPage });
+      setOffset(calculatedOffset);
+      FilterData(calculatedOffset);
+      scrollup();
+      setIsLoading(true);
     }
   };
 
   const paginationNext = () => {
-    if (pagination.currentPage < totalPage) {
-      setPagination({ ...pagination, currentPage: pagination.currentPage + 1 });
-      // scrollup();
-    } else {
-      setPagination({ ...pagination, currentPage: pagination.currentPage + 1 });
+    if (pagination.currentPage < totalPages) {
+      const nextPage = pagination.currentPage + 1;
+      const calculatedOffset = (nextPage - 1) * pagination.dataShowLength;
+      setPagination({ ...pagination, currentPage: nextPage });
+      setOffset(calculatedOffset);
+      FilterData(calculatedOffset);
+      scrollup();
+      setIsLoading(true);
     }
   };
-
   return (
     <section className="shop">
       <div className="container">
@@ -497,14 +491,44 @@ const Shop = ({ product }) => {
                 />
               </div>
               <div className="col-md-3 col-12 mt-md-0">
-                <div className="sidebar">
-                  <SidebarFilter
-                    Priceheader="Shop by Price"
-                    minprice={PriceRange.minprice}
-                    maxprice={PriceRange.maxprice}
-                    onHandleSliderChange={(e) => handleSliderChange(e)}
-                  />
-                </div>
+                <Accordion>
+                  <Accordion.Item eventKey="3" className="my-2">
+                    <Accordion.Header>Shop by price</Accordion.Header>
+                    <Accordion.Body className="p-4 mb-2">
+                      <div className="d-flex justify-content-between">
+                        <p>
+                          From :
+                          <strong>
+                            ₹
+                            {PriceRange?.minprice
+                              ? PriceRange?.minprice
+                              : FilterPriceRange.minprice}
+                          </strong>
+                        </p>
+                        <p>
+                          To :
+                          <strong>
+                            ₹
+                            {PriceRange?.maxprice
+                              ? PriceRange?.maxprice
+                              : FilterPriceRange.maxprice}
+                          </strong>
+                        </p>
+                      </div>
+                      <Slider
+                        range
+                        allowCross={false}
+                        min={FilterPriceRange.minprice}
+                        max={FilterPriceRange.maxprice}
+                        marks={{
+                          [FilterPriceRange?.minprice]: "Min",
+                          [FilterPriceRange?.maxprice]: "Max",
+                        }}
+                        onAfterChange={handleSliderChange}
+                      />
+                    </Accordion.Body>
+                  </Accordion.Item>
+                </Accordion>
               </div>
             </div>
           </div>
@@ -524,10 +548,10 @@ const Shop = ({ product }) => {
               ) : (
                 <>
                   {searchInput?.length === 0 &&
-                  selectedOption === null &&
-                  category.length === 0 &&
-                  gender.length === 0 &&
-                  tag.length === 0 &&
+                  selectedOption?.length === 0 &&
+                  category?.length === 0 &&
+                  gender?.length === 0 &&
+                  tag?.length === 0 &&
                   PriceRange.minprice === null ? (
                     <>
                       {allData?.length > 0 ? (
@@ -803,6 +827,127 @@ const Shop = ({ product }) => {
                               );
                             })}
                           </div>
+                          <div className="pt-5">
+                            {totalPages > 1 && (
+                              <div className="paginationArea">
+                                <nav aria-label="navigation">
+                                  <ul className="pagination">
+                                    {/* Previous Page Button */}
+                                    <li
+                                      className={`page-item ${
+                                        pagination.currentPage === 1
+                                          ? "disabled"
+                                          : ""
+                                      }`}
+                                      style={{
+                                        display:
+                                          pagination.currentPage === 1
+                                            ? "none"
+                                            : "block",
+                                      }}
+                                    >
+                                      <a
+                                        className="page-link"
+                                        onClick={paginationPrev}
+                                      >
+                                        <svg
+                                          xmlns="http://www.w3.org/2000/svg"
+                                          width="24"
+                                          height="24"
+                                          viewBox="0 0 24 24"
+                                        >
+                                          <polyline points="15 18 9 12 15 6"></polyline>
+                                        </svg>
+                                        Prev
+                                      </a>
+                                    </li>
+
+                                    {/* Display pages with ellipses */}
+                                    {Array.from({ length: totalPages }).map(
+                                      (_, index) => {
+                                        const pageNumber = index + 1;
+                                        const isCurrentPage =
+                                          pagination.currentPage === pageNumber;
+
+                                        // Display first and last pages
+                                        if (
+                                          pageNumber === 1 ||
+                                          pageNumber === totalPages ||
+                                          (pageNumber >=
+                                            pagination.currentPage - 1 &&
+                                            pageNumber <=
+                                              pagination.currentPage + 1)
+                                        ) {
+                                          return (
+                                            <li
+                                              key={pageNumber}
+                                              className={`page-item ${
+                                                isCurrentPage ? "active" : ""
+                                              }`}
+                                              onClick={() =>
+                                                paginationPage(pageNumber)
+                                              }
+                                            >
+                                              <a className="page-link">
+                                                {pageNumber}
+                                              </a>
+                                            </li>
+                                          );
+                                        }
+
+                                        // Display ellipses
+                                        if (
+                                          index === 1 ||
+                                          index === totalPages - 2
+                                        ) {
+                                          return (
+                                            <li
+                                              key={pageNumber}
+                                              className="page-item disabled"
+                                            >
+                                              <a className="page-link">...</a>
+                                            </li>
+                                          );
+                                        }
+
+                                        return null;
+                                      }
+                                    )}
+
+                                    {/* Next Page Button */}
+                                    <li
+                                      className={`page-item ${
+                                        pagination.currentPage === totalPages
+                                          ? "disabled"
+                                          : ""
+                                      }`}
+                                      style={{
+                                        display:
+                                          pagination.currentPage === totalPages
+                                            ? "none"
+                                            : "block",
+                                      }}
+                                    >
+                                      <a
+                                        className="page-link"
+                                        onClick={paginationNext}
+                                      >
+                                        Next
+                                        <svg
+                                          xmlns="http://www.w3.org/2000/svg"
+                                          width="24"
+                                          height="24"
+                                          viewBox="0 0 24 24"
+                                        >
+                                          <polyline points="9 18 15 12 9 6"></polyline>
+                                        </svg>
+                                      </a>
+                                    </li>
+                                  </ul>
+                                </nav>
+                              </div>
+                            )}
+                          </div>
                         </>
                       ) : (
                         <div className="not-products">
@@ -813,145 +958,6 @@ const Shop = ({ product }) => {
                       )}
                     </>
                   )}
-                  <>
-                    {totalPages > 20 && (
-                      <div className="pagination">
-                        <button
-                          className="arrow"
-                          id="prevPage"
-                          onClick={handlePrevClick}
-                          disabled={currentPage === 1}
-                          style={{
-                            display: currentPage === 1 ? "none" : "block",
-                          }}
-                        >
-                          ← <span className="nav-text">PREV</span>
-                        </button>
-                        <div className="pages">
-                          {[...Array(totalPages)]
-                            .filter((_, index) => {
-                              return (
-                                (index + 1 <= 8 && index + 1 !== totalPages) ||
-                                (currentPage <= 8 && index + 1 <= 10) ||
-                                (index + 1 >= currentPage - 3 &&
-                                  index + 1 <= currentPage + 3) ||
-                                index + 1 >= totalPages - 1
-                              );
-                            })
-                            .map((_, index) => (
-                              <div
-                                className={`page-number ${
-                                  index + 1 === currentPage ? "active" : ""
-                                }`}
-                                key={index}
-                                onClick={() => handlePageClick(index + 1)}
-                              >
-                                {index + 1}
-                              </div>
-                            ))}
-                          {currentPage < totalPages - 8 && (
-                            <div className="page-number">.....</div>
-                          )}
-                          {totalPages !== currentPage && (
-                            <div
-                              className={`page-number ${
-                                totalPages === currentPage ? "active" : ""
-                              }`}
-                            >
-                              {totalPages}
-                            </div>
-                          )}
-                        </div>
-                        <button
-                          className="arrow"
-                          id="nextPage"
-                          onClick={handleNextClick}
-                          disabled={currentPage === totalPages}
-                          style={{
-                            display:
-                              currentPage === totalPages ? "none" : "block",
-                          }}
-                        >
-                          <span className="nav-text">NEXT</span> →
-                        </button>
-                      </div>
-                    )}
-                    {totalPages > 1 && (
-                      <div className="paginationArea">
-                        <nav aria-label="navigation" className="">
-                          <ul className="pagination">
-                            <li
-                              className="page-item previous"
-                              style={{
-                                display:
-                                  pagination.currentPage === 1
-                                    ? "none"
-                                    : "block",
-                              }}
-                            >
-                              <a
-                                className="page-link"
-                                onClick={() => {
-                                  paginationPrev();
-                                }}
-                              >
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="24"
-                                  height="24"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  stroke-width="2"
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  class="feather feather-chevron-left"
-                                >
-                                  <polyline points="15 18 9 12 15 6"></polyline>
-                                </svg>
-                                <span>Prev</span>
-                              </a>
-                            </li>
-
-                            {paginationArea()}
-
-                            <li
-                              className="page-item next"
-                              tyle={{
-                                display:
-                                  pagination.currentPage === totalPages
-                                    ? "none"
-                                    : "block",
-                              }}
-                            >
-                              <a
-                                onClick={() => {
-                                  paginationNext();
-                                }}
-                                className="page-link"
-                              >
-                                <span>Next</span>
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="24"
-                                  height="24"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  stroke-width="2"
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  class="feather feather-chevron-right"
-                                >
-                                  <polyline points="9 18 15 12 9 6"></polyline>
-                                </svg>
-                              </a>
-                            </li>
-                          </ul>
-                        </nav>
-                      </div>
-                    )}
-                  </>
                 </>
               )}
               <ReactTooltip id="my-tooltip-7" place="top" content="cart" />

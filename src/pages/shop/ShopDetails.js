@@ -379,7 +379,7 @@ const ShopDetails = () => {
                           <div className="mt-3">
                             {goldColor === "yellow_gold" && (
                               <>
-                                <div className="d-flex justify-content-between">
+                                <div className="crt-btn">
                                   <div class="radio-item">
                                     <input
                                       name="radio1"

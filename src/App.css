@@ -1223,149 +1223,56 @@ input[type="file"] {
   color: #de9d6d !important;
 }
 
+/* Pagination css start */
 .pagination {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-.arrow {
-  background-color: #f5f5f5;
-  border: none;
-  padding: 10px 15px;
-  margin: 0 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.paginationArea {
-  max-width: 700px;
-  margin: auto;
-  padding: 10px 0 60px 0;
-}
-
-.pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   list-style-type: none;
   padding: 0;
-
-}
-
-.page-item:not(.threePoints) {
-  margin: 0 6px;
-  border: 2px solid #ecf0f1;
-  font-size: 18px;
-  line-height: 18px;
-  font-weight: 600;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all.2s ease;
-}
-
-.page-item:not(.threePoints, .active):hover {
-  transform: scale(1.1);
-  box-shadow: 0 4px 16px #dde0e169;
-  background: #bdc3c7;
-  color: #ecf0f1;
-}
-
-.page-item.threePoints {
-  font-size: 28px;
-  line-height: 28px;
-  height: 40px;
-  width: 40px;
-  display: flex;
   justify-content: center;
-  align-items: end;
 }
 
-.page-item:not(:last-child, :first-child, .threePoints) {
-  width: 40px;
-  min-width: 40px;
-  height: 40px;
-  max-height: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.page-item:is(:last-child, :first-child) {
-  height: 40px;
-  max-height: 40px;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #34495e;
-  color: #ecf0f1;
-  border: 3px solid #778797a8
-}
-
-.page-item:first-child {
-  padding: 0 16px 0 8px;
-}
-
-.page-item:last-child {
-  padding: 0 8px 0 16px;
-}
-
-
-.page-item.active {
-  background: #e74c3c;
-  color: #ecf0f1;
-  box-shadow: 0 4px 16px 0.2px #e74d3c55;
-  border: 3px solid #c0392b;
+.page-item {
+  margin: 0 5px;
 }
 
 .page-link {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.page-link svg {
-  margin-top: 3px;
-}
-
-.arrow:hover {
-  background-color: #e0e0e0;
-}
-
-.pages {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.page-number {
-  background-color: #f5f5f5;
-  padding: 10px 12px;
+  text-decoration: none;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s ease;
+  color: black !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
 }
 
-.page-number:hover,
-.page-number.active {
-  background-color: #e0e0e0;
+.page-link:hover {
+  background-color: #f5f5f5;
 }
 
-.page-number:last-child {
+.active .page-link {
+  background-color: rgb(219, 150, 98) !important;
+  color: black !important;
+  font-weight: 600 !important;
+  border-color: rgb(219, 150, 98) !important;
+  font-size: 16px !important;
+}
+
+.disabled .page-link {
+  pointer-events: none;
+  background-color: #e9ecef;
+  color: #6c757d;
+  border-color: #e9ecef;
+}
+
+.feather {
   margin-right: 5px;
 }
 
-.page-number:last-child:hover {
-  background-color: #f5f5f5;
-}
-
-.page-number:last-child.active {
-  background-color: #e0e0e0;
-}
+/* Pagination css end */
 
 /* shop_details */
-
 .prodcuts-weight label {
   width: calc(100% - 20px);
 }
@@ -1373,6 +1280,12 @@ input[type="file"] {
 .radio-item [type="radio"],
 .radio-item [type="checkbox"] {
   display: none;
+}
+
+.crt-btn {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 20px;
 }
 
 /* .radio-item+.radio-item {
@@ -1971,8 +1884,10 @@ input[type="file"] {
   }
 
   .navbar-collapse {
+    top: 70px;
     left: 0;
     opacity: 1;
+    z-index: 9;
   }
 
   .more_categories,
@@ -2032,12 +1947,18 @@ input[type="file"] {
 }
 
 @media only screen and (max-width: 767px) {
-
+  .crt-btn {
+    grid-template-columns: repeat(2, 1fr);
+  }
 
 
   .header_inner {
     padding: 10px 20px;
     grid-template-columns: auto auto 1fr;
+  }
+
+  .login_user a span {
+    display: none;
   }
 
   .header .navbar {
@@ -2056,7 +1977,7 @@ input[type="file"] {
   .banner {
     grid-template-columns: 1fr;
     align-items: baseline;
-    padding-top: 70px;
+    /* padding-top: 70px; */
   }
 
   .banner_content {
@@ -2249,6 +2170,8 @@ input[type="file"] {
     @media screen and (max-width: 767px) {
       width: 90%;
     }
+
+
 
     .form-head {
       font-size: 30px;

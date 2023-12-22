@@ -5,7 +5,7 @@ import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 
 const SidebarFilter = (props) => {
-  const [PriceRange, setPriceRange] = useState({
+  const [FilterPriceRange, setFilterPriceRange] = useState({
     minprice: 0,
     maxprice: 0,
   });
@@ -17,7 +17,7 @@ const SidebarFilter = (props) => {
   const priceRange = () => {
     ShopServices.allfilterdesigns()
       .then((res) => {
-        setPriceRange({
+        setFilterPriceRange({
           minprice: res.data.minprice,
           maxprice: res.data.maxprice,
         });
@@ -37,24 +37,26 @@ const SidebarFilter = (props) => {
               <p>
                 From:{" "}
                 <strong>
-                  ₹ {props.minprice ? props.minprice : PriceRange.minprice}
+                  ₹{" "}
+                  {props.minprice ? props.minprice : FilterPriceRange.minprice}
                 </strong>
               </p>
               <p>
                 To:{" "}
                 <strong>
-                  ₹ {props.maxprice ? props.maxprice : PriceRange.maxprice}
+                  ₹{" "}
+                  {props.maxprice ? props.maxprice : FilterPriceRange.maxprice}
                 </strong>
               </p>
             </div>
             <Slider
               range
               allowCross={false}
-              min={PriceRange.minprice}
-              max={PriceRange.maxprice}
+              min={FilterPriceRange.minprice}
+              max={FilterPriceRange.maxprice}
               marks={{
-                [PriceRange?.minprice]: "Min",
-                [PriceRange?.maxprice]: "Max",
+                [FilterPriceRange?.minprice]: "Min",
+                [FilterPriceRange?.maxprice]: "Max",
               }}
               onAfterChange={props.onHandleSliderChange}
             />
