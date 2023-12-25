@@ -16,12 +16,11 @@ import DealerWishlist from "../../services/Dealer/Collection";
 import { BsCartDash, BsHandbagFill } from "react-icons/bs";
 import { FaHeart, FaLongArrowAltLeft, FaRegHeart } from "react-icons/fa";
 import ReactLoading from "react-loading";
-import { CartSystem } from "../../context/CartContext";
+
 import { WishlistSystem } from "../../context/WishListContext";
 import { CgSpinner } from "react-icons/cg";
 
 const ShopDetails = () => {
-  const { dispatch: cartDispatch } = useContext(CartSystem);
   const { dispatch: wishlistDispatch } = useContext(WishlistSystem);
   const { id } = useParams();
   const [product, setProduct] = useState();
@@ -181,10 +180,6 @@ const ShopDetails = () => {
         if (res.status === true) {
           GetUserCartList();
           toast.success(res.message);
-          cartDispatch({
-            type: "ADD_TO_CART",
-            payload: { design_id: CartData.design_id },
-          });
         }
       })
       .catch((err) => {

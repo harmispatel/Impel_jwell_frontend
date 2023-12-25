@@ -26,7 +26,6 @@ import Cart from "./pages/user/Cart";
 import About from "./components/About";
 import { Toaster } from "react-hot-toast";
 import ForgetPassword from "./pages/auth/ForgetPassword";
-import CartProvider from "./context/CartContext";
 import Errorpage from "./components/Errorpage";
 import Popup from "./components/common/Popup";
 import MyOrders from "./pages/user/MyOrders";
@@ -36,7 +35,10 @@ import profileService from "./services/Auth";
 
 function App() {
   const Phone = localStorage.getItem("phone");
+  const popupshow = localStorage.getItem("user_type");
+  const isComingSoon = false;
   const [profileData, setProfileData] = useState([]);
+
   const getProfile = async () => {
     await profileService
       .getProfile({ phone: Phone })
@@ -49,10 +51,9 @@ function App() {
   useEffect(() => {
     getProfile();
   }, []);
-  const popupshow = localStorage.getItem("user_type");
-  const isComingSoon = false;
+
   return (
-    <CartProvider>
+    <>
       <ScrollToTop />
       {popupshow == null ? <Popup /> : <></>}
       <Routes>
@@ -81,6 +82,14 @@ function App() {
                 }
               />
               <Route
+                path="cart"
+                element={
+                  <ProtectedRoute>
+                    <Cart />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
                 path="profile"
                 element={
                   <ProtectedRoute>
@@ -89,16 +98,22 @@ function App() {
                 }
               />
               <Route
-                path="orders"
+                path="my_orders"
+                element={
+                  <ProtectedRoute>
+                    <MyOrders />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="order-details/:id"
                 element={
                   <ProtectedRoute>
                     <Orders />
                   </ProtectedRoute>
                 }
               />
-              <Route path="cart" element={<Cart />} />
-              <Route path="my_orders" element={<MyOrders />} />
-              <Route path="order-details" element={<Orders />} />
+
               {/* DEALER PROTECTED */}
               <Route
                 path="dealer_wishlist"
@@ -124,7 +139,15 @@ function App() {
                   </DealerProtectedRoute>
                 }
               />
-              <Route path="dealer_cart" element={<DealerCart />} />
+              <Route
+                path="dealer_cart"
+                element={
+                  <DealerProtectedRoute>
+                    <DealerCart />
+                  </DealerProtectedRoute>
+                }
+              />
+
               {/* AUTH */}
               <Route path="/login" element={<Login />} />
               <Route path="/Dealer_login" element={<DealerLogIN />} />
@@ -135,7 +158,7 @@ function App() {
         <Route path="*" element={<Errorpage />} />
       </Routes>
       <Toaster toastOptions={{ duration: 2000 }} />
-    </CartProvider>
+    </>
   );
 }
 export default App;

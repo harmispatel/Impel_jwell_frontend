@@ -58,6 +58,16 @@ const Updatecart = async (data) => {
   return d;
 };
 
+const Orderdetails = async (data) => {
+  let d = await call({
+    path: "order-details",
+    method: "POST",
+    enctype: "multipart/form-data",
+    data,
+  });
+  return d;
+};
+
 const exportObject = {
   AddtoCart,
   RemovetoCart,
@@ -65,6 +75,7 @@ const exportObject = {
   DealerCode,
   Updatecart,
   Placeorder,
+  Orderdetails,
 };
 
 export default exportObject;

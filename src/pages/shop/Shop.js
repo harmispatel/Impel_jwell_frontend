@@ -178,6 +178,7 @@ const Shop = ({ product }) => {
       sort_by: selectedOption?.value,
       userType: userType,
       offset: offset,
+      userId: userId,
     };
 
     ShopServices.allfilterdesigns(userData)
@@ -659,17 +660,11 @@ const Shop = ({ product }) => {
                                         )}
                                       </div>
                                     </div>
-                                    <div className="row">
-                                      <div className="col-md-6">
-                                        <div className="product_details">
-                                          <h4>{product?.name}</h4>
-                                        </div>
-                                      </div>
-                                      <div className="col-md-6">
-                                        <div className="product_details text-end">
-                                          <p>{product?.code}</p>
-                                        </div>
-                                      </div>
+                                    <div className="product_details d-flex justify-content-between">
+                                      <h4>{product.name}</h4>
+                                      <h4>
+                                        <b>{product.code}</b>
+                                      </h4>
                                     </div>
                                     <div className="product_details">
                                       <h5>
@@ -799,17 +794,11 @@ const Shop = ({ product }) => {
                                       </div>
                                     </div>
 
-                                    <div className="row">
-                                      <div className="col-md-6">
-                                        <div className="product_details">
-                                          <h4>{data?.name}</h4>
-                                        </div>
-                                      </div>
-                                      <div className="col-md-6">
-                                        <div className="product_details text-end">
-                                          <p>{data?.code}</p>
-                                        </div>
-                                      </div>
+                                    <div className="product_details d-flex justify-content-between">
+                                      <h4>{data?.name}</h4>
+                                      <h4>
+                                        <b>{data?.code}</b>
+                                      </h4>
                                     </div>
                                     <div className="product_details">
                                       <h5>

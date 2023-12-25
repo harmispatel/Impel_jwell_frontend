@@ -13,6 +13,8 @@ const CategoriesItems = () => {
   const [selectedCategory, setselectedCategory] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [categoriesData, setCategoriesData] = useState([]);
+  const [paginate, setPaginate] = useState();
+  const [offset, setOffset] = useState();
 
   const Category = () => {
     homeService
@@ -32,12 +34,13 @@ const CategoriesItems = () => {
       });
   };
 
-  const CategoriesData = () => {
+  const CategoriesData = (offset = 0) => {
     categoryDetail
-      .related_products({ categoryId: paramId })
+      .related_products({ categoryId: paramId, offset: offset })
       .then((res) => {
-        setCategoriesData(res.data);
+        setCategoriesData(res.data.designs);
         setIsLoading(false);
+        setPaginate(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -45,14 +48,57 @@ const CategoriesItems = () => {
       });
   };
 
-  const handleDifferentFunction = (selectedId) => {
-    setselectedCategory(selectedId);
-  };
-
   useEffect(() => {
     Category();
     CategoriesData();
   }, [selectedCategory]);
+
+  const scrollup = () => {
+    window.scrollTo({
+      top: 70,
+      behavior: "smooth",
+    });
+  };
+
+  const totalPages = Math.round(paginate?.total_records / 20);
+
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    dataShowLength: 20,
+  });
+
+  const paginationPage = (page) => {
+    const calculatedOffset = (page - 1) * pagination.dataShowLength;
+    setOffset(calculatedOffset);
+    CategoriesData(calculatedOffset);
+    setPagination({ ...pagination, currentPage: page });
+    scrollup();
+    setIsLoading(true);
+  };
+
+  const paginationPrev = () => {
+    if (pagination.currentPage > 1) {
+      const prevPage = pagination.currentPage - 1;
+      const calculatedOffset = (prevPage - 1) * pagination.dataShowLength;
+      setPagination({ ...pagination, currentPage: prevPage });
+      setOffset(calculatedOffset);
+      CategoriesData(calculatedOffset);
+      scrollup();
+      setIsLoading(true);
+    }
+  };
+
+  const paginationNext = () => {
+    if (pagination.currentPage < totalPages) {
+      const nextPage = pagination.currentPage + 1;
+      const calculatedOffset = (nextPage - 1) * pagination.dataShowLength;
+      setPagination({ ...pagination, currentPage: nextPage });
+      setOffset(calculatedOffset);
+      CategoriesData(calculatedOffset);
+      scrollup();
+      setIsLoading(true);
+    }
+  };
 
   return (
     <section className="categories">
@@ -99,20 +145,29 @@ const CategoriesItems = () => {
                   {categoriesData.length > 0 ? (
                     categoriesData.map((data) => {
                       return (
-                        <div className="col-md-4" key={data.id}>
-                          <Link
-                            to={`/shopdetails/${data.id}`}
-                            className="text-decoration-none"
-                            style={{ color: "#000" }}
-                          >
-                            <div className="category_data py-2">
-                              <img src={data.image} alt="" className="w-100" />
-                              <div className="product_details">
-                                <h4>{data.name}</h4>
+                        <>
+                          <div className="col-md-3" key={data.id}>
+                            <Link
+                              to={`/shopdetails/${data.id}`}
+                              className="text-decoration-none"
+                              style={{ color: "#000" }}
+                            >
+                              <div className="category_data py-2">
+                                <img
+                                  src={data.image}
+                                  alt=""
+                                  className="w-100"
+                                />
+                                <div className="product_details d-flex justify-content-between">
+                                  <h4>{data.name}</h4>
+                                  <h4>
+                                    <b>{data.code}</b>
+                                  </h4>
+                                </div>
                               </div>
-                            </div>
-                          </Link>
-                        </div>
+                            </Link>
+                          </div>
+                        </>
                       );
                     })
                   ) : (
@@ -121,6 +176,103 @@ const CategoriesItems = () => {
                     </div>
                   )}
                 </>
+              )}
+            </div>
+            <div className="pt-5">
+              {totalPages > 1 && (
+                <div className="paginationArea">
+                  <nav aria-label="navigation">
+                    <ul className="pagination">
+                      {/* Previous Page Button */}
+                      <li
+                        className={`page-item ${
+                          pagination.currentPage === 1 ? "disabled" : ""
+                        }`}
+                        style={{
+                          display:
+                            pagination.currentPage === 1 ? "none" : "block",
+                        }}
+                      >
+                        <a className="page-link" onClick={paginationPrev}>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                          >
+                            <polyline points="15 18 9 12 15 6"></polyline>
+                          </svg>
+                          Prev
+                        </a>
+                      </li>
+
+                      {/* Display pages with ellipses */}
+                      {Array.from({ length: totalPages }).map((_, index) => {
+                        const pageNumber = index + 1;
+                        const isCurrentPage =
+                          pagination.currentPage === pageNumber;
+
+                        // Display first and last pages
+                        if (
+                          pageNumber === 1 ||
+                          pageNumber === totalPages ||
+                          (pageNumber >= pagination.currentPage - 1 &&
+                            pageNumber <= pagination.currentPage + 1)
+                        ) {
+                          return (
+                            <li
+                              key={pageNumber}
+                              className={`page-item ${
+                                isCurrentPage ? "active" : ""
+                              }`}
+                              onClick={() => paginationPage(pageNumber)}
+                            >
+                              <a className="page-link">{pageNumber}</a>
+                            </li>
+                          );
+                        }
+
+                        // Display ellipses
+                        if (index === 1 || index === totalPages - 2) {
+                          return (
+                            <li key={pageNumber} className="page-item disabled">
+                              <a className="page-link">...</a>
+                            </li>
+                          );
+                        }
+
+                        return null;
+                      })}
+
+                      {/* Next Page Button */}
+                      <li
+                        className={`page-item ${
+                          pagination.currentPage === totalPages
+                            ? "disabled"
+                            : ""
+                        }`}
+                        style={{
+                          display:
+                            pagination.currentPage === totalPages
+                              ? "none"
+                              : "block",
+                        }}
+                      >
+                        <a className="page-link" onClick={paginationNext}>
+                          Next
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                          >
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                          </svg>
+                        </a>
+                      </li>
+                    </ul>
+                  </nav>
+                </div>
               )}
             </div>
           </div>

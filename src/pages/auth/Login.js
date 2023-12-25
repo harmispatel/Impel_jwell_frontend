@@ -208,7 +208,7 @@ const Login = () => {
                                       value={phoneNumber}
                                       onChange={handlePhoneNumberChange}
                                       placeholder="Enter Your Phone Number"
-                                      maxLength={15}
+                                      maxLength={16}
                                     />
                                     {phoneError && (
                                       <div className="text-danger">

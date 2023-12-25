@@ -1041,6 +1041,7 @@ input[type="file"] {
 .cart,
 .profile,
 .about-section,
+.my_orders,
 .forget-password {
   padding: 80px 0;
   /* margin-top: 130px; */
@@ -1584,11 +1585,6 @@ input[type="file"] {
   color: #000;
 }
 
-/* order page css */
-.my_orders {
-  padding: 80px 0 0 0;
-}
-
 .text-danger strong {
   color: #9f181c;
 }
@@ -2072,7 +2068,6 @@ input[type="file"] {
 
   .cart,
   .categories,
-  .my_orders,
   .profile,
   .shop,
   .wishlist,

@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import { BsBehance, BsHeart } from "react-icons/bs";
+import { BsBehance, BsHandbagFill, BsHeart } from "react-icons/bs";
 import { Link, useNavigate } from "react-router-dom";
 import UserService from "../../services/Cart";
 import profileService from "../../services/Auth";
@@ -7,10 +7,8 @@ import ReactLoading from "react-loading";
 import toast from "react-hot-toast";
 import { Button, Col, Form, Modal } from "react-bootstrap";
 import { CgSpinner } from "react-icons/cg";
-import { CartSystem } from "../../context/CartContext";
 
 const Cart = () => {
-  const { dispatch } = useContext(CartSystem);
   const navigate = useNavigate();
 
   const Phone = localStorage.getItem("phone");
@@ -24,6 +22,7 @@ const Cart = () => {
   const [isFormEmpty, setIsFormEmpty] = useState("");
   const [show, setShow] = useState(false);
   const [removingItemId, setRemovingItemId] = useState(null);
+  const [spinner, setSpinner] = useState(false);
 
   // user profile functionlity
   const [showEdit, setShowEdit] = useState(false);
@@ -32,6 +31,7 @@ const Cart = () => {
   const [city, setcity] = useState();
   const [shipping_city, setShipping_city] = useState();
   const [isChecked, setIsChecked] = useState(false);
+  const [valid, setValid] = useState("");
   const [userData, setUserData] = useState({
     name: "",
     email: "",
@@ -149,6 +149,7 @@ const Cart = () => {
   const handleCheckboxChange = (event) => {
     setIsChecked(event.target.checked);
   };
+
   const SubTotal = () => {
     let subTotal = 0;
     Items.forEach((data) => {
@@ -353,6 +354,7 @@ const Cart = () => {
             getProfile();
             toast.success(res.message);
             localStorage.setItem("verification", res.data.verification);
+            window.location.reload(false);
           }
         })
         .catch((err) => {
@@ -362,6 +364,7 @@ const Cart = () => {
     } else {
     }
   };
+
   useEffect(() => {
     setIsChecked(profileData?.address_same_as_company === 1);
   }, [profileData?.address_same_as_company]);
@@ -391,6 +394,11 @@ const Cart = () => {
     }
   }, []);
 
+  useEffect(() => {
+    UserCartItems();
+    getProfile();
+  }, []);
+
   const Applycoupen = (e) => {
     e.preventDefault();
     UserService.DealerCode({ phone: Phone, dealer_code: dealer_code })
@@ -418,10 +426,6 @@ const Cart = () => {
         if (res.status === true) {
           UserCartItems();
           toast.success("remove design from cart successfully");
-          dispatch({
-            type: "REMOVE_FROM_CART",
-            payload: { design_id: id },
-          });
         }
       })
       .catch((err) => {
@@ -433,6 +437,7 @@ const Cart = () => {
   };
 
   const Orderplacing = () => {
+    setSpinner(true);
     const totalPrice = code?.discount_value
       ? code.discount_type === "percentage"
         ? SubTotal() + SubCharge() - (SubCharge() * code.discount_value) / 100
@@ -441,35 +446,71 @@ const Cart = () => {
 
     if (Verification == 2) {
       if (totalPrice >= 200000 && userData?.pan_no?.length == 0) {
+        setValid(
+          "Pancard is required for your total amount is more than 2 lakh or above"
+        );
         setShowEdit(true);
       } else if (totalPrice < 200000) {
-        navigate("/order-details");
         UserService.Placeorder({
           user_id: user_id,
           dealer_code: code?.dealer_code,
-          discount_type: code?.discount_type,
-          discount_value: code?.discount_value,
-          cart_items_Ids: Items?.map((item) => item?.id),
-        });
+          dealer_discount_type: code?.discount_type,
+          dealer_discount_value: code?.discount_value,
+          cart_items: Items?.map((item) => item?.id),
+          sub_total: SubTotal(),
+          charges: SubCharge(),
+          total: code?.discount_value
+            ? code.discount_type === "percentage"
+              ? SubTotal() +
+                SubCharge() -
+                (SubCharge() * code.discount_value) / 100
+              : SubTotal() + SubCharge() - code.discount_value
+            : SubTotal() + SubCharge(),
+        })
+          .then((res) => {
+            if (res.status === true) {
+              localStorage.removeItem("savedDiscount");
+              localStorage.removeItem("cartItems");
+              toast.success(res.message);
+              setTimeout(() => {
+                navigate(`/order-details/${res.data}`);
+              }, 1000);
+            }
+          })
+          .catch((error) => console.log(error));
       } else {
-        navigate("/order-details");
         UserService.Placeorder({
           user_id: user_id,
           dealer_code: code?.dealer_code,
-          discount_type: code?.discount_type,
-          discount_value: code?.discount_value,
-          cart_items_Ids: Items?.map((item) => item?.id),
-        });
+          dealer_discount_type: code?.discount_type,
+          dealer_discount_value: code?.discount_value,
+          cart_items: Items?.map((item) => item?.id),
+          sub_total: SubTotal(),
+          charges: SubCharge(),
+          total: code?.discount_value
+            ? code.discount_type === "percentage"
+              ? SubTotal() +
+                SubCharge() -
+                (SubCharge() * code.discount_value) / 100
+              : SubTotal() + SubCharge() - code.discount_value
+            : SubTotal() + SubCharge(),
+        })
+          .then((res) => {
+            if (res.status === true) {
+              localStorage.removeItem("savedDiscount");
+              localStorage.removeItem("cartItems");
+              toast.success(res.message);
+              setTimeout(() => {
+                navigate(`/order-details/${res.data}`);
+              }, 1000);
+            }
+          })
+          .catch((error) => console.log(error));
       }
     } else {
       setShowEdit(true);
     }
   };
-
-  useEffect(() => {
-    UserCartItems();
-    getProfile();
-  }, []);
 
   return (
     <section className="cart">
@@ -533,15 +574,18 @@ const Cart = () => {
                                       >
                                         {data?.design_name}
                                       </Link>
-                                      <div className="">
-                                        <p className="text-muted">
-                                          <b>Gold Color : </b>
-                                          {goldColor[data.gold_color]}
-                                          &nbsp;
-                                          {data.gold_type}
-                                        </p>
-                                      </div>
                                     </div>
+
+                                    <div className="">
+                                      <span>
+                                        Gold Color :
+                                        <b>
+                                          {goldColor[data.gold_color]} &nbsp;
+                                          {data.gold_type}
+                                        </b>
+                                      </span>
+                                    </div>
+
                                     <div className="">
                                       <text className="h6">
                                         ₹{price?.toLocaleString("en-US")}
@@ -551,7 +595,7 @@ const Cart = () => {
                                   </div>
 
                                   <div className="col-md-3">
-                                    <div className="float-md-end">
+                                    <div className="text-end">
                                       <Link
                                         to="#"
                                         className="btn btn-light border text-danger icon-hover-danger text-end"
@@ -694,16 +738,24 @@ const Cart = () => {
                         <div className="mt-3">
                           <button
                             className="btn btn-success w-100 shadow-0 mb-2"
+                            disabled={spinner}
                             onClick={(e) => {
                               Orderplacing(e);
                               handleProfileData(profileData);
                             }}
                           >
+                            {spinner && (
+                              <CgSpinner
+                                size={20}
+                                className="animate_spin me-2"
+                              />
+                            )}
                             Place Order
                           </button>
                           <Link
                             to="/shop"
                             className="btn btn-light w-100 border mt-2"
+                            style={{ display: spinner ? "none" : "block" }}
                           >
                             Back to shop
                           </Link>
@@ -819,23 +871,10 @@ const Cart = () => {
                         onChange={(e) => handleChange(e)}
                         placeholder="Enter Your Pancard number"
                       />
-                      <span className="text-danger">
-                        {isPriceAboveLimit ? error.pancardErr : ""}
-                      </span>
+                      <span className="text-danger">{valid && valid}</span>
                     </Form.Group>
                   </div>
-                  {/* <div className="col-md-6 mb-3">
-                <Form.Group className="mb-2" controlId="formGridAddress1">
-                  <Form.Label>GST-number</Form.Label>
-                  <Form.Control
-                    name="gst_no"
-                    defaultValue={selectedData.gst_no}
-                    onChange={(e) => handleChange(e)}
-                    placeholder="Enter Your GST number"
-                  />
-                  <span className="text-danger">{error.gstErr}</span>
-                </Form.Group>
-              </div> */}
+
                   <hr />
                   <div className="col-md-6">
                     <Form.Group

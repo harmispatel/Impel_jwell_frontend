@@ -81,10 +81,6 @@ const WishList = () => {
           toast.success(res.message);
           GetUserWishlist();
           setIsLoading(true);
-          // cartDispatch({
-          //   type: "ADD_TO_CART",
-          //   payload: { design_id: CartData.design_id },
-          // });
         } else {
           toast.error(res.message);
           GetUserWishlist();

@@ -1,20 +1,15 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import profileService from "../../services/Auth";
-import { useState } from "react";
 import { Button, Col, Form, Modal } from "react-bootstrap";
 import toast from "react-hot-toast";
-import { useLocation } from "react-router-dom";
 
 const Profile = () => {
-  const { state } = useLocation();
-  const result = state?.PanCardError || null;
   const phone = localStorage.getItem("phone");
   const [showEdit, setShowEdit] = useState(false);
   const [show, setShow] = useState(false);
   const [selectedData, setSelectedData] = useState([]);
   const [profileData, setProfileData] = useState([]);
   const [profileImg, setProfileImg] = useState({ preview: "", raw: "" });
-
   const [image, setImage] = useState(null);
   const [city, setcity] = useState();
   const [shipping_city, setShipping_city] = useState();
@@ -87,10 +82,13 @@ const Profile = () => {
         .UserProfileImage(myFormData)
         .then((res) => {
           if (res.status === true) {
+            window.location.reload(false);
+
             getProfile();
             toast.success(res.message);
           } else {
             getProfile();
+            window.location.reload(false);
             toast.error(res.message);
           }
         })
@@ -104,10 +102,6 @@ const Profile = () => {
     }
   };
 
-  const handleRemoveImage = () => {
-    setImage(null);
-    localStorage.removeItem("userImage");
-  };
   useEffect(() => {
     const storedImage = localStorage.getItem("userImage");
     if (storedImage) {
@@ -350,11 +344,11 @@ const Profile = () => {
             getProfile();
             toast.success(res.message);
             localStorage.setItem("verification", res.data.verification);
+            window.location.reload(false);
           }
         })
-        .catch((err) => {
-          console.log(err);
-          toast.error(err.message);
+        .catch((error) => {
+          console.log(error);
         });
     } else {
     }
@@ -553,81 +547,6 @@ const Profile = () => {
             </div>
           </div>
         </div>
-
-        {/* <div className="row justify-content-center">
-          <div className="col-md-10">
-            <div className="d-flex justify-content-between align-items-center mb-3">
-              <h4 className="text-right">Profile</h4>
-            </div>
-            <hr />
-            <div className="row justify-content-center">
-              <div className="col-md-3">
-                <input
-                  type="file"
-                  id="upload-button"
-                  style={{ display: "none" }}
-                  onChange={handleEditChange}
-                />
-              </div>
-              <div className="col-md-9">
-                <div className="profile_card">
-                  <div className="row justify-content-center">
-                    <div className="col-md-9">
-                      <div className="profile_card_inr">
-                        <table className="table">
-                          <tbody>
-                            <tr>
-                              <td>Full Name</td>
-                              <td>{profileData.name}</td>
-                            </tr>
-                            <tr>
-                              <td>Mobile Number</td>
-                              <td>{profileData.phone}</td>
-                            </tr>
-                            <tr>
-                              <td>Email Id</td>
-                              <td>{profileData.email}</td>
-                            </tr>
-                            <tr>
-                              <td>Billing Address</td>
-                              <td>{profileData.address}</td>
-                            </tr>
-                            <tr>
-                              <td>City</td>
-                              <td>{profileData?.city_name}</td>
-                            </tr>
-                            <tr>
-                              <td>State</td>
-                              <td>{profileData?.state_name}</td>
-                            </tr>
-                            <tr>
-                              <td>Pincode</td>
-                              <td>{profileData.pincode}</td>
-                            </tr>
-                            <tr>
-                              <td>Pan number</td>
-                              <td>{profileData.pan_no}</td>
-                            </tr>
-                            <tr>
-                              <td colSpan={2}>
-                                <button
-                                  className="w-100 profile_edit_btn border-0"
-                                  onClick={() => handleEdit(profileData)}
-                                >
-                                  Edit Profile
-                                </button>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div> */}
       </div>
 
       <Modal
@@ -692,32 +611,16 @@ const Profile = () => {
 
               <div className="col-md-6 mb-3">
                 <Form.Group className="mb-2" controlId="formGridAddress1">
-                  <Form.Label>
-                    Pan-card{result && <span className="text-danger">*</span>}
-                  </Form.Label>
+                  <Form.Label>Pan-card</Form.Label>
                   <Form.Control
                     name="pan_no"
                     defaultValue={selectedData.pan_no}
                     onChange={(e) => handleEditChange(e)}
                     placeholder="Enter Your Pancard number"
                   />
-                  {result?.length > 0 && (
-                    <span className="text-danger">{result}</span>
-                  )}
                 </Form.Group>
               </div>
-              {/* <div className="col-md-6 mb-3">
-                <Form.Group className="mb-2" controlId="formGridAddress1">
-                  <Form.Label>GST-number</Form.Label>
-                  <Form.Control
-                    name="gst_no"
-                    defaultValue={selectedData.gst_no}
-                    onChange={(e) => handleEditChange(e)}
-                    placeholder="Enter Your GST number"
-                  />
-                  <span className="text-danger">{error.gstErr}</span>
-                </Form.Group>
-              </div> */}
+
               <hr />
               <div className="col-md-6">
                 <Form.Group as={Col} className="mb-2" controlId="formGridZip">

@@ -14,8 +14,9 @@ import { IoMdArrowDropdown } from "react-icons/io";
 
 const Navbar = (props) => {
   const { profileData } = props;
-  const { state: cartState } = useContext(CartSystem);
+
   const { state: wishliststate } = useContext(WishlistSystem);
+
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const navigate = useNavigate();
@@ -32,12 +33,11 @@ const Navbar = (props) => {
   const Dealer = localStorage.getItem("token");
   const DealerEmail = localStorage.getItem("email");
   const Phone = localStorage.getItem("phone");
-  const userType = localStorage.getItem("user_type");
 
   const [colorChange, setColorchange] = useState(false);
   const [isLoggedOut, setIsLoggedOut] = useState(false);
   // const [dealerCartCounts, setDealerCartCounts] = useState();
-  // const [userCartCounts, setUsererCartCounts] = useState();
+  const [userCartCounts, setUsererCartCounts] = useState();
 
   const [dealerData, setDealerData] = useState([]);
   const [tags, setTags] = useState([]);
@@ -66,15 +66,15 @@ const Navbar = (props) => {
   //     });
   // };
 
-  // const UserCartItems = () => {
-  //   UserService.CartList({ phone: Phone })
-  //     .then((res) => {
-  //       setUsererCartCounts(res.data.total_quantity);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
+  const UserCartItems = () => {
+    UserService.CartList({ phone: Phone })
+      .then((res) => {
+        setUsererCartCounts(res.data.total_quantity);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const Tags = () => {
     FilterServices.headerTags()
@@ -98,7 +98,7 @@ const Navbar = (props) => {
   };
   useEffect(() => {
     // DealerCart();
-    // UserCartItems();
+    UserCartItems();
     getProfileData();
     Tags();
   }, []);
@@ -183,6 +183,7 @@ const Navbar = (props) => {
                     aria-current="page"
                   >
                     Tags
+                    <IoMdArrowDropdown />
                   </Link>
                   <div className="tags-dropdown">
                     <div className="row">
@@ -337,10 +338,8 @@ const Navbar = (props) => {
                             <BsHandbag
                               style={{ fontSize: "20px", color: "black" }}
                             />
-                            {cartState.cartItems > 0 && (
-                              <div className="cart_count">
-                                {cartState.cartItems}
-                              </div>
+                            {userCartCounts > 0 && (
+                              <div className="cart_count">{userCartCounts}</div>
                             )}
                           </Link>
                         )}
