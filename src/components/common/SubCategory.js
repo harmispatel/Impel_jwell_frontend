@@ -15,7 +15,10 @@ const SubCategory = (props) => {
                 onChange={() => props.onChange(data.id)}
                 value={data.id}
               />
-              <label className="form-check-label" htmlFor={`exampleRadios${data.id}`}>
+              <label
+                className="form-check-label"
+                htmlFor={`exampleRadios${data.id}`}
+              >
                 {data.name}
               </label>
             </div>

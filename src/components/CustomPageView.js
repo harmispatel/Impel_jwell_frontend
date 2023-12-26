@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
 import profileService from "../services/Home";
 import { useParams } from "react-router-dom";
+
 const CustomPageView = () => {
   const paramId = useParams();
   const [pageDetails, setPageDetails] = useState([]);
-
-  useEffect(() => {
-    CustomPages();
-  }, []);
 
   const CustomPages = () => {
     profileService
@@ -19,6 +16,11 @@ const CustomPageView = () => {
         console.log(err);
       });
   };
+
+  useEffect(() => {
+    CustomPages();
+  }, []);
+
   return (
     <>
       <section className="wishlist">

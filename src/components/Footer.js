@@ -22,6 +22,7 @@ const Footer = () => {
         console.log(err);
       });
   };
+
   const CustomPages = () => {
     profileService
       .CustomPages()
@@ -32,10 +33,12 @@ const Footer = () => {
         console.log(err);
       });
   };
+
   useEffect(() => {
     SiteSetting();
     CustomPages();
   }, []);
+
   return (
     <footer className="footer">
       <div className="container">

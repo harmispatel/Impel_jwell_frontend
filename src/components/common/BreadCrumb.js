@@ -6,9 +6,19 @@ const BreadCrumb = (props) => {
   return (
     <div className="breadCrumb">
       <Breadcrumb>
-        {props.firstName && <Breadcrumb.Item><Link to={props.firstUrl}>{props.firstName}</Link></Breadcrumb.Item>}
-        {props.secondName && <Breadcrumb.Item><Link to={props.secondUrl}>{props.secondName}</Link></Breadcrumb.Item> }
-        {props.thirdName && <Breadcrumb.Item active>{props.thirdName}</Breadcrumb.Item>}
+        {props.firstName && (
+          <Breadcrumb.Item>
+            <Link to={props.firstUrl}>{props.firstName}</Link>
+          </Breadcrumb.Item>
+        )}
+        {props.secondName && (
+          <Breadcrumb.Item>
+            <Link to={props.secondUrl}>{props.secondName}</Link>
+          </Breadcrumb.Item>
+        )}
+        {props.thirdName && (
+          <Breadcrumb.Item active>{props.thirdName}</Breadcrumb.Item>
+        )}
       </Breadcrumb>
     </div>
   );

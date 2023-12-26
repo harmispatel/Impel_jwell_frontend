@@ -16,7 +16,7 @@ import Ring from "../assets/images/ring.png";
 import Kada from "../assets/images/kada.jpg";
 import Gold_Ring from "../assets/images/gold_ring.png";
 import homeService from "../services/Home";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import gif from "../assets/images/intro.gif";
 
 const Home = () => {

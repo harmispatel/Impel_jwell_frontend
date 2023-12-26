@@ -3,6 +3,7 @@ import video1 from "../assets/video/video.mp4";
 
 const Errorpage = () => {
   const videoEl = useRef(null);
+
   const attemptPlay = () => {
     videoEl &&
       videoEl.current &&
@@ -13,6 +14,7 @@ const Errorpage = () => {
   useEffect(() => {
     attemptPlay();
   }, []);
+
   return (
     <>
       <div>
