@@ -5,31 +5,31 @@ import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 
 const SidebarFilter = (props) => {
-  const [FilterPriceRange, setFilterPriceRange] = useState({
-    minprice: 0,
-    maxprice: 0,
-  });
+  // const [FilterPriceRange, setFilterPriceRange] = useState({
+  //   minprice: 0,
+  //   maxprice: 0,
+  // });
 
-  useEffect(() => {
-    priceRange();
-  }, []);
+  // useEffect(() => {
+  //   priceRange();
+  // }, []);
 
-  const priceRange = () => {
-    ShopServices.allfilterdesigns()
-      .then((res) => {
-        setFilterPriceRange({
-          minprice: res.data.minprice,
-          maxprice: res.data.maxprice,
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  // const priceRange = () => {
+  //   ShopServices.allfilterdesigns()
+  //     .then((res) => {
+  //       setFilterPriceRange({
+  //         minprice: res.data.minprice,
+  //         maxprice: res.data.maxprice,
+  //       });
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
 
   return (
     <>
-      <Accordion>
+      {/* <Accordion>
         <Accordion.Item eventKey="3" className="my-2">
           <Accordion.Header>{props.Priceheader}</Accordion.Header>
           <Accordion.Body className="p-4 mb-2">
@@ -62,7 +62,7 @@ const SidebarFilter = (props) => {
             />
           </Accordion.Body>
         </Accordion.Item>
-      </Accordion>
+      </Accordion> */}
     </>
   );
 };

@@ -109,7 +109,7 @@ const WishList = () => {
             {isLoading ? (
               <div className="h-100 d-flex justify-content-center">
                 <ReactLoading
-                  type={"spokes"}
+                  type={"spin"}
                   color={"#053961"}
                   height={"20%"}
                   width={"10%"}

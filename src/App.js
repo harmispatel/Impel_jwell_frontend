@@ -97,22 +97,8 @@ function App() {
                   </ProtectedRoute>
                 }
               />
-              <Route
-                path="my_orders"
-                element={
-                  <ProtectedRoute>
-                    <MyOrders />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="order-details/:id"
-                element={
-                  <ProtectedRoute>
-                    <Orders />
-                  </ProtectedRoute>
-                }
-              />
+              <Route path="my_orders" element={<MyOrders />} />
+              <Route path="order-details/:id" element={<Orders />} />
 
               {/* DEALER PROTECTED */}
               <Route

@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useMemo, useState } from "react";
-import { BsHeart, BsNutFill, BsSearch } from "react-icons/bs";
+import React, { useContext, useEffect, useState } from "react";
+import { BsHeart, BsSearch } from "react-icons/bs";
 import ReactLoading from "react-loading";
 import ShopServices from "../../services/Shop";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -55,7 +55,7 @@ const Shop = ({ product }) => {
   });
 
   const [isLoading, setIsLoading] = useState(true);
-  const [allData, setAllData] = useState([]);
+
   const [filterData, setFilterData] = useState([]);
   const [filterTag, setFilterTag] = useState([]);
   const [paginate, setPaginate] = useState();
@@ -75,6 +75,25 @@ const Shop = ({ product }) => {
       top: 70,
       behavior: "smooth",
     });
+  };
+
+  // sort by searching
+  const searchbar = (e) => {
+    setIsLoading(true);
+    setSearchInput(e.target.value);
+  };
+
+  // sort by dropdown functions
+  const options = [
+    { value: "new_added", label: "New Added" },
+    { value: "low_to_high", label: "Price : low to high" },
+    { value: "high_to_low", label: "Price : high to low" },
+    { value: "highest_selling", label: "Top Seller" },
+  ];
+
+  const handleSelectChange = (selectedSort) => {
+    setIsLoading(true);
+    setSelectedOption(selectedSort);
   };
 
   // 4 Filter APIS call
@@ -100,34 +119,6 @@ const Shop = ({ product }) => {
         setTagData(res.data);
       })
       .catch((error) => console.log("Error in tag filter"));
-  };
-
-  useEffect(() => {
-    CategoryFilter();
-    GenderFilter();
-    TagFilter();
-    AllData();
-    collectionCheck();
-    GetCartList();
-  }, [userType, userId]);
-
-  // sort by searching
-  const searchbar = (e) => {
-    setIsLoading(true);
-    setSearchInput(e.target.value);
-  };
-
-  // sort by dropdown functions
-  const options = [
-    { value: "new_added", label: "New Added" },
-    { value: "low_to_high", label: "Price : low to high" },
-    { value: "high_to_low", label: "Price : high to low" },
-    { value: "highest_selling", label: "Top Seller" },
-  ];
-
-  const handleSelectChange = (selectedSort) => {
-    setIsLoading(true);
-    setSelectedOption(selectedSort);
   };
 
   const handleSelectCategory = (selectedCategory) => {
@@ -198,10 +189,6 @@ const Shop = ({ product }) => {
       });
   };
 
-  useEffect(() => {
-    FilterData(0);
-  }, [category, tag, gender, searchInput, PriceRange, selectedOption]);
-
   const AllData = () => {
     const userData = {
       userType: userType,
@@ -210,7 +197,7 @@ const Shop = ({ product }) => {
     ShopServices.alldesigns(userData)
       .then((res) => {
         setIsLoading(false);
-        setAllData(res.data);
+
         setFilterData(res.data?.designs);
         setFilterTag(res.data?.tags);
         setPaginate(res.data);
@@ -220,22 +207,25 @@ const Shop = ({ product }) => {
         setIsLoading(false);
       });
   };
+
+  useEffect(() => {
+    CategoryFilter();
+    GenderFilter();
+    TagFilter();
+    AllData();
+    collectionCheck();
+    GetCartList();
+  }, [userType, userId]);
+
+  useEffect(() => {
+    FilterData(0);
+  }, [category, tag, gender, searchInput, PriceRange, selectedOption]);
+
   // user wishlist API
   const GetCartList = async () => {
     UserWishlist.userWishlist({ phone: Phone })
       .then((res) => {
         setUserCartItems(res?.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  // Dealer wishlist API
-  const collectionCheck = () => {
-    DealerWishlist.ListCollection({ email: email })
-      .then((res) => {
-        setDealerCollection(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -297,6 +287,17 @@ const Shop = ({ product }) => {
       });
   };
 
+  // Dealer wishlist API
+  const collectionCheck = () => {
+    DealerWishlist.ListCollection({ email: email })
+      .then((res) => {
+        setDealerCollection(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   // Dealer Wishlist products add
   const AddToDealerWishlist = async (product) => {
     if (!DealerCollection.some((item) => item.id === product?.id)) {
@@ -339,7 +340,6 @@ const Shop = ({ product }) => {
   };
 
   // PAGINATION FUNCTION
-
   const totalPages = Math.round(paginate?.total_records / 20);
 
   const [pagination, setPagination] = useState({
@@ -355,44 +355,6 @@ const Shop = ({ product }) => {
     scrollup();
     setIsLoading(true);
   };
-  // const paginationArea = () => {
-  //   const items = [];
-  //   let threePoints = true;
-
-  //   for (let number = 1; number <= totalPages; number++) {
-  //     if (
-  //       number <= 1 ||
-  //       number >= totalPages ||
-  //       (number >= pagination.currentPage - 1 &&
-  //         number <= pagination.currentPage + 1)
-  //     ) {
-  //       items.push(
-  //         <li
-  //           key={number}
-  //           className={`page-item ${
-  //             pagination.currentPage === number ? "active disabled" : ""
-  //           }`}
-  //           onClick={() => {
-  //             paginationPage(number);
-  //           }}
-  //         >
-  //           <a className="page-link">{number}</a>
-  //         </li>
-  //       );
-  //     } else {
-  //       if (threePoints === true) {
-  //         items.push(
-  //           <li key={number} className="page-item threePoints">
-  //             <a className="page-link">...</a>
-  //           </li>
-  //         );
-  //         threePoints = false;
-  //       }
-  //     }
-  //   }
-
-  //   return items;
-  // };
 
   const paginationPrev = () => {
     if (pagination.currentPage > 1) {
@@ -417,12 +379,13 @@ const Shop = ({ product }) => {
       setIsLoading(true);
     }
   };
+
   return (
     <section className="shop">
       <div className="container">
         <div className="shopping_data">
           <div className="row">
-            <div className="col-md-10 col-7">
+            <div className="col-md-9 col-7">
               <div className="search_bar">
                 <input
                   className="form-control"
@@ -435,7 +398,7 @@ const Shop = ({ product }) => {
                 )}
               </div>
             </div>
-            <div className="col-md-2 col-5">
+            <div className="col-md-3 col-5">
               <Select
                 value={selectedOption}
                 onChange={handleSelectChange}
@@ -489,7 +452,7 @@ const Shop = ({ product }) => {
                 />
               </div>
               <div className="col-md-3 col-12 mt-md-0">
-                <Accordion>
+                <Accordion className="accordian">
                   <Accordion.Item eventKey="3" className="my-2">
                     <Accordion.Header>Shop by price</Accordion.Header>
                     <Accordion.Body className="p-4 mb-2">
@@ -536,7 +499,7 @@ const Shop = ({ product }) => {
               {isLoading ? (
                 <div className="h-100 d-flex justify-content-center">
                   <ReactLoading
-                    type={"spinningBubbles"}
+                    type={"spin"}
                     color={"#053961"}
                     height={"20%"}
                     width={"10%"}
@@ -551,141 +514,7 @@ const Shop = ({ product }) => {
                   gender?.length === 0 &&
                   tag?.length === 0 &&
                   PriceRange.minprice === null ? (
-                    <>
-                      {allData?.length > 0 ? (
-                        <>
-                          <div className="row">
-                            {allData.map((product) => {
-                              return (
-                                <div key={product.id} className="col-md-3">
-                                  <Link
-                                    to={`/shopdetails/${product.id}`}
-                                    className="product_data"
-                                    target="_blank"
-                                  >
-                                    {product?.image ? (
-                                      <img
-                                        src={product?.image}
-                                        alt={product?.name}
-                                        className="w-100"
-                                      />
-                                    ) : (
-                                      <img
-                                        src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg"
-                                        alt=""
-                                        className="w-100"
-                                      />
-                                    )}
-
-                                    <div className="edit">
-                                      <div>
-                                        {userType == 1 ? (
-                                          <>
-                                            {email ? (
-                                              <Link
-                                                to="#"
-                                                data-tooltip-id="my-tooltip-12"
-                                                onClick={() => {
-                                                  if (
-                                                    DealerCollection?.find(
-                                                      (item) =>
-                                                        item.id === product.id
-                                                    )
-                                                  ) {
-                                                    removefromdealerwishlist(
-                                                      product
-                                                    );
-                                                  } else {
-                                                    AddToDealerWishlist(
-                                                      product
-                                                    );
-                                                  }
-                                                }}
-                                              >
-                                                {DealerCollection?.find(
-                                                  (item) =>
-                                                    item.id === product.id
-                                                ) ? (
-                                                  <FaStar />
-                                                ) : (
-                                                  <FaRegStar />
-                                                )}
-                                              </Link>
-                                            ) : (
-                                              <Link
-                                                to="/Dealer_login"
-                                                data-tooltip-id="my-tooltip-12"
-                                              >
-                                                <FaRegStar />
-                                              </Link>
-                                            )}
-                                          </>
-                                        ) : (
-                                          <>
-                                            {Phone ? (
-                                              <Link
-                                                to="#"
-                                                data-tooltip-id="my-tooltip-9"
-                                                onClick={() => {
-                                                  if (
-                                                    UsercartItems?.find(
-                                                      (item) =>
-                                                        item.id === product.id
-                                                    )
-                                                  ) {
-                                                    removeFromWishList(product);
-                                                  } else {
-                                                    addToUserWishList(product);
-                                                  }
-                                                }}
-                                              >
-                                                {UsercartItems?.find(
-                                                  (item) =>
-                                                    item.id === product.id
-                                                ) ? (
-                                                  <FcLike />
-                                                ) : (
-                                                  <BsHeart />
-                                                )}
-                                              </Link>
-                                            ) : (
-                                              <Link
-                                                to="/login"
-                                                data-tooltip-id="my-tooltip-9"
-                                              >
-                                                <BsHeart />
-                                              </Link>
-                                            )}
-                                          </>
-                                        )}
-                                      </div>
-                                    </div>
-                                    <div className="product_details d-flex justify-content-between">
-                                      <h4>{product.name}</h4>
-                                      <h4>
-                                        <b>{product.code}</b>
-                                      </h4>
-                                    </div>
-                                    <div className="product_details">
-                                      <h5>
-                                        ₹
-                                        {product?.total_price_18k?.toLocaleString(
-                                          "en-US"
-                                        )}
-                                      </h5>
-                                    </div>
-                                  </Link>
-                                </div>
-                              );
-                            })}
-                          </div>
-                        </>
-                      ) : (
-                        <div className="not-products">
-                          <p>No products available.</p>
-                        </div>
-                      )}
-                    </>
+                    <></>
                   ) : (
                     <>
                       {filterData?.length > 0 ? (

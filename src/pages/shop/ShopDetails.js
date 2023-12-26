@@ -257,7 +257,7 @@ const ShopDetails = () => {
               {isLoading ? (
                 <div className="h-100 d-flex justify-content-center">
                   <ReactLoading
-                    type={"cubes"}
+                    type={"spin"}
                     color={"#053961"}
                     delay={"2"}
                     height={"20%"}

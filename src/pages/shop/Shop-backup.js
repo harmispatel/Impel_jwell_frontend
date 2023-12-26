@@ -1,43 +1,66 @@
-// import React, { useContext, useEffect, useState } from "react";
-// import { BsHeart, BsSearch } from "react-icons/bs";
-// import SidebarFilter from "../../components/common/SidebarFilter";
+// import React, { useContext, useEffect, useMemo, useState } from "react";
+// import { BsHeart, BsNutFill, BsSearch } from "react-icons/bs";
 // import ReactLoading from "react-loading";
 // import ShopServices from "../../services/Shop";
 // import { Link, useLocation, useNavigate } from "react-router-dom";
 // import DealerWishlist from "../../services/Dealer/Collection";
 // import UserWishlist from "../../services/Auth";
-// import UserCartService from "../../services/Cart";
 // import { FcLike } from "react-icons/fc";
 // import toast from "react-hot-toast";
 // import { Tooltip as ReactTooltip } from "react-tooltip";
 // import { WishlistSystem } from "../../context/WishListContext";
 // import { FaRegStar, FaStar } from "react-icons/fa";
+// import FilterServices from "../../services/Filter";
+// import Select from "react-select";
+// import Accordion from "react-bootstrap/Accordion";
+// import Slider from "rc-slider";
+// import "rc-slider/assets/index.css";
 
 // const Shop = ({ product }) => {
 //   const { dispatch: wishlistDispatch } = useContext(WishlistSystem);
 //   const { dispatch: wishlistRemoveDispatch } = useContext(WishlistSystem);
 
-//   const location = useLocation();
 //   const navigate = useNavigate();
+//   const location = useLocation();
 
 //   const userType = localStorage.getItem("user_type");
 //   const userId = localStorage.getItem("user_id");
 //   const email = localStorage.getItem("email");
 //   const Phone = localStorage.getItem("phone");
 
-//   const [searchInput, setSearchInput] = useState([]);
+//   const [searchInput, setSearchInput] = useState(null);
+
 //   const [selectedOption, setSelectedOption] = useState([]);
-//   const [category, setCategory] = useState([]);
-//   const [gender, setGender] = useState([]);
+
+//   const [categoryData, setCategoryData] = useState([]);
+//   const [category, setCategory] = useState(null);
+//   const [selectedCategory, setSelectedCategory] = useState(null);
+
+//   const [genderData, setGenderData] = useState([]);
+//   const [gender, setGender] = useState(null);
+//   const [selectedGender, setSelectedGender] = useState(null);
+
+//   const [tagData, setTagData] = useState([]);
 //   const [tag, setTag] = useState([]);
+//   const [selectedTag, setSelectedTag] = useState(null);
+
 //   const [PriceRange, setPriceRange] = useState({
 //     minprice: null,
 //     maxprice: null,
 //   });
 
+//   const [FilterPriceRange, setFilterPriceRange] = useState({
+//     minprice: 0,
+//     maxprice: 0,
+//   });
+
 //   const [isLoading, setIsLoading] = useState(true);
 //   const [allData, setAllData] = useState([]);
 //   const [filterData, setFilterData] = useState([]);
+//   const [filterTag, setFilterTag] = useState([]);
+//   const [paginate, setPaginate] = useState();
+
+//   const [offset, setOffset] = useState();
 
 //   const [collection_status, setCollectionStatus] = useState(false);
 //   const [DealerCollection, setDealerCollection] = useState([]);
@@ -46,81 +69,88 @@
 //   const [goldColor, setGoldColor] = useState("yellow_gold");
 //   const [goldType, setGoldType] = useState("18k");
 //   const [UsercartItems, setUserCartItems] = useState([]);
-//   const [cartItems, setCartItems] = useState([]);
-
-//   const [pagination, setPagination] = useState({
-//     currentPage: 1,
-//     dataShowLength: 50,
-//   });
-
-//   const totalPage = Math.ceil(allData.length / pagination.dataShowLength);
-
-//   const paginationPage = (page) => {
-//     setPagination({ ...pagination, currentPage: page });
-//     scrollup();
-//   };
-//   const paginationArea = () => {
-//     const items = [];
-//     let threePoints = true;
-//     for (let number = 1; number <= totalPage; number++) {
-//       if (
-//         number <= 1 ||
-//         number >= totalPage ||
-//         (number >= pagination.currentPage - 1 &&
-//           number <= pagination.currentPage + 1)
-//       ) {
-//         items.push(
-//           <li
-//             key={number}
-//             className={`page-item ${
-//               pagination.currentPage === number ? "active" : ""
-//             }`}
-//             onClick={() => {
-//               paginationPage(number);
-//             }}
-//           >
-//             <a className="page-link">{number}</a>
-//           </li>
-//         );
-//       } else {
-//         if (threePoints === true) {
-//           items.push(
-//             <li key={number} className="page-item threePoints">
-//               <a className="page-link">...</a>
-//             </li>
-//           );
-//           threePoints = false;
-//         }
-//       }
-//     }
-//     return items;
-//   };
-
-//   const paginationPrev = () => {
-//     if (pagination.currentPage > 1) {
-//       setPagination({ ...pagination, currentPage: pagination.currentPage - 1 });
-//       scrollup();
-//     } else {
-//       setPagination({ ...pagination, currentPage: 1 });
-//       scrollup();
-//     }
-//   };
-
-//   const paginationNext = () => {
-//     if (pagination.currentPage < totalPage) {
-//       setPagination({ ...pagination, currentPage: pagination.currentPage + 1 });
-//       scrollup();
-//     } else {
-//       setPagination({ ...pagination, currentPage: totalPage });
-//       scrollup();
-//     }
-//   };
 
 //   const scrollup = () => {
 //     window.scrollTo({
-//       top: 150,
+//       top: 70,
 //       behavior: "smooth",
 //     });
+//   };
+
+//   // 4 Filter APIS call
+//   const CategoryFilter = () => {
+//     FilterServices.categoryFilter()
+//       .then((res) => {
+//         setCategoryData(res.data);
+//       })
+//       .catch((error) => console.log("Error in category filter"));
+//   };
+
+//   const GenderFilter = () => {
+//     FilterServices.genderFilter()
+//       .then((res) => {
+//         setGenderData(res.data);
+//       })
+//       .catch((error) => console.log("Error in gender filter"));
+//   };
+
+//   const TagFilter = () => {
+//     FilterServices.TagFilter()
+//       .then((res) => {
+//         setTagData(res.data);
+//       })
+//       .catch((error) => console.log("Error in tag filter"));
+//   };
+
+//   useEffect(() => {
+//     CategoryFilter();
+//     GenderFilter();
+//     TagFilter();
+//     AllData();
+//     collectionCheck();
+//     GetCartList();
+//   }, [userType, userId]);
+
+//   // sort by searching
+//   const searchbar = (e) => {
+//     setIsLoading(true);
+//     setSearchInput(e.target.value);
+//   };
+
+//   // sort by dropdown functions
+//   const options = [
+//     { value: "new_added", label: "New Added" },
+//     { value: "low_to_high", label: "Price : low to high" },
+//     { value: "high_to_low", label: "Price : high to low" },
+//     { value: "highest_selling", label: "Top Seller" },
+//   ];
+
+//   const handleSelectChange = (selectedSort) => {
+//     setIsLoading(true);
+//     setSelectedOption(selectedSort);
+//   };
+
+//   const handleSelectCategory = (selectedCategory) => {
+//     setIsLoading(true);
+//     setCategory(selectedCategory ? selectedCategory.value : "");
+//     setSelectedCategory(selectedCategory);
+//   };
+
+//   const handleSelectGender = (selectedGender) => {
+//     setIsLoading(true);
+//     setGender(selectedGender ? selectedGender.value : "");
+//     setSelectedGender(selectedGender);
+//   };
+
+//   const handleSelectTag = (selectedTags) => {
+//     setIsLoading(true);
+//     setTag(selectedTags ? [selectedTags.value] : []);
+//     setSelectedTag(selectedTags);
+//   };
+
+//   const handleSliderChange = (e) => {
+//     setIsLoading(true);
+//     setPriceRange({ minprice: e[0], maxprice: e[1] });
 //   };
 
 //   useEffect(() => {
@@ -137,111 +167,40 @@
 //     setTag(tagIds);
 //   }, [location.search]);
 
+//   const FilterData = (offset = 0) => {
+//     const userData = {
+//       category_id: category,
+//       gender_id: gender,
+//       tag_id: tag,
+//       search: searchInput,
+//       min_price: PriceRange?.minprice,
+//       max_price: PriceRange?.maxprice,
+//       sort_by: selectedOption?.value,
+//       userType: userType,
+//       offset: offset,
+//       userId: userId,
+//     };
+
+//     ShopServices.allfilterdesigns(userData)
+//       .then((res) => {
+//         setIsLoading(false);
+//         setFilterData(res.data?.designs);
+//         setFilterTag(res.data?.tags);
+//         setPaginate(res.data);
+//         setFilterPriceRange({
+//           minprice: res.data.minprice,
+//           maxprice: res.data.maxprice,
+//         });
+//       })
+//       .catch((err) => {
+//         console.log(err);
+//         setIsLoading(false);
+//       });
+//   };
+
 //   useEffect(() => {
-//     if (
-//       category.length > 0 ||
-//       tag?.length > 0 ||
-//       gender.length > 0 ||
-//       searchInput.length > 0 ||
-//       PriceRange.minprice !== null ||
-//       selectedOption.length > 0
-//     ) {
-//       FilterData();
-//     }
-//   }, [category, tag?.length, gender, searchInput, PriceRange, selectedOption]);
-
-//   // sort by searching
-//   const searchbar = (e) => {
-//     setIsLoading(true);
-//     setSearchInput(e.target.value);
-//   };
-
-//   // sort by filters
-//   const handleRadioChange = (event) => {
-//     setSelectedOption(event.target.value);
-//     const sortfield = event.target.value;
-//     let sorted = [...allData];
-//     switch (sortfield) {
-//       case "new_added":
-//       case "low_to_high":
-//       case "high_to_low":
-//       case "highest_selling":
-//       case "clear_all":
-//         setIsLoading(true);
-//         break;
-//       default:
-//         break;
-//     }
-//     setFilterData(sorted);
-//   };
-
-//   // side filter 4 functions
-//   const handleCategory = (e) => {
-//     setIsLoading(true);
-//     const selectedCategory = e.target.value;
-//     if (e.target.checked) {
-//       setCategory([selectedCategory]);
-//       scrollup();
-//     } else {
-//       setCategory([]);
-//       AllData();
-//       scrollup();
-//     }
-//   };
-//   const handleGender = (e) => {
-//     setIsLoading(true);
-//     const selectedGender = e.target.value;
-//     if (e.target.checked) {
-//       setGender([selectedGender]);
-//       scrollup();
-//     } else {
-//       setGender([]);
-//       AllData();
-//       scrollup();
-//     }
-//   };
-
-//   // const handleTag = (e) => {
-//   //   setIsLoading(true);
-//   //   const selectedTag = e.target.value;
-//   //   if (e.target.checked) {
-//   //     setTag([selectedTag]);
-//   //     scrollup();
-//   //   } else {
-//   //     setTag([]);
-//   //     AllData();
-//   //     scrollup();
-//   //   }
-//   // };
-
-//   const handleTag = (e) => {
-//     setIsLoading(true);
-//     const selectedTagId = parseFloat(e.target.value);
-//     if (e.target.checked) {
-//       setTag([...tag, selectedTagId]);
-//       const updatedTagIds = [...tag, selectedTagId];
-//       navigate(`/shop?tag_id=${updatedTagIds}`);
-//       scrollup();
-//     } else {
-//       const updatedTags = tag.filter((item) => item !== selectedTagId);
-//       setTag(updatedTags);
-//       if (updatedTags?.length > 0) {
-//         navigate(`/shop?tag_id=${updatedTags}`);
-//       } else {
-//         navigate(`/shop`);
-//       }
-//       if (updatedTags?.length === 0) {
-//         AllData();
-//         scrollup();
-//       }
-//     }
-//   };
-
-//   const handleSliderChange = (e) => {
-//     setIsLoading(true);
-//     setPriceRange({ minprice: e[0], maxprice: e[1] });
-//     scrollup();
-//   };
+//     FilterData(0);
+//   }, [category, tag, gender, searchInput, PriceRange, selectedOption]);
 
 //   const AllData = () => {
 //     const userData = {
@@ -252,35 +211,16 @@
 //       .then((res) => {
 //         setIsLoading(false);
 //         setAllData(res.data);
+//         console.log(res.data);
+//         setFilterData(res.data?.designs);
+//         setFilterTag(res.data?.tags);
+//         setPaginate(res.data);
 //       })
 //       .catch((err) => {
 //         console.log(err);
 //         setIsLoading(false);
 //       });
 //   };
-//   const FilterData = () => {
-//     const userData = {
-//       categoryIds: category,
-//       GenderIds: gender,
-//       TagIds: tag,
-//       search: searchInput,
-//       MinPrice: PriceRange?.minprice,
-//       MaxPrice: PriceRange?.maxprice,
-//       sort_by: selectedOption,
-//       userType: userType,
-//     };
-
-//     ShopServices.allfilterdesigns(userData)
-//       .then((res) => {
-//         setIsLoading(false);
-//         setFilterData(res.data);
-//       })
-//       .catch((err) => {
-//         console.log(err);
-//         setIsLoading(false);
-//       });
-//   };
-
 //   // user wishlist API
 //   const GetCartList = async () => {
 //     UserWishlist.userWishlist({ phone: Phone })
@@ -291,16 +231,6 @@
 //         console.log(err);
 //       });
 //   };
-//   // // user cart API
-//   // const GetUserCartList = async () => {
-//   //   UserCartService.CartList({ phone: Phone })
-//   //     .then((res) => {
-//   //       setCartItems(res.data.cart_items);
-//   //     })
-//   //     .catch((err) => {
-//   //       console.log(err);
-//   //     });
-//   // };
 
 //   // Dealer wishlist API
 //   const collectionCheck = () => {
@@ -313,13 +243,6 @@
 //       });
 //   };
 
-//   useEffect(() => {
-//     AllData();
-//     collectionCheck();
-//     // GetUserCartList();
-//     GetCartList();
-//   }, []);
-
 //   // user wishlist products add
 //   const addToUserWishList = async (product) => {
 //     const payload = { id: product.id };
@@ -329,6 +252,7 @@
 //         design_id: product.id,
 //         gold_color: goldColor,
 //         gold_type: goldType,
+//         design_name: product?.name,
 //       })
 //         .then((res) => {
 //           if (res.success === true) {
@@ -348,6 +272,8 @@
 //     } else {
 //     }
 //   };
+
+//   // user wishlist products remove
 //   const removeFromWishList = (product) => {
 //     const payload = { id: product.id };
 //     UserWishlist.removetoWishlist({
@@ -355,6 +281,7 @@
 //       design_id: product.id,
 //       gold_color: goldColor,
 //       gold_type: goldType,
+//       design_name: product?.name,
 //     })
 //       .then((res) => {
 //         if (res.success === true) {
@@ -393,6 +320,8 @@
 //     } else {
 //     }
 //   };
+
+//   // Dealer Wishlist products remove
 //   const removefromdealerwishlist = (product) => {
 //     DealerWishlist.removetoWishlist({
 //       email: localStorage.getItem("email"),
@@ -410,125 +339,205 @@
 //       });
 //   };
 
+//   // PAGINATION FUNCTION
+
+//   const totalPages = Math.round(paginate?.total_records / 20);
+
+//   const [pagination, setPagination] = useState({
+//     currentPage: 1,
+//     dataShowLength: 20,
+//   });
+
+//   const paginationPage = (page) => {
+//     const calculatedOffset = (page - 1) * pagination.dataShowLength;
+//     setOffset(calculatedOffset);
+//     FilterData(calculatedOffset);
+//     setPagination({ ...pagination, currentPage: page });
+//     scrollup();
+//     setIsLoading(true);
+//   };
+//   // const paginationArea = () => {
+//   //   const items = [];
+//   //   let threePoints = true;
+
+//   //   for (let number = 1; number <= totalPages; number++) {
+//   //     if (
+//   //       number <= 1 ||
+//   //       number >= totalPages ||
+//   //       (number >= pagination.currentPage - 1 &&
+//   //         number <= pagination.currentPage + 1)
+//   //     ) {
+//   //       items.push(
+//   //         <li
+//   //           key={number}
+//   //           className={`page-item ${
+//   //             pagination.currentPage === number ? "active disabled" : ""
+//   //           }`}
+//   //           onClick={() => {
+//   //             paginationPage(number);
+//   //           }}
+//   //         >
+//   //           <a className="page-link">{number}</a>
+//   //         </li>
+//   //       );
+//   //     } else {
+//   //       if (threePoints === true) {
+//   //         items.push(
+//   //           <li key={number} className="page-item threePoints">
+//   //             <a className="page-link">...</a>
+//   //           </li>
+//   //         );
+//   //         threePoints = false;
+//   //       }
+//   //     }
+//   //   }
+
+//   //   return items;
+//   // };
+
+//   const paginationPrev = () => {
+//     if (pagination.currentPage > 1) {
+//       const prevPage = pagination.currentPage - 1;
+//       const calculatedOffset = (prevPage - 1) * pagination.dataShowLength;
+//       setPagination({ ...pagination, currentPage: prevPage });
+//       setOffset(calculatedOffset);
+//       FilterData(calculatedOffset);
+//       scrollup();
+//       setIsLoading(true);
+//     }
+//   };
+
+//   const paginationNext = () => {
+//     if (pagination.currentPage < totalPages) {
+//       const nextPage = pagination.currentPage + 1;
+//       const calculatedOffset = (nextPage - 1) * pagination.dataShowLength;
+//       setPagination({ ...pagination, currentPage: nextPage });
+//       setOffset(calculatedOffset);
+//       FilterData(calculatedOffset);
+//       scrollup();
+//       setIsLoading(true);
+//     }
+//   };
 //   return (
 //     <section className="shop">
 //       <div className="container">
 //         <div className="shopping_data">
-//           <div className="filters">
+//           <div className="row">
+//             <div className="col-md-9 col-7">
+//               <div className="search_bar">
+//                 <input
+//                   className="form-control"
+//                   placeholder="Search by design code"
+//                   onChange={(e) => searchbar(e)}
+//                   type="search"
+//                 />
+//                 {searchInput?.length === 0 && (
+//                   <BsSearch className="search-icon" />
+//                 )}
+//               </div>
+//             </div>
+//             <div className="col-md-3 col-5">
+//               <Select
+//                 value={selectedOption}
+//                 onChange={handleSelectChange}
+//                 isClearable={true}
+//                 isSearchable={false}
+//                 options={options}
+//                 placeholder="Sort By"
+//               />
+//             </div>
+//           </div>
+
+//           <div className="">
 //             <div className="row">
-//               <div className="col-md-12">
-//                 <div className="row justify-content-center">
-//                   <div className="col-md-2">
-//                     <div className="csm_sort_btn">
-//                       <input
-//                         type="radio"
-//                         id="new_added"
-//                         className="d-none"
-//                         name="attr_option[0]"
-//                         checked={selectedOption === "new_added"}
-//                         onChange={handleRadioChange}
-//                         value="new_added"
+//               <div className="col-md-3 col-12 mt-2 mt-md-2">
+//                 <Select
+//                   placeholder="Shop by category"
+//                   isClearable={true}
+//                   isSearchable={false}
+//                   value={selectedCategory}
+//                   options={categoryData.map((data) => ({
+//                     value: data?.id,
+//                     label: data?.name,
+//                   }))}
+//                   onChange={handleSelectCategory}
+//                 />
+//               </div>
+//               <div className="col-md-3 col-6 mt-2 mt-md-2">
+//                 <Select
+//                   placeholder="Shop by Gender"
+//                   isClearable
+//                   isSearchable={false}
+//                   value={selectedGender}
+//                   options={genderData?.map((data) => ({
+//                     value: data?.id,
+//                     label: data?.name,
+//                   }))}
+//                   onChange={handleSelectGender}
+//                 />
+//               </div>
+//               <div className="col-md-3 col-6 mt-2 mt-md-2">
+//                 <Select
+//                   placeholder="Shop by Tag"
+//                   isClearable
+//                   isSearchable={false}
+//                   value={selectedTag}
+//                   options={filterTag?.map((data) => ({
+//                     value: data?.id,
+//                     label: data?.name,
+//                   }))}
+//                   onChange={handleSelectTag}
+//                 />
+//               </div>
+//               <div className="col-md-3 col-12 mt-md-0">
+//                 <Accordion className="accordian">
+//                   <Accordion.Item eventKey="3" className="my-2">
+//                     <Accordion.Header>Shop by price</Accordion.Header>
+//                     <Accordion.Body className="p-4 mb-2">
+//                       <div className="d-flex justify-content-between">
+//                         <p>
+//                           From :
+//                           <strong>
+//                             ₹
+//                             {PriceRange?.minprice
+//                               ? PriceRange?.minprice
+//                               : FilterPriceRange.minprice}
+//                           </strong>
+//                         </p>
+//                         <p>
+//                           To :
+//                           <strong>
+//                             ₹
+//                             {PriceRange?.maxprice
+//                               ? PriceRange?.maxprice
+//                               : FilterPriceRange.maxprice}
+//                           </strong>
+//                         </p>
+//                       </div>
+//                       <Slider
+//                         range
+//                         allowCross={false}
+//                         min={FilterPriceRange.minprice}
+//                         max={FilterPriceRange.maxprice}
+//                         marks={{
+//                           [FilterPriceRange?.minprice]: "Min",
+//                           [FilterPriceRange?.maxprice]: "Max",
+//                         }}
+//                         onAfterChange={handleSliderChange}
 //                       />
-//                       <label htmlFor="new_added" className="">
-//                         New Added
-//                       </label>
-//                     </div>
-//                   </div>
-//                   <div className="col-md-2">
-//                     <div className="csm_sort_btn">
-//                       <input
-//                         type="radio"
-//                         id="low_to_high"
-//                         value="low_to_high"
-//                         name="attr_option[0]"
-//                         checked={selectedOption === "low_to_high"}
-//                         onChange={handleRadioChange}
-//                         className="d-none"
-//                       />
-//                       <label htmlFor="low_to_high">Price : low to high</label>
-//                     </div>
-//                   </div>
-//                   <div className="col-md-2">
-//                     <div className="csm_sort_btn">
-//                       <input
-//                         type="radio"
-//                         id="high_to_low"
-//                         className="d-none"
-//                         value="high_to_low"
-//                         name="attr_option[0]"
-//                         checked={selectedOption === "high_to_low"}
-//                         onChange={handleRadioChange}
-//                       />
-//                       <label htmlFor="high_to_low">Price : high to low</label>
-//                     </div>
-//                   </div>
-//                   <div className="col-md-2">
-//                     <div className="csm_sort_btn">
-//                       <input
-//                         type="radio"
-//                         id="highest_selling"
-//                         value="highest_selling"
-//                         name="attr_option[0]"
-//                         checked={selectedOption === "highest_selling"}
-//                         onChange={handleRadioChange}
-//                         className="d-none"
-//                       />
-//                       <label htmlFor="highest_selling">Top Seller</label>
-//                     </div>
-//                   </div>
-//                   <div className="col-md-2">
-//                     <div className="csm_sort_btn">
-//                       <input
-//                         type="radio"
-//                         id="clear_all"
-//                         className="d-none"
-//                         value="clear_all"
-//                         name="attr_option[0]"
-//                         checked={selectedOption === "clear_all"}
-//                         onChange={handleRadioChange}
-//                       />
-//                       <label htmlFor="clear_all">Clear All</label>
-//                     </div>
-//                   </div>
-//                 </div>
+//                     </Accordion.Body>
+//                   </Accordion.Item>
+//                 </Accordion>
 //               </div>
 //             </div>
 //           </div>
 //           <hr />
 //           <div className="row">
-//             <div className="col-md-3">
-//               <div className="search_bar">
-//                 <input
-//                   className="form-control"
-//                   placeholder="Please enter a design code"
-//                   onChange={(e) => searchbar(e)}
-//                   type="search"
-//                 />
-//                 {searchInput.length === 0 && (
-//                   <BsSearch className="search-icon" />
-//                 )}
-//               </div>
-//               <div className="sidebar">
-//                 <SidebarFilter
-//                   Categoryheader="Shop by category"
-//                   Genderheader="Shop by Gender"
-//                   Tagheader="Shop by Tag"
-//                   Priceheader="Shop by Price"
-//                   minprice={PriceRange.minprice}
-//                   maxprice={PriceRange.maxprice}
-//                   onCategoryChange={(e) => handleCategory(e)}
-//                   onGenderChange={(e) => handleGender(e)}
-//                   onTagChange={(e) => handleTag(e)}
-//                   onHandleSliderChange={(e) => handleSliderChange(e)}
-//                   tag={tag}
-//                 />
-//               </div>
-//             </div>
-//             <div className="col-md-9">
+//             <div className="col-md-12">
 //               {isLoading ? (
 //                 <div className="h-100 d-flex justify-content-center">
 //                   <ReactLoading
-//                     type={"spinningBubbles"}
+//                     type={"spin"}
 //                     color={"#053961"}
 //                     height={"20%"}
 //                     width={"10%"}
@@ -537,156 +546,139 @@
 //                 </div>
 //               ) : (
 //                 <>
-//                   {searchInput.length === 0 &&
-//                   selectedOption.length === 0 &&
-//                   category.length === 0 &&
-//                   gender.length === 0 &&
-//                   tag.length === 0 &&
+//                   {searchInput?.length === 0 &&
+//                   selectedOption?.length === 0 &&
+//                   category?.length === 0 &&
+//                   gender?.length === 0 &&
+//                   tag?.length === 0 &&
 //                   PriceRange.minprice === null ? (
 //                     <>
 //                       {allData?.length > 0 ? (
 //                         <>
 //                           <div className="row">
-//                             {allData
-//                               ?.slice(
-//                                 (pagination.currentPage - 1) *
-//                                   pagination.dataShowLength,
-//                                 pagination.dataShowLength *
-//                                   pagination.currentPage
-//                               )
-//                               .map((product) => {
-//                                 return (
-//                                   <div key={product.id} className="col-md-4">
-//                                     <Link
-//                                       to={`/shopdetails/${product.id}`}
-//                                       className="product_data"
-//                                       target="_blank"
-//                                     >
-//                                       {product?.image ? (
-//                                         <img
-//                                           src={product?.image}
-//                                           alt={product?.name}
-//                                           className="w-100"
-//                                         />
-//                                       ) : (
-//                                         <img
-//                                           src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg"
-//                                           alt=""
-//                                           className="w-100"
-//                                         />
-//                                       )}
+//                             {allData.map((product) => {
+//                               return (
+//                                 <div key={product.id} className="col-md-3">
+//                                   <Link
+//                                     to={`/shopdetails/${product.id}`}
+//                                     className="product_data"
+//                                     target="_blank"
+//                                   >
+//                                     {product?.image ? (
+//                                       <img
+//                                         src={product?.image}
+//                                         alt={product?.name}
+//                                         className="w-100"
+//                                       />
+//                                     ) : (
+//                                       <img
+//                                         src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg"
+//                                         alt=""
+//                                         className="w-100"
+//                                       />
+//                                     )}
 
-//                                       <div className="edit">
-//                                         <div>
-//                                           {userType == 1 ? (
-//                                             <>
-//                                               {email ? (
-//                                                 <Link
-//                                                   to="#"
-//                                                   data-tooltip-id="my-tooltip-12"
-//                                                   onClick={() => {
-//                                                     if (
-//                                                       DealerCollection?.find(
-//                                                         (item) =>
-//                                                           item.id === product.id
-//                                                       )
-//                                                     ) {
-//                                                       removefromdealerwishlist(
-//                                                         product
-//                                                       );
-//                                                     } else {
-//                                                       AddToDealerWishlist(
-//                                                         product
-//                                                       );
-//                                                     }
-//                                                   }}
-//                                                 >
-//                                                   {DealerCollection?.find(
-//                                                     (item) =>
-//                                                       item.id === product.id
-//                                                   ) ? (
-//                                                     <FaStar />
-//                                                   ) : (
-//                                                     <FaRegStar />
-//                                                   )}
-//                                                 </Link>
-//                                               ) : (
-//                                                 <Link
-//                                                   to="/Dealer_login"
-//                                                   data-tooltip-id="my-tooltip-12"
-//                                                 >
+//                                     <div className="edit">
+//                                       <div>
+//                                         {userType == 1 ? (
+//                                           <>
+//                                             {email ? (
+//                                               <Link
+//                                                 to="#"
+//                                                 data-tooltip-id="my-tooltip-12"
+//                                                 onClick={() => {
+//                                                   if (
+//                                                     DealerCollection?.find(
+//                                                       (item) =>
+//                                                         item.id === product.id
+//                                                     )
+//                                                   ) {
+//                                                     removefromdealerwishlist(
+//                                                       product
+//                                                     );
+//                                                   } else {
+//                                                     AddToDealerWishlist(
+//                                                       product
+//                                                     );
+//                                                   }
+//                                                 }}
+//                                               >
+//                                                 {DealerCollection?.find(
+//                                                   (item) =>
+//                                                     item.id === product.id
+//                                                 ) ? (
+//                                                   <FaStar />
+//                                                 ) : (
 //                                                   <FaRegStar />
-//                                                 </Link>
-//                                               )}
-//                                             </>
-//                                           ) : (
-//                                             <>
-//                                               {Phone ? (
-//                                                 <Link
-//                                                   to="#"
-//                                                   data-tooltip-id="my-tooltip-9"
-//                                                   onClick={() => {
-//                                                     if (
-//                                                       UsercartItems?.find(
-//                                                         (item) =>
-//                                                           item.id === product.id
-//                                                       )
-//                                                     ) {
-//                                                       removeFromWishList(
-//                                                         product
-//                                                       );
-//                                                     } else {
-//                                                       addToUserWishList(
-//                                                         product
-//                                                       );
-//                                                     }
-//                                                   }}
-//                                                 >
-//                                                   {UsercartItems?.find(
-//                                                     (item) =>
-//                                                       item.id === product.id
-//                                                   ) ? (
-//                                                     <FcLike />
-//                                                   ) : (
-//                                                     <BsHeart />
-//                                                   )}
-//                                                 </Link>
-//                                               ) : (
-//                                                 <Link
-//                                                   to="/login"
-//                                                   data-tooltip-id="my-tooltip-9"
-//                                                 >
+//                                                 )}
+//                                               </Link>
+//                                             ) : (
+//                                               <Link
+//                                                 to="/Dealer_login"
+//                                                 data-tooltip-id="my-tooltip-12"
+//                                               >
+//                                                 <FaRegStar />
+//                                               </Link>
+//                                             )}
+//                                           </>
+//                                         ) : (
+//                                           <>
+//                                             {Phone ? (
+//                                               <Link
+//                                                 to="#"
+//                                                 data-tooltip-id="my-tooltip-9"
+//                                                 onClick={() => {
+//                                                   if (
+//                                                     UsercartItems?.find(
+//                                                       (item) =>
+//                                                         item.id === product.id
+//                                                     )
+//                                                   ) {
+//                                                     removeFromWishList(product);
+//                                                   } else {
+//                                                     addToUserWishList(product);
+//                                                   }
+//                                                 }}
+//                                               >
+//                                                 {UsercartItems?.find(
+//                                                   (item) =>
+//                                                     item.id === product.id
+//                                                 ) ? (
+//                                                   <FcLike />
+//                                                 ) : (
 //                                                   <BsHeart />
-//                                                 </Link>
-//                                               )}
-//                                             </>
-//                                           )}
-//                                         </div>
+//                                                 )}
+//                                               </Link>
+//                                             ) : (
+//                                               <Link
+//                                                 to="/login"
+//                                                 data-tooltip-id="my-tooltip-9"
+//                                               >
+//                                                 <BsHeart />
+//                                               </Link>
+//                                             )}
+//                                           </>
+//                                         )}
 //                                       </div>
-//                                       <div className="row">
-//                                         <div className="col-md-6">
-//                                           <div className="product_details">
-//                                             <h4>{product?.name}</h4>
-//                                           </div>
-//                                         </div>
-//                                         <div className="col-md-6">
-//                                           <div className="product_details text-end">
-//                                             <p>{product?.code}</p>
-//                                           </div>
-//                                         </div>
-//                                       </div>
-//                                       <div className="product_details">
-//                                         <h5>
-//                                           ₹
-//                                           {product?.total_price_18k?.toLocaleString(
-//                                             "en-US"
-//                                           )}
-//                                         </h5>
-//                                       </div>
-//                                     </Link>
-//                                   </div>
-//                                 );
-//                               })}
+//                                     </div>
+//                                     <div className="product_details d-flex justify-content-between">
+//                                       <h4>{product.name}</h4>
+//                                       <h4>
+//                                         <b>{product.code}</b>
+//                                       </h4>
+//                                     </div>
+//                                     <div className="product_details">
+//                                       <h5>
+//                                         ₹
+//                                         {product?.total_price_18k?.toLocaleString(
+//                                           "en-US"
+//                                         )}
+//                                       </h5>
+//                                     </div>
+//                                   </Link>
+//                                 </div>
+//                               );
+//                             })}
 //                           </div>
 //                         </>
 //                       ) : (
@@ -694,63 +686,6 @@
 //                           <p>No products available.</p>
 //                         </div>
 //                       )}
-//                       <div className="paginationArea">
-//                         <nav aria-label="navigation" className="">
-//                           <ul className="pagination">
-//                             <li className="page-item previous">
-//                               <a
-//                                 className="page-link"
-//                                 onClick={() => {
-//                                   paginationPrev();
-//                                 }}
-//                               >
-//                                 <svg
-//                                   xmlns="http://www.w3.org/2000/svg"
-//                                   width="24"
-//                                   height="24"
-//                                   viewBox="0 0 24 24"
-//                                   fill="none"
-//                                   stroke="currentColor"
-//                                   stroke-width="2"
-//                                   stroke-linecap="round"
-//                                   stroke-linejoin="round"
-//                                   class="feather feather-chevron-left"
-//                                 >
-//                                   <polyline points="15 18 9 12 15 6"></polyline>
-//                                 </svg>
-//                                 <span>Prev</span>
-//                               </a>
-//                             </li>
-
-//                             {paginationArea()}
-
-//                             <li className="page-item next">
-//                               <a
-//                                 onClick={() => {
-//                                   paginationNext();
-//                                 }}
-//                                 className="page-link"
-//                               >
-//                                 <span>Next</span>
-//                                 <svg
-//                                   xmlns="http://www.w3.org/2000/svg"
-//                                   width="24"
-//                                   height="24"
-//                                   viewBox="0 0 24 24"
-//                                   fill="none"
-//                                   stroke="currentColor"
-//                                   stroke-width="2"
-//                                   stroke-linecap="round"
-//                                   stroke-linejoin="round"
-//                                   class="feather feather-chevron-right"
-//                                 >
-//                                   <polyline points="9 18 15 12 9 6"></polyline>
-//                                 </svg>
-//                               </a>
-//                             </li>
-//                           </ul>
-//                         </nav>
-//                       </div>
 //                     </>
 //                   ) : (
 //                     <>
@@ -759,7 +694,7 @@
 //                           <div className="row">
 //                             {filterData?.map((data) => {
 //                               return (
-//                                 <div className="col-md-4">
+//                                 <div className="col-md-3">
 //                                   <Link
 //                                     to={`/shopdetails/${data.id}`}
 //                                     className="product_data"
@@ -860,17 +795,11 @@
 //                                       </div>
 //                                     </div>
 
-//                                     <div className="row">
-//                                       <div className="col-md-6">
-//                                         <div className="product_details">
-//                                           <h4>{data?.name}</h4>
-//                                         </div>
-//                                       </div>
-//                                       <div className="col-md-6">
-//                                         <div className="product_details text-end">
-//                                           <p>{data?.code}</p>
-//                                         </div>
-//                                       </div>
+//                                     <div className="product_details d-flex justify-content-between">
+//                                       <h4>{data?.name}</h4>
+//                                       <h4>
+//                                         <b>{data?.code}</b>
+//                                       </h4>
 //                                     </div>
 //                                     <div className="product_details">
 //                                       <h5>
@@ -884,6 +813,127 @@
 //                                 </div>
 //                               );
 //                             })}
+//                           </div>
+//                           <div className="pt-5">
+//                             {totalPages > 1 && (
+//                               <div className="paginationArea">
+//                                 <nav aria-label="navigation">
+//                                   <ul className="pagination">
+//                                     {/* Previous Page Button */}
+//                                     <li
+//                                       className={`page-item ${
+//                                         pagination.currentPage === 1
+//                                           ? "disabled"
+//                                           : ""
+//                                       }`}
+//                                       style={{
+//                                         display:
+//                                           pagination.currentPage === 1
+//                                             ? "none"
+//                                             : "block",
+//                                       }}
+//                                     >
+//                                       <a
+//                                         className="page-link"
+//                                         onClick={paginationPrev}
+//                                       >
+//                                         <svg
+//                                           xmlns="http://www.w3.org/2000/svg"
+//                                           width="24"
+//                                           height="24"
+//                                           viewBox="0 0 24 24"
+//                                         >
+//                                           <polyline points="15 18 9 12 15 6"></polyline>
+//                                         </svg>
+//                                         Prev
+//                                       </a>
+//                                     </li>
+
+//                                     {/* Display pages with ellipses */}
+//                                     {Array.from({ length: totalPages }).map(
+//                                       (_, index) => {
+//                                         const pageNumber = index + 1;
+//                                         const isCurrentPage =
+//                                           pagination.currentPage === pageNumber;
+
+//                                         // Display first and last pages
+//                                         if (
+//                                           pageNumber === 1 ||
+//                                           pageNumber === totalPages ||
+//                                           (pageNumber >=
+//                                             pagination.currentPage - 1 &&
+//                                             pageNumber <=
+//                                               pagination.currentPage + 1)
+//                                         ) {
+//                                           return (
+//                                             <li
+//                                               key={pageNumber}
+//                                               className={`page-item ${
+//                                                 isCurrentPage ? "active" : ""
+//                                               }`}
+//                                               onClick={() =>
+//                                                 paginationPage(pageNumber)
+//                                               }
+//                                             >
+//                                               <a className="page-link">
+//                                                 {pageNumber}
+//                                               </a>
+//                                             </li>
+//                                           );
+//                                         }
+
+//                                         // Display ellipses
+//                                         if (
+//                                           index === 1 ||
+//                                           index === totalPages - 2
+//                                         ) {
+//                                           return (
+//                                             <li
+//                                               key={pageNumber}
+//                                               className="page-item disabled"
+//                                             >
+//                                               <a className="page-link">...</a>
+//                                             </li>
+//                                           );
+//                                         }
+
+//                                         return null;
+//                                       }
+//                                     )}
+
+//                                     {/* Next Page Button */}
+//                                     <li
+//                                       className={`page-item ${
+//                                         pagination.currentPage === totalPages
+//                                           ? "disabled"
+//                                           : ""
+//                                       }`}
+//                                       style={{
+//                                         display:
+//                                           pagination.currentPage === totalPages
+//                                             ? "none"
+//                                             : "block",
+//                                       }}
+//                                     >
+//                                       <a
+//                                         className="page-link"
+//                                         onClick={paginationNext}
+//                                       >
+//                                         Next
+//                                         <svg
+//                                           xmlns="http://www.w3.org/2000/svg"
+//                                           width="24"
+//                                           height="24"
+//                                           viewBox="0 0 24 24"
+//                                         >
+//                                           <polyline points="9 18 15 12 9 6"></polyline>
+//                                         </svg>
+//                                       </a>
+//                                     </li>
+//                                   </ul>
+//                                 </nav>
+//                               </div>
+//                             )}
 //                           </div>
 //                         </>
 //                       ) : (

@@ -295,7 +295,7 @@ const Navbar = (props) => {
                               <Link to="/dealer_profile">My Profile</Link>
                             </li>
                             <li>
-                              <Link to="/dealer_orders">My Orders</Link>
+                              <Link to="/my_orders">My Orders</Link>
                             </li>
                             <li>
                               <Link to="/dealer_wishlist">My Selections</Link>

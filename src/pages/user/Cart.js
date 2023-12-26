@@ -423,9 +423,13 @@ const Cart = () => {
     setRemovingItemId(id);
     UserService.RemovetoCart({ cart_id: id })
       .then((res) => {
+        console.log(res?.data?.total_quantity);
         if (res.status === true) {
           UserCartItems();
           toast.success("remove design from cart successfully");
+          if (res?.data?.total_quantity == 0) {
+            localStorage.removeItem("savedDiscount");
+          }
         }
       })
       .catch((err) => {
@@ -520,7 +524,7 @@ const Cart = () => {
             <>
               <div className="h-100 d-flex justify-content-center">
                 <ReactLoading
-                  type={"spokes"}
+                  type={"spin"}
                   color={"#053961"}
                   height={"20%"}
                   width={"10%"}
