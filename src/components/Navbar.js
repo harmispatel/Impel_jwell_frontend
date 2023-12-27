@@ -22,17 +22,13 @@ const Navbar = (props) => {
   const navigate = useNavigate();
   let tagIds = searchParams.getAll("tag_id");
   tagIds =
-    Array.isArray(tagIds) && tagIds?.length > 0
-      ? tagIds[0].split(",")
-      : tagIds
-      ? tagIds
-      : [];
+    Array.isArray(tagIds) && tagIds.length > 0 ? tagIds[0].split(",") : [];
   tagIds = tagIds.map((i) => parseFloat(i));
-  const currentRoute = location.pathname;
 
   const Dealer = localStorage.getItem("token");
   const DealerEmail = localStorage.getItem("email");
   const Phone = localStorage.getItem("phone");
+  const currentRoute = location.pathname;
 
   const [colorChange, setColorchange] = useState(false);
   const [isLoggedOut, setIsLoggedOut] = useState(false);
@@ -44,7 +40,7 @@ const Navbar = (props) => {
   const [tag, setTag] = useState([]);
 
   const handleTag = (e) => {
-    setTag([...tag, parseFloat(e.target.value)]);
+    setTag([parseFloat(e.target.value)]);
   };
 
   const changeNavbarColor = () => {
@@ -208,11 +204,11 @@ const Navbar = (props) => {
                               <div className="tags-links">
                                 <Link
                                   to={`/shop?tag_id=${
-                                    tagIds?.includes(multitags?.id)
+                                    tagIds.includes(multitags.id)
                                       ? tagIds
-                                      : [...tagIds, multitags?.id]
+                                      : multitags.id
                                   }`}
-                                  onClick={(e) => handleTag(e)}
+                                  onClick={handleTag}
                                 >
                                   {multitags.name}
                                 </Link>

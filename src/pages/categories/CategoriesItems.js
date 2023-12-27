@@ -60,7 +60,7 @@ const CategoriesItems = () => {
     });
   };
 
-  const totalPages = Math.round(paginate?.total_records / 20);
+  const totalPages = Math.ceil(paginate?.total_records / 20);
 
   const [pagination, setPagination] = useState({
     currentPage: 1,

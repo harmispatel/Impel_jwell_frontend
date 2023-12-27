@@ -125,7 +125,7 @@ const Shop = ({ product }) => {
 
   const handleSelectTag = (selectedTags) => {
     setIsLoading(true);
-    setTag(selectedTags ? [selectedTags?.value] : []);
+    setTag(selectedTags ? [selectedTags.value] : []);
     setSelectedTag(selectedTags);
   };
 
@@ -147,6 +147,21 @@ const Shop = ({ product }) => {
     tagIds = tagIds.map((i) => parseFloat(i));
     setTag(tagIds);
   }, [location.search]);
+
+  // useEffect(() => {
+  //   const searchParams = new URLSearchParams(location.search);
+  //   let tagIds = searchParams.getAll("tag_id");
+  //   setIsLoading(true);
+  //   tagIds = Array.isArray(tagIds) && tagIds.length > 0 ? tagIds[0].split(",") : [];
+  //   tagIds = tagIds.map((i) => parseFloat(i));
+
+  //   const matchedTag = filterTag.find(tag => tag.id === tagIds[0]);
+  //   if (matchedTag) {
+  //     setSelectedTag({ value: matchedTag.id, label: matchedTag.name });
+  //   }
+
+  //   setTag(tagIds);
+  // }, [location.search, filterTag]);
 
   const FilterData = (offset = 0) => {
     ShopServices.allfilterdesigns({
@@ -325,7 +340,7 @@ const Shop = ({ product }) => {
   };
 
   // PAGINATION FUNCTION
-  const totalPages = Math.round(paginate?.total_records / 20);
+  const totalPages = Math.ceil(paginate?.total_records / 20);
 
   const [pagination, setPagination] = useState({
     currentPage: 1,
@@ -401,7 +416,7 @@ const Shop = ({ product }) => {
                 <Select
                   placeholder="Shop by category"
                   isClearable={true}
-                  isSearchable={false}
+                  isSearchable={true}
                   value={selectedCategory}
                   options={categoryData.map((data) => ({
                     value: data?.id,
@@ -414,7 +429,7 @@ const Shop = ({ product }) => {
                 <Select
                   placeholder="Shop by Gender"
                   isClearable
-                  isSearchable={false}
+                  isSearchable={true}
                   value={selectedGender}
                   options={genderData?.map((data) => ({
                     value: data?.id,
@@ -427,7 +442,7 @@ const Shop = ({ product }) => {
                 <Select
                   placeholder="Shop by Tag"
                   isClearable
-                  isSearchable={false}
+                  isSearchable={true}
                   value={selectedTag}
                   options={filterTag?.map((data) => ({
                     value: data?.id,
@@ -482,13 +497,13 @@ const Shop = ({ product }) => {
           <div className="row">
             <div className="col-md-12">
               {isLoading ? (
-                <div className="h-100 d-flex justify-content-center">
+                <div className="d-flex justify-content-center pt-5">
                   <ReactLoading
                     type={"spin"}
                     color={"#053961"}
                     height={"20%"}
                     width={"10%"}
-                    className="loader"
+                    className="loader pt-5"
                   />
                 </div>
               ) : (

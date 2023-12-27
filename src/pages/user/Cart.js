@@ -52,7 +52,7 @@ const Cart = () => {
   const [error, setError] = useState({
     nameErr: "",
     emailErr: "",
-    phoneErr: "",
+
     addressErr: "",
     pincodeErr: "",
     stateErr: "",
@@ -454,6 +454,7 @@ const Cart = () => {
           "Pancard is required for your total amount is more than 2 lakh or above"
         );
         setShowEdit(true);
+        setSpinner(false);
       } else if (totalPrice < 200000) {
         UserService.Placeorder({
           user_id: user_id,
@@ -580,9 +581,9 @@ const Cart = () => {
                                       </Link>
                                     </div>
 
-                                    <div className="">
+                                    <div className="mt-md-2">
                                       <span>
-                                        Gold Color :
+                                        Gold Color : &nbsp;
                                         <b>
                                           {goldColor[data.gold_color]} &nbsp;
                                           {data.gold_type}
@@ -590,7 +591,7 @@ const Cart = () => {
                                       </span>
                                     </div>
 
-                                    <div className="">
+                                    <div className="mt-md-2">
                                       <text className="h6">
                                         ₹{price?.toLocaleString("en-US")}
                                       </text>
@@ -692,9 +693,8 @@ const Cart = () => {
                         </div>
                         {show && (
                           <div className="d-flex justify-content-between">
-                            <p className="mb-2">
-                              Dealer discount
-                              <code>({code.dealer_code})</code>:
+                            <p className="mb-2 text-success">
+                              Dealer discount ({code.dealer_code})
                               <p>
                                 {code.discount_type === "percentage" ? (
                                   <>(-{code.discount_value}%)</>
@@ -703,7 +703,7 @@ const Cart = () => {
                                 )}
                               </p>
                             </p>
-                            <p className="mb-2 text-success">
+                            <p className="mb-2 text-success fw-bold">
                               {code.discount_type === "percentage"
                                 ? `- ₹${(
                                     (SubCharge() * code.discount_value) /
@@ -781,7 +781,7 @@ const Cart = () => {
                         </h6>
                       </div>
                       <div className="mt-3 mb-3 text-center">
-                        <Link to="/shop" className="btn btn-light">
+                        <Link to="/shop" className="btn btn-outline-dark">
                           Back to shop
                         </Link>
                       </div>
@@ -855,7 +855,6 @@ const Cart = () => {
                         onChange={(e) => handleChange(e)}
                         placeholder="Enter Your Phone"
                       />
-                      <span className="text-danger">{error.phoneErr}</span>
                     </Form.Group>
                   </div>
 

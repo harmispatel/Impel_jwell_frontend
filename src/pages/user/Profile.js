@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import profileService from "../../services/Auth";
 import { Button, Col, Form, Modal } from "react-bootstrap";
 import toast from "react-hot-toast";
+import ReactLoading from "react-loading";
+import profileService from "../../services/Auth";
 
 const Profile = () => {
   const phone = localStorage.getItem("phone");
@@ -9,11 +10,10 @@ const Profile = () => {
   const [show, setShow] = useState(false);
   const [selectedData, setSelectedData] = useState([]);
   const [profileData, setProfileData] = useState([]);
-  const [profileImg, setProfileImg] = useState({ preview: "", raw: "" });
-  const [image, setImage] = useState(null);
   const [city, setcity] = useState();
   const [shipping_city, setShipping_city] = useState();
   const [isChecked, setIsChecked] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [userData, setUserData] = useState({
     name: "",
     email: "",
@@ -35,7 +35,6 @@ const Profile = () => {
   const [error, setError] = useState({
     nameErr: "",
     emailErr: "",
-    phoneErr: "",
     addressErr: "",
     pincodeErr: "",
     stateErr: "",
@@ -52,6 +51,7 @@ const Profile = () => {
     setShow(false);
     setShowEdit(false);
   };
+
   const handleImageChange = (e) => {
     const fileInput = document.getElementById("upload");
     const file = e.target.files[0];
@@ -83,7 +83,6 @@ const Profile = () => {
         .then((res) => {
           if (res.status === true) {
             window.location.reload(false);
-
             getProfile();
             toast.success(res.message);
           } else {
@@ -96,18 +95,10 @@ const Profile = () => {
           console.log(error);
         });
     };
-
     if (file) {
       reader.readAsDataURL(file);
     }
   };
-
-  useEffect(() => {
-    const storedImage = localStorage.getItem("userImage");
-    if (storedImage) {
-      setImage(storedImage);
-    }
-  }, []);
 
   const handleCheckboxChange = (event) => {
     setIsChecked(event.target.checked);
@@ -141,9 +132,11 @@ const Profile = () => {
         res.data.state.id && fetchCity(res.data.state.id);
         res.data.shipping_state.id &&
           fetchShippingCity(res.data.shipping_state.id);
+        setIsLoading(false);
       })
       .catch((err) => {
         console.log(err);
+        setIsLoading(false);
       });
   };
 
@@ -157,6 +150,7 @@ const Profile = () => {
         console.log(err);
       });
   };
+
   const fetchShippingCity = async (cityId) => {
     await profileService
       .getCity({ state_id: cityId })
@@ -167,6 +161,7 @@ const Profile = () => {
         console.log(err);
       });
   };
+
   const handleEditChange = (e) => {
     const { name, value } = e.target;
     if (name === "state") {
@@ -187,18 +182,19 @@ const Profile = () => {
         [name]: value,
       });
     }
-    if (e.target.files?.length) {
-      setProfileImg({
-        preview: URL.createObjectURL(e.target.files[0]),
-        raw: e.target.files[0],
-      });
-    }
   };
-  const pincodeRegex = /^\d{6}$/;
+
   const handleEdit = async (data) => {
     setShowEdit(true);
     setSelectedData(data);
   };
+
+  const pincodeRegex = /^\d{6}$/;
+  const isValidPan = (panNumber) => {
+    const panRegex = /[A-Z]{5}[0-9]{4}[A-Z]{1}/;
+    return panRegex.test(panNumber);
+  };
+
   const validateForm = () => {
     let isValid = true;
     const validationErrors = { ...error };
@@ -224,12 +220,24 @@ const Profile = () => {
       validationErrors.emailErr = "";
     }
 
+    if (
+      (userData.pan_no && !isValidPan(userData.pan_no)) ||
+      userData.pan_no?.length === 11
+    ) {
+      validationErrors.pancardErr =
+        "Invalid PAN card format or not in UpperCase";
+      isValid = false;
+    } else {
+      validationErrors.pancardErr = "";
+    }
+
     if (!userData.address.trim()) {
       validationErrors.addressErr = "Address is required";
       isValid = false;
     } else {
       validationErrors.addressErr = "";
     }
+
     if (!userData.pincode.trim()) {
       validationErrors.pincodeErr = "Pincode is required";
       isValid = false;
@@ -353,6 +361,7 @@ const Profile = () => {
     } else {
     }
   };
+
   useEffect(() => {
     setIsChecked(profileData?.address_same_as_company === 1);
   }, [profileData?.address_same_as_company]);
@@ -365,187 +374,201 @@ const Profile = () => {
     <section className="profile">
       <div className="container">
         <div className="row">
-          <div className="col-xl-4">
-            <div className="card mb-4 mb-xl-0">
-              <div>
-                <div className="card-header">Profile Picture</div>
-                <div className="upload-btn">
-                  <div className="button-wrap py-3"></div>
-                </div>
-                <>
-                  {profileData?.profile && (
+          {isLoading ? (
+            <div className="h-100 d-flex justify-content-center">
+              <ReactLoading
+                type={"spin"}
+                color={"#053961"}
+                height={"10%"}
+                width={"10%"}
+                className="loader"
+              />
+            </div>
+          ) : (
+            <>
+              <div className="col-xl-4">
+                <div className="card mb-4 mb-xl-0">
+                  <div>
+                    <div className="card-header">Profile Picture</div>
+                    <div className="upload-btn">
+                      <div className="button-wrap py-3"></div>
+                    </div>
                     <>
-                      <div className="imagesss pb-4">
-                        <div className="profile-image">
-                          <form
-                            id="user-profile-form"
-                            method="POST"
-                            encType="multipart/form-data"
-                          >
-                            <input
-                              type="hidden"
-                              name="user_id"
-                              value={profileData?.id}
-                            />
-                            <input
-                              id="upload"
-                              name="user_image"
-                              type="file"
-                              accept="image/*"
-                              onChange={handleImageChange}
-                              style={{ display: "none" }}
-                            />
+                      {profileData?.profile && (
+                        <>
+                          <div className="imagesss pb-4">
+                            <div className="profile-image">
+                              <form
+                                id="user-profile-form"
+                                method="POST"
+                                encType="multipart/form-data"
+                              >
+                                <input
+                                  type="hidden"
+                                  name="user_id"
+                                  value={profileData?.id}
+                                />
+                                <input
+                                  id="upload"
+                                  name="user_image"
+                                  type="file"
+                                  accept="image/*"
+                                  onChange={handleImageChange}
+                                  style={{ display: "none" }}
+                                />
 
-                            <label
-                              className="new-button"
-                              htmlFor="upload"
-                              style={{
-                                cursor: "pointer",
-                                display: "inline-block",
-                                border: "1px solid #ccc",
-                                borderRadius: "5px",
-                              }}
-                            >
-                              <img
-                                src={profileData?.profile}
-                                alt="Uploaded"
-                                className="uploaded-image"
-                              />
-                            </label>
-                          </form>
+                                <label
+                                  className="new-button"
+                                  htmlFor="upload"
+                                  style={{
+                                    cursor: "pointer",
+                                    display: "inline-block",
+                                    border: "1px solid #ccc",
+                                    borderRadius: "5px",
+                                  }}
+                                >
+                                  <img
+                                    src={profileData?.profile}
+                                    alt="Uploaded"
+                                    className="uploaded-image"
+                                  />
+                                </label>
+                              </form>
+                            </div>
+                          </div>
+                        </>
+                      )}
+                    </>
+                  </div>
+                </div>
+              </div>
+              <div className="col-xl-8">
+                <div className="card mb-4">
+                  <div className="card-header">Account Details</div>
+                  <div className="card-body">
+                    <form>
+                      <div className="row gx-3 mb-3">
+                        <div className="col-md-6">
+                          <label className="small mb-1" for="inputFirstName">
+                            First name
+                          </label>
+                          <input
+                            className="form-control"
+                            id="inputFirstName"
+                            type="text"
+                            value={profileData.name}
+                            disabled
+                          />
+                        </div>
+
+                        <div className="col-md-6">
+                          <label className="small mb-1" for="inputLastName">
+                            Email Id
+                          </label>
+                          <input
+                            className="form-control"
+                            id="inputLastName"
+                            type="text"
+                            value={profileData.email}
+                            disabled
+                          />
                         </div>
                       </div>
-                    </>
-                  )}
-                </>
+
+                      <div className="row gx-3 mb-3">
+                        <div className="col-md-6">
+                          <label className="small mb-1" for="inputOrgName">
+                            Mobile Number
+                          </label>
+                          <input
+                            className="form-control"
+                            id="inputOrgName"
+                            type="text"
+                            value={profileData.phone}
+                            disabled
+                          />
+                        </div>
+
+                        <div className="col-md-6">
+                          <label className="small mb-1" for="inputLocation">
+                            Billing Address
+                          </label>
+                          <input
+                            className="form-control"
+                            id="inputLocation"
+                            type="text"
+                            value={profileData.address}
+                            disabled
+                          />
+                        </div>
+                      </div>
+                      <div className="row gx-3 mb-3">
+                        <div className="col-md-6">
+                          <label className="small mb-1" for="inputOrgName">
+                            City
+                          </label>
+                          <input
+                            className="form-control"
+                            id="inputOrgName"
+                            type="text"
+                            value={profileData.city_name}
+                            disabled
+                          />
+                        </div>
+
+                        <div className="col-md-6">
+                          <label className="small mb-1" for="inputLocation">
+                            State
+                          </label>
+                          <input
+                            className="form-control"
+                            id="inputLocation"
+                            type="text"
+                            value={profileData.state_name}
+                            disabled
+                          />
+                        </div>
+                      </div>
+                      <div className="row gx-3 mb-3">
+                        <div className="col-md-6">
+                          <label className="small mb-1" for="inputOrgName">
+                            Pincode
+                          </label>
+                          <input
+                            className="form-control"
+                            id="inputOrgName"
+                            type="text"
+                            value={profileData?.pincode}
+                            disabled
+                          />
+                        </div>
+
+                        <div className="col-md-6">
+                          <label className="small mb-1" for="inputLocation">
+                            Pan Number
+                          </label>
+                          <input
+                            className="form-control"
+                            id="inputLocation"
+                            type="text"
+                            value={profileData.pan_no}
+                            disabled
+                          />
+                        </div>
+                      </div>
+                      <button
+                        className="btn btn-primary"
+                        type="button"
+                        onClick={() => handleEdit(profileData)}
+                      >
+                        Edit profile
+                      </button>
+                    </form>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-          <div className="col-xl-8">
-            <div className="card mb-4">
-              <div className="card-header">Account Details</div>
-              <div className="card-body">
-                <form>
-                  <div className="row gx-3 mb-3">
-                    <div className="col-md-6">
-                      <label className="small mb-1" for="inputFirstName">
-                        First name
-                      </label>
-                      <input
-                        className="form-control"
-                        id="inputFirstName"
-                        type="text"
-                        value={profileData.name}
-                        disabled
-                      />
-                    </div>
-
-                    <div className="col-md-6">
-                      <label className="small mb-1" for="inputLastName">
-                        Email Id
-                      </label>
-                      <input
-                        className="form-control"
-                        id="inputLastName"
-                        type="text"
-                        value={profileData.email}
-                        disabled
-                      />
-                    </div>
-                  </div>
-
-                  <div className="row gx-3 mb-3">
-                    <div className="col-md-6">
-                      <label className="small mb-1" for="inputOrgName">
-                        Mobile Number
-                      </label>
-                      <input
-                        className="form-control"
-                        id="inputOrgName"
-                        type="text"
-                        value={profileData.phone}
-                        disabled
-                      />
-                    </div>
-
-                    <div className="col-md-6">
-                      <label className="small mb-1" for="inputLocation">
-                        Billing Address
-                      </label>
-                      <input
-                        className="form-control"
-                        id="inputLocation"
-                        type="text"
-                        value={profileData.address}
-                        disabled
-                      />
-                    </div>
-                  </div>
-                  <div className="row gx-3 mb-3">
-                    <div className="col-md-6">
-                      <label className="small mb-1" for="inputOrgName">
-                        City
-                      </label>
-                      <input
-                        className="form-control"
-                        id="inputOrgName"
-                        type="text"
-                        value={profileData.city_name}
-                        disabled
-                      />
-                    </div>
-
-                    <div className="col-md-6">
-                      <label className="small mb-1" for="inputLocation">
-                        State
-                      </label>
-                      <input
-                        className="form-control"
-                        id="inputLocation"
-                        type="text"
-                        value={profileData.state_name}
-                        disabled
-                      />
-                    </div>
-                  </div>
-                  <div className="row gx-3 mb-3">
-                    <div className="col-md-6">
-                      <label className="small mb-1" for="inputOrgName">
-                        Pincode
-                      </label>
-                      <input
-                        className="form-control"
-                        id="inputOrgName"
-                        type="text"
-                        value={profileData?.pincode}
-                        disabled
-                      />
-                    </div>
-
-                    <div className="col-md-6">
-                      <label className="small mb-1" for="inputLocation">
-                        Pan Number
-                      </label>
-                      <input
-                        className="form-control"
-                        id="inputLocation"
-                        type="text"
-                        value={profileData.pan_no}
-                        disabled
-                      />
-                    </div>
-                  </div>
-                  <button
-                    className="btn btn-primary"
-                    type="button"
-                    onClick={() => handleEdit(profileData)}
-                  >
-                    Edit profile
-                  </button>
-                </form>
-              </div>
-            </div>
-          </div>
+            </>
+          )}
         </div>
       </div>
 
@@ -605,7 +628,6 @@ const Profile = () => {
                     onChange={(e) => handleEditChange(e)}
                     placeholder="Enter Your Phone"
                   />
-                  <span className="text-danger">{error.phoneErr}</span>
                 </Form.Group>
               </div>
 
@@ -618,6 +640,9 @@ const Profile = () => {
                     onChange={(e) => handleEditChange(e)}
                     placeholder="Enter Your Pancard number"
                   />
+                  {error.pancardErr && (
+                    <span className="text-danger">{error.pancardErr}</span>
+                  )}
                 </Form.Group>
               </div>
 

@@ -255,7 +255,7 @@ const ShopDetails = () => {
                 thirdName="Shopdetails"
               />
               {isLoading ? (
-                <div className="h-100 d-flex justify-content-center">
+                <div className="h-100 d-flex justify-content-center pt-5">
                   <ReactLoading
                     type={"spin"}
                     color={"#053961"}
