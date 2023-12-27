@@ -4,11 +4,13 @@ import DealerWishlist from "../../services/Dealer/Collection";
 import { Link } from "react-router-dom";
 import ReactLoading from "react-loading";
 import toast from "react-hot-toast";
+import { CgSpinner } from "react-icons/cg";
 
 const DealerWishList = () => {
   const DealerEmail = localStorage.getItem("email");
   const [checkList, setCheckList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [removingItemId, setRemovingItemId] = useState(null);
 
   const collectionCheck = () => {
     DealerWishlist.ListCollection({ email: DealerEmail })
@@ -23,6 +25,7 @@ const DealerWishList = () => {
   };
 
   const removeFromWishList = (product) => {
+    setRemovingItemId(product);
     DealerWishlist.removetoWishlist({ email: DealerEmail, design_id: product })
       .then((res) => {
         if (res.success === true) {
@@ -32,6 +35,9 @@ const DealerWishList = () => {
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        setRemovingItemId(null);
       });
   };
 
@@ -62,24 +68,29 @@ const DealerWishList = () => {
                     return (
                       <div className="wishlist_card">
                         <div className="wishlist_img">
-                          <img src={product.image} className="w-100" />
+                          <img src={product?.image} className="w-100" />
                         </div>
                         <div className="wishlist_info">
                           <Link
-                            to={`/shopdetails/${product.id}`}
+                            to={`/shopdetails/${product?.id}`}
                             className="product_data"
                           >
-                            <h3>{product.name}</h3>
+                            <h3>{product?.name}</h3>
                           </Link>
                         </div>
                         <div className="move_bag_btn d-flex">
                           <button
                             className="btn w-100"
-                            onClick={() => removeFromWishList(product.id)}
+                            onClick={() => removeFromWishList(product?.id)}
                           >
+                            {removingItemId === product?.id && (
+                              <CgSpinner
+                                size={20}
+                                className="animate_spin me-2"
+                              />
+                            )}
                             Remove
                           </button>
-                          {/* <button className="btn w-100">Move To Bag</button> */}
                         </div>
                       </div>
                     );

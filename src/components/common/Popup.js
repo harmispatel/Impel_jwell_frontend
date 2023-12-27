@@ -50,7 +50,6 @@ const Popup = () => {
           />
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary">Login</Button>
           <Link to="/login" className="btn btn-primary">
             Login
           </Link>

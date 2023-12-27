@@ -1,9 +1,7 @@
-import React from "react";
-import { useState } from "react";
-import categoryDetail from "../../services/Shop";
+import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { useEffect } from "react";
 import BreadCrumb from "../../components/common/BreadCrumb";
+import categoryDetail from "../../services/Shop";
 
 const CategoriesDetail = () => {
   const paramId = useParams();
@@ -50,9 +48,9 @@ const CategoriesDetail = () => {
                     className="text-decoration-none"
                     style={{ color: "#000" }}
                   >
-                    <img src={data.image} alt="" className="w-100" />
+                    <img src={data?.image} alt="" className="w-100" />
                     <div className="product_details">
-                      <h4>{data.name}</h4>
+                      <h4>{data?.name}</h4>
                     </div>
                   </Link>
                 </div>

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { BsHeart, BsSearch } from "react-icons/bs";
 import { FcLike } from "react-icons/fc";
 import { FaRegStar, FaStar } from "react-icons/fa";
@@ -17,6 +17,7 @@ import UserWishlist from "../../services/Auth";
 import { WishlistSystem } from "../../context/WishListContext";
 
 const Shop = ({ product }) => {
+  const navigate = useNavigate();
   const { dispatch: wishlistDispatch } = useContext(WishlistSystem);
   const { dispatch: wishlistRemoveDispatch } = useContext(WishlistSystem);
 
@@ -127,6 +128,15 @@ const Shop = ({ product }) => {
     setIsLoading(true);
     setTag(selectedTags ? [selectedTags.value] : []);
     setSelectedTag(selectedTags);
+
+    const updatedTagIds = selectedTags ? [selectedTags?.value] : [];
+
+    if (updatedTagIds.length > 0) {
+      navigate(`/shop?tag_id=${updatedTagIds}`);
+    } else {
+      AllData();
+      navigate("/shop");
+    }
   };
 
   const handleSliderChange = (e) => {
@@ -148,20 +158,10 @@ const Shop = ({ product }) => {
     setTag(tagIds);
   }, [location.search]);
 
-  // useEffect(() => {
-  //   const searchParams = new URLSearchParams(location.search);
-  //   let tagIds = searchParams.getAll("tag_id");
-  //   setIsLoading(true);
-  //   tagIds = Array.isArray(tagIds) && tagIds.length > 0 ? tagIds[0].split(",") : [];
-  //   tagIds = tagIds.map((i) => parseFloat(i));
-
-  //   const matchedTag = filterTag.find(tag => tag.id === tagIds[0]);
-  //   if (matchedTag) {
-  //     setSelectedTag({ value: matchedTag.id, label: matchedTag.name });
-  //   }
-
-  //   setTag(tagIds);
-  // }, [location.search, filterTag]);
+  // const matchedTag = filterTag.find((tag) => tag.id === tagIds[0]);
+  // setSelectedTag(
+  //   matchedTag ? { value: matchedTag.id, label: matchedTag.name } : null
+  // );
 
   const FilterData = (offset = 0) => {
     ShopServices.allfilterdesigns({
@@ -304,6 +304,8 @@ const Shop = ({ product }) => {
       DealerWishlist.addtoDealerWishlist({
         email: email,
         design_id: product?.id,
+        gold_color: goldColor,
+        gold_type: goldType,
       })
         .then((res) => {
           if (res.success === true) {

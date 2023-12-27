@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import BreadCrumb from "../../components/common/BreadCrumb";
-import DealerService from "../../services/Dealer/Cart";
 import { BsFillTrashFill } from "react-icons/bs";
-import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import DealerService from "../../services/Dealer/Cart";
 
 const DealerCart = () => {
   const Dealer = localStorage.getItem("email");
@@ -158,12 +157,12 @@ const DealerCart = () => {
                                 </div>
                               </div>
                               <div className="text-end">
-                                <Button
+                                <button
                                   className="btn btn-dark"
                                   onClick={() => RemoveCartItems(product.id)}
                                 >
                                   <BsFillTrashFill />
-                                </Button>
+                                </button>
                               </div>
                             </div>
                           </div>

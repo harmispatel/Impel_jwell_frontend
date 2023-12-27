@@ -1,15 +1,11 @@
 import React, { useEffect, useState } from "react";
-import categoriesService from "../../services/Home";
 import { Link } from "react-router-dom";
 import ReactLoading from "react-loading";
+import categoriesService from "../../services/Home";
 
 const Categories = () => {
   const [allCategories, setAllCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    categories();
-  }, []);
 
   const categories = () => {
     categoriesService
@@ -22,6 +18,10 @@ const Categories = () => {
         console.log(err);
       });
   };
+
+  useEffect(() => {
+    categories();
+  }, []);
 
   return (
     <section className="categories">
@@ -51,10 +51,10 @@ const Categories = () => {
                       style={{ color: "#000" }}
                     >
                       <div className="category_data py-2">
-                        <img src={data.image} className="w-100" />
+                        <img src={data?.image} className="w-100" />
                         <div className="product_details">
-                          <h4>{data.name}</h4>
-                          <p>{data.category_name}</p>
+                          <h4>{data?.name}</h4>
+                          <p>{data?.category_name}</p>
                         </div>
                       </div>
                     </Link>

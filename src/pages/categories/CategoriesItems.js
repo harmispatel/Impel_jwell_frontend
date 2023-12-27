@@ -1,11 +1,9 @@
-import React from "react";
-import { useEffect } from "react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import homeService from "../../services/Home";
-import categoryDetail from "../../services/Shop";
 import BreadCrumb from "../../components/common/BreadCrumb";
 import ReactLoading from "react-loading";
+import homeService from "../../services/Home";
+import categoryDetail from "../../services/Shop";
 
 const CategoriesItems = () => {
   const paramId = useParams();
