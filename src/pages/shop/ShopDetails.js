@@ -39,6 +39,7 @@ const ShopDetails = () => {
   const [goldType, setGoldType] = useState("18k");
   const [isLoading, setIsLoading] = useState(true);
   const [spinner, setSpinner] = useState(false);
+  const [spinner2, setSpinner2] = useState(false);
 
   const productData = async () => {
     const data = {
@@ -108,6 +109,7 @@ const ShopDetails = () => {
   }, []);
 
   const addToUserWishList = async (product) => {
+    setSpinner2(true);
     const payload = { id: product.id };
     Userservice.addtoWishlist({
       phone: localStorage.getItem("phone"),
@@ -130,22 +132,10 @@ const ShopDetails = () => {
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        setSpinner2(false);
       });
-  };
-
-  const openLightbox = (index) => {
-    setCurrentImageIndex(index);
-    setLightboxOpen(true);
-  };
-
-  const closeLightbox = () => {
-    setLightboxOpen(false);
-  };
-
-  const navigateLightbox = (step) => {
-    const newIndex =
-      (currentImageIndex + step + productImages.length) % productImages.length;
-    setCurrentImageIndex(newIndex);
   };
 
   const handleAddToCart = (product) => {
@@ -172,6 +162,21 @@ const ShopDetails = () => {
       .finally(() => {
         setSpinner(false);
       });
+  };
+
+  const openLightbox = (index) => {
+    setCurrentImageIndex(index);
+    setLightboxOpen(true);
+  };
+
+  const closeLightbox = () => {
+    setLightboxOpen(false);
+  };
+
+  const navigateLightbox = (step) => {
+    const newIndex =
+      (currentImageIndex + step + productImages.length) % productImages.length;
+    setCurrentImageIndex(newIndex);
   };
 
   const handleGoldColor = (goldType) => {
@@ -753,6 +758,7 @@ const ShopDetails = () => {
                                         onClick={() =>
                                           addToUserWishList(product)
                                         }
+                                        disabled={spinner}
                                       >
                                         {UserWishlistItems?.find(
                                           (item) => item?.id === product?.id
@@ -763,7 +769,15 @@ const ShopDetails = () => {
                                           </div>
                                         ) : (
                                           <div className="btn-success">
-                                            <FaRegHeart className="me-2" />
+                                            {spinner2 && (
+                                              <CgSpinner
+                                                size={20}
+                                                className="animate_spin me-2"
+                                              />
+                                            )}
+                                            {!spinner2 && (
+                                              <FaRegHeart className="me-2" />
+                                            )}
                                             WISHLIST
                                           </div>
                                         )}

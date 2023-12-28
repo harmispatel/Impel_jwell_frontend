@@ -556,9 +556,10 @@ const Profile = () => {
                           />
                         </div>
                       </div>
+
                       <button
-                        className="btn btn-primary"
                         type="button"
+                        class="custom-btn btn-2"
                         onClick={() => handleEdit(profileData)}
                       >
                         Edit profile

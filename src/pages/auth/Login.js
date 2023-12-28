@@ -227,7 +227,7 @@ const Login = () => {
                                         {spinner && (
                                           <CgSpinner
                                             size={20}
-                                            className="animate_spin me-2  text-center"
+                                            className="animate_spin text-center mx-2"
                                           />
                                         )}
                                         {spinner ? "" : "Login"}
@@ -262,7 +262,11 @@ const Login = () => {
                                       numInputs={6}
                                       renderSeparator={<span>-</span>}
                                       renderInput={(props) => (
-                                        <input {...props} />
+                                        <input
+                                          {...props}
+                                          type="tel"
+                                          pattern="[0-9]*"
+                                        />
                                       )}
                                     />
                                   </div>
@@ -275,10 +279,10 @@ const Login = () => {
                                       {spinner && (
                                         <CgSpinner
                                           size={20}
-                                          className="animate_spin me-2"
+                                          className="animate_spin text-center mx-3"
                                         />
                                       )}
-                                      Verfy OTP
+                                      {spinner ? "" : "Verfy OTP"}
                                     </button>
                                     {/* <div>
                                     {seconds > 0 || minutes > 0 ? (

@@ -30,7 +30,6 @@ const Home = () => {
       ? tagIds
       : [];
   tagIds = tagIds.map((i) => parseFloat(i));
-  const currentRoute = location.pathname;
 
   const [bannerSlider, SetBannerSlider] = useState([]);
   const [category, SetCategory] = useState([]);
@@ -147,7 +146,9 @@ const Home = () => {
             <h1>TRY TO SOMETHING NEW</h1>
             <p>Because every piece caries a precious story</p>
 
-            <button className="btn btn-outline-warning">Explore More</button>
+            <Link to="/shop" className="home_more_btn">
+              Explore More
+            </Link>
           </div>
         </div>
         <div className="banner_slide">
@@ -186,11 +187,11 @@ const Home = () => {
           <div className="more_categories_detail">
             <h3>Browse our categories</h3>
             <Link
-              className="btn text-decoration-none "
-              style={{ color: "#000" }}
               to="/categories"
+              class="custom-btn btn-16 mb-4"
+              style={{ textDecoration: "none" }}
             >
-              <u>View All</u>
+              View All
             </Link>
           </div>
           <div className="more_categories_slide">

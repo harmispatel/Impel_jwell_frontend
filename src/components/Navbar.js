@@ -32,7 +32,6 @@ const Navbar = (props) => {
 
   const [colorChange, setColorchange] = useState(false);
   const [isLoggedOut, setIsLoggedOut] = useState(false);
-  // const [dealerCartCounts, setDealerCartCounts] = useState();
   const [userCartCounts, setUsererCartCounts] = useState();
 
   const [dealerData, setDealerData] = useState([]);
@@ -51,16 +50,6 @@ const Navbar = (props) => {
     }
   };
   window.addEventListener("scroll", changeNavbarColor);
-
-  // const DealerCart = () => {
-  //   DealerService.CartList({ email: DealerEmail })
-  //     .then((res) => {
-  //       setDealerCartCounts(res.data);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
 
   const UserCartItems = () => {
     UserService.CartList({ phone: Phone })
@@ -93,7 +82,6 @@ const Navbar = (props) => {
       });
   };
   useEffect(() => {
-    // DealerCart();
     UserCartItems();
     getProfileData();
     Tags();
@@ -127,9 +115,6 @@ const Navbar = (props) => {
       <nav className="navbar navbar-expand-lg bg-body-tertiary">
         <div className="container">
           <div className="header_inner">
-            {/* <div className="position-relative">
-
-          </div> */}
             <button
               className="navbar-toggler"
               type="button"

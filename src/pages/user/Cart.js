@@ -7,6 +7,8 @@ import ReactLoading from "react-loading";
 import toast from "react-hot-toast";
 import { Button, Col, Form, Modal } from "react-bootstrap";
 import { CgSpinner } from "react-icons/cg";
+import { FaLongArrowAltLeft } from "react-icons/fa";
+import emptycart from "../../assets/images/empty-cart.png";
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -444,21 +446,20 @@ const Cart = () => {
   const Orderplacing = () => {
     setSpinner(true);
     const totalPrice = code?.discount_value
-      ? code.discount_type === "percentage"
+      ? code?.discount_type === "percentage"
         ? SubTotal() + SubCharge() - (SubCharge() * code.discount_value) / 100
         : SubTotal() + SubCharge() - code.discount_value
       : SubTotal() + SubCharge();
 
     if (Verification == 2) {
-      if (
-        (totalPrice >= 200000 && userData?.pan_no?.length == 0) ||
-        (totalPrice >= 200000 && !isValidPan(userData.pan_no))
-      ) {
+      if (totalPrice >= 200000 && userData?.pan_no?.length == 0) {
         setValid(
           "Pancard is required for your total amount is more than 2 lakh or above"
         );
         setShowEdit(true);
         setSpinner(false);
+      } else if (totalPrice >= 200000 && !isValidPan(userData.pan_no)) {
+        setValid("Invalid pancard format");
       } else if (totalPrice < 200000) {
         UserService.Placeorder({
           user_id: user_id,
@@ -774,20 +775,42 @@ const Cart = () => {
                 </>
               ) : (
                 <>
-                  <div className="col-md-12">
-                    <div className="card border shadow-0">
-                      <div className="m-4">
-                        <h4 className="card-title mb-4">Your shopping cart</h4>
-                      </div>
-                      <div>
-                        <h6 className="text-center">
-                          No items in your cart list.
-                        </h6>
-                      </div>
-                      <div className="mt-3 mb-3 text-center">
-                        <Link to="/shop" className="btn btn-outline-dark">
-                          Back to shop
-                        </Link>
+                  <div className="container">
+                    <div className="row justify-content-center">
+                      <div className="col-lg-8">
+                        <div className="card border shadow-sm p-4">
+                          <div className="text-center mb-4">
+                            <h2 className="card-title mb-0">
+                              Your Shopping Cart
+                            </h2>
+                          </div>
+
+                          <div className="text-center my-4">
+                            <img
+                              src={emptycart}
+                              alt="Empty Cart Illustration"
+                              className="img-fluid mb-3"
+                              style={{ maxWidth: "200px" }}
+                            />
+                            <h5 className="text-muted mb-3">
+                              Oops! Your cart is empty.
+                            </h5>
+                            <p className="text-muted">
+                              Explore our collection and add items to your cart.
+                            </p>
+                          </div>
+
+                          <div className="mt-4 text-center">
+                            <Link
+                              to="/shop"
+                              className="view_all_btn px-4 py-2"
+                              style={{ borderRadius: "8px" }}
+                            >
+                              <FaLongArrowAltLeft className="mr-2" /> &nbsp;Back
+                              to Shop
+                            </Link>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
