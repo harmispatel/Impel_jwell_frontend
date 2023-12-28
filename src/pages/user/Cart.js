@@ -181,6 +181,7 @@ const Cart = () => {
   };
 
   const pincodeRegex = /^\d{6}$/;
+
   const isValidPan = (panNumber) => {
     const panRegex = /[A-Z]{5}[0-9]{4}[A-Z]{1}/;
     return panRegex.test(panNumber);
@@ -449,7 +450,10 @@ const Cart = () => {
       : SubTotal() + SubCharge();
 
     if (Verification == 2) {
-      if (totalPrice >= 200000 && userData?.pan_no?.length == 0) {
+      if (
+        (totalPrice >= 200000 && userData?.pan_no?.length == 0) ||
+        (totalPrice >= 200000 && !isValidPan(userData.pan_no))
+      ) {
         setValid(
           "Pancard is required for your total amount is more than 2 lakh or above"
         );

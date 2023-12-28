@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import noWishlist from "../../assets/images/wishlist.png";
-import DealerWishlist from "../../services/Dealer/Collection";
 import { Link } from "react-router-dom";
 import ReactLoading from "react-loading";
 import toast from "react-hot-toast";
 import { CgSpinner } from "react-icons/cg";
+import DealerWishlist from "../../services/Dealer/Collection";
 
 const DealerWishList = () => {
   const DealerEmail = localStorage.getItem("email");

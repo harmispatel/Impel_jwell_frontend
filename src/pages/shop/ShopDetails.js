@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import productDetail from "../../services/Shop";
 import BreadCrumb from "../../components/common/BreadCrumb";
 import "swiper/css";
 import "swiper/css/pagination";
@@ -9,16 +8,15 @@ import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import toast from "react-hot-toast";
 import { RxChevronLeft, RxChevronRight, RxCross1 } from "react-icons/rx";
-import DealeCartService from "../../services/Dealer/Cart";
-import UserCartService from "../../services/Cart";
-import Userservice from "../../services/Auth";
-import DealerWishlist from "../../services/Dealer/Collection";
 import { BsCartDash, BsHandbagFill } from "react-icons/bs";
-import { FaHeart, FaLongArrowAltLeft, FaRegHeart } from "react-icons/fa";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 import ReactLoading from "react-loading";
-
 import { WishlistSystem } from "../../context/WishListContext";
 import { CgSpinner } from "react-icons/cg";
+import UserCartService from "../../services/Cart";
+import Userservice from "../../services/Auth";
+import productDetail from "../../services/Shop";
+import DealerWishlist from "../../services/Dealer/Collection";
 
 const ShopDetails = () => {
   const { dispatch: wishlistDispatch } = useContext(WishlistSystem);
@@ -34,8 +32,6 @@ const ShopDetails = () => {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [cartItems, setCartItems] = useState([]);
-  const [cartCounts, setCartCounts] = useState();
-  const [DealercartItems, setDealerCartItems] = useState([]);
   const [userWishlist, setUserWishlist] = useState(false);
   const [UserWishlistItems, setUserWishlistItems] = useState([]);
   const [DealerWishlistItems, setDealerWishlistItems] = useState([]);
@@ -48,7 +44,6 @@ const ShopDetails = () => {
     const data = {
       id: id,
     };
-
     await productDetail
       .product_detail(data)
       .then((res) => {
@@ -73,16 +68,6 @@ const ShopDetails = () => {
       console.log(err);
     }
   };
-
-  // const GetCarList = async () => {
-  //   DealeCartService.DealerCartList({ email: Dealer })
-  //     .then((res) => {
-  //       setDealerCartItems(res.data);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
 
   const GetUserCartList = async () => {
     UserCartService.CartList({ phone: Phone })
@@ -118,7 +103,6 @@ const ShopDetails = () => {
     productData();
     Relatedproduct();
     GetUserCartList();
-    // GetCarList();
     GetUserWishList();
     GetDealerWishList();
   }, []);
@@ -189,13 +173,16 @@ const ShopDetails = () => {
         setSpinner(false);
       });
   };
+
   const handleGoldColor = (goldType) => {
     setGoldColor(goldType);
     setGoldType("18k");
   };
+
   const handleGoldType = (event) => {
     setGoldType(event.target.id);
   };
+
   const productdetail = {
     // details for 22k gold
     gross_weight_22k: product?.gross_weight_22k?.toFixed(2),
@@ -241,6 +228,7 @@ const ShopDetails = () => {
     making_charge: product?.making_charge?.toFixed(2),
     total_price_14k: product?.total_price_14k?.toLocaleString("en-US"),
   };
+
   return (
     <section className="shop_details">
       <div className="container">
@@ -333,17 +321,9 @@ const ShopDetails = () => {
                     <div className="col-md-6">
                       <div>
                         <h3>{product?.name}</h3>
-                        {/* <p>{product?.category}</p> */}
                         <h5>
                           Design code : <strong>{product?.code}</strong>
                         </h5>
-                        {/* <h5>
-                          Lorem ipsum dolor sit amet, consectetur adipisicing
-                          elit, sed do eiusmod tempor incididunt ut labore et
-                          dolore magna aliqua. Ut enim ad minim veniam, quis
-                          nostrud exercitation ullamco laboris nisi ut aliquip
-                          ex ea commodo consequat two.
-                        </h5> */}
                         <div>
                           <div>
                             <button

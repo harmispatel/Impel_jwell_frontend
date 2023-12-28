@@ -53,7 +53,7 @@ const CategoriesItems = () => {
 
   const scrollup = () => {
     window.scrollTo({
-      top: 70,
+      top: 0,
       behavior: "smooth",
     });
   };
@@ -149,6 +149,7 @@ const CategoriesItems = () => {
                               to={`/shopdetails/${data.id}`}
                               className="text-decoration-none"
                               style={{ color: "#000" }}
+                              target="_blank"
                             >
                               <div className="category_data py-2">
                                 <img
@@ -169,9 +170,26 @@ const CategoriesItems = () => {
                       );
                     })
                   ) : (
-                    <div className="categoriesData-not">
-                      <p>Categories data is not an available</p>
-                    </div>
+                    <>
+                      <div
+                        className="categoriesData-not text-center"
+                        style={{
+                          fontSize: "35px",
+                          fontWeight: "600",
+                          marginTop: "150px",
+                        }}
+                      >
+                        <p>
+                          Unfortunately, categories data is not available at the
+                          moment.
+                        </p>
+                      </div>
+                      <div className="text-center mt-md-3">
+                        <Link to="/categories" className="btn btn-outline-dark">
+                          Back To Categories
+                        </Link>
+                      </div>
+                    </>
                   )}
                 </>
               )}

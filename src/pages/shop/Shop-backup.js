@@ -1,26 +1,26 @@
-// import React, { useContext, useEffect, useMemo, useState } from "react";
-// import { BsHeart, BsNutFill, BsSearch } from "react-icons/bs";
-// import ReactLoading from "react-loading";
-// import ShopServices from "../../services/Shop";
+// import React, { useContext, useEffect, useState } from "react";
 // import { Link, useLocation, useNavigate } from "react-router-dom";
-// import DealerWishlist from "../../services/Dealer/Collection";
-// import UserWishlist from "../../services/Auth";
+// import { BsHeart, BsSearch } from "react-icons/bs";
 // import { FcLike } from "react-icons/fc";
+// import { FaRegStar, FaStar } from "react-icons/fa";
 // import toast from "react-hot-toast";
 // import { Tooltip as ReactTooltip } from "react-tooltip";
-// import { WishlistSystem } from "../../context/WishListContext";
-// import { FaRegStar, FaStar } from "react-icons/fa";
-// import FilterServices from "../../services/Filter";
+// import ReactLoading from "react-loading";
 // import Select from "react-select";
 // import Accordion from "react-bootstrap/Accordion";
 // import Slider from "rc-slider";
 // import "rc-slider/assets/index.css";
+// import ShopServices from "../../services/Shop";
+// import FilterServices from "../../services/Filter";
+// import DealerWishlist from "../../services/Dealer/Collection";
+// import UserWishlist from "../../services/Auth";
+// import { WishlistSystem } from "../../context/WishListContext";
 
 // const Shop = ({ product }) => {
+//   const navigate = useNavigate();
 //   const { dispatch: wishlistDispatch } = useContext(WishlistSystem);
 //   const { dispatch: wishlistRemoveDispatch } = useContext(WishlistSystem);
 
-//   const navigate = useNavigate();
 //   const location = useLocation();
 
 //   const userType = localStorage.getItem("user_type");
@@ -40,7 +40,7 @@
 //   const [gender, setGender] = useState(null);
 //   const [selectedGender, setSelectedGender] = useState(null);
 
-//   const [tagData, setTagData] = useState([]);
+//   const [filterTag, setFilterTag] = useState([]);
 //   const [tag, setTag] = useState([]);
 //   const [selectedTag, setSelectedTag] = useState(null);
 
@@ -55,9 +55,8 @@
 //   });
 
 //   const [isLoading, setIsLoading] = useState(true);
-//   const [allData, setAllData] = useState([]);
+
 //   const [filterData, setFilterData] = useState([]);
-//   const [filterTag, setFilterTag] = useState([]);
 //   const [paginate, setPaginate] = useState();
 
 //   const [offset, setOffset] = useState();
@@ -72,44 +71,10 @@
 
 //   const scrollup = () => {
 //     window.scrollTo({
-//       top: 70,
+//       top: 0,
 //       behavior: "smooth",
 //     });
 //   };
-
-//   // 4 Filter APIS call
-//   const CategoryFilter = () => {
-//     FilterServices.categoryFilter()
-//       .then((res) => {
-//         setCategoryData(res.data);
-//       })
-//       .catch((error) => console.log("Error in category filter"));
-//   };
-
-//   const GenderFilter = () => {
-//     FilterServices.genderFilter()
-//       .then((res) => {
-//         setGenderData(res.data);
-//       })
-//       .catch((error) => console.log("Error in gender filter"));
-//   };
-
-//   const TagFilter = () => {
-//     FilterServices.TagFilter()
-//       .then((res) => {
-//         setTagData(res.data);
-//       })
-//       .catch((error) => console.log("Error in tag filter"));
-//   };
-
-//   useEffect(() => {
-//     CategoryFilter();
-//     GenderFilter();
-//     TagFilter();
-//     AllData();
-//     collectionCheck();
-//     GetCartList();
-//   }, [userType, userId]);
 
 //   // sort by searching
 //   const searchbar = (e) => {
@@ -130,15 +95,32 @@
 //     setSelectedOption(selectedSort);
 //   };
 
+//   // 4 Filter APIS call
+//   const CategoryFilter = () => {
+//     FilterServices.categoryFilter()
+//       .then((res) => {
+//         setCategoryData(res.data);
+//       })
+//       .catch((error) => console.log("Error in category filter"));
+//   };
+
+//   const GenderFilter = () => {
+//     FilterServices.genderFilter()
+//       .then((res) => {
+//         setGenderData(res.data);
+//       })
+//       .catch((error) => console.log("Error in gender filter"));
+//   };
+
 //   const handleSelectCategory = (selectedCategory) => {
 //     setIsLoading(true);
-//     setCategory(selectedCategory ? selectedCategory.value : "");
+//     setCategory(selectedCategory ? selectedCategory.value : null);
 //     setSelectedCategory(selectedCategory);
 //   };
 
 //   const handleSelectGender = (selectedGender) => {
 //     setIsLoading(true);
-//     setGender(selectedGender ? selectedGender.value : "");
+//     setGender(selectedGender ? selectedGender.value : null);
 //     setSelectedGender(selectedGender);
 //   };
 
@@ -146,6 +128,14 @@
 //     setIsLoading(true);
 //     setTag(selectedTags ? [selectedTags.value] : []);
 //     setSelectedTag(selectedTags);
+
+//     // const updatedTagIds = selectedTags ? [selectedTags?.value] : [];
+
+//     // if (updatedTagIds.length > 0) {
+//     //   navigate(`/shop?tag_id=${updatedTagIds}`);
+//     // } else {
+//     //   navigate("/shop");
+//     // }
 //   };
 
 //   const handleSliderChange = (e) => {
@@ -167,8 +157,13 @@
 //     setTag(tagIds);
 //   }, [location.search]);
 
+//   // const matchedTag = filterTag.find((tag) => tag.id === tagIds[0]);
+//   // setSelectedTag(
+//   //   matchedTag ? { value: matchedTag.id, label: matchedTag.name } : null
+//   // );
+
 //   const FilterData = (offset = 0) => {
-//     const userData = {
+//     ShopServices.allfilterdesigns({
 //       category_id: category,
 //       gender_id: gender,
 //       tag_id: tag,
@@ -179,9 +174,7 @@
 //       userType: userType,
 //       offset: offset,
 //       userId: userId,
-//     };
-
-//     ShopServices.allfilterdesigns(userData)
+//     })
 //       .then((res) => {
 //         setIsLoading(false);
 //         setFilterData(res.data?.designs);
@@ -198,20 +191,13 @@
 //       });
 //   };
 
-//   useEffect(() => {
-//     FilterData(0);
-//   }, [category, tag, gender, searchInput, PriceRange, selectedOption]);
-
 //   const AllData = () => {
-//     const userData = {
+//     ShopServices.alldesigns({
 //       userType: userType,
 //       userId: userId,
-//     };
-//     ShopServices.alldesigns(userData)
+//     })
 //       .then((res) => {
 //         setIsLoading(false);
-//         setAllData(res.data);
-//         console.log(res.data);
 //         setFilterData(res.data?.designs);
 //         setFilterTag(res.data?.tags);
 //         setPaginate(res.data);
@@ -221,11 +207,81 @@
 //         setIsLoading(false);
 //       });
 //   };
+
+//   useEffect(() => {
+//     CategoryFilter();
+//     GenderFilter();
+//     AllData();
+//     collectionCheck();
+//     GetUserWishList();
+//   }, [userType, userId]);
+
+//   useEffect(() => {
+//     FilterData(0);
+//   }, [category, tag, gender, searchInput, PriceRange, selectedOption]);
+
 //   // user wishlist API
-//   const GetCartList = async () => {
+//   const GetUserWishList = async () => {
 //     UserWishlist.userWishlist({ phone: Phone })
 //       .then((res) => {
 //         setUserCartItems(res?.data);
+//       })
+//       .catch((err) => {
+//         console.log(err);
+//       });
+//   };
+
+//   // user wishlist products add
+//   const addToUserWishList = async (e, product) => {
+//     e.preventDefault();
+//     const payload = { id: product.id };
+//     if (!UsercartItems.some((item) => item.id === product.id)) {
+//       UserWishlist.addtoWishlist({
+//         phone: Phone,
+//         design_id: product.id,
+//         gold_color: goldColor,
+//         gold_type: goldType,
+//         design_name: product?.name,
+//       })
+//         .then((res) => {
+//           if (res.success === true) {
+//             setUserWishlist(true);
+//             toast.success("Design has been Added to Your Wishlist");
+//             GetUserWishList();
+//             wishlistDispatch({
+//               type: "ADD_TO_WISHLIST",
+//               payload,
+//             });
+//           } else {
+//           }
+//         })
+//         .catch((err) => {
+//           console.log(err);
+//         });
+//     } else {
+//     }
+//   };
+
+//   // user wishlist products remove
+//   const removeFromWishList = (e, product) => {
+//     e.preventDefault();
+//     const payload = { id: product.id };
+//     UserWishlist.removetoWishlist({
+//       phone: Phone,
+//       design_id: product.id,
+//       gold_color: goldColor,
+//       gold_type: goldType,
+//       design_name: product?.name,
+//     })
+//       .then((res) => {
+//         if (res.success === true) {
+//           toast.success("Design has been Removed from Your Wishlist.");
+//           GetUserWishList();
+//           wishlistRemoveDispatch({
+//             type: "REMOVE_FROM_WISHLIST",
+//             payload,
+//           });
+//         }
 //       })
 //       .catch((err) => {
 //         console.log(err);
@@ -243,67 +299,15 @@
 //       });
 //   };
 
-//   // user wishlist products add
-//   const addToUserWishList = async (product) => {
-//     const payload = { id: product.id };
-//     if (!UsercartItems.some((item) => item.id === product.id)) {
-//       UserWishlist.addtoWishlist({
-//         phone: Phone,
-//         design_id: product.id,
-//         gold_color: goldColor,
-//         gold_type: goldType,
-//         design_name: product?.name,
-//       })
-//         .then((res) => {
-//           if (res.success === true) {
-//             setUserWishlist(true);
-//             toast.success("Design has been Added to Your Wishlist");
-//             GetCartList();
-//             wishlistDispatch({
-//               type: "ADD_TO_WISHLIST",
-//               payload,
-//             });
-//           } else {
-//           }
-//         })
-//         .catch((err) => {
-//           console.log(err);
-//         });
-//     } else {
-//     }
-//   };
-
-//   // user wishlist products remove
-//   const removeFromWishList = (product) => {
-//     const payload = { id: product.id };
-//     UserWishlist.removetoWishlist({
-//       phone: Phone,
-//       design_id: product.id,
-//       gold_color: goldColor,
-//       gold_type: goldType,
-//       design_name: product?.name,
-//     })
-//       .then((res) => {
-//         if (res.success === true) {
-//           toast.success("Design has been Removed from Your Wishlist.");
-//           GetCartList();
-//           wishlistRemoveDispatch({
-//             type: "REMOVE_FROM_WISHLIST",
-//             payload,
-//           });
-//         }
-//       })
-//       .catch((err) => {
-//         console.log(err);
-//       });
-//   };
-
 //   // Dealer Wishlist products add
-//   const AddToDealerWishlist = async (product) => {
+//   const AddToDealerWishlist = async (e, product) => {
+//     e.preventDefault();
 //     if (!DealerCollection.some((item) => item.id === product?.id)) {
 //       DealerWishlist.addtoDealerWishlist({
 //         email: email,
 //         design_id: product?.id,
+//         gold_color: goldColor,
+//         gold_type: goldType,
 //       })
 //         .then((res) => {
 //           if (res.success === true) {
@@ -322,7 +326,8 @@
 //   };
 
 //   // Dealer Wishlist products remove
-//   const removefromdealerwishlist = (product) => {
+//   const removefromdealerwishlist = (e, product) => {
+//     e.preventDefault();
 //     DealerWishlist.removetoWishlist({
 //       email: localStorage.getItem("email"),
 //       design_id: product.id,
@@ -340,8 +345,7 @@
 //   };
 
 //   // PAGINATION FUNCTION
-
-//   const totalPages = Math.round(paginate?.total_records / 20);
+//   const totalPages = Math.ceil(paginate?.total_records / 20);
 
 //   const [pagination, setPagination] = useState({
 //     currentPage: 1,
@@ -356,44 +360,6 @@
 //     scrollup();
 //     setIsLoading(true);
 //   };
-//   // const paginationArea = () => {
-//   //   const items = [];
-//   //   let threePoints = true;
-
-//   //   for (let number = 1; number <= totalPages; number++) {
-//   //     if (
-//   //       number <= 1 ||
-//   //       number >= totalPages ||
-//   //       (number >= pagination.currentPage - 1 &&
-//   //         number <= pagination.currentPage + 1)
-//   //     ) {
-//   //       items.push(
-//   //         <li
-//   //           key={number}
-//   //           className={`page-item ${
-//   //             pagination.currentPage === number ? "active disabled" : ""
-//   //           }`}
-//   //           onClick={() => {
-//   //             paginationPage(number);
-//   //           }}
-//   //         >
-//   //           <a className="page-link">{number}</a>
-//   //         </li>
-//   //       );
-//   //     } else {
-//   //       if (threePoints === true) {
-//   //         items.push(
-//   //           <li key={number} className="page-item threePoints">
-//   //             <a className="page-link">...</a>
-//   //           </li>
-//   //         );
-//   //         threePoints = false;
-//   //       }
-//   //     }
-//   //   }
-
-//   //   return items;
-//   // };
 
 //   const paginationPrev = () => {
 //     if (pagination.currentPage > 1) {
@@ -418,6 +384,7 @@
 //       setIsLoading(true);
 //     }
 //   };
+
 //   return (
 //     <section className="shop">
 //       <div className="container">
@@ -454,7 +421,7 @@
 //                 <Select
 //                   placeholder="Shop by category"
 //                   isClearable={true}
-//                   isSearchable={false}
+//                   isSearchable={true}
 //                   value={selectedCategory}
 //                   options={categoryData.map((data) => ({
 //                     value: data?.id,
@@ -467,7 +434,7 @@
 //                 <Select
 //                   placeholder="Shop by Gender"
 //                   isClearable
-//                   isSearchable={false}
+//                   isSearchable={true}
 //                   value={selectedGender}
 //                   options={genderData?.map((data) => ({
 //                     value: data?.id,
@@ -480,7 +447,7 @@
 //                 <Select
 //                   placeholder="Shop by Tag"
 //                   isClearable
-//                   isSearchable={false}
+//                   isSearchable={true}
 //                   value={selectedTag}
 //                   options={filterTag?.map((data) => ({
 //                     value: data?.id,
@@ -535,415 +502,269 @@
 //           <div className="row">
 //             <div className="col-md-12">
 //               {isLoading ? (
-//                 <div className="h-100 d-flex justify-content-center">
+//                 <div className="d-flex justify-content-center pt-5">
 //                   <ReactLoading
 //                     type={"spin"}
 //                     color={"#053961"}
 //                     height={"20%"}
 //                     width={"10%"}
-//                     className="loader"
+//                     className="loader pt-5"
 //                   />
 //                 </div>
 //               ) : (
 //                 <>
-//                   {searchInput?.length === 0 &&
-//                   selectedOption?.length === 0 &&
-//                   category?.length === 0 &&
-//                   gender?.length === 0 &&
-//                   tag?.length === 0 &&
-//                   PriceRange.minprice === null ? (
+//                   {filterData?.length > 0 ? (
 //                     <>
-//                       {allData?.length > 0 ? (
-//                         <>
-//                           <div className="row">
-//                             {allData.map((product) => {
-//                               return (
-//                                 <div key={product.id} className="col-md-3">
-//                                   <Link
-//                                     to={`/shopdetails/${product.id}`}
-//                                     className="product_data"
-//                                     target="_blank"
-//                                   >
-//                                     {product?.image ? (
-//                                       <img
-//                                         src={product?.image}
-//                                         alt={product?.name}
-//                                         className="w-100"
-//                                       />
-//                                     ) : (
-//                                       <img
-//                                         src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg"
-//                                         alt=""
-//                                         className="w-100"
-//                                       />
-//                                     )}
-
-//                                     <div className="edit">
-//                                       <div>
-//                                         {userType == 1 ? (
-//                                           <>
-//                                             {email ? (
-//                                               <Link
-//                                                 to="#"
-//                                                 data-tooltip-id="my-tooltip-12"
-//                                                 onClick={() => {
-//                                                   if (
-//                                                     DealerCollection?.find(
-//                                                       (item) =>
-//                                                         item.id === product.id
-//                                                     )
-//                                                   ) {
-//                                                     removefromdealerwishlist(
-//                                                       product
-//                                                     );
-//                                                   } else {
-//                                                     AddToDealerWishlist(
-//                                                       product
-//                                                     );
-//                                                   }
-//                                                 }}
-//                                               >
-//                                                 {DealerCollection?.find(
-//                                                   (item) =>
-//                                                     item.id === product.id
-//                                                 ) ? (
-//                                                   <FaStar />
-//                                                 ) : (
-//                                                   <FaRegStar />
-//                                                 )}
-//                                               </Link>
-//                                             ) : (
-//                                               <Link
-//                                                 to="/Dealer_login"
-//                                                 data-tooltip-id="my-tooltip-12"
-//                                               >
-//                                                 <FaRegStar />
-//                                               </Link>
-//                                             )}
-//                                           </>
-//                                         ) : (
-//                                           <>
-//                                             {Phone ? (
-//                                               <Link
-//                                                 to="#"
-//                                                 data-tooltip-id="my-tooltip-9"
-//                                                 onClick={() => {
-//                                                   if (
-//                                                     UsercartItems?.find(
-//                                                       (item) =>
-//                                                         item.id === product.id
-//                                                     )
-//                                                   ) {
-//                                                     removeFromWishList(product);
-//                                                   } else {
-//                                                     addToUserWishList(product);
-//                                                   }
-//                                                 }}
-//                                               >
-//                                                 {UsercartItems?.find(
-//                                                   (item) =>
-//                                                     item.id === product.id
-//                                                 ) ? (
-//                                                   <FcLike />
-//                                                 ) : (
-//                                                   <BsHeart />
-//                                                 )}
-//                                               </Link>
-//                                             ) : (
-//                                               <Link
-//                                                 to="/login"
-//                                                 data-tooltip-id="my-tooltip-9"
-//                                               >
-//                                                 <BsHeart />
-//                                               </Link>
-//                                             )}
-//                                           </>
-//                                         )}
-//                                       </div>
-//                                     </div>
-//                                     <div className="product_details d-flex justify-content-between">
-//                                       <h4>{product.name}</h4>
-//                                       <h4>
-//                                         <b>{product.code}</b>
-//                                       </h4>
-//                                     </div>
-//                                     <div className="product_details">
-//                                       <h5>
-//                                         ₹
-//                                         {product?.total_price_18k?.toLocaleString(
-//                                           "en-US"
-//                                         )}
-//                                       </h5>
-//                                     </div>
-//                                   </Link>
-//                                 </div>
-//                               );
-//                             })}
-//                           </div>
-//                         </>
-//                       ) : (
-//                         <div className="not-products">
-//                           <p>No products available.</p>
-//                         </div>
-//                       )}
-//                     </>
-//                   ) : (
-//                     <>
-//                       {filterData?.length > 0 ? (
-//                         <>
-//                           <div className="row">
-//                             {filterData?.map((data) => {
-//                               return (
-//                                 <div className="col-md-3">
-//                                   <Link
-//                                     to={`/shopdetails/${data.id}`}
-//                                     className="product_data"
-//                                     target="_blank"
-//                                   >
-//                                     {data.image ? (
-//                                       <img
-//                                         src={data.image}
-//                                         key={data.id}
-//                                         alt=""
-//                                         className="w-100"
-//                                       />
-//                                     ) : (
-//                                       <img
-//                                         src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930"
-//                                         alt=""
-//                                         className="w-100"
-//                                       />
-//                                     )}
-//                                     <div className="edit">
-//                                       <div>
-//                                         {userType == 1 ? (
-//                                           <>
-//                                             {email ? (
-//                                               <Link
-//                                                 to="#"
-//                                                 data-tooltip-id="my-tooltip-12"
-//                                                 onClick={() => {
-//                                                   if (
-//                                                     DealerCollection?.find(
-//                                                       (item) =>
-//                                                         item?.id === data?.id
-//                                                     )
-//                                                   ) {
-//                                                     removefromdealerwishlist(
-//                                                       data
-//                                                     );
-//                                                   } else {
-//                                                     AddToDealerWishlist(data);
-//                                                   }
-//                                                 }}
-//                                               >
-//                                                 {DealerCollection?.find(
+//                       <div className="row">
+//                         {filterData?.map((data) => {
+//                           return (
+//                             <div className="col-md-3">
+//                               <Link
+//                                 to={`/shopdetails/${data.id}`}
+//                                 className="product_data"
+//                                 target="_blank"
+//                               >
+//                                 {data.image ? (
+//                                   <img
+//                                     src={data.image}
+//                                     key={data.id}
+//                                     alt=""
+//                                     className="w-100"
+//                                   />
+//                                 ) : (
+//                                   <img
+//                                     src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930"
+//                                     alt=""
+//                                     className="w-100"
+//                                   />
+//                                 )}
+//                                 <div className="edit">
+//                                   <div>
+//                                     {userType == 1 ? (
+//                                       <>
+//                                         {email ? (
+//                                           <Link
+//                                             to="#"
+//                                             data-tooltip-id="my-tooltip-12"
+//                                             onClick={(e) => {
+//                                               if (
+//                                                 DealerCollection?.find(
 //                                                   (item) =>
 //                                                     item?.id === data?.id
-//                                                 ) ? (
-//                                                   <FaStar />
-//                                                 ) : (
-//                                                   <FaRegStar />
-//                                                 )}
-//                                               </Link>
-//                                             ) : (
-//                                               <Link
-//                                                 to="/Dealer_login"
-//                                                 data-tooltip-id="my-tooltip-12"
-//                                               >
-//                                                 <FaRegStar />
-//                                               </Link>
-//                                             )}
-//                                           </>
-//                                         ) : (
-//                                           <>
-//                                             {Phone ? (
-//                                               <Link
-//                                                 to="#"
-//                                                 data-tooltip-id="my-tooltip-9"
-//                                                 onClick={() => {
-//                                                   if (
-//                                                     UsercartItems?.find(
-//                                                       (item) =>
-//                                                         item.id === data.id
-//                                                     )
-//                                                   ) {
-//                                                     removeFromWishList(data);
-//                                                   } else {
-//                                                     addToUserWishList(data);
-//                                                   }
-//                                                 }}
-//                                               >
-//                                                 {UsercartItems?.find(
-//                                                   (item) => item.id === data.id
-//                                                 ) ? (
-//                                                   <FcLike />
-//                                                 ) : (
-//                                                   <BsHeart />
-//                                                 )}
-//                                               </Link>
-//                                             ) : (
-//                                               <Link
-//                                                 to="/login"
-//                                                 data-tooltip-id="my-tooltip-9"
-//                                               >
-//                                                 <BsHeart />
-//                                               </Link>
-//                                             )}
-//                                           </>
-//                                         )}
-//                                       </div>
-//                                     </div>
-
-//                                     <div className="product_details d-flex justify-content-between">
-//                                       <h4>{data?.name}</h4>
-//                                       <h4>
-//                                         <b>{data?.code}</b>
-//                                       </h4>
-//                                     </div>
-//                                     <div className="product_details">
-//                                       <h5>
-//                                         ₹
-//                                         {data?.total_price_18k?.toLocaleString(
-//                                           "en-US"
-//                                         )}
-//                                       </h5>
-//                                     </div>
-//                                   </Link>
-//                                 </div>
-//                               );
-//                             })}
-//                           </div>
-//                           <div className="pt-5">
-//                             {totalPages > 1 && (
-//                               <div className="paginationArea">
-//                                 <nav aria-label="navigation">
-//                                   <ul className="pagination">
-//                                     {/* Previous Page Button */}
-//                                     <li
-//                                       className={`page-item ${
-//                                         pagination.currentPage === 1
-//                                           ? "disabled"
-//                                           : ""
-//                                       }`}
-//                                       style={{
-//                                         display:
-//                                           pagination.currentPage === 1
-//                                             ? "none"
-//                                             : "block",
-//                                       }}
-//                                     >
-//                                       <a
-//                                         className="page-link"
-//                                         onClick={paginationPrev}
-//                                       >
-//                                         <svg
-//                                           xmlns="http://www.w3.org/2000/svg"
-//                                           width="24"
-//                                           height="24"
-//                                           viewBox="0 0 24 24"
-//                                         >
-//                                           <polyline points="15 18 9 12 15 6"></polyline>
-//                                         </svg>
-//                                         Prev
-//                                       </a>
-//                                     </li>
-
-//                                     {/* Display pages with ellipses */}
-//                                     {Array.from({ length: totalPages }).map(
-//                                       (_, index) => {
-//                                         const pageNumber = index + 1;
-//                                         const isCurrentPage =
-//                                           pagination.currentPage === pageNumber;
-
-//                                         // Display first and last pages
-//                                         if (
-//                                           pageNumber === 1 ||
-//                                           pageNumber === totalPages ||
-//                                           (pageNumber >=
-//                                             pagination.currentPage - 1 &&
-//                                             pageNumber <=
-//                                               pagination.currentPage + 1)
-//                                         ) {
-//                                           return (
-//                                             <li
-//                                               key={pageNumber}
-//                                               className={`page-item ${
-//                                                 isCurrentPage ? "active" : ""
-//                                               }`}
-//                                               onClick={() =>
-//                                                 paginationPage(pageNumber)
+//                                                 )
+//                                               ) {
+//                                                 removefromdealerwishlist(
+//                                                   e,
+//                                                   data
+//                                                 );
+//                                               } else {
+//                                                 AddToDealerWishlist(e, data);
 //                                               }
-//                                             >
-//                                               <a className="page-link">
-//                                                 {pageNumber}
-//                                               </a>
-//                                             </li>
-//                                           );
-//                                         }
-
-//                                         // Display ellipses
-//                                         if (
-//                                           index === 1 ||
-//                                           index === totalPages - 2
-//                                         ) {
-//                                           return (
-//                                             <li
-//                                               key={pageNumber}
-//                                               className="page-item disabled"
-//                                             >
-//                                               <a className="page-link">...</a>
-//                                             </li>
-//                                           );
-//                                         }
-
-//                                         return null;
-//                                       }
+//                                             }}
+//                                           >
+//                                             {DealerCollection?.find(
+//                                               (item) => item?.id === data?.id
+//                                             ) ? (
+//                                               <FaStar />
+//                                             ) : (
+//                                               <FaRegStar />
+//                                             )}
+//                                           </Link>
+//                                         ) : (
+//                                           <Link
+//                                             to="/Dealer_login"
+//                                             data-tooltip-id="my-tooltip-12"
+//                                           >
+//                                             <FaRegStar />
+//                                           </Link>
+//                                         )}
+//                                       </>
+//                                     ) : (
+//                                       <>
+//                                         {Phone ? (
+//                                           <Link
+//                                             to="#"
+//                                             data-tooltip-id="my-tooltip-9"
+//                                             onClick={(e) => {
+//                                               if (
+//                                                 UsercartItems?.find(
+//                                                   (item) => item.id === data.id
+//                                                 )
+//                                               ) {
+//                                                 removeFromWishList(e, data);
+//                                               } else {
+//                                                 addToUserWishList(e, data);
+//                                               }
+//                                             }}
+//                                           >
+//                                             {UsercartItems?.find(
+//                                               (item) => item.id === data.id
+//                                             ) ? (
+//                                               <FcLike />
+//                                             ) : (
+//                                               <BsHeart />
+//                                             )}
+//                                           </Link>
+//                                         ) : (
+//                                           <Link
+//                                             to="/login"
+//                                             data-tooltip-id="my-tooltip-9"
+//                                           >
+//                                             <BsHeart />
+//                                           </Link>
+//                                         )}
+//                                       </>
 //                                     )}
+//                                   </div>
+//                                 </div>
 
-//                                     {/* Next Page Button */}
-//                                     <li
-//                                       className={`page-item ${
-//                                         pagination.currentPage === totalPages
-//                                           ? "disabled"
-//                                           : ""
-//                                       }`}
-//                                       style={{
-//                                         display:
-//                                           pagination.currentPage === totalPages
-//                                             ? "none"
-//                                             : "block",
-//                                       }}
+//                                 <div className="product_details d-flex justify-content-between">
+//                                   <h4>{data?.name}</h4>
+//                                   <h4>
+//                                     <b>{data?.code}</b>
+//                                   </h4>
+//                                 </div>
+//                                 <div className="product_details">
+//                                   <h5>
+//                                     ₹
+//                                     {data?.total_price_18k?.toLocaleString(
+//                                       "en-US"
+//                                     )}
+//                                   </h5>
+//                                 </div>
+//                               </Link>
+//                             </div>
+//                           );
+//                         })}
+//                       </div>
+//                       <div className="pt-5">
+//                         {totalPages > 1 && (
+//                           <div className="paginationArea">
+//                             <nav aria-label="navigation">
+//                               <ul className="pagination">
+//                                 {/* Previous Page Button */}
+//                                 <li
+//                                   className={`page-item ${
+//                                     pagination.currentPage === 1
+//                                       ? "disabled"
+//                                       : ""
+//                                   }`}
+//                                   style={{
+//                                     display:
+//                                       pagination.currentPage === 1
+//                                         ? "none"
+//                                         : "block",
+//                                   }}
+//                                 >
+//                                   <a
+//                                     className="page-link"
+//                                     onClick={paginationPrev}
+//                                   >
+//                                     <svg
+//                                       xmlns="http://www.w3.org/2000/svg"
+//                                       width="24"
+//                                       height="24"
+//                                       viewBox="0 0 24 24"
 //                                     >
-//                                       <a
-//                                         className="page-link"
-//                                         onClick={paginationNext}
-//                                       >
-//                                         Next
-//                                         <svg
-//                                           xmlns="http://www.w3.org/2000/svg"
-//                                           width="24"
-//                                           height="24"
-//                                           viewBox="0 0 24 24"
+//                                       <polyline points="15 18 9 12 15 6"></polyline>
+//                                     </svg>
+//                                     Prev
+//                                   </a>
+//                                 </li>
+
+//                                 {/* Display pages with ellipses */}
+//                                 {Array.from({ length: totalPages }).map(
+//                                   (_, index) => {
+//                                     const pageNumber = index + 1;
+//                                     const isCurrentPage =
+//                                       pagination.currentPage === pageNumber;
+
+//                                     // Display first and last pages
+//                                     if (
+//                                       pageNumber === 1 ||
+//                                       pageNumber === totalPages ||
+//                                       (pageNumber >=
+//                                         pagination.currentPage - 1 &&
+//                                         pageNumber <=
+//                                           pagination.currentPage + 1)
+//                                     ) {
+//                                       return (
+//                                         <li
+//                                           key={pageNumber}
+//                                           className={`page-item ${
+//                                             isCurrentPage ? "active" : ""
+//                                           }`}
+//                                           onClick={() =>
+//                                             paginationPage(pageNumber)
+//                                           }
 //                                         >
-//                                           <polyline points="9 18 15 12 9 6"></polyline>
-//                                         </svg>
-//                                       </a>
-//                                     </li>
-//                                   </ul>
-//                                 </nav>
-//                               </div>
-//                             )}
+//                                           <a className="page-link">
+//                                             {pageNumber}
+//                                           </a>
+//                                         </li>
+//                                       );
+//                                     }
+
+//                                     // Display ellipses
+//                                     if (
+//                                       index === 1 ||
+//                                       index === totalPages - 2
+//                                     ) {
+//                                       return (
+//                                         <li
+//                                           key={pageNumber}
+//                                           className="page-item disabled"
+//                                         >
+//                                           <a className="page-link">...</a>
+//                                         </li>
+//                                       );
+//                                     }
+
+//                                     return null;
+//                                   }
+//                                 )}
+
+//                                 {/* Next Page Button */}
+//                                 <li
+//                                   className={`page-item ${
+//                                     pagination.currentPage === totalPages
+//                                       ? "disabled"
+//                                       : ""
+//                                   }`}
+//                                   style={{
+//                                     display:
+//                                       pagination.currentPage === totalPages
+//                                         ? "none"
+//                                         : "block",
+//                                   }}
+//                                 >
+//                                   <a
+//                                     className="page-link"
+//                                     onClick={paginationNext}
+//                                   >
+//                                     Next
+//                                     <svg
+//                                       xmlns="http://www.w3.org/2000/svg"
+//                                       width="24"
+//                                       height="24"
+//                                       viewBox="0 0 24 24"
+//                                     >
+//                                       <polyline points="9 18 15 12 9 6"></polyline>
+//                                     </svg>
+//                                   </a>
+//                                 </li>
+//                               </ul>
+//                             </nav>
 //                           </div>
-//                         </>
-//                       ) : (
-//                         <div className="not-products">
-//                           <p>
-//                             No products available based on the selected filters.
-//                           </p>
-//                         </div>
-//                       )}
+//                         )}
+//                       </div>
 //                     </>
+//                   ) : (
+//                     <div className="not-products">
+//                       <p>
+//                         No products available based on the selected filters.
+//                       </p>
+//                     </div>
 //                   )}
 //                 </>
 //               )}

@@ -1,9 +1,8 @@
-import React, { useEffect } from "react";
-import profileService from "../../services/Auth";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { IconName, ImCross } from "react-icons/im";
+import { ImCross } from "react-icons/im";
 import toast from "react-hot-toast";
+import profileService from "../../services/Auth";
 
 const DealerProfile = () => {
   const email = localStorage.getItem("email");
@@ -71,10 +70,10 @@ const DealerProfile = () => {
         .UserProfileImage(myFormData)
         .then((res) => {
           if (res.status === true) {
-            getProfileData();
+            getDealerProfileData();
             toast.success(res.message);
           } else {
-            getProfileData();
+            getDealerProfileData();
             toast.error(res.message);
           }
         })
@@ -87,7 +86,8 @@ const DealerProfile = () => {
       reader.readAsDataURL(file);
     }
   };
-  const getProfileData = () => {
+
+  const getDealerProfileData = () => {
     profileService
       .profile({ email: email, token: token })
       .then((res) => {
@@ -100,7 +100,7 @@ const DealerProfile = () => {
   };
 
   useEffect(() => {
-    getProfileData();
+    getDealerProfileData();
   }, []);
 
   return (
@@ -275,7 +275,7 @@ const DealerProfile = () => {
               <label className="labels">
                 <strong>Company Logo</strong>
               </label>
-             
+
               <br />
               <img
                 src={profileData?.company_logo}
@@ -319,8 +319,6 @@ const DealerProfile = () => {
             </div>
           </div>
         </div>
-
-       
       </div>
     </section>
   );

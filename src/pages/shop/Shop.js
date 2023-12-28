@@ -71,7 +71,7 @@ const Shop = ({ product }) => {
 
   const scrollup = () => {
     window.scrollTo({
-      top: 70,
+      top: 0,
       behavior: "smooth",
     });
   };
@@ -129,14 +129,13 @@ const Shop = ({ product }) => {
     setTag(selectedTags ? [selectedTags.value] : []);
     setSelectedTag(selectedTags);
 
-    const updatedTagIds = selectedTags ? [selectedTags?.value] : [];
+    // const updatedTagIds = selectedTags ? [selectedTags?.value] : [];
 
-    if (updatedTagIds.length > 0) {
-      navigate(`/shop?tag_id=${updatedTagIds}`);
-    } else {
-      AllData();
-      navigate("/shop");
-    }
+    // if (updatedTagIds.length > 0) {
+    //   navigate(`/shop?tag_id=${updatedTagIds}`);
+    // } else {
+    //   navigate("/shop");
+    // }
   };
 
   const handleSliderChange = (e) => {
@@ -214,7 +213,7 @@ const Shop = ({ product }) => {
     GenderFilter();
     AllData();
     collectionCheck();
-    GetCartList();
+    GetUserWishList();
   }, [userType, userId]);
 
   useEffect(() => {
@@ -222,7 +221,7 @@ const Shop = ({ product }) => {
   }, [category, tag, gender, searchInput, PriceRange, selectedOption]);
 
   // user wishlist API
-  const GetCartList = async () => {
+  const GetUserWishList = async () => {
     UserWishlist.userWishlist({ phone: Phone })
       .then((res) => {
         setUserCartItems(res?.data);
@@ -233,7 +232,8 @@ const Shop = ({ product }) => {
   };
 
   // user wishlist products add
-  const addToUserWishList = async (product) => {
+  const addToUserWishList = async (e, product) => {
+    e.preventDefault();
     const payload = { id: product.id };
     if (!UsercartItems.some((item) => item.id === product.id)) {
       UserWishlist.addtoWishlist({
@@ -247,7 +247,7 @@ const Shop = ({ product }) => {
           if (res.success === true) {
             setUserWishlist(true);
             toast.success("Design has been Added to Your Wishlist");
-            GetCartList();
+            GetUserWishList();
             wishlistDispatch({
               type: "ADD_TO_WISHLIST",
               payload,
@@ -263,7 +263,8 @@ const Shop = ({ product }) => {
   };
 
   // user wishlist products remove
-  const removeFromWishList = (product) => {
+  const removeFromWishList = (e, product) => {
+    e.preventDefault();
     const payload = { id: product.id };
     UserWishlist.removetoWishlist({
       phone: Phone,
@@ -275,7 +276,7 @@ const Shop = ({ product }) => {
       .then((res) => {
         if (res.success === true) {
           toast.success("Design has been Removed from Your Wishlist.");
-          GetCartList();
+          GetUserWishList();
           wishlistRemoveDispatch({
             type: "REMOVE_FROM_WISHLIST",
             payload,
@@ -299,7 +300,8 @@ const Shop = ({ product }) => {
   };
 
   // Dealer Wishlist products add
-  const AddToDealerWishlist = async (product) => {
+  const AddToDealerWishlist = async (e, product) => {
+    e.preventDefault();
     if (!DealerCollection.some((item) => item.id === product?.id)) {
       DealerWishlist.addtoDealerWishlist({
         email: email,
@@ -324,7 +326,8 @@ const Shop = ({ product }) => {
   };
 
   // Dealer Wishlist products remove
-  const removefromdealerwishlist = (product) => {
+  const removefromdealerwishlist = (e, product) => {
+    e.preventDefault();
     DealerWishlist.removetoWishlist({
       email: localStorage.getItem("email"),
       design_id: product.id,
@@ -543,16 +546,19 @@ const Shop = ({ product }) => {
                                           <Link
                                             to="#"
                                             data-tooltip-id="my-tooltip-12"
-                                            onClick={() => {
+                                            onClick={(e) => {
                                               if (
                                                 DealerCollection?.find(
                                                   (item) =>
                                                     item?.id === data?.id
                                                 )
                                               ) {
-                                                removefromdealerwishlist(data);
+                                                removefromdealerwishlist(
+                                                  e,
+                                                  data
+                                                );
                                               } else {
-                                                AddToDealerWishlist(data);
+                                                AddToDealerWishlist(e, data);
                                               }
                                             }}
                                           >
@@ -579,15 +585,15 @@ const Shop = ({ product }) => {
                                           <Link
                                             to="#"
                                             data-tooltip-id="my-tooltip-9"
-                                            onClick={() => {
+                                            onClick={(e) => {
                                               if (
                                                 UsercartItems?.find(
                                                   (item) => item.id === data.id
                                                 )
                                               ) {
-                                                removeFromWishList(data);
+                                                removeFromWishList(e, data);
                                               } else {
-                                                addToUserWishList(data);
+                                                addToUserWishList(e, data);
                                               }
                                             }}
                                           >
