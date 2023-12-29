@@ -9,6 +9,7 @@ import NoImage from "../../assets/images/NoImage.jpeg";
 import UserCartService from "../../services/Cart";
 import toast from "react-hot-toast";
 import { BsHandbagFill } from "react-icons/bs";
+import { Helmet } from "react-helmet-async";
 
 const WishList = () => {
   const phone = localStorage.getItem("phone");
@@ -102,6 +103,9 @@ const WishList = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Impel Store - Wishlist</title>
+      </Helmet>
       <section className="wishlist">
         <div className="container">
           <h2>My Wishlist</h2>

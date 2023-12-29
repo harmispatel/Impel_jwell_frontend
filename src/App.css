@@ -1817,7 +1817,7 @@ input[type="file"] {
 }
 
 .accordian .accordion-button {
-  padding: 9px !important;
+  padding: 8px !important;
   border-color: hsl(0, 0%, 80%) !important;
   color: #949594 !important;
 }

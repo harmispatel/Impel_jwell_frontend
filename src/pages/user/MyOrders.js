@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import ReactLoading from "react-loading";
 import { FaEye } from "react-icons/fa";
 import Userservice from "../../services/Cart";
+import { Helmet } from "react-helmet-async";
 
 const MyOrders = () => {
   const user_id = localStorage.getItem("user_id");
@@ -28,6 +29,9 @@ const MyOrders = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Impel Store - My orders</title>
+      </Helmet>
       <section className="cart">
         {isLoading ? (
           <div className="h-100 d-flex justify-content-center">

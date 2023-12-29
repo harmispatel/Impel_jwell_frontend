@@ -3,6 +3,7 @@ import { useDropzone } from "react-dropzone";
 import { ImCross } from "react-icons/im";
 import toast from "react-hot-toast";
 import profileService from "../../services/Auth";
+import { Helmet } from "react-helmet-async";
 
 const DealerProfile = () => {
   const email = localStorage.getItem("email");
@@ -71,6 +72,7 @@ const DealerProfile = () => {
         .then((res) => {
           if (res.status === true) {
             getDealerProfileData();
+            window.location.reload(false);
             toast.success(res.message);
           } else {
             getDealerProfileData();
@@ -104,223 +106,228 @@ const DealerProfile = () => {
   }, []);
 
   return (
-    <section className="profile">
-      <div className="container rounded bg-white mb-5 p-5">
-        <div className="row mb-4">
-          {/* Owner_info */}
-          <div className="d-flex justify-content-between align-items-center">
-            <h4 className="text-right">Owner Information</h4>
-          </div>
-          <div className="row">
-            <div className="col-md-4">
-              <label className="labels">Owner Name</label>
-              <input
-                type="text"
-                className="form-control"
-                value={profileData.name}
-                disabled
-              />
+    <>
+      <Helmet>
+        <title>Impel Store - Dealer Profile</title>
+      </Helmet>
+      <section className="profile">
+        <div className="container rounded bg-white mb-5 p-5">
+          <div className="row mb-4">
+            {/* Owner_info */}
+            <div className="d-flex justify-content-between align-items-center">
+              <h4 className="text-right">Owner Information</h4>
             </div>
-            <div className="col-md-4">
-              <label className="labels">Owner Email</label>
-              <input
-                type="text"
-                className="form-control"
-                value={profileData.email}
-                disabled
-              />
-            </div>
-            <div className="col-md-4">
-              <label className="labels">Owner Phone No.</label>
-              <input
-                type="text"
-                className="form-control"
-                value={profileData.phone}
-                disabled
-              />
-            </div>
-            <div className="col-md-4 mt-3">
-              <label className="labels">Owner Whatsapp No.</label>
-              <input
-                type="text"
-                className="form-control"
-                value={profileData.phone}
-                disabled
-              />
-            </div>
-          </div>
-        </div>
-        <hr />
-        <div className="row mb-4">
-          {/* company_info */}
-          <div className="d-flex justify-content-between align-items-center">
-            <h4 className="text-right">Company Information</h4>
-          </div>
-          <div className="row">
-            <div className="col-md-4">
-              <label className="labels">Company Name</label>
-              <input
-                type="text"
-                className="form-control"
-                value={profileData.comapany_name}
-                disabled
-              />
-            </div>
-            <div class="col-md-4">
-              <label class="labels">GST No</label>
-              <input
-                type="text"
-                className="form-control"
-                value={profileData.gst_no}
-                disabled
-              />
-            </div>
-            <div class="col-md-4">
-              <label class="labels">Address</label>
-              <textarea
-                type="text"
-                rows={2}
-                className="form-control"
-                value={profileData.address}
-                disabled
-              />
-            </div>
-            <div className="col-md-4 mt-2">
-              <label className="labels">Pincode</label>
-              <input
-                type="number"
-                className="form-control"
-                value={profileData.pincode}
-                disabled
-              />
-            </div>
-            <div className="col-md-4 mt-2">
-              <label className="labels">State</label>
-              <input
-                type="text"
-                className="form-control"
-                value={profileData?.state?.name}
-                disabled
-              />
-            </div>
-            <div className="col-md-4 mt-2">
-              <label className="labels">City</label>
-              <input
-                type="text"
-                className="form-control"
-                value={profileData?.city?.name}
-                disabled
-              />
+            <div className="row">
+              <div className="col-md-4">
+                <label className="labels">Owner Name</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={profileData.name}
+                  disabled
+                />
+              </div>
+              <div className="col-md-4">
+                <label className="labels">Owner Email</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={profileData.email}
+                  disabled
+                />
+              </div>
+              <div className="col-md-4">
+                <label className="labels">Owner Phone No.</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={profileData.phone}
+                  disabled
+                />
+              </div>
+              <div className="col-md-4 mt-3">
+                <label className="labels">Owner Whatsapp No.</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={profileData.phone}
+                  disabled
+                />
+              </div>
             </div>
           </div>
-        </div>
-        <hr />
-        <div className="row mb-4">
-          {/* Owner_info */}
-          <div className="d-flex justify-content-between align-items-center">
-            <h4 className="text-right">Logo & Documents</h4>
+          <hr />
+          <div className="row mb-4">
+            {/* company_info */}
+            <div className="d-flex justify-content-between align-items-center">
+              <h4 className="text-right">Company Information</h4>
+            </div>
+            <div className="row">
+              <div className="col-md-4">
+                <label className="labels">Company Name</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={profileData.comapany_name}
+                  disabled
+                />
+              </div>
+              <div class="col-md-4">
+                <label class="labels">GST No</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={profileData.gst_no}
+                  disabled
+                />
+              </div>
+              <div class="col-md-4">
+                <label class="labels">Address</label>
+                <textarea
+                  type="text"
+                  rows={2}
+                  className="form-control"
+                  value={profileData.address}
+                  disabled
+                />
+              </div>
+              <div className="col-md-4 mt-2">
+                <label className="labels">Pincode</label>
+                <input
+                  type="number"
+                  className="form-control"
+                  value={profileData.pincode}
+                  disabled
+                />
+              </div>
+              <div className="col-md-4 mt-2">
+                <label className="labels">State</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={profileData?.state?.name}
+                  disabled
+                />
+              </div>
+              <div className="col-md-4 mt-2">
+                <label className="labels">City</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={profileData?.city?.name}
+                  disabled
+                />
+              </div>
+            </div>
           </div>
-          <div className="row">
-            <div className="col-md-4">
-              <label className="labels">
-                <strong>Profile picture</strong>
-              </label>
-              <br />
-              {profileData?.profile && (
-                <>
-                  <div className="imagesss">
-                    <div className="profile-image">
-                      <form
-                        id="user-profile-form"
-                        method="POST"
-                        encType="multipart/form-data"
-                      >
-                        <input
-                          type="hidden"
-                          name="user_id"
-                          value={profileData?.id}
-                        />
-                        <input
-                          id="upload"
-                          name="user_image"
-                          type="file"
-                          accept="image/*"
-                          onChange={handleImageChange}
-                          style={{ display: "none" }}
-                        />
-
-                        <label
-                          className="new-button"
-                          htmlFor="upload"
-                          style={{
-                            cursor: "pointer",
-                            display: "inline-block",
-                            border: "1px solid #ccc",
-                            borderRadius: "5px",
-                          }}
+          <hr />
+          <div className="row mb-4">
+            {/* Owner_info */}
+            <div className="d-flex justify-content-between align-items-center">
+              <h4 className="text-right">Logo & Documents</h4>
+            </div>
+            <div className="row">
+              <div className="col-md-4">
+                <label className="labels">
+                  <strong>Profile picture</strong>
+                </label>
+                <br />
+                {profileData?.profile && (
+                  <>
+                    <div className="imagesss">
+                      <div className="profile-image">
+                        <form
+                          id="user-profile-form"
+                          method="POST"
+                          encType="multipart/form-data"
                         >
-                          <img
-                            src={profileData?.profile}
-                            alt="Uploaded"
-                            className="uploaded-image"
+                          <input
+                            type="hidden"
+                            name="user_id"
+                            value={profileData?.id}
                           />
-                        </label>
-                      </form>
-                    </div>
-                  </div>
-                </>
-              )}
-            </div>
-            <div className="col-md-4">
-              <label className="labels">
-                <strong>Company Logo</strong>
-              </label>
+                          <input
+                            id="upload"
+                            name="user_image"
+                            type="file"
+                            accept="image/*"
+                            onChange={handleImageChange}
+                            style={{ display: "none" }}
+                          />
 
-              <br />
-              <img
-                src={profileData?.company_logo}
-                className="mt-3"
-                width={200}
-                alt=""
-              />
-            </div>
-            <div className="col-md-4">
-              <label className="labels">
-                <strong>Your Documents</strong>
-              </label>
-              {/* <div {...getRootProps()} className="dropzone" disabled>
+                          <label
+                            className="new-button"
+                            htmlFor="upload"
+                            style={{
+                              cursor: "pointer",
+                              display: "inline-block",
+                              border: "1px solid #ccc",
+                              borderRadius: "5px",
+                            }}
+                          >
+                            <img
+                              src={profileData?.profile}
+                              alt="Uploaded"
+                              className="uploaded-image"
+                            />
+                          </label>
+                        </form>
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+              <div className="col-md-4">
+                <label className="labels">
+                  <strong>Company Logo</strong>
+                </label>
+
+                <br />
+                <img
+                  src={profileData?.company_logo}
+                  className="mt-3"
+                  width={200}
+                  alt=""
+                />
+              </div>
+              <div className="col-md-4">
+                <label className="labels">
+                  <strong>Your Documents</strong>
+                </label>
+                {/* <div {...getRootProps()} className="dropzone" disabled>
                     <input {...getInputProps()} />
                     <p>Drag & drop some files here, or click to select files</p>
                   </div> */}
-              <div className="file-preview">
-                <div className="row">
-                  {files.map((file) => (
-                    <div className="col-md-3">
-                      <div
-                        key={file.id}
-                        className="file-item position-relative"
-                      >
-                        <img
-                          src={URL.createObjectURL(file.file)}
-                          alt={file.file.name}
-                          className="file-thumbnail w-100"
-                        />
-                        <span
-                          className="close-icon"
-                          onClick={() => removeFile(file.id)}
+                <div className="file-preview">
+                  <div className="row">
+                    {files.map((file) => (
+                      <div className="col-md-3">
+                        <div
+                          key={file.id}
+                          className="file-item position-relative"
                         >
-                          <ImCross />
-                        </span>
+                          <img
+                            src={URL.createObjectURL(file.file)}
+                            alt={file.file.name}
+                            className="file-thumbnail w-100"
+                          />
+                          <span
+                            className="close-icon"
+                            onClick={() => removeFile(file.id)}
+                          >
+                            <ImCross />
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 };
 

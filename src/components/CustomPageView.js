@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import profileService from "../services/Home";
 import { useParams } from "react-router-dom";
 import ReactLoading from "react-loading";
+import { Helmet } from "react-helmet-async";
 
 const CustomPageView = () => {
   const paramId = useParams();
@@ -27,6 +28,14 @@ const CustomPageView = () => {
 
   return (
     <>
+      <Helmet>
+        <title>
+          Impel Store -{" "}
+          {pageDetails[0]?.name && pageDetails[0]?.name
+            ? pageDetails[0]?.name
+            : ""}
+        </title>
+      </Helmet>
       <section className="wishlist">
         {isLoading ? (
           <div className="h-100 d-flex justify-content-center">

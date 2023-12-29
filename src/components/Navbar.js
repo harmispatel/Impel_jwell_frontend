@@ -14,16 +14,9 @@ import { IoMdArrowDropdown } from "react-icons/io";
 
 const Navbar = (props) => {
   const { profileData } = props;
+  const location = useLocation();
 
   const { state: wishliststate } = useContext(WishlistSystem);
-
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const navigate = useNavigate();
-  let tagIds = searchParams.getAll("tag_id");
-  tagIds =
-    Array.isArray(tagIds) && tagIds.length > 0 ? tagIds[0].split(",") : [];
-  tagIds = tagIds.map((i) => parseFloat(i));
 
   const Dealer = localStorage.getItem("token");
   const DealerEmail = localStorage.getItem("email");
@@ -37,6 +30,13 @@ const Navbar = (props) => {
   const [dealerData, setDealerData] = useState([]);
   const [tags, setTags] = useState([]);
   const [tag, setTag] = useState([]);
+
+  const searchParams = new URLSearchParams(location.search);
+  const navigate = useNavigate();
+  let tagIds = searchParams.getAll("tag_id");
+  tagIds =
+    Array.isArray(tagIds) && tagIds.length > 0 ? tagIds[0].split(",") : [];
+  tagIds = tagIds.map((i) => parseFloat(i));
 
   const handleTag = (e) => {
     setTag([parseFloat(e.target.value)]);
@@ -110,6 +110,7 @@ const Navbar = (props) => {
       navigate("/login");
     }
   };
+
   return (
     <header className={colorChange ? "header sticky_header" : "header"}>
       <nav className="navbar navbar-expand-lg bg-body-tertiary">

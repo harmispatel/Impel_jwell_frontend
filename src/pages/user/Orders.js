@@ -3,6 +3,7 @@ import Userservice from "../../services/Cart";
 import { Link, useParams } from "react-router-dom";
 import ReactLoading from "react-loading";
 import BreadCrumb from "../../components/common/BreadCrumb";
+import { Helmet } from "react-helmet-async";
 
 const Orders = () => {
   const id = useParams();
@@ -37,6 +38,9 @@ const Orders = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Impel Store - Order Details</title>
+      </Helmet>
       <section className="my_orders">
         {isLoading ? (
           <div className="h-100 d-flex justify-content-center">

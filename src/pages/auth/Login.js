@@ -15,6 +15,7 @@ import CheckUser from "../../services/Auth";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { CgSpinner } from "react-icons/cg";
+import { Helmet } from "react-helmet-async";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -172,6 +173,9 @@ const Login = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Impel Store - Login</title>
+      </Helmet>
       <section className="login">
         <div className="login_main">
           <div className="container">
@@ -275,6 +279,7 @@ const Login = () => {
                                       id="sign-in-button"
                                       type="submit"
                                       className="btn btn-outline-warning"
+                                      disabled={spinner}
                                     >
                                       {spinner && (
                                         <CgSpinner

@@ -18,6 +18,7 @@ import Gold_Ring from "../assets/images/gold_ring.png";
 import homeService from "../services/Home";
 import { Link, useLocation } from "react-router-dom";
 import gif from "../assets/images/intro.gif";
+import { Helmet } from "react-helmet-async";
 
 const Home = () => {
   const location = useLocation();
@@ -139,6 +140,9 @@ const Home = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Impel Store - Home</title>
+      </Helmet>
       {/* home */}
       <section className="banner">
         <div className="banner_content">
@@ -361,6 +365,7 @@ const Home = () => {
                           to={`/shopdetails/${data.id}`}
                           className="text-decoration-none"
                           style={{ color: "#000" }}
+                          target="_blank"
                         >
                           <div className="profile-pic">
                             <div className="profile_img">
@@ -512,6 +517,7 @@ const Home = () => {
                           to={`/shopdetails/${data.id}`}
                           className="text-decoration-none"
                           style={{ color: "#000" }}
+                          target="_blank"
                         >
                           <div className="profile-pic">
                             <img src={data.image} alt="" />

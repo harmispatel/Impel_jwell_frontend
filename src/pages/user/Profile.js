@@ -3,6 +3,7 @@ import { Button, Col, Form, Modal } from "react-bootstrap";
 import toast from "react-hot-toast";
 import ReactLoading from "react-loading";
 import profileService from "../../services/Auth";
+import { Helmet } from "react-helmet-async";
 
 const Profile = () => {
   const phone = localStorage.getItem("phone");
@@ -87,7 +88,6 @@ const Profile = () => {
             toast.success(res.message);
           } else {
             getProfile();
-            window.location.reload(false);
             toast.error(res.message);
           }
         })
@@ -371,474 +371,493 @@ const Profile = () => {
   }, []);
 
   return (
-    <section className="profile">
-      <div className="container">
-        <div className="row">
-          {isLoading ? (
-            <div className="h-100 d-flex justify-content-center">
-              <ReactLoading
-                type={"spin"}
-                color={"#053961"}
-                height={"10%"}
-                width={"10%"}
-                className="loader"
-              />
-            </div>
-          ) : (
-            <>
-              <div className="col-xl-4">
-                <div className="card mb-4 mb-xl-0">
-                  <div>
-                    <div className="card-header">Profile Picture</div>
-                    <div className="upload-btn">
-                      <div className="button-wrap py-3"></div>
-                    </div>
-                    <>
-                      {profileData?.profile && (
-                        <>
-                          <div className="imagesss pb-4">
-                            <div className="profile-image">
-                              <form
-                                id="user-profile-form"
-                                method="POST"
-                                encType="multipart/form-data"
-                              >
-                                <input
-                                  type="hidden"
-                                  name="user_id"
-                                  value={profileData?.id}
-                                />
-                                <input
-                                  id="upload"
-                                  name="user_image"
-                                  type="file"
-                                  accept="image/*"
-                                  onChange={handleImageChange}
-                                  style={{ display: "none" }}
-                                />
-
-                                <label
-                                  className="new-button"
-                                  htmlFor="upload"
-                                  style={{
-                                    cursor: "pointer",
-                                    display: "inline-block",
-                                    border: "1px solid #ccc",
-                                    borderRadius: "5px",
-                                  }}
-                                >
-                                  <img
-                                    src={profileData?.profile}
-                                    alt="Uploaded"
-                                    className="uploaded-image"
-                                  />
-                                </label>
-                              </form>
-                            </div>
-                          </div>
-                        </>
-                      )}
-                    </>
-                  </div>
-                </div>
-              </div>
-              <div className="col-xl-8">
-                <div className="card mb-4">
-                  <div className="card-header">Account Details</div>
-                  <div className="card-body">
-                    <form>
-                      <div className="row gx-3 mb-3">
-                        <div className="col-md-6">
-                          <label className="small mb-1" for="inputFirstName">
-                            First name
-                          </label>
-                          <input
-                            className="form-control"
-                            id="inputFirstName"
-                            type="text"
-                            value={profileData.name}
-                            disabled
-                          />
-                        </div>
-
-                        <div className="col-md-6">
-                          <label className="small mb-1" for="inputLastName">
-                            Email Id
-                          </label>
-                          <input
-                            className="form-control"
-                            id="inputLastName"
-                            type="text"
-                            value={profileData.email}
-                            disabled
-                          />
-                        </div>
-                      </div>
-
-                      <div className="row gx-3 mb-3">
-                        <div className="col-md-6">
-                          <label className="small mb-1" for="inputOrgName">
-                            Mobile Number
-                          </label>
-                          <input
-                            className="form-control"
-                            id="inputOrgName"
-                            type="text"
-                            value={profileData.phone}
-                            disabled
-                          />
-                        </div>
-
-                        <div className="col-md-6">
-                          <label className="small mb-1" for="inputLocation">
-                            Billing Address
-                          </label>
-                          <input
-                            className="form-control"
-                            id="inputLocation"
-                            type="text"
-                            value={profileData.address}
-                            disabled
-                          />
-                        </div>
-                      </div>
-                      <div className="row gx-3 mb-3">
-                        <div className="col-md-6">
-                          <label className="small mb-1" for="inputOrgName">
-                            City
-                          </label>
-                          <input
-                            className="form-control"
-                            id="inputOrgName"
-                            type="text"
-                            value={profileData.city_name}
-                            disabled
-                          />
-                        </div>
-
-                        <div className="col-md-6">
-                          <label className="small mb-1" for="inputLocation">
-                            State
-                          </label>
-                          <input
-                            className="form-control"
-                            id="inputLocation"
-                            type="text"
-                            value={profileData.state_name}
-                            disabled
-                          />
-                        </div>
-                      </div>
-                      <div className="row gx-3 mb-3">
-                        <div className="col-md-6">
-                          <label className="small mb-1" for="inputOrgName">
-                            Pincode
-                          </label>
-                          <input
-                            className="form-control"
-                            id="inputOrgName"
-                            type="text"
-                            value={profileData?.pincode}
-                            disabled
-                          />
-                        </div>
-
-                        <div className="col-md-6">
-                          <label className="small mb-1" for="inputLocation">
-                            Pan Number
-                          </label>
-                          <input
-                            className="form-control"
-                            id="inputLocation"
-                            type="text"
-                            value={profileData.pan_no}
-                            disabled
-                          />
-                        </div>
-                      </div>
-
-                      <button
-                        type="button"
-                        class="custom-btn btn-2"
-                        onClick={() => handleEdit(profileData)}
-                      >
-                        Edit profile
-                      </button>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </>
-          )}
-        </div>
-      </div>
-
-      <Modal
-        className="form_intent profile_model"
-        centered
-        show={showEdit}
-        onHide={handleClose}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Edit Profile</Modal.Title>
-        </Modal.Header>
-
-        <Modal.Body>
-          <Form
-            onSubmit={(e) => handleUpdate(e, selectedData)}
-            onKeyUp={(e) => validateForm(e)}
-          >
-            <div className="row">
-              <div className="col-md-6">
-                <Form.Group as={Col} className="mb-2" controlId="formGridState">
-                  <Form.Label>
-                    Name<span className="text-danger">*</span>
-                  </Form.Label>
-                  <Form.Control
-                    name="name"
-                    defaultValue={selectedData.name}
-                    onChange={(e) => handleEditChange(e)}
-                    placeholder="Enter Your Name"
-                  />
-                  {error.nameErr && (
-                    <span className="text-danger">{error.nameErr}</span>
-                  )}
-                </Form.Group>
-              </div>
-              <div className="col-md-6">
-                <Form.Group as={Col} className="mb-2" controlId="formGridState">
-                  <Form.Label>
-                    Email<span className="text-danger">*</span>
-                  </Form.Label>
-                  <Form.Control
-                    name="email"
-                    defaultValue={selectedData.email}
-                    onChange={(e) => handleEditChange(e)}
-                    placeholder="Enter Your Email"
-                  />
-                  <span className="text-danger">{error.emailErr}</span>
-                </Form.Group>
-              </div>
-              <div className="col-md-6">
-                <Form.Group as={Col} className="mb-2" controlId="formGridState">
-                  <Form.Label>Phone</Form.Label>
-                  <Form.Control
-                    name="phone"
-                    defaultValue={selectedData.phone}
-                    disabled
-                    onChange={(e) => handleEditChange(e)}
-                    placeholder="Enter Your Phone"
-                  />
-                </Form.Group>
-              </div>
-
-              <div className="col-md-6 mb-3">
-                <Form.Group className="mb-2" controlId="formGridAddress1">
-                  <Form.Label>Pan-card</Form.Label>
-                  <Form.Control
-                    name="pan_no"
-                    defaultValue={selectedData.pan_no}
-                    onChange={(e) => handleEditChange(e)}
-                    placeholder="Enter Your Pancard number"
-                  />
-                  {error.pancardErr && (
-                    <span className="text-danger">{error.pancardErr}</span>
-                  )}
-                </Form.Group>
-              </div>
-
-              <hr />
-              <div className="col-md-6">
-                <Form.Group as={Col} className="mb-2" controlId="formGridZip">
-                  <Form.Label>
-                    Billing Address<span className="text-danger">*</span>
-                  </Form.Label>
-                  <textarea
-                    name="address"
-                    className="form-control"
-                    defaultValue={selectedData.address}
-                    onChange={(e) => {
-                      handleEditChange(e);
-                    }}
-                    placeholder="Enter Your Address"
-                  />
-                  {error.addressErr && (
-                    <span className="text-danger">{error.addressErr}</span>
-                  )}
-                </Form.Group>
-              </div>
-              <div className="col-md-6">
-                <Form.Group className="mb-2" controlId="formGridAddress1">
-                  <Form.Label>
-                    State<span className="text-danger">*</span>
-                  </Form.Label>
-                  <select
-                    className="form-control"
-                    name="state"
-                    onChange={(e) => {
-                      handleEditChange(e);
-                      fetchCity(e.target.value);
-                    }}
-                    value={userData.state}
-                  >
-                    <option value="">--state select--</option>
-                    {profileData?.states?.map((userstate, index) => (
-                      <option key={index} value={userstate.id}>
-                        {userstate.name}
-                      </option>
-                    ))}
-                  </select>
-                  <span className="text-danger">{error.stateErr}</span>
-                </Form.Group>
-              </div>
-              <div className="col-md-6">
-                <Form.Group className="mb-2" controlId="formGridAddress1">
-                  <Form.Label>
-                    City<span className="text-danger">*</span>
-                  </Form.Label>
-                  <select
-                    className="form-control"
-                    name="city"
-                    onChange={(e) => {
-                      handleEditChange(e);
-                    }}
-                    value={userData.city}
-                  >
-                    <option value="">--city select--</option>
-                    {city?.map((usercity, index) => (
-                      <option key={index} value={usercity.id}>
-                        {usercity.name}
-                      </option>
-                    ))}
-                  </select>
-                  <span className="text-danger">{error.cityErr}</span>
-                </Form.Group>
-              </div>
-              <div className="col-md-6 mb-3">
-                <Form.Group className="mb-2" controlId="formGridAddress1">
-                  <Form.Label>
-                    Pincode<span className="text-danger">*</span>
-                  </Form.Label>
-                  <Form.Control
-                    name="pincode"
-                    defaultValue={selectedData.pincode}
-                    onChange={(e) => handleEditChange(e)}
-                    placeholder="Enter Your Pincode"
-                    maxLength={6}
-                  />
-                  <span className="text-danger">{error.pincodeErr}</span>
-                </Form.Group>
-              </div>
-              <div className="address-checkbox-btn">
-                <input
-                  type="checkbox"
-                  id="checkbox"
-                  name="address_same_as_company"
-                  className="address-checkbox"
-                  checked={isChecked}
-                  onChange={handleCheckboxChange}
+    <>
+      <Helmet>
+        <title>Impel Store - Profile</title>
+      </Helmet>
+      <section className="profile">
+        <div className="container">
+          <div className="row">
+            {isLoading ? (
+              <div className="h-100 d-flex justify-content-center">
+                <ReactLoading
+                  type={"spin"}
+                  color={"#053961"}
+                  height={"10%"}
+                  width={"10%"}
+                  className="loader"
                 />
-                <label htmlFor="checkbox" className="ms-1 address-check-text">
-                  Shipping Address is as same above then check this box
-                </label>
               </div>
-              <hr className="mt-3" />
-              <div className="col-md-6">
-                <Form.Group as={Col} className="mb-2" controlId="formGridZip">
-                  <Form.Label>
-                    Shipping Address<span className="text-danger">*</span>
-                  </Form.Label>
-                  <textarea
-                    name="shipping_address"
-                    className="form-control"
-                    defaultValue={selectedData.shipping_address}
-                    onChange={(e) => {
-                      handleEditChange(e);
-                    }}
-                    placeholder="Enter Your Address"
-                  />
-                  <span className="text-danger">
-                    {error.shipping_address_err}
-                  </span>
-                </Form.Group>
-              </div>
-              <div className="col-md-6">
-                <Form.Group className="mb-2" controlId="formGridAddress1">
-                  <Form.Label>
-                    Shipping-State<span className="text-danger">*</span>
-                  </Form.Label>
-                  <select
-                    className="form-control"
-                    name="shipping_state"
-                    onChange={(e) => {
-                      handleEditChange(e);
-                      fetchShippingCity(e.target.value);
-                    }}
-                    value={userData.shipping_state}
-                  >
-                    <option value="">--shipping state select--</option>
-                    {profileData?.states?.map((userstate, index) => (
-                      <option key={index} value={userstate.id}>
-                        {userstate.name}
-                      </option>
-                    ))}
-                  </select>
-                  <span className="text-danger">
-                    {error.shipping_state_err}
-                  </span>
-                </Form.Group>
-              </div>
-              <div className="col-md-6">
-                <Form.Group className="mb-2" controlId="formGridAddress1">
-                  <Form.Label>
-                    Shipping-City<span className="text-danger">*</span>
-                  </Form.Label>
-                  <select
-                    className="form-control"
-                    name="shipping_city"
-                    onChange={(e) => {
-                      handleEditChange(e);
-                    }}
-                    value={userData.shipping_city}
-                  >
-                    <option value="">--shipping City select--</option>
-                    {shipping_city?.map((usercity, index) => (
-                      <option key={index} value={usercity.id}>
-                        {usercity.name}
-                      </option>
-                    ))}
-                  </select>
-                  <span className="text-danger">{error.shipping_city_err}</span>
-                </Form.Group>
-              </div>
-              <div className="col-md-6 mb-3">
-                <Form.Group className="mb-2" controlId="formGridAddress1">
-                  <Form.Label>
-                    Shipping Pincode<span className="text-danger">*</span>
-                  </Form.Label>
-                  <Form.Control
-                    name="shipping_pincode"
-                    defaultValue={selectedData.shipping_pincode}
-                    onChange={(e) => handleEditChange(e)}
-                    placeholder="Enter Your Pincode"
-                    maxLength={6}
-                  />
-                  <span className="text-danger">
-                    {error.shipping_pincode_err}
-                  </span>
-                </Form.Group>
-              </div>
-            </div>
+            ) : (
+              <>
+                <div className="col-xl-4">
+                  <div className="card mb-4 mb-xl-0">
+                    <div>
+                      <div className="card-header">Profile Picture</div>
+                      <div className="upload-btn">
+                        <div className="button-wrap py-3"></div>
+                      </div>
+                      <>
+                        {profileData?.profile && (
+                          <>
+                            <div className="imagesss pb-4">
+                              <div className="profile-image">
+                                <form
+                                  id="user-profile-form"
+                                  method="POST"
+                                  encType="multipart/form-data"
+                                >
+                                  <input
+                                    type="hidden"
+                                    name="user_id"
+                                    value={profileData?.id}
+                                  />
+                                  <input
+                                    id="upload"
+                                    name="user_image"
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleImageChange}
+                                    style={{ display: "none" }}
+                                  />
 
-            <div className="text-center">
-              <Button variant="primary" type="submit">
-                Update
-              </Button>
-            </div>
-          </Form>
-        </Modal.Body>
-      </Modal>
-    </section>
+                                  <label
+                                    className="new-button"
+                                    htmlFor="upload"
+                                    style={{
+                                      cursor: "pointer",
+                                      display: "inline-block",
+                                      border: "1px solid #ccc",
+                                      borderRadius: "5px",
+                                    }}
+                                  >
+                                    <img
+                                      src={profileData?.profile}
+                                      alt="Uploaded"
+                                      className="uploaded-image"
+                                    />
+                                  </label>
+                                </form>
+                              </div>
+                            </div>
+                          </>
+                        )}
+                      </>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-xl-8">
+                  <div className="card mb-4">
+                    <div className="card-header">Account Details</div>
+                    <div className="card-body">
+                      <form>
+                        <div className="row gx-3 mb-3">
+                          <div className="col-md-6">
+                            <label className="small mb-1" for="inputFirstName">
+                              First name
+                            </label>
+                            <input
+                              className="form-control"
+                              id="inputFirstName"
+                              type="text"
+                              value={profileData.name}
+                              disabled
+                            />
+                          </div>
+
+                          <div className="col-md-6">
+                            <label className="small mb-1" for="inputLastName">
+                              Email Id
+                            </label>
+                            <input
+                              className="form-control"
+                              id="inputLastName"
+                              type="text"
+                              value={profileData.email}
+                              disabled
+                            />
+                          </div>
+                        </div>
+
+                        <div className="row gx-3 mb-3">
+                          <div className="col-md-6">
+                            <label className="small mb-1" for="inputOrgName">
+                              Mobile Number
+                            </label>
+                            <input
+                              className="form-control"
+                              id="inputOrgName"
+                              type="text"
+                              value={profileData.phone}
+                              disabled
+                            />
+                          </div>
+
+                          <div className="col-md-6">
+                            <label className="small mb-1" for="inputLocation">
+                              Billing Address
+                            </label>
+                            <input
+                              className="form-control"
+                              id="inputLocation"
+                              type="text"
+                              value={profileData.address}
+                              disabled
+                            />
+                          </div>
+                        </div>
+                        <div className="row gx-3 mb-3">
+                          <div className="col-md-6">
+                            <label className="small mb-1" for="inputOrgName">
+                              City
+                            </label>
+                            <input
+                              className="form-control"
+                              id="inputOrgName"
+                              type="text"
+                              value={profileData.city_name}
+                              disabled
+                            />
+                          </div>
+
+                          <div className="col-md-6">
+                            <label className="small mb-1" for="inputLocation">
+                              State
+                            </label>
+                            <input
+                              className="form-control"
+                              id="inputLocation"
+                              type="text"
+                              value={profileData.state_name}
+                              disabled
+                            />
+                          </div>
+                        </div>
+                        <div className="row gx-3 mb-3">
+                          <div className="col-md-6">
+                            <label className="small mb-1" for="inputOrgName">
+                              Pincode
+                            </label>
+                            <input
+                              className="form-control"
+                              id="inputOrgName"
+                              type="text"
+                              value={profileData?.pincode}
+                              disabled
+                            />
+                          </div>
+
+                          <div className="col-md-6">
+                            <label className="small mb-1" for="inputLocation">
+                              Pan Number
+                            </label>
+                            <input
+                              className="form-control"
+                              id="inputLocation"
+                              type="text"
+                              value={profileData.pan_no}
+                              disabled
+                            />
+                          </div>
+                        </div>
+
+                        <button
+                          type="button"
+                          class="custom-btn btn-2"
+                          onClick={() => handleEdit(profileData)}
+                        >
+                          Edit profile
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+
+        <Modal
+          className="form_intent profile_model"
+          centered
+          show={showEdit}
+          onHide={handleClose}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Edit Profile</Modal.Title>
+          </Modal.Header>
+
+          <Modal.Body>
+            <Form
+              onSubmit={(e) => handleUpdate(e, selectedData)}
+              onKeyUp={(e) => validateForm(e)}
+            >
+              <div className="row">
+                <div className="col-md-6">
+                  <Form.Group
+                    as={Col}
+                    className="mb-2"
+                    controlId="formGridState"
+                  >
+                    <Form.Label>
+                      Name<span className="text-danger">*</span>
+                    </Form.Label>
+                    <Form.Control
+                      name="name"
+                      defaultValue={selectedData.name}
+                      onChange={(e) => handleEditChange(e)}
+                      placeholder="Enter Your Name"
+                    />
+                    {error.nameErr && (
+                      <span className="text-danger">{error.nameErr}</span>
+                    )}
+                  </Form.Group>
+                </div>
+                <div className="col-md-6">
+                  <Form.Group
+                    as={Col}
+                    className="mb-2"
+                    controlId="formGridState"
+                  >
+                    <Form.Label>
+                      Email<span className="text-danger">*</span>
+                    </Form.Label>
+                    <Form.Control
+                      name="email"
+                      defaultValue={selectedData.email}
+                      onChange={(e) => handleEditChange(e)}
+                      placeholder="Enter Your Email"
+                    />
+                    <span className="text-danger">{error.emailErr}</span>
+                  </Form.Group>
+                </div>
+                <div className="col-md-6">
+                  <Form.Group
+                    as={Col}
+                    className="mb-2"
+                    controlId="formGridState"
+                  >
+                    <Form.Label>Phone</Form.Label>
+                    <Form.Control
+                      name="phone"
+                      defaultValue={selectedData.phone}
+                      disabled
+                      onChange={(e) => handleEditChange(e)}
+                      placeholder="Enter Your Phone"
+                    />
+                  </Form.Group>
+                </div>
+
+                <div className="col-md-6 mb-3">
+                  <Form.Group className="mb-2" controlId="formGridAddress1">
+                    <Form.Label>Pan-card</Form.Label>
+                    <Form.Control
+                      name="pan_no"
+                      defaultValue={selectedData.pan_no}
+                      onChange={(e) => handleEditChange(e)}
+                      placeholder="Enter Your Pancard number"
+                    />
+                    {error.pancardErr && (
+                      <span className="text-danger">{error.pancardErr}</span>
+                    )}
+                  </Form.Group>
+                </div>
+
+                <hr />
+                <div className="col-md-6">
+                  <Form.Group as={Col} className="mb-2" controlId="formGridZip">
+                    <Form.Label>
+                      Billing Address<span className="text-danger">*</span>
+                    </Form.Label>
+                    <textarea
+                      name="address"
+                      className="form-control"
+                      defaultValue={selectedData.address}
+                      onChange={(e) => {
+                        handleEditChange(e);
+                      }}
+                      placeholder="Enter Your Address"
+                    />
+                    {error.addressErr && (
+                      <span className="text-danger">{error.addressErr}</span>
+                    )}
+                  </Form.Group>
+                </div>
+                <div className="col-md-6">
+                  <Form.Group className="mb-2" controlId="formGridAddress1">
+                    <Form.Label>
+                      State<span className="text-danger">*</span>
+                    </Form.Label>
+                    <select
+                      className="form-control"
+                      name="state"
+                      onChange={(e) => {
+                        handleEditChange(e);
+                        fetchCity(e.target.value);
+                      }}
+                      value={userData.state}
+                    >
+                      <option value="">--state select--</option>
+                      {profileData?.states?.map((userstate, index) => (
+                        <option key={index} value={userstate.id}>
+                          {userstate.name}
+                        </option>
+                      ))}
+                    </select>
+                    <span className="text-danger">{error.stateErr}</span>
+                  </Form.Group>
+                </div>
+                <div className="col-md-6">
+                  <Form.Group className="mb-2" controlId="formGridAddress1">
+                    <Form.Label>
+                      City<span className="text-danger">*</span>
+                    </Form.Label>
+                    <select
+                      className="form-control"
+                      name="city"
+                      onChange={(e) => {
+                        handleEditChange(e);
+                      }}
+                      value={userData.city}
+                    >
+                      <option value="">--city select--</option>
+                      {city?.map((usercity, index) => (
+                        <option key={index} value={usercity.id}>
+                          {usercity.name}
+                        </option>
+                      ))}
+                    </select>
+                    <span className="text-danger">{error.cityErr}</span>
+                  </Form.Group>
+                </div>
+                <div className="col-md-6 mb-3">
+                  <Form.Group className="mb-2" controlId="formGridAddress1">
+                    <Form.Label>
+                      Pincode<span className="text-danger">*</span>
+                    </Form.Label>
+                    <Form.Control
+                      name="pincode"
+                      defaultValue={selectedData.pincode}
+                      onChange={(e) => handleEditChange(e)}
+                      placeholder="Enter Your Pincode"
+                      maxLength={6}
+                    />
+                    <span className="text-danger">{error.pincodeErr}</span>
+                  </Form.Group>
+                </div>
+                <div className="address-checkbox-btn">
+                  <input
+                    type="checkbox"
+                    id="checkbox"
+                    name="address_same_as_company"
+                    className="address-checkbox"
+                    checked={isChecked}
+                    onChange={handleCheckboxChange}
+                  />
+                  <label htmlFor="checkbox" className="ms-1 address-check-text">
+                    Shipping Address is as same above then check this box
+                  </label>
+                </div>
+                <hr className="mt-3" />
+                <div className="col-md-6">
+                  <Form.Group as={Col} className="mb-2" controlId="formGridZip">
+                    <Form.Label>
+                      Shipping Address<span className="text-danger">*</span>
+                    </Form.Label>
+                    <textarea
+                      name="shipping_address"
+                      className="form-control"
+                      defaultValue={selectedData.shipping_address}
+                      onChange={(e) => {
+                        handleEditChange(e);
+                      }}
+                      placeholder="Enter Your Address"
+                    />
+                    <span className="text-danger">
+                      {error.shipping_address_err}
+                    </span>
+                  </Form.Group>
+                </div>
+                <div className="col-md-6">
+                  <Form.Group className="mb-2" controlId="formGridAddress1">
+                    <Form.Label>
+                      Shipping-State<span className="text-danger">*</span>
+                    </Form.Label>
+                    <select
+                      className="form-control"
+                      name="shipping_state"
+                      onChange={(e) => {
+                        handleEditChange(e);
+                        fetchShippingCity(e.target.value);
+                      }}
+                      value={userData.shipping_state}
+                    >
+                      <option value="">--shipping state select--</option>
+                      {profileData?.states?.map((userstate, index) => (
+                        <option key={index} value={userstate.id}>
+                          {userstate.name}
+                        </option>
+                      ))}
+                    </select>
+                    <span className="text-danger">
+                      {error.shipping_state_err}
+                    </span>
+                  </Form.Group>
+                </div>
+                <div className="col-md-6">
+                  <Form.Group className="mb-2" controlId="formGridAddress1">
+                    <Form.Label>
+                      Shipping-City<span className="text-danger">*</span>
+                    </Form.Label>
+                    <select
+                      className="form-control"
+                      name="shipping_city"
+                      onChange={(e) => {
+                        handleEditChange(e);
+                      }}
+                      value={userData.shipping_city}
+                    >
+                      <option value="">--shipping City select--</option>
+                      {shipping_city?.map((usercity, index) => (
+                        <option key={index} value={usercity.id}>
+                          {usercity.name}
+                        </option>
+                      ))}
+                    </select>
+                    <span className="text-danger">
+                      {error.shipping_city_err}
+                    </span>
+                  </Form.Group>
+                </div>
+                <div className="col-md-6 mb-3">
+                  <Form.Group className="mb-2" controlId="formGridAddress1">
+                    <Form.Label>
+                      Shipping Pincode<span className="text-danger">*</span>
+                    </Form.Label>
+                    <Form.Control
+                      name="shipping_pincode"
+                      defaultValue={selectedData.shipping_pincode}
+                      onChange={(e) => handleEditChange(e)}
+                      placeholder="Enter Your Pincode"
+                      maxLength={6}
+                    />
+                    <span className="text-danger">
+                      {error.shipping_pincode_err}
+                    </span>
+                  </Form.Group>
+                </div>
+              </div>
+
+              <div className="text-center">
+                <Button variant="primary" type="submit">
+                  Update
+                </Button>
+              </div>
+            </Form>
+          </Modal.Body>
+        </Modal>
+      </section>
+    </>
   );
 };
 
