@@ -244,6 +244,7 @@ const ShopDetails = () => {
             ? `${product.name} (${product.code})`
             : ""}
         </title>
+        <meta name="description" content="Helmet application" />
       </Helmet>
 
       <section className="shop_details">

@@ -143,6 +143,7 @@ const Home = () => {
       <Helmet>
         <title>Impel Store - Home</title>
       </Helmet>
+
       {/* home */}
       <section className="banner">
         <div className="banner_content">
