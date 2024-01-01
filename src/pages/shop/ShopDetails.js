@@ -64,6 +64,7 @@ const ShopDetails = () => {
     try {
       const response = await productDetail.related_products(data);
       setRelatedProduct(response.data);
+      console.log(response.data);
     } catch (err) {
       console.log(err);
     }
