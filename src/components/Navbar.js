@@ -1,30 +1,33 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+
 import { FaUserAlt } from "react-icons/fa";
 import { BsHandbag, BsHeart } from "react-icons/bs";
-import Logo from "../assets/images/logo.png";
-import DealerService from "../services/Dealer/Cart";
-import UserService from "../services/Cart";
-import { Tooltip as ReactTooltip } from "react-tooltip";
-import FilterServices from "../services/Filter";
-import profileService from "../services/Auth";
-import { CartSystem } from "../context/CartContext";
-import { WishlistSystem } from "../context/WishListContext";
 import { IoMdArrowDropdown } from "react-icons/io";
 
-const Navbar = (props) => {
-  const { profileData } = props;
-  const location = useLocation();
+import { Tooltip as ReactTooltip } from "react-tooltip";
 
+import Logo from "../assets/images/logo.png";
+
+import UserService from "../services/Cart";
+
+import FilterServices from "../services/Filter";
+import profileService from "../services/Auth";
+import { WishlistSystem } from "../context/WishListContext";
+
+const Navbar = () => {
   const { state: wishliststate } = useContext(WishlistSystem);
+
+  const location = useLocation();
+  const currentRoute = location.pathname;
 
   const Dealer = localStorage.getItem("token");
   const DealerEmail = localStorage.getItem("email");
   const Phone = localStorage.getItem("phone");
-  const currentRoute = location.pathname;
 
   const [colorChange, setColorchange] = useState(false);
   const [isLoggedOut, setIsLoggedOut] = useState(false);
+  const [profileData, setProfileData] = useState([]);
   const [userCartCounts, setUsererCartCounts] = useState();
 
   const [dealerData, setDealerData] = useState([]);
@@ -71,6 +74,15 @@ const Navbar = (props) => {
       });
   };
 
+  const getProfile = async () => {
+    await profileService
+      .getProfile({ phone: Phone })
+      .then((res) => setProfileData(res.data))
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const getProfileData = () => {
     profileService
       .profile({ email: DealerEmail, token: Dealer })
@@ -81,8 +93,10 @@ const Navbar = (props) => {
         console.log(err);
       });
   };
+
   useEffect(() => {
     UserCartItems();
+    getProfile();
     getProfileData();
     Tags();
   }, []);
@@ -158,12 +172,7 @@ const Navbar = (props) => {
                 </li>
 
                 <li className="nav-item main-tags">
-                  <Link
-                    // to={`/shop${tagIds?.length > 0 ? `?tag_id=${tagIds}` : ""}`}
-                    to="#"
-                    className="nav-link"
-                    aria-current="page"
-                  >
+                  <Link to="#" className="nav-link" aria-current="page">
                     Tags
                     <IoMdArrowDropdown />
                   </Link>
@@ -333,16 +342,19 @@ const Navbar = (props) => {
                           to="#"
                           style={{ textDecoration: "none" }}
                         >
-                          <img
-                            src={profileData?.profile}
-                            alt=""
-                            className="uploaded-image"
-                            style={{
-                              width: "40px",
-                              height: "40px",
-                              borderRadius: "50%",
-                            }}
-                          />
+                          {profileData?.profile && (
+                            <img
+                              src={profileData?.profile}
+                              alt=""
+                              className="uploaded-image"
+                              style={{
+                                width: "40px",
+                                height: "40px",
+                                borderRadius: "50%",
+                              }}
+                            />
+                          )}
+
                           {profileData?.name ? (
                             <span className="ms-2">
                               <b

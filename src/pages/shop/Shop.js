@@ -10,12 +10,12 @@ import Select from "react-select";
 import Accordion from "react-bootstrap/Accordion";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
+import { Helmet } from "react-helmet-async";
 import ShopServices from "../../services/Shop";
 import FilterServices from "../../services/Filter";
 import DealerWishlist from "../../services/Dealer/Collection";
 import UserWishlist from "../../services/Auth";
 import { WishlistSystem } from "../../context/WishListContext";
-import { Helmet } from "react-helmet-async";
 
 const Shop = ({ product }) => {
   const { dispatch: wishlistDispatch } = useContext(WishlistSystem);
@@ -128,14 +128,6 @@ const Shop = ({ product }) => {
     setIsLoading(true);
     setTag(selectedTags ? [selectedTags.value] : []);
     setSelectedTag(selectedTags);
-
-    // const updatedTagIds = selectedTags ? [selectedTags?.value] : [];
-
-    // if (updatedTagIds.length > 0) {
-    //   navigate(`/shop?tag_id=${updatedTagIds}`);
-    // } else {
-    //   navigate("/shop");
-    // }
   };
 
   const handleSliderChange = (e) => {
@@ -156,11 +148,6 @@ const Shop = ({ product }) => {
     tagIds = tagIds.map((i) => parseFloat(i));
     setTag(tagIds);
   }, [location.search]);
-
-  // const matchedTag = filterTag.find((tag) => tag.id === tagIds[0]);
-  // setSelectedTag(
-  //   matchedTag ? { value: matchedTag.id, label: matchedTag.name } : null
-  // );
 
   const FilterData = (offset = 0) => {
     ShopServices.allfilterdesigns({
@@ -326,7 +313,7 @@ const Shop = ({ product }) => {
   // Dealer Wishlist products remove
   const removefromdealerwishlist = (e, product) => {
     e.preventDefault();
-    DealerWishlist.removetoWishlist({
+    DealerWishlist.removetodealerWishlist({
       email: localStorage.getItem("email"),
       design_id: product.id,
     })

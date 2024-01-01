@@ -72,8 +72,7 @@ const Orders = () => {
               <div className="container">
                 <div className="row justify-content-center text-center">
                   <div className="col-md-12">
-                    <div class="order-error-section">
-                      <h1 class="order-error">404</h1>
+                    <div class="order-error-section pt-5">
                       <div class="page">
                         Ooops!!! The Order you are looking for is not found
                       </div>

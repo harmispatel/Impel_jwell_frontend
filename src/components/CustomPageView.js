@@ -30,7 +30,7 @@ const CustomPageView = () => {
     <>
       <Helmet>
         <title>
-          Impel Store -{" "}
+          Impel Store -
           {pageDetails[0]?.name && pageDetails[0]?.name
             ? pageDetails[0]?.name
             : ""}
@@ -49,7 +49,6 @@ const CustomPageView = () => {
           </div>
         ) : (
           <>
-            {" "}
             <div className="container">
               <div className="row">
                 <div className="text-center">

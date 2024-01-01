@@ -4,12 +4,13 @@ import { Link } from "react-router-dom";
 import ReactLoading from "react-loading";
 import { CgSpinner } from "react-icons/cg";
 import { WishlistSystem } from "../../context/WishListContext";
-import noWishlist from "../../assets/images/wishlist.png";
 import NoImage from "../../assets/images/NoImage.jpeg";
 import UserCartService from "../../services/Cart";
 import toast from "react-hot-toast";
 import { BsHandbagFill } from "react-icons/bs";
 import { Helmet } from "react-helmet-async";
+import emptycart from "../../assets/images/empty-cart.png";
+import { FaLongArrowAltLeft } from "react-icons/fa";
 
 const WishList = () => {
   const phone = localStorage.getItem("phone");
@@ -79,8 +80,8 @@ const WishList = () => {
       .then((res) => {
         if (res.status === true) {
           GetUserCartList();
-          toast.success(res.message);
           GetUserWishlist();
+          toast.success(res.message);
           setIsLoading(true);
         } else {
           toast.error(res.message);
@@ -189,15 +190,38 @@ const WishList = () => {
                     </div>
                   </>
                 ) : (
-                  <div className="row justify-content-center">
-                    <div className="col-md-4 text-center">
-                      <img
-                        src={noWishlist}
-                        alt=""
-                        className="text-center align-items-center"
-                        height="350px"
-                        width="350px"
-                      />
+                  <div className="container">
+                    <div className="row justify-content-center">
+                      <div className="col-lg-8">
+                        <div className="card border shadow-sm p-4">
+                          <div className="text-center my-4">
+                            <img
+                              src={emptycart}
+                              alt="Empty Cart Illustration"
+                              className="img-fluid mb-3"
+                              style={{ maxWidth: "200px" }}
+                            />
+                            <h5 className="text-muted mb-3">
+                              Oops! Your Wishlist is empty.
+                            </h5>
+                            <p className="text-muted">
+                              Explore our collection and add your favourite
+                              products in your wishlist
+                            </p>
+                          </div>
+
+                          <div className="text-center">
+                            <Link
+                              to="/shop"
+                              className="view_all_btn px-4 py-2"
+                              style={{ borderRadius: "8px" }}
+                            >
+                              <FaLongArrowAltLeft className="mr-2" /> &nbsp;Back
+                              to Shop
+                            </Link>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 )}

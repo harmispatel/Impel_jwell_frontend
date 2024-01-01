@@ -9,15 +9,14 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import toast from "react-hot-toast";
 import { RxChevronLeft, RxChevronRight, RxCross1 } from "react-icons/rx";
 import { BsCartDash, BsHandbagFill } from "react-icons/bs";
+import { CgSpinner } from "react-icons/cg";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import ReactLoading from "react-loading";
+import { Helmet } from "react-helmet-async";
 import { WishlistSystem } from "../../context/WishListContext";
-import { CgSpinner } from "react-icons/cg";
 import UserCartService from "../../services/Cart";
 import Userservice from "../../services/Auth";
 import productDetail from "../../services/Shop";
-import DealerWishlist from "../../services/Dealer/Collection";
-import { Helmet } from "react-helmet-async";
 
 const ShopDetails = () => {
   const { dispatch: wishlistDispatch } = useContext(WishlistSystem);
@@ -35,7 +34,6 @@ const ShopDetails = () => {
   const [cartItems, setCartItems] = useState([]);
   const [userWishlist, setUserWishlist] = useState(false);
   const [UserWishlistItems, setUserWishlistItems] = useState([]);
-  const [DealerWishlistItems, setDealerWishlistItems] = useState([]);
   const [goldColor, setGoldColor] = useState("yellow_gold");
   const [goldType, setGoldType] = useState("18k");
   const [isLoading, setIsLoading] = useState(true);
@@ -91,22 +89,11 @@ const ShopDetails = () => {
       });
   };
 
-  const GetDealerWishList = async () => {
-    DealerWishlist.ListCollection({ email: Dealer })
-      .then((res) => {
-        setDealerWishlistItems(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
   useEffect(() => {
     productData();
     Relatedproduct();
     GetUserCartList();
     GetUserWishList();
-    GetDealerWishList();
   }, []);
 
   const addToUserWishList = async (product) => {

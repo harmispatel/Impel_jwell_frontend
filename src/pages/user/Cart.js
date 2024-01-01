@@ -810,7 +810,7 @@ const Cart = () => {
                               </p>
                             </div>
 
-                            <div className="mt-4 text-center">
+                            <div className="text-center">
                               <Link
                                 to="/shop"
                                 className="view_all_btn px-4 py-2"

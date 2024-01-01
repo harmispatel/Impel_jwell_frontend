@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import BreadCrumb from "../../components/common/BreadCrumb";
-import categoryDetail from "../../services/Shop";
 import { Helmet } from "react-helmet-async";
+import categoryDetail from "../../services/Shop";
 
 const CategoriesDetail = () => {
   const paramId = useParams();

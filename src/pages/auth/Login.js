@@ -11,7 +11,6 @@ import {
   getAuth,
   signInWithPhoneNumber,
 } from "firebase/auth";
-import CheckUser from "../../services/Auth";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { CgSpinner } from "react-icons/cg";
@@ -24,47 +23,7 @@ const Login = () => {
   const [show, setShow] = useState(false);
   const [phoneError, setPhoneError] = useState();
   const [spinner, setSpinner] = useState(false);
-  const [minutes, setMinutes] = useState(1);
-  const [seconds, setSeconds] = useState(30);
   const [phonedata, setPhoneData] = useState();
-  const [profileData, setProfileData] = useState([]);
-  const Phone = localStorage.getItem("phone");
-  const getProfile = async () => {
-    await profileService
-      .getProfile({ phone: Phone })
-      .then((res) => setProfileData(res.data))
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  useEffect(() => {
-    getProfile();
-  }, []);
-
-  useEffect(() => {
-    onCaptchVerify();
-  }, []);
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (seconds > 0) {
-        setSeconds(seconds - 1);
-      }
-
-      if (seconds === 0) {
-        if (minutes === 0) {
-          clearInterval(interval);
-        } else {
-          setSeconds(59);
-          setMinutes(minutes - 1);
-        }
-      }
-    }, 1000);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, [seconds]);
 
   const handlePhoneNumberChange = (newPhoneNumber) => {
     let isValid = true;
@@ -93,8 +52,6 @@ const Login = () => {
   }
 
   const sendOtp = (e) => {
-    setMinutes(1);
-    setSeconds(30);
     e.preventDefault();
     if (!phoneNumber) {
       setPhoneError("Please enter your mobile");
@@ -144,6 +101,7 @@ const Login = () => {
         });
     }
   };
+
   const handleOtpVerification = (e) => {
     setSpinner(true);
     e.preventDefault();
@@ -158,7 +116,6 @@ const Login = () => {
           localStorage.setItem("user_id", phonedata?.user_id);
           localStorage.setItem("verification", phonedata?.verification);
           navigate("/");
-          getProfile();
         }
       })
       .catch((error) => {
@@ -170,6 +127,10 @@ const Login = () => {
         setSpinner(false);
       });
   };
+
+  useEffect(() => {
+    onCaptchVerify();
+  }, []);
 
   return (
     <>
@@ -186,11 +147,6 @@ const Login = () => {
                     <div className="col-md-8">
                       <div className="login_info">
                         <div className="login_info_inr">
-                          {/* <div className="login_header">
-                          <Link to="#">
-                            <img src={Logo} height="80" alt="logo" />
-                          </Link>
-                        </div> */}
                           <div className="login_info_inr_title">
                             <div className=" p-2 text-center">
                               <div className="login_info_inr_title">
@@ -289,24 +245,11 @@ const Login = () => {
                                       )}
                                       {spinner ? "" : "Verfy OTP"}
                                     </button>
-                                    {/* <div>
-                                    {seconds > 0 || minutes > 0 ? (
-                                      <p>
-                                        Time Remaining:{" "}
-                                        {minutes < 10 ? `0${minutes}` : minutes}
-                                        :
-                                        {seconds < 10 ? `0${seconds}` : seconds}
-                                      </p>
-                                    ) : (
-                                      <p>Didn't recieve code?</p>
-                                    )}
-                                  </div> */}
                                     <button
                                       id="sign-in-button"
                                       type="button"
                                       onClick={sendOtp}
                                       className="btn btn-outline-warning"
-                                      disabled={seconds > 0 || minutes > 0}
                                     >
                                       Resend OTP
                                     </button>

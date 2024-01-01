@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import ReactLoading from "react-loading";
-import categoriesService from "../../services/Home";
 import { Helmet } from "react-helmet-async";
+import categoriesService from "../../services/Home";
 
 const Categories = () => {
   const [allCategories, setAllCategories] = useState([]);

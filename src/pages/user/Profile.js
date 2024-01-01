@@ -370,6 +370,9 @@ const Profile = () => {
     getProfile();
   }, []);
 
+  const phoneNumber = profileData?.phone?.replace("+91", "");
+  const phoneNumber2 = selectedData?.phone?.replace("+91", "");
+
   return (
     <>
       <Helmet>
@@ -488,7 +491,7 @@ const Profile = () => {
                               className="form-control"
                               id="inputOrgName"
                               type="text"
-                              value={profileData.phone}
+                              value={phoneNumber}
                               disabled
                             />
                           </div>
@@ -638,13 +641,7 @@ const Profile = () => {
                     controlId="formGridState"
                   >
                     <Form.Label>Phone</Form.Label>
-                    <Form.Control
-                      name="phone"
-                      defaultValue={selectedData.phone}
-                      disabled
-                      onChange={(e) => handleEditChange(e)}
-                      placeholder="Enter Your Phone"
-                    />
+                    <Form.Control defaultValue={phoneNumber2} disabled />
                   </Form.Group>
                 </div>
 

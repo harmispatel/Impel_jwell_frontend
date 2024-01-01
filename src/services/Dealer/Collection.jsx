@@ -10,7 +10,7 @@ const addtoDealerWishlist = async (data) => {
   return d;
 };
 
-const removetoWishlist = async (data) => {
+const removetodealerWishlist = async (data) => {
   let d = await call({
     path: "remove-collection-design",
     method: "POST",
@@ -30,6 +30,10 @@ const ListCollection = async (data) => {
   return d;
 };
 
-const exportObject = { addtoDealerWishlist, removetoWishlist, ListCollection };
+const exportObject = {
+  addtoDealerWishlist,
+  removetodealerWishlist,
+  ListCollection,
+};
 
 export default exportObject;
