@@ -69,68 +69,74 @@ const MyOrders = () => {
                           <tbody className="text-center">
                             {Items?.length ? (
                               <>
-                                {Items?.map((datas, index) => (
-                                  <>
-                                    <tr key={index}>
-                                      <td>
-                                        <span>{datas?.order_id}</span>
-                                      </td>
-                                      <td>
-                                        <span>{datas?.customer}</span>
-                                      </td>
-                                      <td>
-                                        <span>{datas?.customer_phone}</span>
-                                      </td>
-                                      <td>
-                                        {datas?.dealer ? (
-                                          <span>{datas?.dealer}</span>
-                                        ) : (
-                                          <span>-</span>
-                                        )}
-                                      </td>
-                                      <td>
-                                        {datas?.dealer_code ? (
-                                          <span>{datas?.dealer_code}</span>
-                                        ) : (
-                                          <span>-</span>
-                                        )}
-                                      </td>
-                                      <td>
-                                        {datas?.order_status == "pending" && (
-                                          <span className="badge bg-warning">
-                                            Pending
+                                {Items?.map((datas, index) => {
+                                  const phoneNumber =
+                                    datas?.customer_phone?.replace("+91", "");
+                                  return (
+                                    <>
+                                      <tr key={index}>
+                                        <td>
+                                          <span>{datas?.order_id}</span>
+                                        </td>
+                                        <td>
+                                          <span>{datas?.customer}</span>
+                                        </td>
+                                        <td>
+                                          <span>{phoneNumber}</span>
+                                        </td>
+                                        <td>
+                                          {datas?.dealer ? (
+                                            <span>{datas?.dealer}</span>
+                                          ) : (
+                                            <span>-</span>
+                                          )}
+                                        </td>
+                                        <td>
+                                          {datas?.dealer_code ? (
+                                            <span>{datas?.dealer_code}</span>
+                                          ) : (
+                                            <span>-</span>
+                                          )}
+                                        </td>
+                                        <td>
+                                          {datas?.order_status == "pending" && (
+                                            <span className="badge bg-warning">
+                                              Pending
+                                            </span>
+                                          )}
+                                          {datas?.order_status ==
+                                            "accepted" && (
+                                            <span className="badge bg-info">
+                                              Accepted
+                                            </span>
+                                          )}
+                                          {datas?.order_status ==
+                                            "processing" && (
+                                            <span className="badge bg-primary">
+                                              Processing
+                                            </span>
+                                          )}
+                                          {datas?.order_status ==
+                                            "completed" && (
+                                            <span className="badge bg-success">
+                                              Completed
+                                            </span>
+                                          )}
+                                        </td>
+                                        <td>
+                                          <span>
+                                            <Link
+                                              to={`/order-details/${datas?.order_id}`}
+                                              className="btn btn-primary btn-sm"
+                                            >
+                                              <FaEye />
+                                            </Link>
                                           </span>
-                                        )}
-                                        {datas?.order_status == "accepted" && (
-                                          <span className="badge bg-info">
-                                            Accepted
-                                          </span>
-                                        )}
-                                        {datas?.order_status ==
-                                          "processing" && (
-                                          <span className="badge bg-primary">
-                                            Processing
-                                          </span>
-                                        )}
-                                        {datas?.order_status == "completed" && (
-                                          <span className="badge bg-success">
-                                            Completed
-                                          </span>
-                                        )}
-                                      </td>
-                                      <td>
-                                        <span>
-                                          <Link
-                                            to={`/order-details/${datas?.order_id}`}
-                                            className="btn btn-primary btn-sm"
-                                          >
-                                            <FaEye />
-                                          </Link>
-                                        </span>
-                                      </td>
-                                    </tr>
-                                  </>
-                                ))}
+                                        </td>
+                                      </tr>
+                                    </>
+                                  );
+                                })}
                               </>
                             ) : (
                               <>

@@ -522,7 +522,7 @@ const Cart = () => {
       setShowEdit(true);
     }
   };
-
+  const phoneNumber = profileData?.phone?.replace("+91", "");
   return (
     <>
       <Helmet>
@@ -889,13 +889,7 @@ const Cart = () => {
                         controlId="formGridState"
                       >
                         <Form.Label>Phone</Form.Label>
-                        <Form.Control
-                          name="phone"
-                          defaultValue={selectedData.phone}
-                          disabled
-                          onChange={(e) => handleChange(e)}
-                          placeholder="Enter Your Phone"
-                        />
+                        <Form.Control defaultValue={phoneNumber} disabled />
                       </Form.Group>
                     </div>
 

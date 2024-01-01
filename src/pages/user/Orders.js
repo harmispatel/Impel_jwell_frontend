@@ -36,6 +36,8 @@ const Orders = () => {
     GetUserOrders();
   }, []);
 
+  const phoneNumber = Items?.customer_phone?.replace("+91", "");
+
   return (
     <>
       <Helmet>
@@ -163,7 +165,7 @@ const Orders = () => {
                             </tr>
                             <tr>
                               <th scope="col">Phone :</th>
-                              <td>{Items?.customer_phone}</td>
+                              <td>{phoneNumber}</td>
                             </tr>
                           </tbody>
                         </table>
