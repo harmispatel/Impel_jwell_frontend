@@ -158,10 +158,18 @@ const CategoriesItems = () => {
                                   className="w-100"
                                 />
                                 <div className="product_details d-flex justify-content-between">
-                                  <h4>{data.name}</h4>
+                                  <h4>{data?.name}</h4>
                                   <h4>
-                                    <b>{data.code}</b>
+                                    <b>{data?.code}</b>
                                   </h4>
+                                </div>
+                                <div className="product_details">
+                                  <h5>
+                                    ₹
+                                    {data?.total_price_18k?.toLocaleString(
+                                      "en-US"
+                                    )}
+                                  </h5>
                                 </div>
                               </div>
                             </Link>

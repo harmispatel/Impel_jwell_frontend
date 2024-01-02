@@ -1,13 +1,16 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
-import { FaUserAlt } from "react-icons/fa";
+import { FaBars, FaStar, FaUser, FaUserAlt } from "react-icons/fa";
 import { BsHandbag, BsHeart } from "react-icons/bs";
 import { IoMdArrowDropdown } from "react-icons/io";
+import { FaCartShopping } from "react-icons/fa6";
+import { IoLogOut } from "react-icons/io5";
 
 import { Tooltip as ReactTooltip } from "react-tooltip";
 
 import Logo from "../assets/images/logo.png";
+import NOimage from "../assets/images/NoImage.jpeg";
 
 import UserService from "../services/Cart";
 
@@ -33,6 +36,10 @@ const Navbar = () => {
   const [dealerData, setDealerData] = useState([]);
   const [tags, setTags] = useState([]);
   const [tag, setTag] = useState([]);
+
+  const [isMenuActive, setMenuActive] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true);
+  const dropdownRef = useRef(null);
 
   const searchParams = new URLSearchParams(location.search);
   const navigate = useNavigate();
@@ -125,6 +132,47 @@ const Navbar = () => {
     }
   };
 
+  const toggleMenu = () => {
+    setMenuActive(!isMenuActive);
+  };
+
+  const handleOutsideClick = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setMenuActive(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleOutsideClick);
+    window.addEventListener("scroll", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+      window.removeEventListener("scroll", handleOutsideClick);
+    };
+  }, []);
+
+  const handleNavClick = () => {
+    setIsCollapsed(!isCollapsed);
+  };
+
+  const navbarRef = useRef(null);
+
+  const handleScroll = () => {
+    const navbar = navbarRef.current;
+    if (navbar && navbar.classList.contains("show")) {
+      navbar.classList.remove("show");
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("scroll", handleScroll);
+
+    return () => {
+      document.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
     <header className={colorChange ? "header sticky_header" : "header"}>
       <nav className="navbar navbar-expand-lg bg-body-tertiary">
@@ -133,17 +181,21 @@ const Navbar = () => {
             <button
               className="navbar-toggler"
               type="button"
+              onClick={handleNavClick}
               data-bs-toggle="collapse"
               data-bs-target="#navbarSupportedContent"
               aria-controls="navbarSupportedContent"
               aria-expanded="false"
               aria-label="Toggle navigation"
             >
-              <span className="navbar-toggler-icon"></span>
+              <FaBars className="text-white" />
             </button>
             <div
-              className="collapse navbar-collapse navbar-collapse-start"
+              className={`collapse navbar-collapse ${
+                isCollapsed ? "" : "show"
+              }`}
               id="navbarSupportedContent"
+              ref={navbarRef}
             >
               <ul className="navbar-nav mb-2 mb-lg-0 w-100">
                 <li className="nav-item">
@@ -153,10 +205,12 @@ const Navbar = () => {
                     }
                     aria-current="page"
                     to="/"
+                    onClick={handleNavClick}
                   >
                     Home
                   </Link>
                 </li>
+
                 <li className="nav-item">
                   <div>
                     <Link
@@ -165,6 +219,7 @@ const Navbar = () => {
                       }
                       aria-current="page"
                       to="#"
+                      onClick={handleNavClick}
                     >
                       Ready To Dispatch
                     </Link>
@@ -181,17 +236,20 @@ const Navbar = () => {
                       {tags?.length ? (
                         <>
                           <div className="col-md-2">
-                            <Link
-                              className={
-                                currentRoute === "/shop"
-                                  ? "nav-link active tag-shop-link"
-                                  : "nav-link"
-                              }
-                              style={{ fontSize: "17px", fontWeight: "800" }}
-                              to="/shop"
-                            >
-                              All jewellery
-                            </Link>
+                            <div className="tags-links">
+                              <Link
+                                className={
+                                  currentRoute === "/shop"
+                                    ? "nav-link active tag-shop-link"
+                                    : "nav-link"
+                                }
+                                style={{ fontSize: "17px", fontWeight: "800" }}
+                                to="/shop"
+                                onClick={handleNavClick}
+                              >
+                                All jewellery
+                              </Link>
+                            </div>
                           </div>
 
                           {tags?.map((multitags, index) => (
@@ -212,91 +270,121 @@ const Navbar = () => {
                           ))}
                         </>
                       ) : (
-                        <></>
+                        <>
+                          <Link
+                            className={
+                              currentRoute === "/shop"
+                                ? "nav-link active tag-shop-link"
+                                : "nav-link"
+                            }
+                            style={{ fontSize: "17px", fontWeight: "800" }}
+                            to="/shop"
+                            onClick={handleNavClick}
+                          >
+                            All jewellery
+                          </Link>
+                        </>
                       )}
                     </div>
                   </div>
                 </li>
-                <li className="nav-item"></li>
+
                 <li className="nav-item">
                   <Link
                     className={
                       currentRoute === "/about" ? "nav-link active" : "nav-link"
                     }
                     to="/about"
+                    onClick={handleNavClick}
                   >
                     About
                   </Link>
                 </li>
               </ul>
             </div>
+
             <Link className="navbar-brand m-0" to="/">
               <img src={Logo} alt="logo" width={100} />
             </Link>
+
             <div className="header_icon">
               <ul>
                 <li className="m-0">
                   {Dealer && (
                     <ul>
-                      <li className="login_user">
-                        <Link
-                          className="icon"
-                          to="#"
-                          style={{ textDecoration: "none" }}
+                      <li className="login_user" id="user-profile">
+                        <div
+                          class="profile"
+                          onClick={toggleMenu}
+                          ref={dropdownRef}
                         >
-                          <img
-                            src={dealerData?.profile}
-                            alt=""
-                            className="uploaded-image"
-                            style={{
-                              width: "40px",
-                              height: "40px",
-                              borderRadius: "50%",
-                            }}
-                          />
-                          {dealerData?.name ? (
-                            <span className="ms-2">
-                              <b
+                          <div
+                            className={`menu ${isMenuActive ? "active" : ""}`}
+                          >
+                            <ul>
+                              <li>
+                                <Link to="/dealer_profile">
+                                  <FaUser /> My Profile
+                                </Link>
+                              </li>
+                              <li>
+                                <Link to="/my_orders">
+                                  <FaCartShopping /> My Orders
+                                </Link>
+                              </li>
+                              <li>
+                                <Link to="/dealer_wishlist">
+                                  <FaStar /> My Selections
+                                </Link>
+                              </li>
+                              <li>
+                                <Link to="/Dealer_login" onClick={handleLogout}>
+                                  <IoLogOut />
+                                  Logout
+                                </Link>
+                              </li>
+                            </ul>
+                          </div>
+
+                          <div class="img-box">
+                            {dealerData?.profile && (
+                              <img
+                                src={dealerData?.profile}
+                                alt=""
+                                className="uploaded-image w-100"
                                 style={{
-                                  fontSize: "20px",
+                                  borderRadius: "50%",
                                 }}
-                              >
-                                {dealerData?.name}
-                                <IoMdArrowDropdown />
-                              </b>
-                            </span>
-                          ) : (
-                            <>
+                              />
+                            )}
+                          </div>
+                          <div class="user">
+                            {dealerData?.name ? (
                               <span className="ms-2">
                                 <b
                                   style={{
                                     fontSize: "20px",
                                   }}
                                 >
-                                  Hello! Dealer <IoMdArrowDropdown />
+                                  {dealerData?.name}
+                                  <IoMdArrowDropdown />
                                 </b>
                               </span>
-                            </>
-                          )}
-                        </Link>
-
-                        <div className="login_dropdown dealer_dropdown">
-                          <ul>
-                            <li>
-                              <Link to="/dealer_profile">My Profile</Link>
-                            </li>
-                            <li>
-                              <Link to="/my_orders">My Orders</Link>
-                            </li>
-                            <li>
-                              <Link to="/dealer_wishlist">My Selections</Link>
-                            </li>
-                            <li>
-                              <a href="#" onClick={handleLogout}>
-                                LogOut
-                              </a>
-                            </li>
-                          </ul>
+                            ) : (
+                              <>
+                                <span className="ms-2">
+                                  <b
+                                    style={{
+                                      fontSize: "20px",
+                                    }}
+                                  >
+                                    Hello! Dealer
+                                    <IoMdArrowDropdown />
+                                  </b>
+                                </span>
+                              </>
+                            )}
+                          </div>
                         </div>
                       </li>
                     </ul>
@@ -335,66 +423,85 @@ const Navbar = () => {
                           </Link>
                         )}
                       </li>
-
-                      <li className="login_user">
-                        <Link
-                          className="icon"
-                          to="#"
-                          style={{ textDecoration: "none" }}
+                      <li className="login_user" id="user-profile">
+                        <div
+                          class="profile"
+                          onClick={toggleMenu}
+                          ref={dropdownRef}
                         >
-                          {profileData?.profile && (
-                            <img
-                              src={profileData?.profile}
-                              alt=""
-                              className="uploaded-image"
-                              style={{
-                                width: "40px",
-                                height: "40px",
-                                borderRadius: "50%",
-                              }}
-                            />
-                          )}
+                          <div
+                            className={`menu ${isMenuActive ? "active" : ""}`}
+                          >
+                            <ul>
+                              <li>
+                                <Link to="/profile">
+                                  <FaUser />
+                                  My Profile
+                                </Link>
+                              </li>
+                              <li>
+                                <Link to="/my_orders">
+                                  <FaCartShopping />
+                                  My Orders
+                                </Link>
+                              </li>
+                              <li>
+                                <Link to="/login" onClick={handleLogout}>
+                                  <IoLogOut />
+                                  Logout
+                                </Link>
+                              </li>
+                            </ul>
+                          </div>
 
-                          {profileData?.name ? (
-                            <span className="ms-2">
-                              <b
+                          <div class="img-box">
+                            {profileData?.profile ? (
+                              <img
+                                src={profileData?.profile}
+                                alt=""
+                                className="uploaded-image w-100"
                                 style={{
-                                  fontSize: "20px",
+                                  borderRadius: "50%",
                                 }}
-                              >
-                                {profileData?.name}
-                                <IoMdArrowDropdown />
-                              </b>
-                            </span>
-                          ) : (
-                            <>
+                              />
+                            ) : (
+                              <img
+                                src={NOimage}
+                                alt=""
+                                className="uploaded-image w-100"
+                                style={{
+                                  borderRadius: "50%",
+                                }}
+                              />
+                            )}
+                          </div>
+                          <div class="user">
+                            {profileData?.name ? (
                               <span className="ms-2">
                                 <b
                                   style={{
                                     fontSize: "20px",
                                   }}
                                 >
-                                  Hello! user <IoMdArrowDropdown />
+                                  {profileData?.name}
+                                  <IoMdArrowDropdown />
                                 </b>
                               </span>
-                            </>
-                          )}
-                        </Link>
-
-                        <div className="login_dropdown">
-                          <ul>
-                            <li>
-                              <Link to="/profile">Profile</Link>
-                            </li>
-                            <li>
-                              <Link to="/my_orders">My Orders</Link>
-                            </li>
-                            <li>
-                              <a href="#" onClick={handleLogout}>
-                                LogOut
-                              </a>
-                            </li>
-                          </ul>
+                            ) : (
+                              <>
+                                <span className="ms-2">
+                                  <b
+                                    style={{
+                                      fontSize: "20px",
+                                    }}
+                                  >
+                                    Hello! user
+                                    <IoMdArrowDropdown />
+                                  </b>
+                                </span>
+                              </>
+                            )}
+                          </div>
                         </div>
                       </li>
                     </ul>

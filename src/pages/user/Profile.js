@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import ReactLoading from "react-loading";
 import profileService from "../../services/Auth";
 import { Helmet } from "react-helmet-async";
+import { MdEditSquare } from "react-icons/md";
 
 const Profile = () => {
   const phone = localStorage.getItem("phone");
@@ -404,7 +405,7 @@ const Profile = () => {
                         {profileData?.profile && (
                           <>
                             <div className="imagesss pb-4">
-                              <div className="profile-image">
+                              <div className="">
                                 <form
                                   id="user-profile-form"
                                   method="POST"
@@ -425,19 +426,21 @@ const Profile = () => {
                                   />
 
                                   <label
-                                    className="new-button"
                                     htmlFor="upload"
                                     style={{
                                       cursor: "pointer",
-                                      display: "inline-block",
-                                      border: "1px solid #ccc",
-                                      borderRadius: "5px",
                                     }}
                                   >
                                     <img
                                       src={profileData?.profile}
                                       alt="Uploaded"
-                                      className="uploaded-image"
+                                      style={{
+                                        width: "200px",
+                                        height: "200px",
+                                        borderRadius: "50%",
+                                        border: "1px solid #ccc",
+                                        padding: "2px",
+                                      }}
                                     />
                                   </label>
                                 </form>
@@ -451,127 +454,56 @@ const Profile = () => {
                 </div>
                 <div className="col-xl-8">
                   <div className="card mb-4">
-                    <div className="card-header">Account Details</div>
+                    <div className="card-header">
+                      <div className="row align-items-center">
+                        <div className="col-md-6">Account Details</div>
+                        <div className="col-md-6 text-end">
+                          <button
+                            onClick={() => handleEdit(profileData)}
+                            className="btn btn-sm btn-primary"
+                          >
+                            <MdEditSquare />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
                     <div className="card-body">
-                      <form>
-                        <div className="row gx-3 mb-3">
-                          <div className="col-md-6">
-                            <label className="small mb-1" for="inputFirstName">
-                              First name
-                            </label>
-                            <input
-                              className="form-control"
-                              id="inputFirstName"
-                              type="text"
-                              value={profileData.name}
-                              disabled
-                            />
-                          </div>
-
-                          <div className="col-md-6">
-                            <label className="small mb-1" for="inputLastName">
-                              Email Id
-                            </label>
-                            <input
-                              className="form-control"
-                              id="inputLastName"
-                              type="text"
-                              value={profileData.email}
-                              disabled
-                            />
-                          </div>
-                        </div>
-
-                        <div className="row gx-3 mb-3">
-                          <div className="col-md-6">
-                            <label className="small mb-1" for="inputOrgName">
-                              Mobile Number
-                            </label>
-                            <input
-                              className="form-control"
-                              id="inputOrgName"
-                              type="text"
-                              value={phoneNumber}
-                              disabled
-                            />
-                          </div>
-
-                          <div className="col-md-6">
-                            <label className="small mb-1" for="inputLocation">
-                              Billing Address
-                            </label>
-                            <input
-                              className="form-control"
-                              id="inputLocation"
-                              type="text"
-                              value={profileData.address}
-                              disabled
-                            />
-                          </div>
-                        </div>
-                        <div className="row gx-3 mb-3">
-                          <div className="col-md-6">
-                            <label className="small mb-1" for="inputOrgName">
-                              City
-                            </label>
-                            <input
-                              className="form-control"
-                              id="inputOrgName"
-                              type="text"
-                              value={profileData.city_name}
-                              disabled
-                            />
-                          </div>
-
-                          <div className="col-md-6">
-                            <label className="small mb-1" for="inputLocation">
-                              State
-                            </label>
-                            <input
-                              className="form-control"
-                              id="inputLocation"
-                              type="text"
-                              value={profileData.state_name}
-                              disabled
-                            />
-                          </div>
-                        </div>
-                        <div className="row gx-3 mb-3">
-                          <div className="col-md-6">
-                            <label className="small mb-1" for="inputOrgName">
-                              Pincode
-                            </label>
-                            <input
-                              className="form-control"
-                              id="inputOrgName"
-                              type="text"
-                              value={profileData?.pincode}
-                              disabled
-                            />
-                          </div>
-
-                          <div className="col-md-6">
-                            <label className="small mb-1" for="inputLocation">
-                              Pan Number
-                            </label>
-                            <input
-                              className="form-control"
-                              id="inputLocation"
-                              type="text"
-                              value={profileData.pan_no}
-                              disabled
-                            />
-                          </div>
-                        </div>
-
-                        <button
-                          type="button"
-                          class="custom-btn btn-2"
-                          onClick={() => handleEdit(profileData)}
-                        >
-                          Edit profile
-                        </button>
-                      </form>
+                      <table class="table">
+                        <tbody>
+                          <tr>
+                            <th scope="col">Full Name : </th>
+                            <td>{profileData.name}</td>
+                          </tr>
+                          <tr>
+                            <th scope="col">Email : </th>
+                            <td>{profileData.email}</td>
+                          </tr>
+                          <tr>
+                            <th scope="col">Phone : </th>
+                            <td>{phoneNumber}</td>
+                          </tr>
+                          <tr>
+                            <th scope="col">Billing Address : </th>
+                            <td>{profileData.address}</td>
+                          </tr>
+                          <tr>
+                            <th scope="col">City : </th>
+                            <td>{profileData.city_name}</td>
+                          </tr>
+                          <tr>
+                            <th scope="col">State : </th>
+                            <td>{profileData.state_name}</td>
+                          </tr>
+                          <tr>
+                            <th scope="col">Pincode : </th>
+                            <td>{profileData.pincode}</td>
+                          </tr>
+                          <tr>
+                            <th scope="col">Pancard : </th>
+                            <td>{profileData.pan_no}</td>
+                          </tr>
+                        </tbody>
+                      </table>
                     </div>
                   </div>
                 </div>

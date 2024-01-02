@@ -4,7 +4,6 @@ import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 import OTPInput from "react-otp-input";
 import firebase from "./firebase.config";
-import profileService from "../../services/Auth";
 
 import {
   RecaptchaVerifier,
@@ -225,7 +224,7 @@ const Login = () => {
                                         <input
                                           {...props}
                                           type="tel"
-                                          pattern="[0-9]*"
+                                          inputMode="numeric"
                                         />
                                       )}
                                     />

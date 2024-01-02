@@ -45,7 +45,7 @@ const Categories = () => {
               />
             </div>
           ) : (
-            <div className="categories_data">
+            <div className="categories_data_main">
               <div className="row">
                 {allCategories.map((data, index) => {
                   return (
@@ -55,11 +55,10 @@ const Categories = () => {
                         className="text-decoration-none"
                         style={{ color: "#000" }}
                       >
-                        <div className="category_data py-2">
-                          <img src={data?.image} className="w-100" />
+                        <div className="category_data_item">
+                          <img src={data?.image} className="w-100" alt="" />
                           <div className="product_details">
                             <h4>{data?.name}</h4>
-                            <p>{data?.category_name}</p>
                           </div>
                         </div>
                       </Link>
