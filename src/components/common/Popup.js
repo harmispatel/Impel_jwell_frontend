@@ -23,10 +23,10 @@ const Popup = () => {
     }
   }, [showPopup]);
 
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-    return () => (document.body.style.overflow = "unset");
-  }, []);
+  // useEffect(() => {
+  //   document.body.style.overflow = "hidden";
+  //   return () => (document.body.style.overflow = "unset");
+  // }, []);
 
   useEffect(() => {
     if (window.location.reload && showPopup) {
