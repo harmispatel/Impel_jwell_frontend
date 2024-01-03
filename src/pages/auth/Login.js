@@ -137,129 +137,109 @@ const Login = () => {
         <title>Impel Store - Login</title>
       </Helmet>
       <section className="login">
-        <div className="login_main">
-          <div className="container">
-            <div className="row justify-content-center">
-              <div className="col-md-9">
-                <div className="login_inr">
-                  <div className="row justify-content-center">
-                    <div className="col-md-8">
-                      <div className="login_info">
-                        <div className="login_info_inr">
-                          <div className="login_info_inr_title">
-                            <div className=" p-2 text-center">
-                              <div className="login_info_inr_title">
-                                <h3>Welcome</h3>
-                              </div>
+        <div class="container">
+          <div className="">
+            <div class="row justify-content-center">
+              <div className="col-md-5">
+                <div className="login_detail">
+                  <div id="recaptcha-container">
+                    {show === false && (
+                      <>
+                        <form onSubmit={sendOtp}>
+                          <h2>Customer Login</h2>
+                          <div className="form-group my-3">
+                            <PhoneInput
+                              international
+                              countryCallingCodeEditable={false}
+                              defaultCountry="IN"
+                              className="form-control phone_input"
+                              name="phoneNumber"
+                              value={phoneNumber}
+                              onChange={handlePhoneNumberChange}
+                              placeholder="Enter Your Phone Number"
+                              maxLength={16}
+                            />
+                            {phoneError && (
+                              <div className="text-danger">{phoneError}</div>
+                            )}
+                          </div>
+                          <div className="row">
+                            <div className="col-md-12">
+                              <button
+                                className="btn btn-success dealer_login_btn"
+                                id="sign-in-button"
+                              >
+                                {spinner && (
+                                  <CgSpinner
+                                    size={20}
+                                    className="animate_spin text-center mx-2"
+                                    role="button"
+                                  />
+                                )}
+                                {spinner ? "" : "Login "}
+                              </button>
                             </div>
                           </div>
-                          <div id="recaptcha-container">
-                            {show === false && (
-                              <>
-                                <form onSubmit={sendOtp}>
-                                  <div className="form-group my-3">
-                                    <PhoneInput
-                                      international
-                                      countryCallingCodeEditable={false}
-                                      defaultCountry="IN"
-                                      className="form-control phone_input"
-                                      name="phoneNumber"
-                                      value={phoneNumber}
-                                      onChange={handlePhoneNumberChange}
-                                      placeholder="Enter Your Phone Number"
-                                      maxLength={16}
-                                    />
-                                    {phoneError && (
-                                      <div className="text-danger">
-                                        {phoneError}
-                                      </div>
-                                    )}
-                                  </div>
-                                  <div className="row">
-                                    <div className="col-md-6">
-                                      <button
-                                        className="button-60"
-                                        role="button"
-                                        type="submit"
-                                        id="sign-in-button"
-                                      >
-                                        {spinner && (
-                                          <CgSpinner
-                                            size={20}
-                                            className="animate_spin text-center mx-2"
-                                          />
-                                        )}
-                                        {spinner ? "" : "Login"}
-                                      </button>
-                                    </div>
-                                    <div className="col-md-6 text-end">
-                                      <Link
-                                        to="/Dealer_login"
-                                        className="text-decoration-none"
-                                        style={{
-                                          color: "#db9662",
-                                          "font-size": "15px !important",
-                                        }}
-                                      >
-                                        Dealer Login ?
-                                      </Link>
-                                    </div>
-                                  </div>
-                                </form>
-                              </>
-                            )}
-
-                            {show === true && (
-                              <>
-                                <form onSubmit={handleOtpVerification}>
-                                  <div className="form-group my-3 otp_box">
-                                    <OTPInput
-                                      value={otp}
-                                      className="form-control"
-                                      onChange={setOtp}
-                                      shouldAutoFocus={true}
-                                      numInputs={6}
-                                      renderSeparator={<span>-</span>}
-                                      renderInput={(props) => (
-                                        <input
-                                          {...props}
-                                          type="tel"
-                                          inputMode="numeric"
-                                        />
-                                      )}
-                                    />
-                                  </div>
-                                  <div className="d-flex justify-content-between">
-                                    <button
-                                      id="sign-in-button"
-                                      type="submit"
-                                      className="btn btn-outline-warning"
-                                      disabled={spinner}
-                                    >
-                                      {spinner && (
-                                        <CgSpinner
-                                          size={20}
-                                          className="animate_spin text-center mx-3"
-                                        />
-                                      )}
-                                      {spinner ? "" : "Verfy OTP"}
-                                    </button>
-                                    <button
-                                      id="sign-in-button"
-                                      type="button"
-                                      onClick={sendOtp}
-                                      className="btn btn-outline-warning"
-                                    >
-                                      Resend OTP
-                                    </button>
-                                  </div>
-                                </form>
-                              </>
-                            )}
+                          <div className="col-md-12 text-end">
+                            <Link
+                              to="/Dealer_login"
+                              className="text-decoration-none text-success"
+                            >
+                              Dealer Login ?
+                            </Link>
                           </div>
-                        </div>
-                      </div>
-                    </div>
+                        </form>
+                      </>
+                    )}
+
+                    {show === true && (
+                      <>
+                        <form onSubmit={handleOtpVerification}>
+                          <h2>Enter OTP</h2>
+                          <div className="form-group my-3 otp_box">
+                            <OTPInput
+                              value={otp}
+                              className="form-control"
+                              onChange={setOtp}
+                              shouldAutoFocus={true}
+                              numInputs={6}
+                              renderSeparator={<span>-</span>}
+                              renderInput={(props) => (
+                                <input
+                                  {...props}
+                                  type="tel"
+                                  inputMode="numeric"
+                                />
+                              )}
+                            />
+                          </div>
+                          <div className="d-flex justify-content-between">
+                            <button
+                              id="sign-in-button"
+                              type="submit"
+                              className="btn btn-success user_login_btn"
+                              disabled={spinner}
+                            >
+                              {spinner && (
+                                <CgSpinner
+                                  size={20}
+                                  className="animate_spin text-center mx-3"
+                                />
+                              )}
+                              {spinner ? "" : "VERIFY"}
+                            </button>
+                            <button
+                              id="sign-in-button"
+                              type="button"
+                              onClick={sendOtp}
+                              className="btn btn-success user_login_btn"
+                            >
+                              RESEND
+                            </button>
+                          </div>
+                        </form>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>

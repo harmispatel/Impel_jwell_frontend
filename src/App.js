@@ -1,7 +1,7 @@
 import "./App.css";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "../node_modules/bootstrap/dist/js/bootstrap.bundle";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import Layout from "./components/Layout";
 import Home from "./pages/Home";
 import Shop from "./pages/shop/Shop";
@@ -29,16 +29,23 @@ import Popup from "./components/common/Popup";
 import MyOrders from "./pages/user/MyOrders";
 import CustomPageView from "./components/CustomPageView";
 import { HelmetProvider } from "react-helmet-async";
+import Resetpassword from "./pages/auth/Resetpassword";
 
 function App() {
   const popupshow = localStorage.getItem("user_type");
   const helmetContext = {};
+  const location = useLocation();
+
+  const shouldShowPopup =
+    !["/login", "/Dealer_login", "/forget-password"].some((path) =>
+      location.pathname.startsWith(path)
+    ) && !location.pathname.startsWith("/reset-password/");
 
   return (
     <>
       <ScrollToTop />
       <HelmetProvider context={helmetContext}>
-        {popupshow == null ? <Popup /> : <></>}
+        {shouldShowPopup && popupshow == null ? <Popup /> : <></>}
         <Routes>
           <>
             <Route path="/" element={<Layout />}>
@@ -102,6 +109,10 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/Dealer_login" element={<DealerLogIN />} />
               <Route path="/forget-password" element={<ForgetPassword />} />
+              <Route
+                path="/reset-password/:token"
+                element={<Resetpassword />}
+              />
             </Route>
           </>
 

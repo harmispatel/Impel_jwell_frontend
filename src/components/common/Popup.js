@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Modal } from "react-bootstrap";
+import Modal from "react-modal";
 import { Link } from "react-router-dom";
+import images from "../../assets/images/download.png";
 
 const Popup = () => {
   const [showPopup, setShowPopup] = useState(() => {
@@ -14,14 +15,18 @@ const Popup = () => {
 
   useEffect(() => {
     if (window.location.reload && !showPopup) {
-      setShowPopup(false);
       const timeout = setTimeout(() => {
         setShowPopup(true);
-      }, 600000);
+      }, 6000);
 
       return () => clearTimeout(timeout);
     }
   }, [showPopup]);
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => (document.body.style.overflow = "unset");
+  }, []);
 
   useEffect(() => {
     if (window.location.reload && showPopup) {
@@ -32,31 +37,30 @@ const Popup = () => {
   return (
     <>
       <Modal
-        show={showPopup}
-        id="exampleModalCenter"
-        data-bs-backdrop="static"
-        data-bs-keyboard="false"
-        tabindex="-1"
-        role="dialog"
-        aria-labelledby="exampleModalCenterTitle"
-        aria-hidden="true"
-        className="modal fade"
+        isOpen={showPopup}
+        overlayClassName={{
+          base: "overlay-base",
+          afterOpen: "overlay-after",
+          beforeClose: "overlay-before",
+        }}
+        className={{
+          base: "content-base",
+          afterOpen: "content-after",
+          beforeClose: "content-before",
+        }}
+        closeTimeoutMS={500}
       >
-        <Modal.Body>
-          <img
-            src="https://www.smartrmail.com/blog/wp-content/uploads/2021/04/7-exit-intent-popup.png"
-            alt=""
-            className="w-100"
-          />
-        </Modal.Body>
-        <Modal.Footer>
-          <Link to="/login" className="btn btn-primary">
+        <div className="position-relative">
+          <img src={images} alt="image" />
+          <Link to="login" className="model_banner_button">
             Login
           </Link>
-        </Modal.Footer>
+        </div>
       </Modal>
     </>
   );
 };
 
 export default Popup;
+
+// 600000

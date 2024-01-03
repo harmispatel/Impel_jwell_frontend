@@ -21,48 +21,10 @@ body {
 
 
 /* User Login Page Style  Start*/
-.button-60 {
-  align-items: center;
-  appearance: none;
-  background-color: #fff;
-  border: 1px solid #dbdbdb;
-  border-radius: .375em;
-  box-shadow: none;
-  box-sizing: border-box;
-  color: #363636;
-  cursor: pointer;
-  display: inline-flex;
-  font-family: BlinkMacSystemFont, -apple-system, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 1rem;
-  height: 2.5em;
-  justify-content: center;
-  line-height: 1.5;
-  padding: calc(.5em - 1px) 1em;
-  position: relative;
-  text-align: center;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-  vertical-align: top;
-  white-space: nowrap;
-}
 
-.button-60:active {
-  border-color: #4a4a4a;
-  outline: 0;
-}
-
-.button-60:focus {
-  border-color: #485fc7;
-  outline: 0;
-}
-
-.button-60:hover {
-  border-color: #b5b5b5;
-}
-
-.button-60:focus:not(:active) {
-  box-shadow: rgba(72, 95, 199, .25) 0 0 0 .125em;
+.user_login_btn {
+  background-color: #caa78d !important;
+  border-color: #caa78d !important;
 }
 
 .phone_input {
@@ -88,6 +50,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 60px 0;
 }
 
 .login_main {
@@ -1999,7 +1962,7 @@ input[type="file"] {
   .explore_banner,
   .footer,
   .Top_sellers {
-    padding: 30px 0;
+    padding: 30px 0 !important;
     text-align: center;
   }
 
@@ -2098,8 +2061,7 @@ input[type="file"] {
 
   .login {
     height: auto;
-    margin-top: 115px;
-    padding: 40px 0
+    padding: 20px 0 0;
   }
 
 
@@ -2395,4 +2357,174 @@ input[type="file"] {
 
 #user-profile .menu ul li a i {
   font-size: 1.2em;
+}
+
+
+
+/* dealer login form */
+.login_detail {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 20px;
+}
+
+.login_detail h2 {
+  font-size: 30px;
+  margin-bottom: 20px;
+  color: #caa78d;
+  text-transform: uppercase;
+  text-align: center;
+  font-weight: 700;
+}
+
+.form__input {
+  width: 100%;
+  border: 0px solid transparent;
+  border-radius: 4px;
+  border-bottom: 1px solid #aaa;
+  padding: 10px 20px;
+  outline: none;
+  border-bottom-color: #caa78d;
+  box-shadow: 0 0 5px rgba(208, 166, 143, .4);
+  transition: all .5s ease;
+}
+
+.login_detail .form-group:first-child {
+  margin: 0;
+}
+
+.form-group {
+  margin-top: 20px;
+  position: relative;
+}
+
+.toggle_btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translate(0, -50%);
+  padding: 0 !important;
+  font-size: 20px !important;
+  line-height: 16px !important;
+}
+
+.toggle_btn:focus {
+  border: none !important;
+}
+
+.dealer_login_btn {
+  width: 100%;
+  background-color: #caa78d !important;
+  border-color: #caa78d !important;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.login_detail p {
+  text-align: right;
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+}
+
+@media screen and (max-width: 640px) {
+  .main-content {
+    width: 90%;
+  }
+
+  .company__info {
+    display: none;
+  }
+
+  .login_form {
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+  }
+}
+
+@media screen and (min-width: 642px) and (max-width:800px) {
+  .main-content {
+    width: 70%;
+  }
+}
+
+.message-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.message-text {
+  padding: 10px 20px;
+  background-color: #e6f7ff;
+  border-radius: 5px;
+  color: #333;
+  font-weight: 500;
+  border: 1px solid #b3d7ff;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Popup model for not any user login styles*/
+.overlay-base {
+  padding: 1rem;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0);
+  opacity: 0;
+  transition-property: background-color, opacity;
+  transition-duration: 500ms;
+  transition-timing-function: ease-in-out;
+  outline: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999 !important;
+}
+
+.overlay-after {
+  background-color: rgba(0, 0, 0, 0.8);
+  opacity: 1;
+}
+
+.overlay-before {
+  background-color: rgba(0, 0, 0, 0);
+  opacity: 0;
+}
+
+.content-base {
+  position: relative;
+  margin: 0 auto;
+  border: 0;
+  outline: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 0%;
+  width: 0%;
+  background-color: transparent;
+  transition-property: background-color, width, height;
+  transition-duration: 500ms;
+  transition-timing-function: ease-in-out;
+}
+
+.model_banner_button {
+  position: absolute;
+  right: 20px;
+  bottom: 15px;
+  background-color: #fff !important;
+  border: 1px solid #caa78d !important;
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: #caa78d !important;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.model_banner_button:focus {
+  border: 1px solid #caa78d !important;
 }

@@ -4,6 +4,8 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { CgSpinner } from "react-icons/cg";
 import { Helmet } from "react-helmet-async";
+import logo from "../../assets/images/logo.png";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const DealerLogin = () => {
   const navigate = useNavigate();
@@ -12,6 +14,8 @@ const DealerLogin = () => {
     password: "",
   });
 
+  const [passwordType, setPasswordType] = useState("password");
+
   const [user, setUser] = useState([]);
   const [error, setError] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -19,6 +23,15 @@ const DealerLogin = () => {
 
   const handleChange = (e) => {
     setLoginData({ ...loginData, [e.target.name]: e.target.value });
+  };
+
+  const togglePassword = (e) => {
+    e.preventDefault();
+    if (passwordType === "password") {
+      setPasswordType("text");
+      return;
+    }
+    setPasswordType("password");
   };
 
   const handleSubmit = (e) => {
@@ -64,6 +77,8 @@ const DealerLogin = () => {
         } else {
           navigate("/Dealer_login");
           toast.error(response.data.message);
+          setLoginData.email("");
+          setLoginData.password("");
           setUser("");
         }
       })
@@ -81,75 +96,75 @@ const DealerLogin = () => {
         <title>Impel Store - Dealer Login</title>
       </Helmet>
       <section className="login">
-        <div className="login_main">
-          <div className="container">
-            <div className="row justify-content-center">
-              <div className="col-md-9">
-                <div className="login_inr">
-                  <div className="row justify-content-center">
-                    <div className="col-md-8">
-                      <div className="login_info">
-                        <div className="delivery_info_inr">
-                          {/* <div className="login_header">
-                          <Link to="#">
-                            <img src={Logo} height="80" alt="logo" />
-                          </Link>
-                        </div> */}
-                          <div className="delivery_login_info_inr_title">
-                            <h3>Welcome</h3>
-                          </div>
-                          <form onSubmit={handleSubmit}>
-                            <div className="form-group my-3">
-                              <input
-                                className="form-control"
-                                type="text"
-                                name="email"
-                                onChange={(e) => handleChange(e)}
-                                placeholder="Registered Email ID"
-                              />
-                              {error &&
-                                error === "Please enter your email." && (
-                                  <p className="text-danger">{error}</p>
-                                )}
-                            </div>
-                            <div className="form-group my-3">
-                              <input
-                                className="form-control"
-                                type="password"
-                                name="password"
-                                onChange={(e) => handleChange(e)}
-                                placeholder="Password"
-                              />
-                              {error &&
-                                error === "Please enter your password." && (
-                                  <p className="text-danger">{error}</p>
-                                )}
-                            </div>
+        <div class="container">
+          <div className="">
+            <div class="row justify-content-center">
+              <div className="col-md-5">
+                <div className="login_detail">
+                  <h2>Dealer Login</h2>
+                  <form onSubmit={handleSubmit}>
+                    <div class="form-group">
+                      <input
+                        type="text"
+                        name="email"
+                        onChange={(e) => handleChange(e)}
+                        placeholder="Registered Email ID"
+                        class="form__input"
+                      />
+                      {error && error === "Please enter your email." && (
+                        <span className="text-danger">{error}</span>
+                      )}
+                    </div>
+                    <div className="form-group">
+                      <input
+                        type={passwordType}
+                        name="password"
+                        onChange={(e) => handleChange(e)}
+                        placeholder="Password"
+                        class="form__input"
+                      />
+                      <button
+                        className="btn toggle_btn "
+                        onClick={(e) => togglePassword(e)}
+                      >
+                        {passwordType === "password" ? (
+                          <FaEye />
+                        ) : (
+                          <FaEyeSlash />
+                        )}
+                      </button>
+                      {error && error === "Please enter your password." && (
+                        <span className="text-danger">{error}</span>
+                      )}
+                    </div>
 
-                            <div className="form-group mt-4 mb-0">
-                              <button type="submit" className="btn login_bt">
-                                {spinner && (
-                                  <CgSpinner
-                                    size={20}
-                                    className="animate_spin me-2"
-                                  />
-                                )}
-                                {spinner ? "" : "Login"}
-                              </button>
-                              <div className="d-flex justify-content-between">
-                                <Link
-                                  to="/forget-password"
-                                  className="text-decoration-none"
-                                >
-                                  Forgot Credentials?
-                                </Link>
-                              </div>
-                            </div>
-                          </form>
-                        </div>
+                    <div className="form-group">
+                      <button className="btn btn-success dealer_login_btn">
+                        {spinner && (
+                          <CgSpinner size={20} className="animate_spin me-2" />
+                        )}
+                        {spinner ? "" : "Login"}
+                      </button>
+                      <div className="d-flex align-items-center justify-content-between">
+                        <p className="text-start">
+                          <Link
+                            to="/login"
+                            className="text-decoration-none text-success"
+                          >
+                            Customer Login?
+                          </Link>
+                        </p>
+                        <p>
+                          <Link
+                            to="/forget-password"
+                            className="text-decoration-none text-danger"
+                          >
+                            Forgot Password?
+                          </Link>
+                        </p>
                       </div>
                     </div>
-                  </div>
+                  </form>
                 </div>
               </div>
             </div>

@@ -398,7 +398,9 @@ const Navbar = () => {
                             to="/wishlist"
                             data-tooltip-id="my-tooltip-2"
                           >
-                            <BsHeart />
+                            <BsHeart
+                              style={{ fontSize: "20px", color: "black" }}
+                            />
                             {wishliststate.wishlistItems > 0 && (
                               <div className="cart_count">
                                 {wishliststate.wishlistItems}

@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { Button, Col, Form, Modal } from "react-bootstrap";
 import { CgSpinner } from "react-icons/cg";
 import { FaLongArrowAltLeft } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
 import emptycart from "../../assets/images/empty-cart.png";
 import { Helmet } from "react-helmet-async";
 
@@ -54,7 +55,6 @@ const Cart = () => {
   const [error, setError] = useState({
     nameErr: "",
     emailErr: "",
-
     addressErr: "",
     pincodeErr: "",
     stateErr: "",
@@ -613,8 +613,8 @@ const Cart = () => {
                                       </div>
                                     </div>
 
-                                    <div className="col-md-3">
-                                      <div className="text-end">
+                                    <div className="col-md-5">
+                                      <div className="text-md-end">
                                         <Link
                                           to="#"
                                           className="btn btn-light border text-danger icon-hover-danger text-end"
@@ -623,10 +623,14 @@ const Cart = () => {
                                           {removingItemId === data.id && (
                                             <CgSpinner
                                               size={20}
-                                              className="animate_spin me-2"
+                                              className="animate_spin"
                                             />
                                           )}
-                                          Remove
+                                          {removingItemId === data.id ? (
+                                            ""
+                                          ) : (
+                                            <MdDelete />
+                                          )}
                                         </Link>
                                       </div>
                                     </div>
