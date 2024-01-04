@@ -119,7 +119,7 @@ function App() {
           <Route path="*" element={<Errorpage />} />
         </Routes>
       </HelmetProvider>
-      <Toaster toastOptions={{ duration: 2000 }} />
+      <Toaster toastOptions={{ duration: 3000 }} />
     </>
   );
 }

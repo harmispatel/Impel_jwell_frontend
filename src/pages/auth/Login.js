@@ -114,6 +114,7 @@ const Login = () => {
           localStorage.setItem("user_type", phonedata?.user_type);
           localStorage.setItem("user_id", phonedata?.user_id);
           localStorage.setItem("verification", phonedata?.verification);
+          localStorage.removeItem("showPopup");
           navigate("/");
         }
       })
@@ -166,7 +167,8 @@ const Login = () => {
                           <div className="row">
                             <div className="col-md-12">
                               <button
-                                className="btn btn-success dealer_login_btn"
+                                className="btn btn-success dealer_login_btn fw-bolder"
+                                style={{ fontSize: "18px" }}
                                 id="sign-in-button"
                               >
                                 {spinner && (
@@ -184,6 +186,7 @@ const Login = () => {
                             <Link
                               to="/Dealer_login"
                               className="text-decoration-none text-success"
+                              style={{ fontWeight: "700", fontSize: "18px" }}
                             >
                               Dealer Login ?
                             </Link>

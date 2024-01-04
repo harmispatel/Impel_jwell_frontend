@@ -73,6 +73,7 @@ const DealerLogin = () => {
           localStorage.setItem("user_id", response.data.data.user.id);
           localStorage.setItem("user_type", response.data.data.user.user_type);
           localStorage.setItem("email", loginData.email);
+          localStorage.removeItem("showPopup");
           navigate("/");
         } else {
           navigate("/Dealer_login");
@@ -139,7 +140,10 @@ const DealerLogin = () => {
                     </div>
 
                     <div className="form-group">
-                      <button className="btn btn-success dealer_login_btn">
+                      <button
+                        className="btn btn-success dealer_login_btn fw-bolder"
+                        style={{ fontSize: "18px" }}
+                      >
                         {spinner && (
                           <CgSpinner size={20} className="animate_spin me-2" />
                         )}

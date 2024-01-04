@@ -41,7 +41,7 @@ const ForgetPassword = () => {
     setSpinner(true);
     DealerServices.ForgetPassword({
       email: email,
-      reset_url: window.location.href,
+      reset_url: window.location.origin + "/reset-password",
     })
       .then((res) => {
         if (res.status === false) {
@@ -57,7 +57,7 @@ const ForgetPassword = () => {
         setSpinner(false);
       });
   };
-
+  console.log(window.location.origin + "/reset-password");
   useEffect(() => {
     let timeoutId;
 
@@ -109,7 +109,10 @@ const ForgetPassword = () => {
                       />
                       {error && <span className="text-danger">{error}</span>}
                     </div>
-                    <button className="btn btn-success dealer_login_btn mt-3">
+                    <button
+                      className="btn btn-success dealer_login_btn mt-3 fw-bolder"
+                      style={{ fontSize: "18px" }}
+                    >
                       {spinner && (
                         <CgSpinner size={20} className="animate_spin me-2" />
                       )}

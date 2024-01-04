@@ -148,7 +148,10 @@ const Resetpassword = () => {
                       </div>
                     </div>
                     <div class="form-group">
-                      <button className="btn btn-success dealer_login_btn">
+                      <button
+                        className="btn btn-success dealer_login_btn fw-bolder"
+                        style={{ fontSize: "18px" }}
+                      >
                         {spinner && (
                           <CgSpinner size={20} className="animate_spin me-2" />
                         )}
