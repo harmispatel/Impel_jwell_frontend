@@ -102,6 +102,12 @@ const WishList = () => {
     GetUserCartList();
   }, []);
 
+  const goldColor = {
+    yellow_gold: "Yellow Gold",
+    rose_gold: "Rose Gold",
+    white_gold: "White Gold",
+  };
+
   return (
     <>
       <Helmet>
@@ -109,7 +115,9 @@ const WishList = () => {
       </Helmet>
       <section className="wishlist">
         <div className="container">
-          <h2>My Wishlist</h2>
+          <h2 className="text-center pb-3 text-uppercase fw-bolder">
+            My Wishlist
+          </h2>
           <div>
             {isLoading ? (
               <div className="h-100 d-flex justify-content-center">
@@ -150,7 +158,7 @@ const WishList = () => {
                                 </h3>
 
                                 <div className="d-flex justify-content-around align-items-center">
-                                  <span>{product?.gold_color}</span>
+                                  <span>{goldColor[product.gold_color]}</span>
                                   <span>{product?.gold_type}</span>
                                 </div>
                               </Link>
@@ -188,6 +196,7 @@ const WishList = () => {
                         );
                       })}
                     </div>
+                   
                   </>
                 ) : (
                   <div className="container">

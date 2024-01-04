@@ -42,8 +42,17 @@ const Navbar = () => {
   const dropdownRef = useRef(null);
 
   const searchParams = new URLSearchParams(location.search);
+
   const navigate = useNavigate();
+
   let tagIds = searchParams.getAll("tag_id");
+
+  console.log("tagIds -->", tagIds);
+  console.log("isArray -->", Array.isArray(tagIds));
+  console.log("length -->", tagIds.length > 0);
+  console.log("tagIds -->", tagIds[0]?.split(","));
+  console.log("map -->", tagIds.map((i) => parseFloat(i)));
+
   tagIds =
     Array.isArray(tagIds) && tagIds.length > 0 ? tagIds[0].split(",") : [];
   tagIds = tagIds.map((i) => parseFloat(i));
@@ -81,8 +90,8 @@ const Navbar = () => {
       });
   };
 
-  const getProfile = async () => {
-    await profileService
+  const getProfile = () => {
+    profileService
       .getProfile({ phone: Phone })
       .then((res) => setProfileData(res.data))
       .catch((err) => {
@@ -255,6 +264,7 @@ const Navbar = () => {
                           {tags?.map((multitags, index) => (
                             <div className="col-md-2" key={index}>
                               <div className="tags-links">
+                                {console.log(tagIds.includes(multitags.id) ? tagIds: multitags.id)}
                                 <Link
                                   to={`/shop?tag_id=${
                                     tagIds.includes(multitags.id)

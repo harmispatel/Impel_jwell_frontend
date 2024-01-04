@@ -1322,7 +1322,7 @@ input[type="file"] {
 
 .active .page-link {
   background-color: rgb(219, 150, 98) !important;
-  color: black !important;
+  color: #fbf7f5 !important;
   font-weight: 600 !important;
   border-color: rgb(219, 150, 98) !important;
   font-size: 16px !important;
@@ -1656,6 +1656,12 @@ input[type="file"] {
 .text-danger strong {
   color: #9f181c;
 }
+
+
+/* user new wishlist Page styles start */
+
+
+/* user new wishlist Page styles end */
 
 /* profile page */
 
