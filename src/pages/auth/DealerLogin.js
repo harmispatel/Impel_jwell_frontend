@@ -152,18 +152,18 @@ const DealerLogin = () => {
                       <div className="d-flex align-items-center justify-content-between">
                         <p className="text-start">
                           <Link
-                            to="/login"
-                            className="text-decoration-none text-success"
-                          >
-                            Customer Login?
-                          </Link>
-                        </p>
-                        <p>
-                          <Link
                             to="/forget-password"
                             className="text-decoration-none text-danger"
                           >
                             Forgot Password?
+                          </Link>
+                        </p>
+                        <p>
+                          <Link
+                            to="/login"
+                            className="text-decoration-none text-success"
+                          >
+                            Customer Login?
                           </Link>
                         </p>
                       </div>

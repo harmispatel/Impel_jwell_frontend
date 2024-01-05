@@ -219,6 +219,14 @@ const Login = () => {
                           <div className="d-flex justify-content-between">
                             <button
                               id="sign-in-button"
+                              type="button"
+                              onClick={sendOtp}
+                              className="btn btn-success user_login_btn"
+                            >
+                              RESEND
+                            </button>
+                            <button
+                              id="sign-in-button"
                               type="submit"
                               className="btn btn-success user_login_btn"
                               disabled={spinner}
@@ -230,14 +238,6 @@ const Login = () => {
                                 />
                               )}
                               {spinner ? "" : "VERIFY"}
-                            </button>
-                            <button
-                              id="sign-in-button"
-                              type="button"
-                              onClick={sendOtp}
-                              className="btn btn-success user_login_btn"
-                            >
-                              RESEND
                             </button>
                           </div>
                         </form>

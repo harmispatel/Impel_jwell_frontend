@@ -7,6 +7,7 @@ import { CgSpinner } from "react-icons/cg";
 import { FaLongArrowAltLeft } from "react-icons/fa";
 import DealerWishlist from "../../services/Dealer/Collection";
 import { Helmet } from "react-helmet-async";
+import { AiFillDelete } from "react-icons/ai";
 
 const DealerWishList = () => {
   const DealerEmail = localStorage.getItem("email");
@@ -72,38 +73,52 @@ const DealerWishList = () => {
             <>
               {checkList?.length ? (
                 <>
-                  <div className="product_washlist">
-                    {checkList?.map((product) => {
-                      return (
-                        <div className="wishlist_card">
-                          <div className="wishlist_img">
-                            <img src={product?.image} className="w-100" />
+                  <div className="new-wishlist-section">
+                    <div className="row">
+                      {checkList?.map((product) => {
+                        return (
+                          <div class="col-md-6 col-lg-3">
+                            <div className="card">
+                              <img
+                                class=""
+                                src={product?.image}
+                                alt={product?.name}
+                              />
+                              <div class="card-body text-center">
+                                <div class="cvp">
+                                  <h5 class="card-title fw-bolder">
+                                    <Link
+                                      to={`/shopdetails/${product?.id}`}
+                                      className="product_data"
+                                    >
+                                      {product?.name}
+                                    </Link>
+                                  </h5>
+
+                                  <div className="wishlist_item_btn">
+                                    <button
+                                      class="btn btn-danger remove"
+                                      onClick={() =>
+                                        removeFromWishList(product?.id)
+                                      }
+                                    >
+                                      {removingItemId === product?.id && (
+                                        <CgSpinner
+                                          size={20}
+                                          className="animate_spin me-2"
+                                        />
+                                      )}
+                                      <AiFillDelete className="me-1" />
+                                      REMOVE
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
                           </div>
-                          <div className="wishlist_info">
-                            <Link
-                              to={`/shopdetails/${product?.id}`}
-                              className="product_data"
-                            >
-                              <h3>{product?.name}</h3>
-                            </Link>
-                          </div>
-                          <div className="move_bag_btn d-flex">
-                            <button
-                              className="btn w-100"
-                              onClick={() => removeFromWishList(product?.id)}
-                            >
-                              {removingItemId === product?.id && (
-                                <CgSpinner
-                                  size={20}
-                                  className="animate_spin me-2"
-                                />
-                              )}
-                              Remove
-                            </button>
-                          </div>
-                        </div>
-                      );
-                    })}
+                        );
+                      })}
+                    </div>
                   </div>
                 </>
               ) : (

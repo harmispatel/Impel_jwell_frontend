@@ -5,8 +5,11 @@ import ReactLoading from "react-loading";
 import profileService from "../../services/Auth";
 import { Helmet } from "react-helmet-async";
 import { MdEditSquare } from "react-icons/md";
+import { CgSpinner } from "react-icons/cg";
+import { useImageContext } from "../../context/WishListContext";
 
 const Profile = () => {
+  const { setProfileImage } = useImageContext();
   const phone = localStorage.getItem("phone");
   const [showEdit, setShowEdit] = useState(false);
   const [show, setShow] = useState(false);
@@ -16,6 +19,7 @@ const Profile = () => {
   const [shipping_city, setShipping_city] = useState();
   const [isChecked, setIsChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [spinner, setSpinner] = useState(false);
   const [userData, setUserData] = useState({
     name: "",
     email: "",
@@ -75,6 +79,7 @@ const Profile = () => {
     }
 
     const reader = new FileReader();
+
     const myFormData = new FormData(
       document.getElementById("user-profile-form")
     );
@@ -84,8 +89,8 @@ const Profile = () => {
         .UserProfileImage(myFormData)
         .then((res) => {
           if (res.status === true) {
-            window.location.reload(false);
             getProfile();
+            setProfileImage(res.data.imageUrl);
             toast.success(res.message);
           } else {
             getProfile();
@@ -307,6 +312,7 @@ const Profile = () => {
   };
 
   const handleUpdate = async (e) => {
+    setSpinner(true);
     e.preventDefault();
     const isFormValid = validateForm();
     if (isFormValid) {
@@ -358,6 +364,9 @@ const Profile = () => {
         })
         .catch((error) => {
           console.log(error);
+        })
+        .finally(() => {
+          setSpinner(false);
         });
     } else {
     }
@@ -779,6 +788,9 @@ const Profile = () => {
 
               <div className="text-center">
                 <Button variant="primary" type="submit">
+                  {spinner && (
+                    <CgSpinner size={20} className="animate_spin me-2" />
+                  )}
                   Update
                 </Button>
               </div>

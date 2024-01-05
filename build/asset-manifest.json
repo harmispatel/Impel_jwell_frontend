@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.e85e5348.css",
-    "main.js": "/static/js/main.1c6aecdd.js",
+    "main.css": "/static/css/main.3b9544df.css",
+    "main.js": "/static/js/main.70e161a2.js",
     "static/js/787.c4e7f8f9.chunk.js": "/static/js/787.c4e7f8f9.chunk.js",
     "static/media/intro.gif": "/static/media/intro.4d76be8e43539460cf9f.gif",
     "static/media/Lato-Semibold.ttf": "/static/media/Lato-Semibold.d585c7df44df3024c49b.ttf",
@@ -13,12 +13,12 @@
     "static/media/logo.png": "/static/media/logo.4b7825a638146a1cdf28.png",
     "static/media/empty-cart.png": "/static/media/empty-cart.30d130f69377623f0ef9.png",
     "index.html": "/index.html",
-    "main.e85e5348.css.map": "/static/css/main.e85e5348.css.map",
-    "main.1c6aecdd.js.map": "/static/js/main.1c6aecdd.js.map",
+    "main.3b9544df.css.map": "/static/css/main.3b9544df.css.map",
+    "main.70e161a2.js.map": "/static/js/main.70e161a2.js.map",
     "787.c4e7f8f9.chunk.js.map": "/static/js/787.c4e7f8f9.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.e85e5348.css",
-    "static/js/main.1c6aecdd.js"
+    "static/css/main.3b9544df.css",
+    "static/js/main.70e161a2.js"
   ]
 }

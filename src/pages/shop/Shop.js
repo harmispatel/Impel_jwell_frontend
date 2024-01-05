@@ -59,8 +59,6 @@ const Shop = ({ product }) => {
   const [filterData, setFilterData] = useState([]);
   const [paginate, setPaginate] = useState();
 
-  const [offset, setOffset] = useState();
-
   const [collection_status, setCollectionStatus] = useState(false);
   const [DealerCollection, setDealerCollection] = useState([]);
 
@@ -159,8 +157,8 @@ const Shop = ({ product }) => {
       max_price: PriceRange?.maxprice,
       sort_by: selectedOption?.value,
       userType: userType,
-      offset: offset,
       userId: userId,
+      offset: offset,
     })
       .then((res) => {
         setIsLoading(false);
@@ -178,32 +176,11 @@ const Shop = ({ product }) => {
       });
   };
 
-  const AllData = () => {
-    ShopServices.alldesigns({
-      userType: userType,
-      userId: userId,
-    })
-      .then((res) => {
-        setIsLoading(false);
-        setFilterData(res.data?.designs);
-        setFilterTag(res.data?.tags);
-        setPaginate(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-        setIsLoading(false);
-      });
-  };
-
   useEffect(() => {
     CategoryFilter();
     GenderFilter();
-    AllData();
-    collectionCheck();
+    GetDealerSelection();
     GetUserWishList();
-  }, [userType, userId]);
-
-  useEffect(() => {
     FilterData(0);
   }, [category, tag, gender, searchInput, PriceRange, selectedOption]);
 
@@ -276,7 +253,7 @@ const Shop = ({ product }) => {
   };
 
   // Dealer wishlist API
-  const collectionCheck = () => {
+  const GetDealerSelection = () => {
     DealerWishlist.ListCollection({ email: email })
       .then((res) => {
         setDealerCollection(res.data);
@@ -287,10 +264,10 @@ const Shop = ({ product }) => {
   };
 
   // Dealer Wishlist products add
-  const AddToDealerWishlist = async (e, product) => {
+  const AddToDealerSelection = async (e, product) => {
     e.preventDefault();
     if (!DealerCollection.some((item) => item.id === product?.id)) {
-      DealerWishlist.addtoDealerWishlist({
+      DealerWishlist.AddToDealerSelection({
         email: email,
         design_id: product?.id,
       })
@@ -298,8 +275,8 @@ const Shop = ({ product }) => {
           if (res.success === true) {
             setCollectionStatus(true);
             toast.success("Design has been Added to Your Collection.");
-            AllData();
-            collectionCheck();
+            FilterData();
+            GetDealerSelection();
           } else {
           }
         })
@@ -311,7 +288,7 @@ const Shop = ({ product }) => {
   };
 
   // Dealer Wishlist products remove
-  const removefromdealerwishlist = (e, product) => {
+  const removeFromSelection = (e, product) => {
     e.preventDefault();
     DealerWishlist.removetodealerWishlist({
       email: localStorage.getItem("email"),
@@ -320,8 +297,8 @@ const Shop = ({ product }) => {
       .then((res) => {
         if (res.success === true) {
           toast.success(res.message);
-          AllData();
-          collectionCheck();
+          FilterData();
+          GetDealerSelection();
         }
       })
       .catch((err) => {
@@ -339,7 +316,6 @@ const Shop = ({ product }) => {
 
   const paginationPage = (page) => {
     const calculatedOffset = (page - 1) * pagination.dataShowLength;
-    setOffset(calculatedOffset);
     FilterData(calculatedOffset);
     setPagination({ ...pagination, currentPage: page });
     scrollup();
@@ -351,7 +327,6 @@ const Shop = ({ product }) => {
       const prevPage = pagination.currentPage - 1;
       const calculatedOffset = (prevPage - 1) * pagination.dataShowLength;
       setPagination({ ...pagination, currentPage: prevPage });
-      setOffset(calculatedOffset);
       FilterData(calculatedOffset);
       scrollup();
       setIsLoading(true);
@@ -363,7 +338,6 @@ const Shop = ({ product }) => {
       const nextPage = pagination.currentPage + 1;
       const calculatedOffset = (nextPage - 1) * pagination.dataShowLength;
       setPagination({ ...pagination, currentPage: nextPage });
-      setOffset(calculatedOffset);
       FilterData(calculatedOffset);
       scrollup();
       setIsLoading(true);
@@ -542,12 +516,9 @@ const Shop = ({ product }) => {
                                                       item?.id === data?.id
                                                   )
                                                 ) {
-                                                  removefromdealerwishlist(
-                                                    e,
-                                                    data
-                                                  );
+                                                  removeFromSelection(e, data);
                                                 } else {
-                                                  AddToDealerWishlist(e, data);
+                                                  AddToDealerSelection(e, data);
                                                 }
                                               }}
                                             >
@@ -646,7 +617,8 @@ const Shop = ({ product }) => {
                                           : "block",
                                     }}
                                   >
-                                    <a
+                                    <Link
+                                      to="#"
                                       className="page-link"
                                       onClick={paginationPrev}
                                     >
@@ -659,7 +631,7 @@ const Shop = ({ product }) => {
                                         <polyline points="15 18 9 12 15 6"></polyline>
                                       </svg>
                                       Prev
-                                    </a>
+                                    </Link>
                                   </li>
 
                                   {/* Display pages with ellipses */}
@@ -684,13 +656,15 @@ const Shop = ({ product }) => {
                                             className={`page-item ${
                                               isCurrentPage ? "active" : ""
                                             }`}
-                                            onClick={() =>
-                                              paginationPage(pageNumber)
-                                            }
                                           >
-                                            <a className="page-link">
+                                            <button
+                                              className="page-link"
+                                              onClick={() =>
+                                                paginationPage(pageNumber)
+                                              }
+                                            >
                                               {pageNumber}
-                                            </a>
+                                            </button>
                                           </li>
                                         );
                                       }
@@ -705,7 +679,9 @@ const Shop = ({ product }) => {
                                             key={pageNumber}
                                             className="page-item disabled"
                                           >
-                                            <a className="page-link">...</a>
+                                            <button className="page-link">
+                                              ...
+                                            </button>
                                           </li>
                                         );
                                       }
@@ -728,7 +704,8 @@ const Shop = ({ product }) => {
                                           : "block",
                                     }}
                                   >
-                                    <a
+                                    <Link
+                                      to="#"
                                       className="page-link"
                                       onClick={paginationNext}
                                     >
@@ -741,7 +718,7 @@ const Shop = ({ product }) => {
                                       >
                                         <polyline points="9 18 15 12 9 6"></polyline>
                                       </svg>
-                                    </a>
+                                    </Link>
                                   </li>
                                 </ul>
                               </nav>

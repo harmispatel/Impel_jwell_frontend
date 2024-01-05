@@ -16,9 +16,11 @@ import UserService from "../services/Cart";
 
 import FilterServices from "../services/Filter";
 import profileService from "../services/Auth";
-import { WishlistSystem } from "../context/WishListContext";
+import { useImageContext, WishlistSystem } from "../context/WishListContext";
 
 const Navbar = () => {
+  const { profileImage } = useImageContext();
+
   const { state: wishliststate } = useContext(WishlistSystem);
 
   const location = useLocation();
@@ -46,12 +48,6 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   let tagIds = searchParams.getAll("tag_id");
-
-  console.log("tagIds -->", tagIds);
-  console.log("isArray -->", Array.isArray(tagIds));
-  console.log("length -->", tagIds.length > 0);
-  console.log("tagIds -->", tagIds[0]?.split(","));
-  console.log("map -->", tagIds.map((i) => parseFloat(i)));
 
   tagIds =
     Array.isArray(tagIds) && tagIds.length > 0 ? tagIds[0].split(",") : [];
@@ -264,7 +260,6 @@ const Navbar = () => {
                           {tags?.map((multitags, index) => (
                             <div className="col-md-2" key={index}>
                               <div className="tags-links">
-                                {console.log(tagIds.includes(multitags.id) ? tagIds: multitags.id)}
                                 <Link
                                   to={`/shop?tag_id=${
                                     tagIds.includes(multitags.id)
@@ -422,7 +417,7 @@ const Navbar = () => {
                       <li>
                         {Phone && (
                           <Link
-                            className="icon cart_icon"
+                            className="icon"
                             to="/cart"
                             data-tooltip-id="my-tooltip-3"
                           >

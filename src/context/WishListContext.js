@@ -1,6 +1,17 @@
-import React, { createContext, useEffect, useReducer } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useReducer,
+  useState,
+} from "react";
 
 export const WishlistSystem = createContext();
+export const ImageContext = createContext();
+
+export const useImageContext = () => {
+  return useContext(ImageContext);
+};
 
 const initialState = {
   wishlist: [],
@@ -44,6 +55,7 @@ const Wishlist = (state, action) => {
 
 const WishlistProvider = ({ children }) => {
   const [state, dispatch] = useReducer(Wishlist, initialState);
+  const [profileImage, setProfileImage] = useState(null);
 
   useEffect(() => {
     localStorage.setItem("wishlistItems", state.wishlistItems.toString());
@@ -51,7 +63,9 @@ const WishlistProvider = ({ children }) => {
 
   return (
     <WishlistSystem.Provider value={{ state, dispatch }}>
-      {children}
+      <ImageContext.Provider value={{ profileImage, setProfileImage }}>
+        {children}
+      </ImageContext.Provider>
     </WishlistSystem.Provider>
   );
 };

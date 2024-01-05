@@ -1,15 +1,5 @@
 import call from "./Call";
 
-const alldesigns = async (data) => {
-  let d = await call({
-    path: "filter-design",
-    method: "POST",
-    enctype: "multipart/form-data",
-    data,
-  });
-  return d;
-};
-
 const allfilterdesigns = async (data) => {
   let d = await call({
     path: "filter-design",
@@ -42,7 +32,6 @@ const related_products = async (data) => {
 
 const exportObject = {
   related_products,
-  alldesigns,
   allfilterdesigns,
   product_detail,
 };

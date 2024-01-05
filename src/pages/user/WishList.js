@@ -10,7 +10,10 @@ import toast from "react-hot-toast";
 import { BsHandbagFill } from "react-icons/bs";
 import { Helmet } from "react-helmet-async";
 import emptycart from "../../assets/images/empty-cart.png";
-import { FaLongArrowAltLeft } from "react-icons/fa";
+import { FaLongArrowAltLeft, FaShoppingCart } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
+import { FaCartShopping } from "react-icons/fa6";
+import { AiFillDelete } from "react-icons/ai";
 
 const WishList = () => {
   const phone = localStorage.getItem("phone");
@@ -51,6 +54,7 @@ const WishList = () => {
         if (res.success === true) {
           GetUserWishlist();
           setIsLoading(true);
+          toast.success(res.message);
           dispatch({
             type: "REMOVE_FROM_WISHLIST",
             payload: { id: product.id },
@@ -133,70 +137,68 @@ const WishList = () => {
               <>
                 {items?.length ? (
                   <>
-                    <div className="product_washlist">
-                      {items?.map((product) => {
-                        return (
-                          <div className="wishlist_card">
-                            <div className="wishlist_img">
-                              {product?.image ? (
+                    <div className="new-wishlist-section">
+                      <div className="row">
+                        {items?.map((product) => {
+                          return (
+                            <div class="col-md-6 col-lg-3">
+                              <div className="card">
                                 <img
-                                  src={product.image}
-                                  className="w-100"
-                                  alt={product.name}
+                                  class=""
+                                  src={product?.image}
+                                  alt={product?.name}
                                 />
-                              ) : (
-                                <img src={NoImage} className="w-100" alt="" />
-                              )}
-                            </div>
-                            <div className="wishlist_info">
-                              <Link
-                                to={`/shopdetails/${product?.id}`}
-                                className="product_data"
-                              >
-                                <h3>
-                                  <b>{product?.name}</b>
-                                </h3>
+                                <div class="card-body text-center">
+                                  <div class="cvp">
+                                    <h5 class="card-title fw-bolder">
+                                      <Link
+                                        to={`/shopdetails/${product?.id}`}
+                                        className="product_data"
+                                      >
+                                        {product?.name}
+                                      </Link>
+                                    </h5>
+                                    <p>{goldColor[product.gold_color]}</p>
+                                    <p>{product.gold_type}</p>
+                                    <div className="wishlist_item_btn">
+                                      <button
+                                        class="btn btn-danger remove"
+                                        onClick={() =>
+                                          removeFromWishList(product?.id)
+                                        }
+                                      >
+                                        {removingItemId === product.id && (
+                                          <CgSpinner
+                                            size={20}
+                                            className="animate_spin me-2"
+                                          />
+                                        )}
+                                        <AiFillDelete className="me-1" />
+                                        REMOVE
+                                      </button>
 
-                                <div className="d-flex justify-content-around align-items-center">
-                                  <span>{goldColor[product.gold_color]}</span>
-                                  <span>{product?.gold_type}</span>
+                                      <button
+                                        class="btn btn-dark add-cart"
+                                        onClick={() => handleAddToCart(product)}
+                                      >
+                                        {removeCartItems === product && (
+                                          <CgSpinner
+                                            size={20}
+                                            className="animate_spin me-2"
+                                          />
+                                        )}
+                                        <FaCartShopping className="me-1" />
+                                        MOVE TO CART
+                                      </button>
+                                    </div>
+                                  </div>
                                 </div>
-                              </Link>
+                              </div>
                             </div>
-                            <div className="move_bag_btn d-flex">
-                              <button
-                                className="btn w-100"
-                                onClick={() => removeFromWishList(product?.id)}
-                              >
-                                {removingItemId === product.id && (
-                                  <CgSpinner
-                                    size={20}
-                                    className="animate_spin me-2"
-                                  />
-                                )}
-                                Remove
-                              </button>
-                              <button
-                                className="btn w-100"
-                                onClick={() => handleAddToCart(product)}
-                              >
-                                {removeCartItems === product && (
-                                  <CgSpinner
-                                    size={20}
-                                    className="animate_spin me-2"
-                                  />
-                                )}
-                                {!removeCartItems === product && (
-                                  <BsHandbagFill className="me-2" />
-                                )}
-                                Move To Cart
-                              </button>
-                            </div>
-                          </div>
-                        );
-                      })}
+                          );
+                        })}
+                      </div>
                     </div>
-                   
                   </>
                 ) : (
                   <div className="container">

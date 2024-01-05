@@ -643,6 +643,7 @@ const Cart = () => {
                         </div>
                       </div>
                     </div>
+                    
 
                     <div className="col-lg-3">
                       {!show && (
