@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import video1 from "../assets/video/video.mp4";
+import { Helmet } from "react-helmet-async";
 
 const Errorpage = () => {
   const videoEl = useRef(null);
@@ -17,6 +18,9 @@ const Errorpage = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Impel Store - Not found URL</title>
+      </Helmet>
       <div>
         <video
           style={{

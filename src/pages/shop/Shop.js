@@ -19,7 +19,7 @@ import { WishlistSystem } from "../../context/WishListContext";
 
 const Shop = ({ product }) => {
   const { dispatch: wishlistDispatch } = useContext(WishlistSystem);
-  const { dispatch: wishlistRemoveDispatch } = useContext(WishlistSystem);
+  const { dispatch: removeWishlistDispatch } = useContext(WishlistSystem);
 
   const location = useLocation();
 
@@ -182,13 +182,13 @@ const Shop = ({ product }) => {
     GetDealerSelection();
     GetUserWishList();
     FilterData(0);
-  }, [category, tag, gender, searchInput, PriceRange, selectedOption]);
+  }, [category, tag?.length, gender, searchInput, PriceRange, selectedOption]);
 
   // user wishlist API
   const GetUserWishList = async () => {
     UserWishlist.userWishlist({ phone: Phone })
       .then((res) => {
-        setUserCartItems(res?.data);
+        setUserCartItems(res?.data?.wishlist_items);
       })
       .catch((err) => {
         console.log(err);
@@ -198,7 +198,7 @@ const Shop = ({ product }) => {
   // user wishlist products add
   const addToUserWishList = async (e, product) => {
     e.preventDefault();
-    const payload = { id: product.id };
+    const payload = { id: product?.id };
     if (!UsercartItems.some((item) => item.id === product.id)) {
       UserWishlist.addtoWishlist({
         phone: Phone,
@@ -229,7 +229,7 @@ const Shop = ({ product }) => {
   // user wishlist products remove
   const removeFromWishList = (e, product) => {
     e.preventDefault();
-    const payload = { id: product.id };
+    const payload = product;
     UserWishlist.removetoWishlist({
       phone: Phone,
       design_id: product.id,
@@ -241,7 +241,7 @@ const Shop = ({ product }) => {
         if (res.success === true) {
           toast.success("Design has been Removed from Your Wishlist.");
           GetUserWishList();
-          wishlistRemoveDispatch({
+          removeWishlistDispatch({
             type: "REMOVE_FROM_WISHLIST",
             payload,
           });
@@ -267,7 +267,7 @@ const Shop = ({ product }) => {
   const AddToDealerSelection = async (e, product) => {
     e.preventDefault();
     if (!DealerCollection.some((item) => item.id === product?.id)) {
-      DealerWishlist.AddToDealerSelection({
+      DealerWishlist.addtoDealerWishlist({
         email: email,
         design_id: product?.id,
       })
@@ -728,9 +728,7 @@ const Shop = ({ product }) => {
                       </>
                     ) : (
                       <div className="not-products">
-                        <p>
-                          No products available based on the selected filters.
-                        </p>
+                        <p>No products available.</p>
                       </div>
                     )}
                   </>
@@ -744,7 +742,7 @@ const Shop = ({ product }) => {
                 <ReactTooltip
                   id="my-tooltip-12"
                   place="bottom"
-                  content="My Collections"
+                  content="My Selections"
                 />
               </div>
             </div>

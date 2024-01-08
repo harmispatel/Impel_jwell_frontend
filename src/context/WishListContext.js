@@ -1,51 +1,56 @@
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useReducer,
-  useState,
-} from "react";
+import React, { createContext, useEffect, useReducer } from "react";
+import Userservice from "../services/Auth";
 
 export const WishlistSystem = createContext();
-export const ImageContext = createContext();
-
-export const useImageContext = () => {
-  return useContext(ImageContext);
-};
 
 const initialState = {
   wishlist: [],
-  wishlistItems: parseInt(localStorage.getItem("wishlistItems")) || 0,
+  wishlistItems: 0,
 };
 
 const Wishlist = (state, action) => {
   switch (action.type) {
+    case "SET_WISHLIST":
+      return {
+        ...state,
+        wishlist: action.payload.wishlist,
+        wishlistItems: action.payload.wishlist?.reduce(
+          (total, item) => total + item.quantity,
+          0
+        ),
+      };
     case "ADD_TO_WISHLIST":
-      const { id } = action.payload;
-      const wishlistitem = state.wishlist.find((item) => item.id === id);
+      const { design_id } = action.payload;
+      const wishlistitem = state.wishlist?.find(
+        (item) => item?.id === design_id
+      );
       if (wishlistitem) {
         return {
           ...state,
-          wishlist: state.wishlist.map((item) =>
-            item.id === id ? { ...item, quantity: item.quantity + 1 } : item
+          wishlist: state.wishlist?.map((item) =>
+            item.id === design_id
+              ? { ...item, quantity: item?.quantity + 1 }
+              : item
           ),
           wishlistItems: state.wishlistItems + 1,
         };
       } else {
         return {
           ...state,
-          wishlist: [...state.wishlist, { id, quantity: 1 }],
+          wishlist: [...state.wishlist, { design_id, quantity: 1 }],
           wishlistItems: state.wishlistItems + 1,
         };
       }
 
     case "REMOVE_FROM_WISHLIST": {
-      const { id } = action.payload;
-      return {
-        ...state,
-        wishlist: state.wishlist.filter((item) => item.id !== id),
-        wishlistItems: state.wishlistItems - 1,
-      };
+      const { design_id } = action.payload;
+      if (state.wishlistItems > 0) {
+        return {
+          ...state,
+          wishlist: state?.wishlist?.filter((item) => item?.id !== design_id),
+          wishlistItems: state.wishlistItems - 1,
+        };
+      }
     }
 
     default:
@@ -54,20 +59,31 @@ const Wishlist = (state, action) => {
 };
 
 const WishlistProvider = ({ children }) => {
+  const Phone = localStorage.getItem("phone");
   const [state, dispatch] = useReducer(Wishlist, initialState);
-  const [profileImage, setProfileImage] = useState(null);
+
+  const fetchWishlistData = async () => {
+    try {
+      if (Phone) {
+        const res = await Userservice.userWishlist({ phone: Phone });
+        const wishlistData = res?.data?.wishlist_items || [];
+        dispatch({ type: "SET_WISHLIST", payload: { wishlist: wishlistData } });
+      }
+    } catch (err) {
+      console.error("Error fetching wishlist items:", err);
+    }
+  };
 
   useEffect(() => {
-    localStorage.setItem("wishlistItems", state.wishlistItems.toString());
-  }, [state.wishlistItems]);
+    if (Phone) {
+      fetchWishlistData();
+    }
+  }, [Phone]);
 
   return (
     <WishlistSystem.Provider value={{ state, dispatch }}>
-      <ImageContext.Provider value={{ profileImage, setProfileImage }}>
-        {children}
-      </ImageContext.Provider>
+      {children}
     </WishlistSystem.Provider>
   );
 };
-
 export default WishlistProvider;

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import BreadCrumb from "../../components/common/BreadCrumb";
 import ReactLoading from "react-loading";
+import { FaLongArrowAltLeft } from "react-icons/fa";
 import homeService from "../../services/Home";
 import categoryDetail from "../../services/Shop";
 
@@ -193,8 +194,13 @@ const CategoriesItems = () => {
                         </p>
                       </div>
                       <div className="text-center mt-md-3">
-                        <Link to="/categories" className="btn btn-outline-dark">
-                          Back To Categories
+                        <Link
+                          to="/categories"
+                          className="view_all_btn px-4 py-2"
+                          style={{ borderRadius: "8px" }}
+                        >
+                          <FaLongArrowAltLeft className="mr-2" /> &nbsp;Back to
+                          Categories
                         </Link>
                       </div>
                     </>

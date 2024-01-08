@@ -6,10 +6,8 @@ import profileService from "../../services/Auth";
 import { Helmet } from "react-helmet-async";
 import { MdEditSquare } from "react-icons/md";
 import { CgSpinner } from "react-icons/cg";
-import { useImageContext } from "../../context/WishListContext";
 
 const Profile = () => {
-  const { setProfileImage } = useImageContext();
   const phone = localStorage.getItem("phone");
   const [showEdit, setShowEdit] = useState(false);
   const [show, setShow] = useState(false);
@@ -90,7 +88,6 @@ const Profile = () => {
         .then((res) => {
           if (res.status === true) {
             getProfile();
-            setProfileImage(res.data.imageUrl);
             toast.success(res.message);
           } else {
             getProfile();
@@ -226,12 +223,18 @@ const Profile = () => {
       validationErrors.emailErr = "";
     }
 
-    if (
-      (userData.pan_no && !isValidPan(userData.pan_no)) ||
-      userData.pan_no?.length === 11
+    if (userData.pan_no && !isValidPan(userData.pan_no)) {
+      validationErrors.pancardErr = "Invalid PAN card format";
+      isValid = false;
+    } else if (
+      userData.pan_no &&
+      userData.pan_no !== userData.pan_no.toUpperCase()
     ) {
+      validationErrors.pancardErr = "PAN card number should be in uppercase";
+      isValid = false;
+    } else if (userData.pan_no && userData.pan_no.length !== 10) {
       validationErrors.pancardErr =
-        "Invalid PAN card format or not in UpperCase";
+        "PAN card number should be 10 characters long";
       isValid = false;
     } else {
       validationErrors.pancardErr = "";
@@ -312,10 +315,10 @@ const Profile = () => {
   };
 
   const handleUpdate = async (e) => {
-    setSpinner(true);
     e.preventDefault();
     const isFormValid = validateForm();
     if (isFormValid) {
+      setSpinner(true);
       const formData = new FormData();
       formData.append("id", selectedData.id);
       formData.append("name", userData.name ? userData.name : "");
@@ -359,7 +362,6 @@ const Profile = () => {
             getProfile();
             toast.success(res.message);
             localStorage.setItem("verification", res.data.verification);
-            window.location.reload(false);
           }
         })
         .catch((error) => {
@@ -379,9 +381,6 @@ const Profile = () => {
   useEffect(() => {
     getProfile();
   }, []);
-
-  const phoneNumber = profileData?.phone?.replace("+91", "");
-  const phoneNumber2 = selectedData?.phone?.replace("+91", "");
 
   return (
     <>
@@ -489,7 +488,7 @@ const Profile = () => {
                           </tr>
                           <tr>
                             <th scope="col">Phone : </th>
-                            <td>{phoneNumber}</td>
+                            <td>{profileData?.phone?.replace("+91", "")}</td>
                           </tr>
                           <tr>
                             <th scope="col">Billing Address : </th>
@@ -582,7 +581,10 @@ const Profile = () => {
                     controlId="formGridState"
                   >
                     <Form.Label>Phone</Form.Label>
-                    <Form.Control defaultValue={phoneNumber2} disabled />
+                    <Form.Control
+                      defaultValue={selectedData?.phone?.replace("+91", "")}
+                      disabled
+                    />
                   </Form.Group>
                 </div>
 

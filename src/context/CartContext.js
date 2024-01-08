@@ -1,23 +1,33 @@
 import React, { createContext, useEffect, useReducer } from "react";
+import UserService from "../services/Cart";
 
 export const CartSystem = createContext();
 
 const initialState = {
   cart: [],
-  cartItems: parseInt(localStorage.getItem("cartItems")) || 0,
+  cartItems: 0,
 };
 
 const Cart = (state, action) => {
   switch (action.type) {
+    case "SET_CART":
+      return {
+        ...state,
+        cart: action.payload.cart,
+        cartItems: action.payload.cart?.reduce(
+          (total, item) => total + item.quantity,
+          0
+        ),
+      };
     case "ADD_TO_CART":
       const { design_id } = action.payload;
-      const cartItem = state.cart.find((item) => item.design_id === design_id);
+      const cartItem = state.cart.find((item) => item?.design_id === design_id);
       if (cartItem) {
         return {
           ...state,
           cart: state.cart.map((item) =>
             item.design_id === design_id
-              ? { ...item, quantity: item.quantity + 1 }
+              ? { ...item, quantity: item?.quantity + 1 }
               : item
           ),
           cartItems: state.cartItems + 1,
@@ -32,11 +42,13 @@ const Cart = (state, action) => {
 
     case "REMOVE_FROM_CART": {
       const { design_id } = action.payload;
-      return {
-        ...state,
-        cart: state.cart.filter((item) => item.design_id !== design_id),
-        cartItems: state.cartItems - 1,
-      };
+      if (state.cartItems > 0) {
+        return {
+          ...state,
+          cart: state?.cart?.filter((item) => item?.design_id !== design_id),
+          cartItems: state.cartItems - 1,
+        };
+      }
     }
 
     default:
@@ -45,11 +57,26 @@ const Cart = (state, action) => {
 };
 
 const CartProvider = ({ children }) => {
+  const Phone = localStorage.getItem("phone");
   const [state, dispatch] = useReducer(Cart, initialState);
 
+  const fetchCartData = async () => {
+    try {
+      if (Phone) {
+        const res = await UserService.CartList({ phone: Phone });
+        const cartData = res?.data?.cart_items || [];
+        dispatch({ type: "SET_CART", payload: { cart: cartData } });
+      }
+    } catch (err) {
+      console.error("Error fetching cart items:", err);
+    }
+  };
+
   useEffect(() => {
-    localStorage.setItem("cartItems", state.cartItems.toString());
-  }, [state.cartItems]);
+    if (Phone) {
+      fetchCartData();
+    }
+  }, [Phone]);
 
   return (
     <CartSystem.Provider value={{ state, dispatch }}>
@@ -57,5 +84,4 @@ const CartProvider = ({ children }) => {
     </CartSystem.Provider>
   );
 };
-
 export default CartProvider;

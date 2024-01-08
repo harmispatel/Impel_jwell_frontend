@@ -4,20 +4,20 @@ import { Link } from "react-router-dom";
 import ReactLoading from "react-loading";
 import { CgSpinner } from "react-icons/cg";
 import { WishlistSystem } from "../../context/WishListContext";
-import NoImage from "../../assets/images/NoImage.jpeg";
 import UserCartService from "../../services/Cart";
 import toast from "react-hot-toast";
-import { BsHandbagFill } from "react-icons/bs";
 import { Helmet } from "react-helmet-async";
 import emptycart from "../../assets/images/empty-cart.png";
-import { FaLongArrowAltLeft, FaShoppingCart } from "react-icons/fa";
-import { MdDelete } from "react-icons/md";
+import { FaLongArrowAltLeft } from "react-icons/fa";
 import { FaCartShopping } from "react-icons/fa6";
 import { AiFillDelete } from "react-icons/ai";
+import { CartSystem } from "../../context/CartContext";
 
 const WishList = () => {
   const phone = localStorage.getItem("phone");
-  const { dispatch } = useContext(WishlistSystem);
+  const { dispatch: addtocartDispatch } = useContext(CartSystem);
+  const { dispatch: removeWishlistDispatch } = useContext(WishlistSystem);
+
   const [items, setItems] = useState([]);
   const [removingItemId, setRemovingItemId] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -28,7 +28,7 @@ const WishList = () => {
   const GetUserWishlist = async () => {
     Userservice.userWishlist({ phone: phone })
       .then((res) => {
-        setItems(res.data);
+        setItems(res?.data?.wishlist_items);
         setIsLoading(false);
       })
       .catch((err) => {
@@ -48,6 +48,7 @@ const WishList = () => {
   };
 
   const removeFromWishList = (product) => {
+    const payload = product;
     setRemovingItemId(product);
     Userservice.removetoWishlist({ phone: phone, design_id: product })
       .then((res) => {
@@ -55,9 +56,9 @@ const WishList = () => {
           GetUserWishlist();
           setIsLoading(true);
           toast.success(res.message);
-          dispatch({
+          removeWishlistDispatch({
             type: "REMOVE_FROM_WISHLIST",
-            payload: { id: product.id },
+            payload,
           });
         }
       })
@@ -70,6 +71,7 @@ const WishList = () => {
   };
 
   const handleAddToCart = (product) => {
+    const payload = { id: product.id };
     setRemoveCartItems(product);
     const CartData = {
       phone: phone,
@@ -85,6 +87,10 @@ const WishList = () => {
         if (res.status === true) {
           GetUserCartList();
           GetUserWishlist();
+          addtocartDispatch({
+            type: "ADD_TO_CART",
+            payload,
+          });
           toast.success(res.message);
           setIsLoading(true);
         } else {

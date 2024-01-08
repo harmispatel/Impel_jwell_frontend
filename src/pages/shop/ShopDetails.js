@@ -17,9 +17,12 @@ import { WishlistSystem } from "../../context/WishListContext";
 import UserCartService from "../../services/Cart";
 import Userservice from "../../services/Auth";
 import productDetail from "../../services/Shop";
+import { CartSystem } from "../../context/CartContext";
 
 const ShopDetails = () => {
   const { dispatch: wishlistDispatch } = useContext(WishlistSystem);
+  const { dispatch: addtocartDispatch } = useContext(CartSystem);
+  
   const { id } = useParams();
   const [product, setProduct] = useState();
   const data = { categoryId: product?.category_id?.id };
@@ -82,7 +85,7 @@ const ShopDetails = () => {
   const GetUserWishList = async () => {
     Userservice.userWishlist({ phone: Phone })
       .then((res) => {
-        setUserWishlistItems(res.data);
+        setUserWishlistItems(res?.data?.wishlist_items);
       })
       .catch((err) => {
         console.log(err);
@@ -98,10 +101,10 @@ const ShopDetails = () => {
 
   const addToUserWishList = async (product) => {
     setSpinner2(true);
-    const payload = { id: product.id };
+    const payload = { id: product?.id };
     Userservice.addtoWishlist({
       phone: localStorage.getItem("phone"),
-      design_id: product.id,
+      design_id: product?.id,
       quantity: productQuantity,
       gold_color: goldColor,
       gold_type: goldType,
@@ -128,10 +131,11 @@ const ShopDetails = () => {
 
   const handleAddToCart = (product) => {
     setSpinner(true);
+    const payload = { id: product?.id };
     const CartData = {
       phone: Phone,
-      design_name: product.name,
-      design_id: product.id,
+      design_name: product?.name,
+      design_id: product?.id,
       quantity: productQuantity,
       gold_color: goldColor,
       gold_type: goldType,
@@ -141,6 +145,10 @@ const ShopDetails = () => {
       .then((res) => {
         if (res.status === true) {
           GetUserCartList();
+          addtocartDispatch({
+            type: "ADD_TO_CART",
+            payload,
+          });
           toast.success(res.message);
         }
       })
@@ -328,6 +336,19 @@ const ShopDetails = () => {
                           <h5>
                             Design code : <strong>{product?.code}</strong>
                           </h5>
+                          {product?.description && (
+                            <p>
+                              Lorem ipsum dolor sit amet consectetur adipiscing
+                              elit curabitur, dui fames cras bibendum justo
+                              nostra duis placerat arcu, etiam cursus mauris
+                              tempus pellentesque euismod facilisi. Lacus
+                              consequat neque lacinia facilisi justo cursus
+                              eleifend, urna curae enim cubilia interdum dictum]
+                              tempor, senectus eget habitant auctor iaculis
+                              nascetur.
+                            </p>
+                          )}
+
                           <div>
                             <div>
                               <button

@@ -73,6 +73,7 @@ const userWishlist = async (data) => {
   });
   return d;
 };
+
 const UserProfileImage = async (data) => {
   let d = await Call({
     path: "upload-user-image",
@@ -92,6 +93,7 @@ const removetoWishlist = async (data) => {
   });
   return d;
 };
+
 const getCity = async (data) => {
   let d = await Call({
     path: "state/cities",

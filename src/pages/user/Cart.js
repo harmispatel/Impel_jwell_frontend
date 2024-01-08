@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import UserService from "../../services/Cart";
 import profileService from "../../services/Auth";
@@ -10,9 +10,11 @@ import { FaLongArrowAltLeft } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import emptycart from "../../assets/images/empty-cart.png";
 import { Helmet } from "react-helmet-async";
+import { CartSystem } from "../../context/CartContext";
 
 const Cart = () => {
   const navigate = useNavigate();
+  const { dispatch: removefromcartDispatch } = useContext(CartSystem);
 
   const Phone = localStorage.getItem("phone");
   const user_id = localStorage.getItem("user_id");
@@ -425,11 +427,15 @@ const Cart = () => {
 
   const Remove = (id) => {
     setRemovingItemId(id);
+    const payload = id;
     UserService.RemovetoCart({ cart_id: id })
       .then((res) => {
-        console.log(res?.data?.total_quantity);
         if (res.status === true) {
           UserCartItems();
+          removefromcartDispatch({
+            type: "REMOVE_FROM_CART",
+            payload,
+          });
           toast.success("remove design from cart successfully");
           if (res?.data?.total_quantity == 0) {
             localStorage.removeItem("savedDiscount");
@@ -445,7 +451,6 @@ const Cart = () => {
   };
 
   const Orderplacing = () => {
-    setSpinner(true);
     const totalPrice = code?.discount_value
       ? code?.discount_type === "percentage"
         ? SubTotal() + SubCharge() - (SubCharge() * code.discount_value) / 100
@@ -520,9 +525,10 @@ const Cart = () => {
       }
     } else {
       setShowEdit(true);
+      setSpinner(false);
     }
   };
-  const phoneNumber = profileData?.phone?.replace("+91", "");
+
   return (
     <>
       <Helmet>
@@ -643,7 +649,6 @@ const Cart = () => {
                         </div>
                       </div>
                     </div>
-                    
 
                     <div className="col-lg-3">
                       {!show && (
@@ -781,7 +786,7 @@ const Cart = () => {
                               style={{ display: spinner ? "none" : "block" }}
                             >
                               Back to shop
-                            </Link>
+                            </Link> 
                           </div>
                         </div>
                       </div>
@@ -894,7 +899,10 @@ const Cart = () => {
                         controlId="formGridState"
                       >
                         <Form.Label>Phone</Form.Label>
-                        <Form.Control defaultValue={phoneNumber} disabled />
+                        <Form.Control
+                          defaultValue={profileData?.phone?.replace("+91", "")}
+                          disabled
+                        />
                       </Form.Group>
                     </div>
 

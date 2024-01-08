@@ -13,14 +13,18 @@ import Logo from "../assets/images/logo.png";
 import NOimage from "../assets/images/NoImage.jpeg";
 
 import UserService from "../services/Cart";
+import Userservice from "../services/Auth";
 
 import FilterServices from "../services/Filter";
 import profileService from "../services/Auth";
-import { useImageContext, WishlistSystem } from "../context/WishListContext";
+import { WishlistSystem } from "../context/WishListContext";
+import { CartSystem } from "../context/CartContext";
 
 const Navbar = () => {
-  const { profileImage } = useImageContext();
+  const { cartItems } = useContext(CartSystem);
+  const { state: cartstate } = useContext(CartSystem);
 
+  const { wishlistItems } = useContext(WishlistSystem);
   const { state: wishliststate } = useContext(WishlistSystem);
 
   const location = useLocation();
@@ -34,6 +38,7 @@ const Navbar = () => {
   const [isLoggedOut, setIsLoggedOut] = useState(false);
   const [profileData, setProfileData] = useState([]);
   const [userCartCounts, setUsererCartCounts] = useState();
+  const [wishlistCount, setWishlistCount] = useState();
 
   const [dealerData, setDealerData] = useState([]);
   const [tags, setTags] = useState([]);
@@ -51,10 +56,15 @@ const Navbar = () => {
 
   tagIds =
     Array.isArray(tagIds) && tagIds.length > 0 ? tagIds[0].split(",") : [];
+
   tagIds = tagIds.map((i) => parseFloat(i));
 
-  const handleTag = (e) => {
-    setTag([parseFloat(e.target.value)]);
+  const handleTag = (tagId) => {
+    if (tag.includes(tagId)) {
+      setTag(tag.filter((id) => id !== tagId));
+    } else {
+      setTag([...tag, tagId]);
+    }
   };
 
   const changeNavbarColor = () => {
@@ -76,6 +86,16 @@ const Navbar = () => {
       });
   };
 
+  const UserWishlist = () => {
+    Userservice.userWishlist({ phone: Phone })
+      .then((res) => {
+        setWishlistCount(res?.data?.total_quantity);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const Tags = () => {
     FilterServices.headerTags()
       .then((res) => {
@@ -86,7 +106,7 @@ const Navbar = () => {
       });
   };
 
-  const getProfile = () => {
+  const getUserProfile = () => {
     profileService
       .getProfile({ phone: Phone })
       .then((res) => setProfileData(res.data))
@@ -108,10 +128,27 @@ const Navbar = () => {
 
   useEffect(() => {
     UserCartItems();
-    getProfile();
-    getProfileData();
+  }, [cartItems]);
+
+  useEffect(() => {
+    UserWishlist();
+  }, [wishlistItems]);
+
+  useEffect(() => {
     Tags();
   }, []);
+
+  useEffect(() => {
+    if (Phone) {
+      getUserProfile();
+    }
+  }, [Phone]);
+
+  useEffect(() => {
+    if (DealerEmail) {
+      getProfileData();
+    }
+  }, [DealerEmail]);
 
   const handleLogout = () => {
     if (Dealer) {
@@ -266,7 +303,7 @@ const Navbar = () => {
                                       ? tagIds
                                       : multitags.id
                                   }`}
-                                  onClick={handleTag}
+                                  onClick={() => handleTag(multitags.id)}
                                 >
                                   {multitags.name}
                                 </Link>
@@ -406,6 +443,7 @@ const Navbar = () => {
                             <BsHeart
                               style={{ fontSize: "20px", color: "black" }}
                             />
+
                             {wishliststate.wishlistItems > 0 && (
                               <div className="cart_count">
                                 {wishliststate.wishlistItems}
@@ -424,8 +462,10 @@ const Navbar = () => {
                             <BsHandbag
                               style={{ fontSize: "20px", color: "black" }}
                             />
-                            {userCartCounts > 0 && (
-                              <div className="cart_count">{userCartCounts}</div>
+                            {cartstate.cartItems > 0 && (
+                              <div className="cart_count">
+                                {cartstate.cartItems}
+                              </div>
                             )}
                           </Link>
                         )}
