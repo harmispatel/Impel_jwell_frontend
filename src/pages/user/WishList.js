@@ -47,10 +47,10 @@ const WishList = () => {
       });
   };
 
-  const removeFromWishList = (product) => {
-    const payload = product;
-    setRemovingItemId(product);
-    Userservice.removetoWishlist({ phone: phone, design_id: product })
+  const removeFromWishList = (id) => {
+    const payload = id;
+    setRemovingItemId(id);
+    Userservice.removetoWishlist({ phone: phone, design_id: id })
       .then((res) => {
         if (res.success === true) {
           GetUserWishlist();

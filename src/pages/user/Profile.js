@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Button, Col, Form, Modal } from "react-bootstrap";
 import toast from "react-hot-toast";
 import ReactLoading from "react-loading";
@@ -6,8 +6,12 @@ import profileService from "../../services/Auth";
 import { Helmet } from "react-helmet-async";
 import { MdEditSquare } from "react-icons/md";
 import { CgSpinner } from "react-icons/cg";
+import { ProfileSystem } from "../../context/ProfileContext";
+import { ImageSystem } from "../../context/ImageContext";
 
 const Profile = () => {
+  const { dispatch: profile } = useContext(ProfileSystem);
+  const { dispatch: image } = useContext(ImageSystem);
   const phone = localStorage.getItem("phone");
   const [showEdit, setShowEdit] = useState(false);
   const [show, setShow] = useState(false);
@@ -88,6 +92,11 @@ const Profile = () => {
         .then((res) => {
           if (res.status === true) {
             getProfile();
+            const payload = myFormData;
+            image({
+              type: "ADD_IMAGE",
+              payload,
+            });
             toast.success(res.message);
           } else {
             getProfile();
@@ -167,6 +176,11 @@ const Profile = () => {
 
   const handleEditChange = (e) => {
     const { name, value } = e.target;
+
+    if (name === "pan_no" && value.length > 10) {
+      e.target.value = value.slice(0, 10);
+    }
+
     if (name === "state") {
       setUserData({
         ...userData,
@@ -231,10 +245,6 @@ const Profile = () => {
       userData.pan_no !== userData.pan_no.toUpperCase()
     ) {
       validationErrors.pancardErr = "PAN card number should be in uppercase";
-      isValid = false;
-    } else if (userData.pan_no && userData.pan_no.length !== 10) {
-      validationErrors.pancardErr =
-        "PAN card number should be 10 characters long";
       isValid = false;
     } else {
       validationErrors.pancardErr = "";
@@ -360,6 +370,11 @@ const Profile = () => {
           if (res.status === true) {
             setShowEdit(false);
             getProfile();
+            const payload = userData.name;
+            profile({
+              type: "ADD_PROFILE",
+              payload,
+            });
             toast.success(res.message);
             localStorage.setItem("verification", res.data.verification);
           }

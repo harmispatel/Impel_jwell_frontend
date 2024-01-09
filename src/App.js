@@ -31,6 +31,7 @@ import CustomPageView from "./components/CustomPageView";
 import { HelmetProvider } from "react-helmet-async";
 import Resetpassword from "./pages/auth/Resetpassword";
 import CartProvider from "./context/CartContext";
+import ProfileProvider from "./context/ProfileContext";
 
 function App() {
   const popupshow = localStorage.getItem("user_type");
@@ -44,87 +45,89 @@ function App() {
 
   return (
     <>
-      <CartProvider>
-        <ScrollToTop />
-        <HelmetProvider context={helmetContext}>
-          {shouldShowPopup && popupshow == null ? <Popup /> : <></>}
-          <Routes>
-            <>
-              <Route path="/" element={<Layout />}>
-                {/* COMMON COMPONENT */}
-                <Route index element={<Home />} />
-                <Route path="shop" element={<Shop />} />
-                <Route path="shopdetails/:id" element={<ShopDetails />} />
-                <Route path="about" element={<About />} />
-                <Route path="categories" element={<Categories />} />
-                <Route path="categories/:id" element={<CategoriesItems />} />
-                <Route
-                  path="categoryDetail/:id"
-                  element={<CategoriesDetail />}
-                />
-                <Route path="page/:slug" element={<CustomPageView />} />
+      <ProfileProvider>
+        <CartProvider>
+          <ScrollToTop />
+          <HelmetProvider context={helmetContext}>
+            {shouldShowPopup && popupshow == null ? <Popup /> : <></>}
+            <Routes>
+              <>
+                <Route path="/" element={<Layout />}>
+                  {/* COMMON COMPONENT */}
+                  <Route index element={<Home />} />
+                  <Route path="shop" element={<Shop />} />
+                  <Route path="shopdetails/:id" element={<ShopDetails />} />
+                  <Route path="about" element={<About />} />
+                  <Route path="categories" element={<Categories />} />
+                  <Route path="categories/:id" element={<CategoriesItems />} />
+                  <Route
+                    path="categoryDetail/:id"
+                    element={<CategoriesDetail />}
+                  />
+                  <Route path="page/:slug" element={<CustomPageView />} />
 
-                {/* USER PROTECTED */}
-                <Route
-                  path="wishlist"
-                  element={
-                    <ProtectedRoute>
-                      <WishList />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="cart"
-                  element={
-                    <ProtectedRoute>
-                      <Cart />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="profile"
-                  element={
-                    <ProtectedRoute>
-                      <Profile />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route path="my_orders" element={<MyOrders />} />
-                <Route path="order-details/:id" element={<Orders />} />
+                  {/* USER PROTECTED */}
+                  <Route
+                    path="wishlist"
+                    element={
+                      <ProtectedRoute>
+                        <WishList />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="cart"
+                    element={
+                      <ProtectedRoute>
+                        <Cart />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="profile"
+                    element={
+                      <ProtectedRoute>
+                        <Profile />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route path="my_orders" element={<MyOrders />} />
+                  <Route path="order-details/:id" element={<Orders />} />
 
-                {/* DEALER PROTECTED */}
-                <Route
-                  path="dealer_wishlist"
-                  element={
-                    <DealerProtectedRoute>
-                      <DealerWishList />
-                    </DealerProtectedRoute>
-                  }
-                />
-                <Route
-                  path="dealer_profile"
-                  element={
-                    <DealerProtectedRoute>
-                      <DealerProfile />
-                    </DealerProtectedRoute>
-                  }
-                />
+                  {/* DEALER PROTECTED */}
+                  <Route
+                    path="dealer_wishlist"
+                    element={
+                      <DealerProtectedRoute>
+                        <DealerWishList />
+                      </DealerProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="dealer_profile"
+                    element={
+                      <DealerProtectedRoute>
+                        <DealerProfile />
+                      </DealerProtectedRoute>
+                    }
+                  />
 
-                {/* AUTH */}
-                <Route path="/login" element={<Login />} />
-                <Route path="/Dealer_login" element={<DealerLogIN />} />
-                <Route path="/forget-password" element={<ForgetPassword />} />
-                <Route
-                  path="/reset-password/:token"
-                  element={<Resetpassword />}
-                />
-              </Route>
-            </>
+                  {/* AUTH */}
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/Dealer_login" element={<DealerLogIN />} />
+                  <Route path="/forget-password" element={<ForgetPassword />} />
+                  <Route
+                    path="/reset-password/:token"
+                    element={<Resetpassword />}
+                  />
+                </Route>
+              </>
 
-            <Route path="*" element={<Errorpage />} />
-          </Routes>
-        </HelmetProvider>
-      </CartProvider>
+              <Route path="*" element={<Errorpage />} />
+            </Routes>
+          </HelmetProvider>
+        </CartProvider>
+      </ProfileProvider>
       <Toaster toastOptions={{ duration: 3000 }} />
     </>
   );

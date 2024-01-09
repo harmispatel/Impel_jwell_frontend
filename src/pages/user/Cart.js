@@ -11,10 +11,13 @@ import { MdDelete } from "react-icons/md";
 import emptycart from "../../assets/images/empty-cart.png";
 import { Helmet } from "react-helmet-async";
 import { CartSystem } from "../../context/CartContext";
+import { ProfileSystem } from "../../context/ProfileContext";
 
 const Cart = () => {
   const navigate = useNavigate();
+  const { dispatch } = useContext(ProfileSystem);
   const { dispatch: removefromcartDispatch } = useContext(CartSystem);
+  const { dispatch: resetcartcount } = useContext(CartSystem);
 
   const Phone = localStorage.getItem("phone");
   const user_id = localStorage.getItem("user_id");
@@ -130,6 +133,11 @@ const Cart = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    if (name === "pan_no" && value.length > 10) {
+      e.target.value = value.slice(0, 10);
+    }
+
     if (name === "state") {
       setUserData({
         ...userData,
@@ -358,9 +366,13 @@ const Cart = () => {
           if (res.status === true) {
             setShowEdit(false);
             getProfile();
+            const payload = userData.name;
+            dispatch({
+              type: "ADD_PROFILE",
+              payload,
+            });
             toast.success(res.message);
             localStorage.setItem("verification", res.data.verification);
-            window.location.reload(false);
           }
         })
         .catch((err) => {
@@ -491,6 +503,7 @@ const Cart = () => {
               setTimeout(() => {
                 navigate(`/order-details/${res.data}`);
               }, 1000);
+              resetcartcount({ type: "RESET_CART" });
             }
           })
           .catch((error) => console.log(error));
@@ -519,6 +532,7 @@ const Cart = () => {
               setTimeout(() => {
                 navigate(`/order-details/${res.data}`);
               }, 1000);
+              resetcartcount({ type: "RESET_CART" });
             }
           })
           .catch((error) => console.log(error));
@@ -567,15 +581,7 @@ const Cart = () => {
                                 const Pricekey =
                                   "metal_price_" + data.gold_type;
                                 const price = parseFloat(data[Pricekey]);
-                                const czStoneCharge =
-                                  parseFloat(data?.cz_stone_charge) || 0;
-                                const gemstoneCharge =
-                                  parseFloat(data?.gemstone_charge) || 0;
-                                const makingCharge =
-                                  parseFloat(data?.making_charge) || 0;
 
-                                const totalCharge =
-                                  czStoneCharge + gemstoneCharge + makingCharge;
                                 return (
                                   <>
                                     <div className="col-md-3" key={index}>
@@ -587,6 +593,7 @@ const Cart = () => {
                                           <img
                                             src={data.image}
                                             className="border rounded me-3 w-100"
+                                            alt=""
                                           />
                                         </Link>
                                       </div>
@@ -786,7 +793,7 @@ const Cart = () => {
                               style={{ display: spinner ? "none" : "block" }}
                             >
                               Back to shop
-                            </Link> 
+                            </Link>
                           </div>
                         </div>
                       </div>

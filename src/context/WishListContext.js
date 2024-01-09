@@ -11,6 +11,7 @@ const initialState = {
 const Wishlist = (state, action) => {
   switch (action.type) {
     case "SET_WISHLIST":
+      console.log(action.payload.wishlist);
       return {
         ...state,
         wishlist: action.payload.wishlist,
@@ -22,13 +23,13 @@ const Wishlist = (state, action) => {
     case "ADD_TO_WISHLIST":
       const { design_id } = action.payload;
       const wishlistitem = state.wishlist?.find(
-        (item) => item?.id === design_id
+        (item) => item?.design_id === design_id
       );
       if (wishlistitem) {
         return {
           ...state,
           wishlist: state.wishlist?.map((item) =>
-            item.id === design_id
+            item.design_id === design_id
               ? { ...item, quantity: item?.quantity + 1 }
               : item
           ),
@@ -47,7 +48,9 @@ const Wishlist = (state, action) => {
       if (state.wishlistItems > 0) {
         return {
           ...state,
-          wishlist: state?.wishlist?.filter((item) => item?.id !== design_id),
+          wishlist: state?.wishlist?.filter(
+            (item) => item?.design_id !== design_id
+          ),
           wishlistItems: state.wishlistItems - 1,
         };
       }

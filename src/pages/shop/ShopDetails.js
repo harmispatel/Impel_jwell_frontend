@@ -22,7 +22,7 @@ import { CartSystem } from "../../context/CartContext";
 const ShopDetails = () => {
   const { dispatch: wishlistDispatch } = useContext(WishlistSystem);
   const { dispatch: addtocartDispatch } = useContext(CartSystem);
-  
+
   const { id } = useParams();
   const [product, setProduct] = useState();
   const data = { categoryId: product?.category_id?.id };

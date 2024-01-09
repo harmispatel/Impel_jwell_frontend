@@ -182,7 +182,8 @@ const Shop = ({ product }) => {
     GetDealerSelection();
     GetUserWishList();
     FilterData(0);
-  }, [category, tag?.length, gender, searchInput, PriceRange, selectedOption]);
+    resetPagination();
+  }, [category, tag, gender, searchInput, PriceRange, selectedOption]);
 
   // user wishlist API
   const GetUserWishList = async () => {
@@ -309,10 +310,14 @@ const Shop = ({ product }) => {
   // PAGINATION FUNCTION
   const totalPages = Math.ceil(paginate?.total_records / 20);
 
-  const [pagination, setPagination] = useState({
-    currentPage: 1,
-    dataShowLength: 20,
-  });
+  const [pagination, setPagination] = useState({});
+
+  const resetPagination = () => {
+    setPagination({
+      currentPage: 1,
+      dataShowLength: 20,
+    });
+  };
 
   const paginationPage = (page) => {
     const calculatedOffset = (page - 1) * pagination.dataShowLength;

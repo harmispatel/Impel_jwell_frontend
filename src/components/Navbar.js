@@ -10,7 +10,7 @@ import { IoLogOut } from "react-icons/io5";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 
 import Logo from "../assets/images/logo.png";
-import NOimage from "../assets/images/NoImage.jpeg";
+import NOimage from "../assets/images/user-demo-image.png";
 
 import UserService from "../services/Cart";
 import Userservice from "../services/Auth";
@@ -19,10 +19,17 @@ import FilterServices from "../services/Filter";
 import profileService from "../services/Auth";
 import { WishlistSystem } from "../context/WishListContext";
 import { CartSystem } from "../context/CartContext";
+import { ProfileSystem } from "../context/ProfileContext";
+import { ImageSystem } from "../context/ImageContext";
 
 const Navbar = () => {
   const { cartItems } = useContext(CartSystem);
   const { state: cartstate } = useContext(CartSystem);
+
+  const { state: profilestate } = useContext(ProfileSystem);
+  const { profile } = profilestate;
+
+  const { state: imagestate } = useContext(ImageSystem);
 
   const { wishlistItems } = useContext(WishlistSystem);
   const { state: wishliststate } = useContext(WishlistSystem);
@@ -37,6 +44,7 @@ const Navbar = () => {
   const [colorChange, setColorchange] = useState(false);
   const [isLoggedOut, setIsLoggedOut] = useState(false);
   const [profileData, setProfileData] = useState([]);
+  const [image, setImage] = useState([]);
   const [userCartCounts, setUsererCartCounts] = useState();
   const [wishlistCount, setWishlistCount] = useState();
 
@@ -109,7 +117,10 @@ const Navbar = () => {
   const getUserProfile = () => {
     profileService
       .getProfile({ phone: Phone })
-      .then((res) => setProfileData(res.data))
+      .then((res) => {
+        setProfileData(res.data.name);
+        setImage(res.data.profile);
+      })
       .catch((err) => {
         console.log(err);
       });
@@ -135,14 +146,12 @@ const Navbar = () => {
   }, [wishlistItems]);
 
   useEffect(() => {
-    Tags();
-  }, []);
+    getUserProfile();
+  }, [profile]);
 
   useEffect(() => {
-    if (Phone) {
-      getUserProfile();
-    }
-  }, [Phone]);
+    Tags();
+  }, []);
 
   useEffect(() => {
     if (DealerEmail) {
@@ -502,9 +511,9 @@ const Navbar = () => {
                           </div>
 
                           <div class="img-box">
-                            {profileData?.profile ? (
+                            {image ? (
                               <img
-                                src={profileData?.profile}
+                                src={image}
                                 alt=""
                                 className="uploaded-image w-100"
                                 style={{
@@ -523,14 +532,14 @@ const Navbar = () => {
                             )}
                           </div>
                           <div class="user">
-                            {profileData?.name ? (
+                            {profile?.length ? (
                               <span className="ms-2">
                                 <b
                                   style={{
                                     fontSize: "20px",
                                   }}
                                 >
-                                  {profileData?.name}
+                                  {profile}
                                   <IoMdArrowDropdown />
                                 </b>
                               </span>
