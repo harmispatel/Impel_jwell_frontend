@@ -257,7 +257,7 @@ const Shop = ({ product }) => {
   const GetDealerSelection = () => {
     DealerWishlist.ListCollection({ email: email })
       .then((res) => {
-        setDealerCollection(res.data);
+        setDealerCollection(res.data?.wishlist_items);
       })
       .catch((err) => {
         console.log(err);
@@ -267,7 +267,7 @@ const Shop = ({ product }) => {
   // Dealer Wishlist products add
   const AddToDealerSelection = async (e, product) => {
     e.preventDefault();
-    if (!DealerCollection.some((item) => item.id === product?.id)) {
+    if (!DealerCollection?.some((item) => item.id === product?.id)) {
       DealerWishlist.addtoDealerWishlist({
         email: email,
         design_id: product?.id,
@@ -278,6 +278,7 @@ const Shop = ({ product }) => {
             toast.success("Design has been Added to Your Collection.");
             FilterData();
             GetDealerSelection();
+            resetPagination();
           } else {
           }
         })

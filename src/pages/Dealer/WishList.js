@@ -19,7 +19,7 @@ const DealerWishList = () => {
     DealerWishlist.ListCollection({ email: DealerEmail })
       .then((res) => {
         setIsLoading(false);
-        setCheckList(res.data);
+        setCheckList(res.data?.wishlist_items);
       })
       .catch((err) => {
         setIsLoading(false);
