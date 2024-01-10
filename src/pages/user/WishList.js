@@ -91,11 +91,20 @@ const WishList = () => {
             type: "ADD_TO_CART",
             payload,
           });
+          removeWishlistDispatch({
+            type: "REMOVE_FROM_WISHLIST",
+            payload,
+          });
           toast.success(res.message);
+
           setIsLoading(true);
         } else {
           toast.error(res.message);
           GetUserWishlist();
+          removeWishlistDispatch({
+            type: "REMOVE_FROM_WISHLIST",
+            payload,
+          });
           setIsLoading(true);
         }
       })
@@ -179,7 +188,13 @@ const WishList = () => {
                                             className="animate_spin me-2"
                                           />
                                         )}
-                                        <AiFillDelete className="me-1" />
+                                        {removingItemId === product.id ? (
+                                          ""
+                                        ) : (
+                                          <>
+                                            <AiFillDelete className="me-1" />
+                                          </>
+                                        )}
                                         REMOVE
                                       </button>
 
@@ -193,7 +208,13 @@ const WishList = () => {
                                             className="animate_spin me-2"
                                           />
                                         )}
-                                        <FaCartShopping className="me-1" />
+                                        {removeCartItems === product ? (
+                                          ""
+                                        ) : (
+                                          <>
+                                            <FaCartShopping className="me-1" />
+                                          </>
+                                        )}
                                         MOVE TO CART
                                       </button>
                                     </div>

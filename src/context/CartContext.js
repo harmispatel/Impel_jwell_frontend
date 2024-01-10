@@ -22,7 +22,6 @@ const Cart = (state, action) => {
     case "ADD_TO_CART":
       const { design_id } = action.payload;
       const cartItem = state.cart.find((item) => item?.design_id === design_id);
-      console.log(state.cart);
       if (cartItem) {
         return {
           ...state,

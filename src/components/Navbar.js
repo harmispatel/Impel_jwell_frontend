@@ -26,13 +26,13 @@ const Navbar = () => {
   const { cartItems } = useContext(CartSystem);
   const { state: cartstate } = useContext(CartSystem);
 
+  const { wishlistItems } = useContext(WishlistSystem);
+  const { state: wishliststate } = useContext(WishlistSystem);
+
   const { state: profilestate } = useContext(ProfileSystem);
   const { profile } = profilestate;
 
   const { state: imagestate } = useContext(ImageSystem);
-
-  const { wishlistItems } = useContext(WishlistSystem);
-  const { state: wishliststate } = useContext(WishlistSystem);
 
   const location = useLocation();
   const currentRoute = location.pathname;
@@ -144,6 +144,9 @@ const Navbar = () => {
   useEffect(() => {
     UserWishlist();
   }, [wishlistItems]);
+
+  console.log(wishliststate.wishlistItems);
+  console.log(cartstate.cartItems);
 
   useEffect(() => {
     getUserProfile();
