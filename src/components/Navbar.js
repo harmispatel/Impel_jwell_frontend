@@ -145,9 +145,6 @@ const Navbar = () => {
     UserWishlist();
   }, [wishlistItems]);
 
-  console.log(wishliststate.wishlistItems);
-  console.log(cartstate.cartItems);
-
   useEffect(() => {
     getUserProfile();
   }, [profile, imagestate?.image]);

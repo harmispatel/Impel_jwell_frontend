@@ -116,6 +116,11 @@ const Shop = ({ product }) => {
     setSelectedCategory(selectedCategory);
   };
 
+  useEffect(() => {
+    if (selectedCategory) {
+    }
+  }, [selectedCategory]);
+
   const handleSelectGender = (selectedGender) => {
     setIsLoading(true);
     setGender(selectedGender ? selectedGender.value : null);
