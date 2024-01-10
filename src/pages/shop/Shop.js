@@ -17,7 +17,7 @@ import DealerWishlist from "../../services/Dealer/Collection";
 import UserWishlist from "../../services/Auth";
 import { WishlistSystem } from "../../context/WishListContext";
 
-const Shop = ({ product }) => {
+const Shop = () => {
   const { dispatch: wishlistDispatch } = useContext(WishlistSystem);
   const { dispatch: removeWishlistDispatch } = useContext(WishlistSystem);
 
@@ -110,16 +110,22 @@ const Shop = ({ product }) => {
       .catch((error) => console.log("Error in gender filter"));
   };
 
-  const handleSelectCategory = (selectedCategory) => {
+  const handleSelectCategory = async (selectedCategory) => {
     setIsLoading(true);
+
+    setSelectedOption("");
+
+    setGender(null);
+    setSelectedGender(null);
+
+    setTag([]);
+    setSelectedTag(null);
+
+    setPriceRange("");
+
     setCategory(selectedCategory ? selectedCategory.value : null);
     setSelectedCategory(selectedCategory);
   };
-
-  useEffect(() => {
-    if (selectedCategory) {
-    }
-  }, [selectedCategory]);
 
   const handleSelectGender = (selectedGender) => {
     setIsLoading(true);
