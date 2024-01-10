@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import profileService from "../../services/Auth";
+import { ImageSystem } from "../../context/ImageContext";
 
 const DealerProfile = () => {
+  const { dispatch: image, state: imagestate } = useContext(ImageSystem);
+
   const email = localStorage.getItem("email");
   const token = localStorage.getItem("token");
   const [profileData, setProfileData] = useState("");
@@ -40,7 +43,10 @@ const DealerProfile = () => {
         .then((res) => {
           if (res.status === true) {
             getDealerProfileData();
-            window.location.reload(false);
+            image({
+              type: "SET_IMAGE",
+              payload: { image: !imagestate?.image },
+            });
             toast.success(res.message);
           } else {
             getDealerProfileData();

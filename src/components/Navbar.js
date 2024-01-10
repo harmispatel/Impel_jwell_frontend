@@ -147,7 +147,7 @@ const Navbar = () => {
 
   useEffect(() => {
     getUserProfile();
-  }, [profile]);
+  }, [profile, imagestate?.image]);
 
   useEffect(() => {
     Tags();
@@ -157,7 +157,7 @@ const Navbar = () => {
     if (DealerEmail) {
       getProfileData();
     }
-  }, [DealerEmail]);
+  }, [DealerEmail, imagestate?.image]);
 
   const handleLogout = () => {
     if (Dealer) {

@@ -11,7 +11,7 @@ import { ImageSystem } from "../../context/ImageContext";
 
 const Profile = () => {
   const { dispatch: profile } = useContext(ProfileSystem);
-  const { dispatch: image } = useContext(ImageSystem);
+  const { dispatch: image, state: imagestate } = useContext(ImageSystem);
   const phone = localStorage.getItem("phone");
   const [showEdit, setShowEdit] = useState(false);
   const [show, setShow] = useState(false);
@@ -92,10 +92,9 @@ const Profile = () => {
         .then((res) => {
           if (res.status === true) {
             getProfile();
-            const payload = myFormData;
             image({
-              type: "ADD_IMAGE",
-              payload,
+              type: "SET_IMAGE",
+              payload: { image: !imagestate?.image },
             });
             toast.success(res.message);
           } else {
