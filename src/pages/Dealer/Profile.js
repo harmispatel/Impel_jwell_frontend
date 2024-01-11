@@ -3,10 +3,10 @@ import toast from "react-hot-toast";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import profileService from "../../services/Auth";
-import { ImageSystem } from "../../context/ImageContext";
+import { ProfileSystem } from "../../context/ProfileContext";
 
 const DealerProfile = () => {
-  const { dispatch: image, state: imagestate } = useContext(ImageSystem);
+  const { dispatch: image, state: imagestate } = useContext(ProfileSystem);
 
   const email = localStorage.getItem("email");
   const token = localStorage.getItem("token");

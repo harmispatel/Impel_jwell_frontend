@@ -7,11 +7,10 @@ import { Helmet } from "react-helmet-async";
 import { MdEditSquare } from "react-icons/md";
 import { CgSpinner } from "react-icons/cg";
 import { ProfileSystem } from "../../context/ProfileContext";
-import { ImageSystem } from "../../context/ImageContext";
 
 const Profile = () => {
-  const { dispatch: profile } = useContext(ProfileSystem);
-  const { dispatch: image, state: imagestate } = useContext(ImageSystem);
+  const { dispatch: profilename, state: namestate } = useContext(ProfileSystem);
+  const { dispatch: image, state: imagestate } = useContext(ProfileSystem);
   const phone = localStorage.getItem("phone");
   const [showEdit, setShowEdit] = useState(false);
   const [show, setShow] = useState(false);
@@ -369,10 +368,9 @@ const Profile = () => {
           if (res.status === true) {
             setShowEdit(false);
             getProfile();
-            const payload = userData.name;
-            profile({
-              type: "ADD_PROFILE",
-              payload,
+            profilename({
+              type: "SET_NAME",
+              payload: { profilename: !namestate?.profilename },
             });
             toast.success(res.message);
             localStorage.setItem("verification", res.data.verification);

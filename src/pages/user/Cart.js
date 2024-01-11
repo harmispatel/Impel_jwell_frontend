@@ -15,7 +15,7 @@ import { ProfileSystem } from "../../context/ProfileContext";
 
 const Cart = () => {
   const navigate = useNavigate();
-  const { dispatch } = useContext(ProfileSystem);
+  const { dispatch: profilename, state: namestate } = useContext(ProfileSystem);
   const { dispatch: removefromcartDispatch } = useContext(CartSystem);
   const { dispatch: resetcartcount } = useContext(CartSystem);
 
@@ -366,10 +366,9 @@ const Cart = () => {
           if (res.status === true) {
             setShowEdit(false);
             getProfile();
-            const payload = userData.name;
-            dispatch({
-              type: "ADD_PROFILE",
-              payload,
+            profilename({
+              type: "SET_NAME",
+              payload: { profilename: !namestate?.profilename },
             });
             toast.success(res.message);
             localStorage.setItem("verification", res.data.verification);

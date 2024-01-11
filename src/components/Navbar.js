@@ -14,13 +14,12 @@ import NOimage from "../assets/images/user-demo-image.png";
 
 import UserService from "../services/Cart";
 import Userservice from "../services/Auth";
-
 import FilterServices from "../services/Filter";
 import profileService from "../services/Auth";
+
 import { WishlistSystem } from "../context/WishListContext";
 import { CartSystem } from "../context/CartContext";
 import { ProfileSystem } from "../context/ProfileContext";
-import { ImageSystem } from "../context/ImageContext";
 
 const Navbar = () => {
   const { cartItems } = useContext(CartSystem);
@@ -29,10 +28,8 @@ const Navbar = () => {
   const { wishlistItems } = useContext(WishlistSystem);
   const { state: wishliststate } = useContext(WishlistSystem);
 
-  const { state: profilestate } = useContext(ProfileSystem);
-  const { profile } = profilestate;
-
-  const { state: imagestate } = useContext(ImageSystem);
+  const { state: imagestate } = useContext(ProfileSystem);
+  const { state: namestate } = useContext(ProfileSystem);
 
   const location = useLocation();
   const currentRoute = location.pathname;
@@ -146,18 +143,20 @@ const Navbar = () => {
   }, [wishlistItems]);
 
   useEffect(() => {
-    getUserProfile();
-  }, [profile, imagestate?.image]);
-
-  useEffect(() => {
-    Tags();
-  }, []);
+    if (Phone) {
+      getUserProfile();
+    }
+  }, [Phone, namestate?.profilename, imagestate?.image]);
 
   useEffect(() => {
     if (DealerEmail) {
       getProfileData();
     }
   }, [DealerEmail, imagestate?.image]);
+
+  useEffect(() => {
+    Tags();
+  }, []);
 
   const handleLogout = () => {
     if (Dealer) {
@@ -532,14 +531,14 @@ const Navbar = () => {
                             )}
                           </div>
                           <div class="user">
-                            {profile?.length ? (
+                            {profileData?.length ? (
                               <span className="ms-2">
                                 <b
                                   style={{
                                     fontSize: "20px",
                                   }}
                                 >
-                                  {profile}
+                                  {profileData}
                                   <IoMdArrowDropdown />
                                 </b>
                               </span>

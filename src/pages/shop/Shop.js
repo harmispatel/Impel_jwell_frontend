@@ -146,16 +146,21 @@ const Shop = () => {
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
-    let tagIds = searchParams.getAll("tag_id");
-    setIsLoading(true);
-    tagIds =
-      Array.isArray(tagIds) && tagIds?.length > 0
-        ? tagIds[0].split(",")
-        : tagIds
-        ? tagIds
-        : [];
-    tagIds = tagIds.map((i) => parseFloat(i));
-    setTag(tagIds);
+    const tagIds = searchParams.getAll("tag_id");
+
+    if (tagIds && tagIds.length > 0) {
+      setIsLoading(true);
+
+      try {
+        const parsedTagIds = tagIds[0].split(",").map((id) => parseFloat(id));
+        setTag(parsedTagIds);
+      } catch (error) {
+        console.error("Error parsing tag IDs:", error);
+        setTag([]);
+      }
+    } else {
+      setTag([]);
+    }
   }, [location.search]);
 
   const FilterData = (offset = 0) => {
@@ -401,7 +406,7 @@ const Shop = () => {
                   <Select
                     placeholder="Shop by category"
                     isClearable={true}
-                    isSearchable={true}
+                    isSearchable={false}
                     value={selectedCategory}
                     options={categoryData.map((data) => ({
                       value: data?.id,
@@ -414,7 +419,7 @@ const Shop = () => {
                   <Select
                     placeholder="Shop by Gender"
                     isClearable
-                    isSearchable={true}
+                    isSearchable={false}
                     value={selectedGender}
                     options={genderData?.map((data) => ({
                       value: data?.id,
@@ -427,7 +432,7 @@ const Shop = () => {
                   <Select
                     placeholder="Shop by Tag"
                     isClearable
-                    isSearchable={true}
+                    isSearchable={false}
                     value={selectedTag}
                     options={filterTag?.map((data) => ({
                       value: data?.id,
@@ -605,9 +610,7 @@ const Shop = () => {
                                   <div className="product_details">
                                     <h5>
                                       ₹
-                                      {data?.total_price_18k?.toLocaleString(
-                                        "en-US"
-                                      )}
+                                      {data?.price_18k?.toLocaleString("en-US")}
                                     </h5>
                                   </div>
                                 </Link>

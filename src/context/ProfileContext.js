@@ -1,53 +1,33 @@
-import React, { createContext, useEffect, useReducer } from "react";
-import profileService from "../services/Auth";
+import React, { createContext, useReducer } from "react";
 
 export const ProfileSystem = createContext();
 
 const initialState = {
-  profile: [],
-  profileItems: 0,
+  image: false,
+  profilename: false,
 };
 
 const Profile = (state, action) => {
   switch (action.type) {
-    case "SET_PROFILE":
+    case "SET_IMAGE":
       return {
         ...state,
-        profile: action.payload.profile,
-        profileItems: action.payload.profile?.length,
+        image: action?.payload?.image,
       };
-    case "ADD_PROFILE":
+
+    case "SET_NAME":
       return {
         ...state,
-        profile: action.payload,
-        profileItems: 1,
+        profilename: action?.payload?.profilename,
       };
+
     default:
       return state;
   }
 };
 
 const ProfileProvider = ({ children }) => {
-  const Phone = localStorage.getItem("phone");
   const [state, dispatch] = useReducer(Profile, initialState);
-
-  const fetchProfileData = async () => {
-    try {
-      if (Phone) {
-        const res = await profileService.getProfile({ phone: Phone });
-        const ProfileData = res.data.name || [];
-        dispatch({ type: "SET_PROFILE", payload: { profile: ProfileData } });
-      }
-    } catch (err) {
-      console.error("Error fetching in profile:", err);
-    }
-  };
-
-  useEffect(() => {
-    if (Phone) {
-      fetchProfileData();
-    }
-  }, [Phone]);
 
   return (
     <ProfileSystem.Provider value={{ state, dispatch }}>

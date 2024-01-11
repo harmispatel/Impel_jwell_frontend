@@ -337,16 +337,7 @@ const ShopDetails = () => {
                             Design code : <strong>{product?.code}</strong>
                           </h5>
                           {product?.description && (
-                            <p>
-                              Lorem ipsum dolor sit amet consectetur adipiscing
-                              elit curabitur, dui fames cras bibendum justo
-                              nostra duis placerat arcu, etiam cursus mauris
-                              tempus pellentesque euismod facilisi. Lacus
-                              consequat neque lacinia facilisi justo cursus
-                              eleifend, urna curae enim cubilia interdum dictum]
-                              tempor, senectus eget habitant auctor iaculis
-                              nascetur.
-                            </p>
+                            <p>{product?.description}</p>
                           )}
 
                           <div>
