@@ -499,6 +499,7 @@ const Cart = () => {
               localStorage.removeItem("savedDiscount");
               localStorage.removeItem("cartItems");
               toast.success(res.message);
+              setSpinner(true);
               setTimeout(() => {
                 navigate(`/order-details/${res.data}`);
               }, 1000);
@@ -528,6 +529,7 @@ const Cart = () => {
               localStorage.removeItem("savedDiscount");
               localStorage.removeItem("cartItems");
               toast.success(res.message);
+              setSpinner(true);
               setTimeout(() => {
                 navigate(`/order-details/${res.data}`);
               }, 1000);

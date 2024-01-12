@@ -62,6 +62,8 @@ const MyOrders = () => {
                               <th>Phone No.</th>
                               <th>Dealer</th>
                               <th>Dealer Code</th>
+                              {user_type == 1 ? <th>Dealer Commission</th> : ""}
+                              {user_type == 1 ? <th>Commission Status</th> : ""}
                               <th>Order Satus</th>
                               <th>Actions</th>
                             </tr>
@@ -98,6 +100,36 @@ const MyOrders = () => {
                                             <span>-</span>
                                           )}
                                         </td>
+                                        {user_type == 1 ? (
+                                          <td>
+                                            <span>
+                                              ₹
+                                              {Math.round(
+                                                datas?.dealer_commission
+                                              )}
+                                            </span>
+                                          </td>
+                                        ) : (
+                                          ""
+                                        )}
+
+                                        {user_type == 1 ? (
+                                          <td>
+                                            {datas?.commission_status == 1 && (
+                                              <span className="badge bg-success">
+                                                Paid
+                                              </span>
+                                            )}
+                                            {datas?.commission_status == 0 && (
+                                              <span className="badge bg-danger">
+                                                Unpaid
+                                              </span>
+                                            )}
+                                          </td>
+                                        ) : (
+                                          ""
+                                        )}
+
                                         <td>
                                           {datas?.order_status == "pending" && (
                                             <span className="badge bg-warning">

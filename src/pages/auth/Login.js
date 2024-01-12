@@ -119,7 +119,6 @@ const Login = () => {
         }
       })
       .catch((error) => {
-        console.error("Verification failed:", error);
         toast.error("Verification failed");
         setOtp("");
       })

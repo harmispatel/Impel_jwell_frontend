@@ -57,7 +57,7 @@ const ForgetPassword = () => {
         setSpinner(false);
       });
   };
-  console.log(window.location.origin + "/reset-password");
+
   useEffect(() => {
     let timeoutId;
 
@@ -123,7 +123,7 @@ const ForgetPassword = () => {
                         to="/Dealer_login"
                         className="text-decoration-none text-success"
                       >
-                        Back to login
+                        Back to dealer login
                       </Link>
                     </p>
                   </form>

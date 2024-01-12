@@ -99,7 +99,7 @@ const Shop = () => {
       .then((res) => {
         setCategoryData(res.data);
       })
-      .catch((error) => console.log("Error in category filter"));
+      .catch((error) => console.log(error));
   };
 
   const GenderFilter = () => {
@@ -107,7 +107,7 @@ const Shop = () => {
       .then((res) => {
         setGenderData(res.data);
       })
-      .catch((error) => console.log("Error in gender filter"));
+      .catch((error) => console.log(error));
   };
 
   const handleSelectCategory = async (selectedCategory) => {

@@ -17,16 +17,11 @@ const Popup = () => {
     if (window.location.reload && !showPopup) {
       const timeout = setTimeout(() => {
         setShowPopup(true);
-      }, 600000);
+      }, 6000);
 
       return () => clearTimeout(timeout);
     }
   }, [showPopup]);
-
-  // useEffect(() => {
-  //   document.body.style.overflow = "hidden";
-  //   return () => (document.body.style.overflow = "unset");
-  // }, []);
 
   useEffect(() => {
     if (window.location.reload && showPopup) {

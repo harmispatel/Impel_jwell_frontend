@@ -322,6 +322,17 @@ const Profile = () => {
     return isValid;
   };
 
+  useEffect(() => {
+    const validationErrors = { ...error };
+    if (isChecked) {
+      validationErrors.shipping_address_err = "";
+      validationErrors.shipping_pincode_err = "";
+      validationErrors.shipping_state_err = "";
+      validationErrors.shipping_city_err = "";
+    }
+    setError(validationErrors);
+  }, [isChecked]);
+
   const handleUpdate = async (e) => {
     e.preventDefault();
     const isFormValid = validateForm();
