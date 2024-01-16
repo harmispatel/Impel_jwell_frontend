@@ -17,7 +17,7 @@ const Popup = () => {
     if (window.location.reload && !showPopup) {
       const timeout = setTimeout(() => {
         setShowPopup(true);
-      }, 6000);
+      }, 600000);
 
       return () => clearTimeout(timeout);
     }
