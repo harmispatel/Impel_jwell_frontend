@@ -1,7 +1,7 @@
 import "./App.css";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "../node_modules/bootstrap/dist/js/bootstrap.bundle";
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import Layout from "./components/Layout";
 import Home from "./pages/Home";
 import Shop from "./pages/shop/Shop";
@@ -33,8 +33,11 @@ import Resetpassword from "./pages/auth/Resetpassword";
 import CartProvider from "./context/CartContext";
 import WishlistProvider from "./context/WishListContext";
 import ProfileProvider from "./context/ProfileContext";
+import { useEffect } from "react";
 
 function App() {
+  const navigate = useNavigate();
+  const userType = localStorage.getItem("user_type");
   const popupshow = localStorage.getItem("user_type");
   const helmetContext = {};
   const location = useLocation();
@@ -43,6 +46,18 @@ function App() {
     !["/login", "/Dealer_login", "/forget-password"].some((path) =>
       location.pathname.startsWith(path)
     ) && !location.pathname.startsWith("/reset-password/");
+
+  useEffect(() => {
+    if (userType == 1 && location.pathname === "/login") {
+      navigate("/");
+    }
+  }, [userType, location.pathname]);
+
+  useEffect(() => {
+    if (userType == 2 && location.pathname === "/Dealer_login") {
+      navigate("/");
+    }
+  }, [userType, location.pathname]);
 
   return (
     <>

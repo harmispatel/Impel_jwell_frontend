@@ -4,7 +4,6 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { CgSpinner } from "react-icons/cg";
 import { Helmet } from "react-helmet-async";
-import logo from "../../assets/images/logo.png";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const DealerLogin = () => {

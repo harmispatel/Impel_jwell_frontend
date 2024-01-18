@@ -21,6 +21,7 @@ import { CartSystem } from "../../context/CartContext";
 
 const ShopDetails = () => {
   const { dispatch: wishlistDispatch } = useContext(WishlistSystem);
+  const { dispatch: removeWishlistDispatch } = useContext(WishlistSystem);
   const { dispatch: addtocartDispatch } = useContext(CartSystem);
 
   const { id } = useParams();
@@ -141,6 +142,13 @@ const ShopDetails = () => {
       gold_type: goldType,
     };
 
+    const isItemInWishlist = UserWishlistItems.some(
+      (wishlistItem) =>
+        wishlistItem.id === product?.id &&
+        wishlistItem.goldType === product?.goldType &&
+        wishlistItem.goldColor === product?.goldColor
+    );
+
     UserCartService.AddtoCart(CartData)
       .then((res) => {
         if (res.status === true) {
@@ -149,6 +157,12 @@ const ShopDetails = () => {
             type: "ADD_TO_CART",
             payload,
           });
+          if (isItemInWishlist) {
+            removeWishlistDispatch({
+              type: "REMOVE_FROM_WISHLIST",
+              payload,
+            });
+          }
           toast.success(res.message);
         }
       })
@@ -511,9 +525,7 @@ const ShopDetails = () => {
                                           </tr>
                                           <tr>
                                             <th>Metal price</th>
-                                            <td>
-                                              ₹ {productdetail?.price_22k}
-                                            </td>
+                                            <td>₹{productdetail?.price_22k}</td>
                                           </tr>
                                           <tr>
                                             <th>CZ Stone Charges</th>
@@ -574,9 +586,7 @@ const ShopDetails = () => {
                                           </tr>
                                           <tr>
                                             <th>Metal price</th>
-                                            <td>
-                                              ₹ {productdetail?.price_20k}
-                                            </td>
+                                            <td>₹{productdetail?.price_20k}</td>
                                           </tr>
                                           <tr>
                                             <th>CZ Stone Charges</th>
@@ -637,9 +647,7 @@ const ShopDetails = () => {
                                           </tr>
                                           <tr>
                                             <th>Metal price</th>
-                                            <td>
-                                              ₹ {productdetail?.price_18k}
-                                            </td>
+                                            <td>₹{productdetail?.price_18k}</td>
                                           </tr>
                                           <tr>
                                             <th>CZ Stone Charges</th>
@@ -700,9 +708,7 @@ const ShopDetails = () => {
                                           </tr>
                                           <tr>
                                             <th>Metal price</th>
-                                            <td>
-                                              ₹ {productdetail?.price_14k}
-                                            </td>
+                                            <td>₹{productdetail?.price_14k}</td>
                                           </tr>
                                           <tr>
                                             <th>CZ Stone Charges</th>
@@ -782,7 +788,9 @@ const ShopDetails = () => {
                                           onClick={() =>
                                             addToUserWishList(product)
                                           }
-                                          disabled={spinner}
+                                          disabled={UserWishlistItems?.find(
+                                            (item) => item?.id === product?.id
+                                          )}
                                         >
                                           {UserWishlistItems?.find(
                                             (item) => item?.id === product?.id

@@ -169,6 +169,7 @@ const Login = () => {
                                 className="btn btn-success dealer_login_btn fw-bolder"
                                 style={{ fontSize: "18px" }}
                                 id="sign-in-button"
+                                disabled={spinner}
                               >
                                 {spinner && (
                                   <CgSpinner

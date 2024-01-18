@@ -1673,11 +1673,11 @@ input[type="file"] {
 }
 
 .new-wishlist-section .card {
-  box-shadow:5px 5px 5px rgba(0, 0, 0, .2);
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, .2);
   border-radius: 5px;
   border: none;
   margin-bottom: 20px;
-  
+
 }
 
 .new-wishlist-section p {
@@ -2381,7 +2381,7 @@ input[type="file"] {
   margin: 0;
 }
 
-.form-group {
+.login_detail .form-group {
   margin-top: 20px;
   position: relative;
 }
@@ -2516,6 +2516,3 @@ input[type="file"] {
 .model_banner_button:focus {
   border: 1px solid #caa78d !important;
 }
-
-
-
