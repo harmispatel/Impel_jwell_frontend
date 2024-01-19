@@ -938,7 +938,7 @@ input[type="file"] {
   text-decoration: none;
   list-style: none;
   font-size: 16px;
-  margin: 50px 0;
+  margin: 40px 0;
   padding: 0;
 }
 
@@ -1853,6 +1853,11 @@ input[type="file"] {
 
 /* Mobile Responsive Style Start For 767px */
 @media only screen and (max-width: 767px) {
+
+  .dealer_profile_data th {
+    width: 45% !important;
+  }
+
   .crt-btn {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -2515,4 +2520,30 @@ input[type="file"] {
 
 .model_banner_button:focus {
   border: 1px solid #caa78d !important;
+}
+
+.dealer_profile_data th {
+  width: 30%;
+}
+
+.shipping-Information th {
+  width: 30%;
+}
+
+.order_products th {
+  border-left: 1px solid #ececec;
+  vertical-align: middle;
+}
+
+.order_products td {
+  border-left: 1px solid #ececec;
+  vertical-align: middle;
+}
+
+.order_products th:nth-of-type(1) {
+  border-left: none;
+}
+
+.order_products td:nth-of-type(1) {
+  border-left: none;
 }

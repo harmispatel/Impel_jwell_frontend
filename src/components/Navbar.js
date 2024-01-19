@@ -297,7 +297,7 @@ const Navbar = () => {
                                 to="/shop"
                                 onClick={handleNavClick}
                               >
-                                All jewellery
+                                All Jwellery
                               </Link>
                             </div>
                           </div>

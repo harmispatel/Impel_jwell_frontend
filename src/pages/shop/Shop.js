@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { BsHeart, BsSearch } from "react-icons/bs";
 import { FcLike } from "react-icons/fc";
 import { FaRegStar, FaStar } from "react-icons/fa";
@@ -22,6 +22,7 @@ const Shop = () => {
   const { dispatch: removeWishlistDispatch } = useContext(WishlistSystem);
 
   const location = useLocation();
+  const navigate = useNavigate();
 
   const userType = localStorage.getItem("user_type");
   const userId = localStorage.getItem("user_id");
@@ -120,6 +121,7 @@ const Shop = () => {
 
     setTag([]);
     setSelectedTag(null);
+    navigate(`/shop`);
 
     setPriceRange("");
 
@@ -135,8 +137,18 @@ const Shop = () => {
 
   const handleSelectTag = (selectedTags) => {
     setIsLoading(true);
-    setTag(selectedTags ? [selectedTags.value] : []);
-    setSelectedTag(selectedTags);
+
+    const selectedTagId = selectedTags ? parseFloat(selectedTags.value) : null;
+
+    if (selectedTagId !== null) {
+      setTag([selectedTagId]);
+      setSelectedTag(selectedTags);
+      navigate(`/shop?tag_id=${selectedTagId}`);
+    } else {
+      setTag([]);
+      setSelectedTag(null);
+      navigate(`/shop`);
+    }
   };
 
   const handleSliderChange = (e) => {
@@ -154,6 +166,16 @@ const Shop = () => {
       try {
         const parsedTagIds = tagIds[0].split(",").map((id) => parseFloat(id));
         setTag(parsedTagIds);
+
+        if (parsedTagIds && parsedTagIds.length > 0) {
+          const tag = filterTag?.find((item) => item.id === parsedTagIds[0]);
+
+          if (tag) {
+            setSelectedTag({ value: tag.id, label: tag.name });
+          } else {
+            console.error("Tag not found with ID:", parsedTagIds[0]);
+          }
+        }
       } catch (error) {
         console.error("Error parsing tag IDs:", error);
         setTag([]);
@@ -337,8 +359,8 @@ const Shop = () => {
   };
 
   const paginationPage = (page) => {
-    const calculatedOffset = (page - 1) * pagination.dataShowLength;
-    FilterData(calculatedOffset);
+    const newOffset = (page - 1) * pagination.dataShowLength;
+    FilterData(newOffset);
     setPagination({ ...pagination, currentPage: page });
     scrollup();
     setIsLoading(true);
@@ -347,9 +369,9 @@ const Shop = () => {
   const paginationPrev = () => {
     if (pagination.currentPage > 1) {
       const prevPage = pagination.currentPage - 1;
-      const calculatedOffset = (prevPage - 1) * pagination.dataShowLength;
+      const newOffset = (prevPage - 1) * pagination.dataShowLength;
+      FilterData(newOffset);
       setPagination({ ...pagination, currentPage: prevPage });
-      FilterData(calculatedOffset);
       scrollup();
       setIsLoading(true);
     }
@@ -358,9 +380,9 @@ const Shop = () => {
   const paginationNext = () => {
     if (pagination.currentPage < totalPages) {
       const nextPage = pagination.currentPage + 1;
-      const calculatedOffset = (nextPage - 1) * pagination.dataShowLength;
+      const newOffset = (nextPage - 1) * pagination.dataShowLength;
+      FilterData(newOffset);
       setPagination({ ...pagination, currentPage: nextPage });
-      FilterData(calculatedOffset);
       scrollup();
       setIsLoading(true);
     }

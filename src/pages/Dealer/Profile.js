@@ -84,11 +84,11 @@ const DealerProfile = () => {
       <Helmet>
         <title>Impel Store - Dealer Profile</title>
       </Helmet>
-      <section>
-        <div className="container  mb-5 p-5">
+      <section className="dealer_profile_data">
+        <div className="container  mb-5 py-5">
           <div class="row">
-            <div class="col-md-12 mb-3">
-              <div class="card">
+            <div class="col-md-6 mb-3">
+              <div class="card" style={{ height: "100%" }}>
                 <div class="card-header">
                   <strong>Owner Information</strong>
                 </div>
@@ -116,7 +116,7 @@ const DealerProfile = () => {
                 </div>
               </div>
             </div>
-            <div class="col-md-12 mb-3">
+            <div class="col-md-6 mb-3">
               <div class="card">
                 <div class="card-header">
                   <strong>Company Information</strong>
