@@ -1478,10 +1478,6 @@ input[type="file"] {
   border-right: 0;
 }
 
-.add_cart {
-  margin-left: 20px;
-}
-
 .add_cart .btn {
   padding: 7px 10px;
   margin: 0 5px;
@@ -1858,12 +1854,16 @@ input[type="file"] {
     width: 45% !important;
   }
 
-  .profile th {
-    width: 50% !important;
+  .user_profile_view th {
+    width: 35% !important;
   }
 
   .shippping_address_card th {
-    width: 30% !important;
+    width: 35% !important;
+  }
+
+  .user_profile_view {
+    padding: 15px 5px !important;
   }
 
 
@@ -2055,10 +2055,9 @@ input[type="file"] {
   }
 
   .add_cart .btn {
-    padding: 7px 30px;
+    padding: 7px 14px;
   }
-
-
+  
   .login {
     height: auto;
     padding: 20px 0 0;

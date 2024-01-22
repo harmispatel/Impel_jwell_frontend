@@ -446,7 +446,7 @@ const Profile = () => {
       <Helmet>
         <title>Impel Store - Profile</title>
       </Helmet>
-      <section className="profile">
+      <section className="profile user_profile_view">
         <div className="container">
           <div className="row">
             {isLoading ? (

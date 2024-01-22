@@ -382,7 +382,7 @@ const ShopDetails = () => {
                                 Rose Gold
                               </button>
                               <button
-                                className={`btn white-gold ${
+                                className={`btn white-gold mt-2 mt-md-0 ${
                                   goldColor === "white_gold" ? "active" : ""
                                 }`}
                                 onClick={() => handleGoldColor("white_gold")}
@@ -465,7 +465,7 @@ const ShopDetails = () => {
                               )}
                               {goldColor === "white_gold" && (
                                 <>
-                                  <div className="d-flex">
+                                  <div className="d-flex ">
                                     <div className="radio-item">
                                       <input
                                         name="radio1"
@@ -752,7 +752,7 @@ const ShopDetails = () => {
                               )}
                             </div>
                           </div>
-                          <div className="buttons pt-4 d-flex justify-content-space-between">
+                          <div className="button d-flex justify-content-around pt-2">
                             <div className="add_cart align-items-center d-flex">
                               {Phone ? (
                                 <>
@@ -819,7 +819,7 @@ const ShopDetails = () => {
                                               {!spinner2 && (
                                                 <FaRegHeart className="me-2" />
                                               )}
-                                              WISHLIST
+                                              Add To Wishlist
                                             </div>
                                           )}
                                         </button>
@@ -833,7 +833,7 @@ const ShopDetails = () => {
                                     <></>
                                   ) : (
                                     <div
-                                      class="buttons pt-4 d-flex"
+                                      class="buttons d-flex"
                                       onClick={(e) => UserLogin(e)}
                                     >
                                       <div class="add_cart align-items-center d-flex">
@@ -846,7 +846,7 @@ const ShopDetails = () => {
                                         <div>
                                           <button class="btn btn-outline-dark align-items-center">
                                             <FaRegHeart className="me-2" />
-                                            Wishlist
+                                            Add To Wishlist
                                           </button>
                                         </div>
                                       </div>
