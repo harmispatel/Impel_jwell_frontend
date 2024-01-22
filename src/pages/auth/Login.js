@@ -114,8 +114,10 @@ const Login = () => {
           localStorage.setItem("user_type", phonedata?.user_type);
           localStorage.setItem("user_id", phonedata?.user_id);
           localStorage.setItem("verification", phonedata?.verification);
+          const redirectPath = localStorage.getItem("redirectPath");
+          localStorage.removeItem("redirectPath");
           localStorage.removeItem("showPopup");
-          navigate("/");
+          navigate(redirectPath || "/");
         }
       })
       .catch((error) => {

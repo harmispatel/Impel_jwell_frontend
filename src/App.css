@@ -1858,6 +1858,15 @@ input[type="file"] {
     width: 45% !important;
   }
 
+  .profile th {
+    width: 50% !important;
+  }
+
+  .shippping_address_card th {
+    width: 30% !important;
+  }
+
+
   .crt-btn {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -2044,8 +2053,6 @@ input[type="file"] {
   .shopping_data .row .col-md-3 {
     border: none;
   }
-
-
 
   .add_cart .btn {
     padding: 7px 30px;
@@ -2399,6 +2406,7 @@ input[type="file"] {
   padding: 0 !important;
   font-size: 20px !important;
   line-height: 16px !important;
+  cursor: pointer;
 }
 
 .toggle_btn:focus {
@@ -2546,4 +2554,14 @@ input[type="file"] {
 
 .order_products td:nth-of-type(1) {
   border-left: none;
+}
+
+
+.profile th {
+  width: 25%;
+}
+
+
+.shippping_address_card th {
+  width: 25%;
 }

@@ -89,6 +89,7 @@ const Orders = () => {
                         style={{
                           border: "none",
                           boxShadow: "2px 2px 2px  #ccc",
+                          height: "100%",
                         }}
                       >
                         <div className="card-body">
@@ -149,6 +150,7 @@ const Orders = () => {
                         style={{
                           border: "none",
                           boxShadow: "2px 2px 2px  #ccc",
+                          height: "100%",
                         }}
                       >
                         <div className="card-body">
@@ -180,6 +182,7 @@ const Orders = () => {
                         style={{
                           border: "none",
                           boxShadow: "2px 2px 2px  #ccc",
+                          height: "100%",
                         }}
                       >
                         <div className="card-body shipping-Information">

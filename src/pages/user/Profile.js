@@ -112,6 +112,24 @@ const Profile = () => {
 
   const handleCheckboxChange = (event) => {
     setIsChecked(event.target.checked);
+
+    if (event.target.checked) {
+      setUserData({
+        ...userData,
+        shipping_address: userData.address,
+        shipping_pincode: userData.pincode,
+        shipping_state: userData.state,
+        shipping_city: userData.city,
+      });
+    } else {
+      setUserData({
+        ...userData,
+        shipping_address: "",
+        shipping_pincode: "",
+        shipping_state: "",
+        shipping_city: "",
+      });
+    }
   };
 
   // user profile display function
@@ -121,10 +139,14 @@ const Profile = () => {
       .then((res) => {
         const statename = res.data.state.name;
         const cityname = res.data.city.name;
+        const shippingstatename = res.data.shipping_state.name;
+        const shippingcityname = res.data.shipping_city.name;
         setProfileData({
           ...res.data,
           state_name: statename,
           city_name: cityname,
+          shipping_state_name: shippingstatename,
+          shipping_city_name: shippingcityname,
           state: res.data.state.id,
           city: res.data.city.id,
           shipping_state: res.data.shipping_state.id,
@@ -134,6 +156,8 @@ const Profile = () => {
           ...res.data,
           state_name: statename,
           city_name: cityname,
+          shipping_state_name: shippingstatename,
+          shipping_city_name: shippingcityname,
           state: res.data.state.id,
           city: res.data.city.id,
           shipping_state: res.data.shipping_state.id,
@@ -279,19 +303,19 @@ const Profile = () => {
     }
 
     if (!isChecked) {
-      if (!userData.shipping_address.trim()) {
-        validationErrors.shipping_address_err = "Address is required";
+      if (!isChecked && !userData.shipping_address.trim()) {
+        validationErrors.shipping_address_err = "Shipping Address is required";
         isValid = false;
       } else {
         validationErrors.shipping_address_err = "";
       }
 
       if (!userData.shipping_pincode.trim()) {
-        validationErrors.shipping_pincode_err = "Pincode is required";
+        validationErrors.shipping_pincode_err = "Shipping Pincode is required";
         isValid = false;
       } else if (!pincodeRegex.test(userData.shipping_pincode.trim())) {
         validationErrors.shipping_pincode_err =
-          "Pincode must be a 6-digit number";
+          "Shipping Pincode must be a 6-digit number";
         isValid = false;
       } else {
         validationErrors.shipping_pincode_err = "";
@@ -323,13 +347,25 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    const validationErrors = { ...error };
-    if (isChecked) {
+    const validationErrors = {
+      shipping_address_err: "",
+      shipping_state_err: "",
+      shipping_city_err: "",
+      shipping_pincode_err: "",
+    };
+
+    if (!isChecked) {
+      validationErrors.shipping_address_err = "Shipping Address is required";
+      validationErrors.shipping_state_err = "shipping state must be select";
+      validationErrors.shipping_city_err = "shipping city must be select";
+      validationErrors.shipping_pincode_err = "Shipping Pincode is required";
+    } else {
       validationErrors.shipping_address_err = "";
-      validationErrors.shipping_pincode_err = "";
       validationErrors.shipping_state_err = "";
       validationErrors.shipping_city_err = "";
+      validationErrors.shipping_pincode_err = "";
     }
+
     setError(validationErrors);
   }, [isChecked]);
 
@@ -358,19 +394,19 @@ const Profile = () => {
       // shipping address update
       formData.append(
         "shipping_address",
-        userData.shipping_address ? userData.shipping_address : ""
+        isChecked ? userData.address : userData.shipping_address
       );
       formData.append(
         "shipping_pincode",
-        userData.shipping_pincode ? userData.shipping_pincode : ""
+        isChecked ? userData.pincode : userData.shipping_pincode
       );
       formData.append(
         "shipping_state",
-        userData.shipping_state ? userData.shipping_state : ""
+        isChecked ? userData.state : userData.shipping_state
       );
       formData.append(
         "shipping_city",
-        userData.shipping_city ? userData.shipping_city : ""
+        isChecked ? userData.city : userData.shipping_city
       );
 
       profileService
@@ -486,16 +522,14 @@ const Profile = () => {
                 <div className="col-xl-8">
                   <div className="card mb-4">
                     <div className="card-header">
-                      <div className="row align-items-center">
-                        <div className="col-md-6">Account Details</div>
-                        <div className="col-md-6 text-end">
-                          <button
-                            onClick={() => handleEdit(profileData)}
-                            className="btn btn-sm btn-primary"
-                          >
-                            <MdEditSquare />
-                          </button>
-                        </div>
+                      <div className="d-flex align-items-center justify-content-between">
+                        <span>Account Details</span>
+                        <button
+                          onClick={() => handleEdit(profileData)}
+                          className="btn btn-sm btn-primary"
+                        >
+                          <MdEditSquare />
+                        </button>
                       </div>
                     </div>
                     <div className="card-body">
@@ -532,6 +566,35 @@ const Profile = () => {
                           <tr>
                             <th scope="col">Pancard : </th>
                             <td>{profileData.pan_no}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <div className="card shippping_address_card">
+                    <div class="card-header">
+                      <span>
+                        <b>Shipping Address</b>
+                      </span>
+                    </div>
+                    <div class="card-body">
+                      <table class="table">
+                        <tbody>
+                          <tr>
+                            <th scope="col">Address : </th>
+                            <td>{profileData.shipping_address}</td>
+                          </tr>
+                          <tr>
+                            <th scope="col">City : </th>
+                            <td>{profileData.shipping_city_name}</td>
+                          </tr>
+                          <tr>
+                            <th scope="col">State : </th>
+                            <td>{profileData.shipping_state_name}</td>
+                          </tr>
+                          <tr>
+                            <th scope="col">Pincode : </th>
+                            <td>{profileData.shipping_pincode}</td>
                           </tr>
                         </tbody>
                       </table>
@@ -716,8 +779,13 @@ const Profile = () => {
                     className="address-checkbox"
                     checked={isChecked}
                     onChange={handleCheckboxChange}
+                    style={{ cursor: "pointer" }}
                   />
-                  <label htmlFor="checkbox" className="ms-1 address-check-text">
+                  <label
+                    htmlFor="checkbox"
+                    className="ms-1 address-check-text"
+                    style={{ cursor: "pointer" }}
+                  >
                     Shipping Address is as same above then check this box
                   </label>
                 </div>
@@ -730,11 +798,9 @@ const Profile = () => {
                     <textarea
                       name="shipping_address"
                       className="form-control"
-                      defaultValue={selectedData.shipping_address}
-                      onChange={(e) => {
-                        handleEditChange(e);
-                      }}
-                      placeholder="Enter Your Address"
+                      value={userData.shipping_address}
+                      onChange={(e) => handleEditChange(e)}
+                      placeholder="Enter Your Shipping Address"
                     />
                     <span className="text-danger">
                       {error.shipping_address_err}
@@ -799,9 +865,9 @@ const Profile = () => {
                     </Form.Label>
                     <Form.Control
                       name="shipping_pincode"
-                      defaultValue={selectedData.shipping_pincode}
+                      value={userData.shipping_pincode}
                       onChange={(e) => handleEditChange(e)}
-                      placeholder="Enter Your Pincode"
+                      placeholder="Enter Your Shipping Pincode"
                       maxLength={6}
                     />
                     <span className="text-danger">

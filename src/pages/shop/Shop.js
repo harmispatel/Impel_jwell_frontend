@@ -388,6 +388,18 @@ const Shop = () => {
     }
   };
 
+  const UserLogin = (e) => {
+    e.preventDefault();
+    localStorage.setItem("redirectPath", location.pathname);
+    navigate("/login");
+  };
+
+  const DealerLogin = (e) => {
+    e.preventDefault();
+    localStorage.setItem("redirectPath", location.pathname);
+    navigate("/Dealer_login");
+  };
+
   return (
     <>
       <Helmet>
@@ -575,12 +587,12 @@ const Shop = () => {
                                               )}
                                             </Link>
                                           ) : (
-                                            <Link
-                                              to="/Dealer_login"
+                                            <span
+                                              onClick={(e) => DealerLogin(e)}
                                               data-tooltip-id="my-tooltip-12"
                                             >
                                               <FaRegStar />
-                                            </Link>
+                                            </span>
                                           )}
                                         </>
                                       ) : (
@@ -611,12 +623,12 @@ const Shop = () => {
                                               )}
                                             </Link>
                                           ) : (
-                                            <Link
-                                              to="/login"
+                                            <span
+                                              onClick={(e) => UserLogin(e)}
                                               data-tooltip-id="my-tooltip-9"
                                             >
                                               <BsHeart />
-                                            </Link>
+                                            </span>
                                           )}
                                         </>
                                       )}

@@ -50,14 +50,16 @@ function App() {
   useEffect(() => {
     if (userType == 1 && location.pathname === "/login") {
       navigate("/");
-    }
-  }, [userType, location.pathname]);
-
-  useEffect(() => {
-    if (userType == 2 && location.pathname === "/Dealer_login") {
+    } else if (userType == 2 && location.pathname === "/login") {
       navigate("/");
     }
-  }, [userType, location.pathname]);
+
+    if (userType == 2 && location.pathname === "/Dealer_login") {
+      navigate("/");
+    } else if (userType == 1 && location.pathname === "/Dealer_login") {
+      navigate("/");
+    }
+  }, [userType, location.pathname, navigate]);
 
   return (
     <>

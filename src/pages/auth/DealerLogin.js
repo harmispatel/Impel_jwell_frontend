@@ -123,16 +123,16 @@ const DealerLogin = () => {
                         placeholder="Password"
                         class="form__input"
                       />
-                      <button
-                        className="btn toggle_btn "
+                      <span
+                        className="toggle_btn"
                         onClick={(e) => togglePassword(e)}
                       >
                         {passwordType === "password" ? (
-                          <FaEye />
-                        ) : (
                           <FaEyeSlash />
+                        ) : (
+                          <FaEye />
                         )}
-                      </button>
+                      </span>
                       {error && error === "Please enter your password." && (
                         <span className="text-danger">{error}</span>
                       )}

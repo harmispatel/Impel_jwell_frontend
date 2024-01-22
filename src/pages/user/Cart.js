@@ -98,12 +98,16 @@ const Cart = () => {
     await profileService
       .getProfile({ phone: Phone })
       .then((res) => {
-        const statename = res.data.state.name;
-        const cityname = res.data.city.name;
+        const Billing_shipping_state = res.data.state.name;
+        const Billing_shipping_city = res.data.city.name;
+        const shipping_state_name = res.data.shipping_state.name;
+        const shipping_city_name = res.data.shipping_city.name;
         setProfileData({
           ...res.data,
-          state_name: statename,
-          city_name: cityname,
+          state_name: Billing_shipping_state,
+          city_name: Billing_shipping_city,
+          shipping_state_name: shipping_state_name,
+          shipping_city_name: shipping_city_name,
           state: res.data.state.id,
           city: res.data.city.id,
           shipping_state: res.data.shipping_state.id,
@@ -111,8 +115,10 @@ const Cart = () => {
         });
         setUserData({
           ...res.data,
-          state_name: statename,
-          city_name: cityname,
+          state_name: Billing_shipping_state,
+          city_name: Billing_shipping_city,
+          shipping_state_name: shipping_state_name,
+          shipping_city_name: shipping_city_name,
           state: res.data.state.id,
           city: res.data.city.id,
           shipping_state: res.data.shipping_state.id,
@@ -121,9 +127,11 @@ const Cart = () => {
         res.data.state.id && fetchCity(res.data.state.id);
         res.data.shipping_state.id &&
           fetchShippingCity(res.data.shipping_state.id);
+        setIsLoading(false);
       })
       .catch((err) => {
         console.log(err);
+        setIsLoading(false);
       });
   };
 
@@ -160,6 +168,24 @@ const Cart = () => {
 
   const handleCheckboxChange = (event) => {
     setIsChecked(event.target.checked);
+
+    if (event.target.checked) {
+      setUserData({
+        ...userData,
+        shipping_address: userData.address,
+        shipping_pincode: userData.pincode,
+        shipping_state: userData.state,
+        shipping_city: userData.city,
+      });
+    } else {
+      setUserData({
+        ...userData,
+        shipping_address: "",
+        shipping_pincode: "",
+        shipping_state: "",
+        shipping_city: "",
+      });
+    }
   };
 
   const SubTotal = () => {
@@ -275,19 +301,19 @@ const Cart = () => {
     }
 
     if (!isChecked) {
-      if (!userData.shipping_address.trim()) {
-        validationErrors.shipping_address_err = "Address is required";
+      if (!isChecked && !userData.shipping_address.trim()) {
+        validationErrors.shipping_address_err = "Shipping Address is required";
         isValid = false;
       } else {
         validationErrors.shipping_address_err = "";
       }
 
       if (!userData.shipping_pincode.trim()) {
-        validationErrors.shipping_pincode_err = "Pincode is required";
+        validationErrors.shipping_pincode_err = "Shipping Pincode is required";
         isValid = false;
       } else if (!pincodeRegex.test(userData.shipping_pincode.trim())) {
         validationErrors.shipping_pincode_err =
-          "Pincode must be a 6-digit number";
+          "Shipping Pincode must be a 6-digit number";
         isValid = false;
       } else {
         validationErrors.shipping_pincode_err = "";
@@ -322,6 +348,7 @@ const Cart = () => {
     e.preventDefault();
     const isFormValid = FormValidation();
     if (isFormValid) {
+      setSpinner(true);
       const formData = new FormData();
       formData.append("id", selectedData.id);
       formData.append("name", userData.name ? userData.name : "");
@@ -342,19 +369,19 @@ const Cart = () => {
       // shipping address update
       formData.append(
         "shipping_address",
-        userData.shipping_address ? userData.shipping_address : ""
+        isChecked ? userData.address : userData.shipping_address
       );
       formData.append(
         "shipping_pincode",
-        userData.shipping_pincode ? userData.shipping_pincode : ""
+        isChecked ? userData.pincode : userData.shipping_pincode
       );
       formData.append(
         "shipping_state",
-        userData.shipping_state ? userData.shipping_state : ""
+        isChecked ? userData.state : userData.shipping_state
       );
       formData.append(
         "shipping_city",
-        userData.shipping_city ? userData.shipping_city : ""
+        isChecked ? userData.city : userData.shipping_city
       );
 
       profileService
@@ -371,13 +398,38 @@ const Cart = () => {
             localStorage.setItem("verification", res.data.verification);
           }
         })
-        .catch((err) => {
-          console.log(err);
-          toast.error(err.message);
+        .catch((error) => {
+          console.log(error);
+        })
+        .finally(() => {
+          setSpinner(false);
         });
     } else {
     }
   };
+
+  useEffect(() => {
+    const validationErrors = {
+      shipping_address_err: "",
+      shipping_state_err: "",
+      shipping_city_err: "",
+      shipping_pincode_err: "",
+    };
+
+    if (!isChecked) {
+      validationErrors.shipping_address_err = "Shipping Address is required";
+      validationErrors.shipping_state_err = "shipping state must be select";
+      validationErrors.shipping_city_err = "shipping city must be select";
+      validationErrors.shipping_pincode_err = "Shipping Pincode is required";
+    } else {
+      validationErrors.shipping_address_err = "";
+      validationErrors.shipping_state_err = "";
+      validationErrors.shipping_city_err = "";
+      validationErrors.shipping_pincode_err = "";
+    }
+
+    setError(validationErrors);
+  }, [isChecked]);
 
   useEffect(() => {
     setIsChecked(profileData?.address_same_as_company === 1);
@@ -1024,10 +1076,12 @@ const Cart = () => {
                         className="address-checkbox"
                         checked={isChecked}
                         onChange={handleCheckboxChange}
+                        style={{ cursor: "pointer" }}
                       />
                       <label
                         htmlFor="checkbox"
                         className="ms-1 address-check-text"
+                        style={{ cursor: "pointer" }}
                       >
                         Shipping Address is as same above then check this box
                       </label>
@@ -1045,7 +1099,7 @@ const Cart = () => {
                         <textarea
                           name="shipping_address"
                           className="form-control"
-                          defaultValue={selectedData.shipping_address}
+                          value={userData.shipping_address}
                           onChange={(e) => {
                             handleChange(e);
                           }}
@@ -1114,7 +1168,7 @@ const Cart = () => {
                         </Form.Label>
                         <Form.Control
                           name="shipping_pincode"
-                          defaultValue={selectedData.shipping_pincode}
+                          value={userData.shipping_pincode}
                           onChange={(e) => handleChange(e)}
                           placeholder="Enter Your Pincode"
                           maxLength={6}

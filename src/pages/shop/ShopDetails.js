@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import BreadCrumb from "../../components/common/BreadCrumb";
 import "swiper/css";
 import "swiper/css/pagination";
@@ -20,6 +20,9 @@ import productDetail from "../../services/Shop";
 import { CartSystem } from "../../context/CartContext";
 
 const ShopDetails = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const { dispatch: wishlistDispatch } = useContext(WishlistSystem);
   const { dispatch: removeWishlistDispatch } = useContext(WishlistSystem);
   const { dispatch: addtocartDispatch } = useContext(CartSystem);
@@ -242,6 +245,12 @@ const ShopDetails = () => {
     gemstone_price: product?.gemstone_price?.toFixed(2),
     making_charge: product?.making_charge?.toFixed(2),
     total_price_14k: product?.total_price_14k?.toLocaleString("en-US"),
+  };
+
+  const UserLogin = (e) => {
+    e.preventDefault();
+    localStorage.setItem("redirectPath", location.pathname);
+    navigate("/login");
   };
 
   return (
@@ -823,23 +832,24 @@ const ShopDetails = () => {
                                   {Dealer ? (
                                     <></>
                                   ) : (
-                                    <div class="buttons pt-4 d-flex">
-                                      <Link to="/login">
-                                        <div class="add_cart align-items-center d-flex">
-                                          <div>
-                                            <button class="btn btn-outline-dark">
-                                              <BsHandbagFill className="me-2" />
-                                              Add To Cart
-                                            </button>
-                                          </div>
-                                          <div>
-                                            <button class="btn btn-outline-dark align-items-center">
-                                              <FaRegHeart className="me-2" />
-                                              Wishlist
-                                            </button>
-                                          </div>
+                                    <div
+                                      class="buttons pt-4 d-flex"
+                                      onClick={(e) => UserLogin(e)}
+                                    >
+                                      <div class="add_cart align-items-center d-flex">
+                                        <div>
+                                          <button class="btn btn-outline-dark">
+                                            <BsHandbagFill className="me-2" />
+                                            Add To Cart
+                                          </button>
                                         </div>
-                                      </Link>
+                                        <div>
+                                          <button class="btn btn-outline-dark align-items-center">
+                                            <FaRegHeart className="me-2" />
+                                            Wishlist
+                                          </button>
+                                        </div>
+                                      </div>
                                     </div>
                                   )}
                                 </>

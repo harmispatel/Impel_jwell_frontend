@@ -397,7 +397,7 @@ const Navbar = () => {
                           </div>
 
                           <div class="img-box">
-                            {dealerData?.profile && (
+                            {dealerData?.profile ? (
                               <img
                                 src={dealerData?.profile}
                                 alt=""
@@ -406,6 +406,17 @@ const Navbar = () => {
                                   borderRadius: "50%",
                                 }}
                               />
+                            ) : (
+                              <>
+                                <img
+                                  src={NOimage}
+                                  alt=""
+                                  className="uploaded-image w-100"
+                                  style={{
+                                    borderRadius: "50%",
+                                  }}
+                                />
+                              </>
                             )}
                           </div>
                           <div class="user">
@@ -510,14 +521,14 @@ const Navbar = () => {
                           </div>
 
                           <div class="img-box">
-                            {image ? (
+                            {image?.length ? (
                               <img
                                 src={image}
                                 alt=""
                                 className="uploaded-image w-100"
                                 style={{
                                   borderRadius: "50%",
-                                }}
+                                }}  
                               />
                             ) : (
                               <img
