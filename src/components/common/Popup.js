@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Modal from "react-modal";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import images from "../../assets/images/download.png";
 
 const Popup = () => {
+  const location = useLocation();
   const [showPopup, setShowPopup] = useState(() => {
     const storedState = localStorage.getItem("showPopup");
     return storedState ? JSON.parse(storedState) : false;
@@ -11,6 +12,7 @@ const Popup = () => {
 
   useEffect(() => {
     localStorage.setItem("showPopup", JSON.stringify(showPopup));
+    localStorage.setItem("redirectPath", location.pathname);
   }, [showPopup]);
 
   useEffect(() => {

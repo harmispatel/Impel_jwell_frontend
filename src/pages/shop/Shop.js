@@ -215,13 +215,22 @@ const Shop = () => {
   };
 
   useEffect(() => {
-    CategoryFilter();
-    GenderFilter();
-    GetDealerSelection();
-    GetUserWishList();
     FilterData(0);
     resetPagination();
   }, [category, tag, gender, searchInput, PriceRange, selectedOption]);
+
+  useEffect(() => {
+    if (Phone) {
+      GetUserWishList();
+    }
+
+    if (email) {
+      GetDealerSelection();
+    }
+
+    CategoryFilter();
+    GenderFilter();
+  }, []);
 
   // user wishlist API
   const GetUserWishList = async () => {

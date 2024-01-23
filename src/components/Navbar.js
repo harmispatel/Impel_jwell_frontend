@@ -331,7 +331,7 @@ const Navbar = () => {
                             to="/shop"
                             onClick={handleNavClick}
                           >
-                            All jewellery
+                            All Jwellery
                           </Link>
                         </>
                       )}
@@ -528,7 +528,7 @@ const Navbar = () => {
                                 className="uploaded-image w-100"
                                 style={{
                                   borderRadius: "50%",
-                                }}  
+                                }}
                               />
                             ) : (
                               <img
