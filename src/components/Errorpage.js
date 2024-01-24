@@ -1,43 +1,24 @@
-import React, { useEffect, useRef } from "react";
-import video1 from "../assets/video/video.mp4";
+import React from "react";
 import { Helmet } from "react-helmet-async";
+import { Link } from "react-router-dom";
 
 const Errorpage = () => {
-  const videoEl = useRef(null);
-
-  const attemptPlay = () => {
-    videoEl &&
-      videoEl.current &&
-      videoEl.current.play().catch((error) => {
-        console.error("Error attempting to play", error);
-      });
-  };
-  useEffect(() => {
-    attemptPlay();
-  }, []);
-
   return (
     <>
       <Helmet>
         <title>Impel Store - Not found URL</title>
       </Helmet>
-      <div>
-        <video
-          style={{
-            maxWidth: "100%",
-            width: "100%",
-            height: "660px",
-            margin: "0 auto",
-            backgroundColor: "black",
-            border: "none",
-          }}
-          playsInline
-          loop
-          muted
-          controls
-          alt="All the devices"
-          src={video1}
-          ref={videoEl}
+      <div className="container">
+        <h1>Oops! Something went wrong.</h1>
+        <p>We couldn't find the information you were looking for.</p>
+        <p>
+          Please try again later or go back to the <Link to="/">home page</Link>
+          .
+        </p>
+        <img
+          src="https://cdn.dribbble.com/userupload/5849501/file/original-71d511570d1fbbba81ff272abc7e99ae.png?resize=1600x1200"
+          alt="Error"
+          className="error-image w-100"
         />
       </div>
     </>

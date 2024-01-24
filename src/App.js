@@ -10,7 +10,6 @@ import Categories from "./pages/categories/Categories";
 import CategoriesItems from "./pages/categories/CategoriesItems";
 import Login from "./pages/auth/Login";
 import "react-toastify/dist/ReactToastify.css";
-import CategoriesDetail from "./pages/categories/CategoriesDetail";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import DealerLogIN from "./pages/auth/DealerLogin";
 import Profile from "./pages/user/Profile";
@@ -81,10 +80,6 @@ function App() {
                     <Route
                       path="categories/:id"
                       element={<CategoriesItems />}
-                    />
-                    <Route
-                      path="categoryDetail/:id"
-                      element={<CategoriesDetail />}
                     />
                     <Route path="page/:slug" element={<CustomPageView />} />
 

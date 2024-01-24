@@ -51,7 +51,9 @@ const Navbar = () => {
 
   const [isMenuActive, setMenuActive] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(true);
+  const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null);
+  const tagRef = useRef(null);
 
   const searchParams = new URLSearchParams(location.search);
 
@@ -202,8 +204,25 @@ const Navbar = () => {
     };
   }, []);
 
+  const handleOutsideClickTag = (event) => {
+    if (tagRef.current && !tagRef.current.contains(event.target)) {
+      setShowDropdown(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleOutsideClickTag);
+    window.addEventListener("scroll", handleOutsideClickTag);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClickTag);
+      window.removeEventListener("scroll", handleOutsideClickTag);
+    };
+  }, []);
+
   const handleNavClick = () => {
     setIsCollapsed(!isCollapsed);
+    setShowDropdown(false);
   };
 
   const navbarRef = useRef(null);
@@ -222,6 +241,14 @@ const Navbar = () => {
       document.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  const toggleDropdown = () => {
+    setShowDropdown(!showDropdown);
+  };
+
+  const handleItemClick = () => {
+    setShowDropdown(false);
+  };
 
   return (
     <header className={colorChange ? "header sticky_header" : "header"}>
@@ -276,17 +303,72 @@ const Navbar = () => {
                   </div>
                 </li>
 
-                <li className="nav-item main-tags">
-                  <Link to="#" className="nav-link" aria-current="page">
-                    Tags
-                    <IoMdArrowDropdown />
-                  </Link>
-                  <div className="tags-dropdown">
-                    <div className="row">
-                      {tags?.length ? (
-                        <>
-                          <div className="col-md-2">
-                            <div className="tags-links">
+                <li className="nav-item">
+                  <div>
+                    <Link
+                      onClick={toggleDropdown}
+                      className={
+                        currentRoute === "/shop"
+                          ? "nav-link active"
+                          : "nav-link"
+                      }
+                      aria-current="page"
+                    >
+                      Tags
+                      <IoMdArrowDropdown />
+                    </Link>
+                    {showDropdown && (
+                      <div ref={tagRef} className="dropdown-content">
+                        <div className="row">
+                          {tags?.length ? (
+                            <>
+                              <div className="col-md-2">
+                                <div className="tags-links">
+                                  <Link
+                                    className={
+                                      currentRoute === "/shop"
+                                        ? "nav-link active tag-shop-link"
+                                        : "nav-link"
+                                    }
+                                    style={{
+                                      fontSize: "17px",
+                                      fontWeight: "800",
+                                      textTransform: "uppercase",
+                                    }}
+                                    to="/shop"
+                                    onClick={() => {
+                                      handleNavClick();
+                                      handleItemClick();
+                                    }}
+                                  >
+                                    All Jwellery
+                                  </Link>
+                                </div>
+                              </div>
+
+                              {tags?.map((multitags, index) => (
+                                <div className="col-md-2" key={index}>
+                                  <div className="tags-links">
+                                    <Link
+                                      to={`/shop?tag_id=${
+                                        tagIds.includes(multitags.id)
+                                          ? tagIds
+                                          : multitags.id
+                                      }`}
+                                      className="nav-link"
+                                      onClick={() => {
+                                        handleTag(multitags.id);
+                                        handleItemClick();
+                                      }}
+                                    >
+                                      {multitags.name}
+                                    </Link>
+                                  </div>
+                                </div>
+                              ))}
+                            </>
+                          ) : (
+                            <>
                               <Link
                                 className={
                                   currentRoute === "/shop"
@@ -299,43 +381,11 @@ const Navbar = () => {
                               >
                                 All Jwellery
                               </Link>
-                            </div>
-                          </div>
-
-                          {tags?.map((multitags, index) => (
-                            <div className="col-md-2" key={index}>
-                              <div className="tags-links">
-                                <Link
-                                  to={`/shop?tag_id=${
-                                    tagIds.includes(multitags.id)
-                                      ? tagIds
-                                      : multitags.id
-                                  }`}
-                                  onClick={() => handleTag(multitags.id)}
-                                >
-                                  {multitags.name}
-                                </Link>
-                              </div>
-                            </div>
-                          ))}
-                        </>
-                      ) : (
-                        <>
-                          <Link
-                            className={
-                              currentRoute === "/shop"
-                                ? "nav-link active tag-shop-link"
-                                : "nav-link"
-                            }
-                            style={{ fontSize: "17px", fontWeight: "800" }}
-                            to="/shop"
-                            onClick={handleNavClick}
-                          >
-                            All Jwellery
-                          </Link>
-                        </>
-                      )}
-                    </div>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </li>
 

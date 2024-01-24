@@ -752,7 +752,7 @@ const ShopDetails = () => {
                               )}
                             </div>
                           </div>
-                          <div className="button d-flex justify-content-around pt-2">
+                          <div className="button d-flex pt-2">
                             <div className="add_cart align-items-center d-flex">
                               {Phone ? (
                                 <>

@@ -417,10 +417,18 @@ const Cart = () => {
     };
 
     if (!isChecked) {
-      validationErrors.shipping_address_err = "Shipping Address is required";
-      validationErrors.shipping_state_err = "shipping state must be select";
-      validationErrors.shipping_city_err = "shipping city must be select";
-      validationErrors.shipping_pincode_err = "Shipping Pincode is required";
+      if (!userData.shipping_address.trim()) {
+        validationErrors.shipping_address_err = "Shipping address is required";
+      }
+      if (!userData.shipping_pincode.trim()) {
+        validationErrors.shipping_pincode_err = "Shipping pincode is required";
+      }
+      if (!userData.shipping_state || userData.shipping_state === undefined) {
+        validationErrors.shipping_state_err = "Shipping state must be select";
+      }
+      if (!userData.shipping_city || userData.shipping_city === undefined) {
+        validationErrors.shipping_city_err = "Shipping city must be select";
+      }
     } else {
       validationErrors.shipping_address_err = "";
       validationErrors.shipping_state_err = "";
@@ -429,8 +437,7 @@ const Cart = () => {
     }
 
     setError(validationErrors);
-  }, [isChecked]);
-
+  }, [isChecked, userData]);
   useEffect(() => {
     setIsChecked(profileData?.address_same_as_company === 1);
   }, [profileData?.address_same_as_company]);

@@ -210,42 +210,6 @@ body {
   background-color: transparent !important;
 }
 
-.main-tags:hover .tags-dropdown {
-  transform: perspective(600px) rotateX(0deg);
-  opacity: 1;
-  visibility: visible;
-  z-index: 9;
-}
-
-.tags-dropdown {
-  position: absolute;
-  top: 75px;
-  left: 0;
-  background-color: #eaeaea;
-  /* box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.5); */
-  padding: 20px;
-  border-radius: 10px;
-  width: 100%;
-  transform: perspective(600px) rotateX(-90deg);
-  transform-origin: 0 0 0;
-  left: 0;
-  opacity: 0;
-  visibility: hidden;
-  right: auto;
-  transition: 0.5s all ease-in-out;
-}
-
-.tags-dropdown .tags-links {
-  padding: 5px;
-}
-
-
-.tags-dropdown .tags-links a {
-  font-size: 17px;
-  text-decoration: none;
-  display: block;
-}
-
 .header_inner {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
@@ -1201,7 +1165,6 @@ input[type="file"] {
 
 .product_sec .nav-tabs {
   justify-content: center;
-  margin-bottom: 30px;
   border: none;
 }
 
@@ -2057,7 +2020,7 @@ input[type="file"] {
   .add_cart .btn {
     padding: 7px 14px;
   }
-  
+
   .login {
     height: auto;
     padding: 20px 0 0;
@@ -2555,12 +2518,25 @@ input[type="file"] {
   border-left: none;
 }
 
-
 .profile th {
   width: 25%;
 }
 
-
 .shippping_address_card th {
   width: 25%;
+}
+
+.tag-dropdown {
+  display: inline-block;
+}
+
+.dropdown-content {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #f9f9f9;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 3;
+  padding: 15px;
+  border-radius: 10px;
 }

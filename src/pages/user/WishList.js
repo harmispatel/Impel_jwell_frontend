@@ -54,7 +54,7 @@ const WishList = () => {
       .then((res) => {
         if (res.success === true) {
           GetUserWishlist();
-          setIsLoading(true);
+
           toast.success(res.message);
           removeWishlistDispatch({
             type: "REMOVE_FROM_WISHLIST",
@@ -96,8 +96,6 @@ const WishList = () => {
             payload,
           });
           toast.success(res.message);
-
-          setIsLoading(true);
         } else {
           toast.error(res.message);
           GetUserWishlist();
@@ -105,7 +103,6 @@ const WishList = () => {
             type: "REMOVE_FROM_WISHLIST",
             payload,
           });
-          setIsLoading(true);
         }
       })
       .catch((err) => {

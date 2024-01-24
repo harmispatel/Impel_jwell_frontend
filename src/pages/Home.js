@@ -38,7 +38,7 @@ const Home = () => {
   // const [Featured, SetFeatured] = useState([]);
   const [TopSell, SetTopSell] = useState([]);
   const [tags, setTags] = useState([]);
-  const [tag, setTag] = useState([]);
+  const [tag, setTag] = useState();
 
   const videoEl = useRef(null);
 
@@ -61,7 +61,7 @@ const Home = () => {
   };
 
   const handleTag = (e) => {
-    setTag([...tag, parseFloat(e.target.value)]);
+    setTag(...tag, parseFloat(e.target.value));
   };
   useEffect(() => {
     banners();

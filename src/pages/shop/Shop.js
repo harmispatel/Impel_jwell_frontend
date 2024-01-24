@@ -38,11 +38,11 @@ const Shop = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   const [genderData, setGenderData] = useState([]);
-  const [gender, setGender] = useState(null);
+  const [gender, setGender] = useState();
   const [selectedGender, setSelectedGender] = useState(null);
 
   const [filterTag, setFilterTag] = useState([]);
-  const [tag, setTag] = useState([]);
+  const [tag, setTag] = useState();
   const [selectedTag, setSelectedTag] = useState(null);
 
   const [PriceRange, setPriceRange] = useState({
@@ -119,7 +119,7 @@ const Shop = () => {
     setGender(null);
     setSelectedGender(null);
 
-    setTag([]);
+    setTag(null);
     setSelectedTag(null);
     navigate(`/shop`);
 
@@ -141,11 +141,11 @@ const Shop = () => {
     const selectedTagId = selectedTags ? parseFloat(selectedTags.value) : null;
 
     if (selectedTagId !== null) {
-      setTag([selectedTagId]);
+      setTag(selectedTagId);
       setSelectedTag(selectedTags);
       navigate(`/shop?tag_id=${selectedTagId}`);
     } else {
-      setTag([]);
+      setTag(null);
       setSelectedTag(null);
       navigate(`/shop`);
     }
@@ -154,6 +154,18 @@ const Shop = () => {
   const handleSliderChange = (e) => {
     setIsLoading(true);
     setPriceRange({ minprice: e[0], maxprice: e[1] });
+  };
+
+  const shopTag = () => {
+    ShopServices.allfilterdesigns()
+      .then((res) => {
+        setIsLoading(false);
+        setFilterTag(res.data?.tags);
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsLoading(false);
+      });
   };
 
   useEffect(() => {
@@ -165,25 +177,30 @@ const Shop = () => {
 
       try {
         const parsedTagIds = tagIds[0].split(",").map((id) => parseFloat(id));
-        setTag(parsedTagIds);
+        setTag(parsedTagIds[0]);
 
         if (parsedTagIds && parsedTagIds.length > 0) {
           const tag = filterTag?.find((item) => item.id === parsedTagIds[0]);
+          console.log(tag);
+          console.log(filterTag);
 
           if (tag) {
             setSelectedTag({ value: tag.id, label: tag.name });
+            if (tag?.length > 0) {
+              FilterData(0);
+            }
           } else {
             console.error("Tag not found with ID:", parsedTagIds[0]);
           }
         }
       } catch (error) {
         console.error("Error parsing tag IDs:", error);
-        setTag([]);
+        setTag(null);
       }
     } else {
-      setTag([]);
+      setTag(null);
     }
-  }, [location.search]);
+  }, [location.search, filterTag, tag]);
 
   const FilterData = (offset = 0) => {
     ShopServices.allfilterdesigns({
@@ -201,7 +218,7 @@ const Shop = () => {
       .then((res) => {
         setIsLoading(false);
         setFilterData(res.data?.designs);
-        setFilterTag(res.data?.tags);
+
         setPaginate(res.data);
         setFilterPriceRange({
           minprice: res.data.minprice,
@@ -218,6 +235,10 @@ const Shop = () => {
     FilterData(0);
     resetPagination();
   }, [category, tag, gender, searchInput, PriceRange, selectedOption]);
+
+  useEffect(() => {
+    shopTag();
+  }, []);
 
   useEffect(() => {
     if (Phone) {
@@ -356,14 +377,14 @@ const Shop = () => {
   };
 
   // PAGINATION FUNCTION
-  const totalPages = Math.ceil(paginate?.total_records / 20);
+  const totalPages = Math.ceil(paginate?.total_records / 40);
 
   const [pagination, setPagination] = useState({});
 
   const resetPagination = () => {
     setPagination({
       currentPage: 1,
-      dataShowLength: 20,
+      dataShowLength: 40,
     });
   };
 
