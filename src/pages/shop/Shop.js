@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { BsHeart, BsSearch } from "react-icons/bs";
 import { FcLike } from "react-icons/fc";
@@ -156,18 +156,6 @@ const Shop = () => {
     setPriceRange({ minprice: e[0], maxprice: e[1] });
   };
 
-  const shopTag = () => {
-    ShopServices.allfilterdesigns()
-      .then((res) => {
-        setIsLoading(false);
-        setFilterTag(res.data?.tags);
-      })
-      .catch((err) => {
-        console.log(err);
-        setIsLoading(false);
-      });
-  };
-
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     const tagIds = searchParams.getAll("tag_id");
@@ -180,15 +168,15 @@ const Shop = () => {
         setTag(parsedTagIds[0]);
 
         if (parsedTagIds && parsedTagIds.length > 0) {
-          const tag = filterTag?.find((item) => item.id === parsedTagIds[0]);
-          console.log(tag);
-          console.log(filterTag);
+          const slectedTagID = filterTag?.find(
+            (item) => item.id === parsedTagIds[0]
+          );
 
-          if (tag) {
-            setSelectedTag({ value: tag.id, label: tag.name });
-            if (tag?.length > 0) {
-              FilterData(0);
-            }
+          if (slectedTagID) {
+            setSelectedTag({
+              value: slectedTagID.id,
+              label: slectedTagID.name,
+            });
           } else {
             console.error("Tag not found with ID:", parsedTagIds[0]);
           }
@@ -200,7 +188,7 @@ const Shop = () => {
     } else {
       setTag(null);
     }
-  }, [location.search, filterTag, tag]);
+  }, [location.search, filterTag?.length]);
 
   const FilterData = (offset = 0) => {
     ShopServices.allfilterdesigns({
@@ -218,7 +206,7 @@ const Shop = () => {
       .then((res) => {
         setIsLoading(false);
         setFilterData(res.data?.designs);
-
+        setFilterTag(res.data?.tags);
         setPaginate(res.data);
         setFilterPriceRange({
           minprice: res.data.minprice,
@@ -230,15 +218,6 @@ const Shop = () => {
         setIsLoading(false);
       });
   };
-
-  useEffect(() => {
-    FilterData(0);
-    resetPagination();
-  }, [category, tag, gender, searchInput, PriceRange, selectedOption]);
-
-  useEffect(() => {
-    shopTag();
-  }, []);
 
   useEffect(() => {
     if (Phone) {
@@ -429,6 +408,19 @@ const Shop = () => {
     localStorage.setItem("redirectPath", location.pathname);
     navigate("/Dealer_login");
   };
+
+  useEffect(() => {
+    FilterData(0);
+    resetPagination();
+  }, [
+    category,
+    tag,
+    gender,
+    searchInput,
+    PriceRange,
+    selectedOption,
+    filterTag?.length,
+  ]);
 
   return (
     <>

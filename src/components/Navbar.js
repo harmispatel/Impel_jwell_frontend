@@ -289,104 +289,103 @@ const Navbar = () => {
                 </li>
 
                 <li className="nav-item">
-                  <div>
-                    <Link
-                      className={
-                        currentRoute === "#" ? "nav-link active" : "nav-link"
-                      }
-                      aria-current="page"
-                      to="#"
-                      onClick={handleNavClick}
-                    >
-                      Ready To Dispatch
-                    </Link>
-                  </div>
+                  <Link
+                    className={
+                      currentRoute === "#" ? "nav-link active" : "nav-link"
+                    }
+                    aria-current="page"
+                    to="#"
+                    onClick={handleNavClick}
+                  >
+                    Ready To Dispatch
+                  </Link>
                 </li>
 
                 <li className="nav-item">
-                  <div>
-                    <Link
-                      onClick={toggleDropdown}
-                      className={
-                        currentRoute === "/shop"
-                          ? "nav-link active"
-                          : "nav-link"
-                      }
-                      aria-current="page"
-                    >
-                      Tags
-                      <IoMdArrowDropdown />
-                    </Link>
-                    {showDropdown && (
-                      <div ref={tagRef} className="dropdown-content">
-                        <div className="row">
-                          {tags?.length ? (
-                            <>
-                              <div className="col-md-2">
+                  <span
+                    onClick={toggleDropdown}
+                    className="nav-link"
+                    aria-current="page"
+                    style={{
+                      fontWeight: "500",
+                      color: "#000",
+                      textTransform: "uppercase",
+                      fontSize: "16px",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Tags
+                    <IoMdArrowDropdown />
+                  </span>
+                  {showDropdown && (
+                    <div ref={tagRef} className="dropdown-content">
+                      <div className="row">
+                        {tags?.length ? (
+                          <>
+                            <div className="col-md-2">
+                              <div className="tags-links">
+                                <Link
+                                  className={
+                                    currentRoute === "/shop"
+                                      ? "nav-link active tag-shop-link"
+                                      : "nav-link"
+                                  }
+                                  style={{
+                                    fontSize: "16px",
+                                    fontWeight: "800",
+                                    textTransform: "uppercase",
+                                  }}
+                                  to="/shop"
+                                  onClick={() => {
+                                    handleNavClick();
+                                    handleItemClick();
+                                  }}
+                                >
+                                  All Jwellery
+                                </Link>
+                              </div>
+                            </div>
+
+                            {tags?.map((multitags, index) => (
+                              <div className="col-md-2" key={index}>
                                 <div className="tags-links">
                                   <Link
-                                    className={
-                                      currentRoute === "/shop"
-                                        ? "nav-link active tag-shop-link"
-                                        : "nav-link"
-                                    }
-                                    style={{
-                                      fontSize: "17px",
-                                      fontWeight: "800",
-                                      textTransform: "uppercase",
-                                    }}
-                                    to="/shop"
+                                    to={`/shop?tag_id=${
+                                      tagIds.includes(multitags.id)
+                                        ? tagIds
+                                        : multitags.id
+                                    }`}
+                                    className="nav-link"
                                     onClick={() => {
-                                      handleNavClick();
+                                      handleTag(multitags.id);
                                       handleItemClick();
                                     }}
                                   >
-                                    All Jwellery
+                                    {multitags.name}
                                   </Link>
                                 </div>
                               </div>
-
-                              {tags?.map((multitags, index) => (
-                                <div className="col-md-2" key={index}>
-                                  <div className="tags-links">
-                                    <Link
-                                      to={`/shop?tag_id=${
-                                        tagIds.includes(multitags.id)
-                                          ? tagIds
-                                          : multitags.id
-                                      }`}
-                                      className="nav-link"
-                                      onClick={() => {
-                                        handleTag(multitags.id);
-                                        handleItemClick();
-                                      }}
-                                    >
-                                      {multitags.name}
-                                    </Link>
-                                  </div>
-                                </div>
-                              ))}
-                            </>
-                          ) : (
-                            <>
-                              <Link
-                                className={
-                                  currentRoute === "/shop"
-                                    ? "nav-link active tag-shop-link"
-                                    : "nav-link"
-                                }
-                                style={{ fontSize: "17px", fontWeight: "800" }}
-                                to="/shop"
-                                onClick={handleNavClick}
-                              >
-                                All Jwellery
-                              </Link>
-                            </>
-                          )}
-                        </div>
+                            ))}
+                          </>
+                        ) : (
+                          <>
+                            <Link
+                              className={
+                                currentRoute === "/shop"
+                                  ? "nav-link active tag-shop-link"
+                                  : "nav-link"
+                              }
+                              style={{ fontSize: "17px", fontWeight: "800" }}
+                              to="/shop"
+                              onClick={handleNavClick}
+                            >
+                              All Jwellery
+                            </Link>
+                          </>
+                        )}
                       </div>
-                    )}
-                  </div>
+                    </div>
+                  )}
                 </li>
 
                 <li className="nav-item">
@@ -404,7 +403,7 @@ const Navbar = () => {
             </div>
 
             <Link className="navbar-brand m-0" to="/">
-              <img src={Logo} alt="logo" width={100} />
+              <img src={Logo} alt="logo" height={100} />
             </Link>
 
             <div className="header_icon">

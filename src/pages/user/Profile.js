@@ -791,7 +791,7 @@ const Profile = () => {
                   />
                   <label
                     htmlFor="checkbox"
-                    className="ms-1 address-check-text"
+                    className="address-check-text"
                     style={{ cursor: "pointer" }}
                   >
                     Shipping Address is as same above then check this box

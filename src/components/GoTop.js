@@ -24,23 +24,7 @@ const GoTop = () => {
   return (
     <div>
       {backButton && (
-        <button
-          className="btn"
-          style={{
-            position: "fixed",
-            background: "#db9662",
-            bottom: "50px",
-            right: "50px",
-            height: "50px",
-            width: "50px",
-            fontSize: "25px",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            zIndex: "9",
-          }}
-          onClick={scrollup}
-        >
+        <button className="btn go-top-button" onClick={scrollup}>
           <FaAngleUp />
         </button>
       )}
