@@ -38,7 +38,7 @@ const Home = () => {
   // const [Featured, SetFeatured] = useState([]);
   const [TopSell, SetTopSell] = useState([]);
   const [tags, setTags] = useState([]);
-  const [tag, setTag] = useState();
+  const [tag, setTag] = useState([]);
 
   const videoEl = useRef(null);
 
@@ -61,8 +61,9 @@ const Home = () => {
   };
 
   const handleTag = (e) => {
-    setTag(...tag, parseFloat(e.target.value));
+    setTag([...tag, parseFloat(e.target.value)]);
   };
+
   useEffect(() => {
     banners();
     Category();
@@ -295,7 +296,7 @@ const Home = () => {
                       to={`/shop?tag_id=${
                         tagIds?.includes(Middle_banner_tag)
                           ? tagIds
-                          : [...tagIds, Middle_banner_tag]
+                          : Middle_banner_tag
                       }`}
                       onClick={(e) => handleTag(e)}
                       className="btn discover_btn"
@@ -459,7 +460,7 @@ const Home = () => {
                       to={`/shop?tag_id=${
                         tagIds?.includes(Bottom_banner_tag)
                           ? tagIds
-                          : [...tagIds, Bottom_banner_tag]
+                          : Bottom_banner_tag
                       }`}
                       onClick={(e) => handleTag(e)}
                       className="btn discover_btn"

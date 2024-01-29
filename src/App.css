@@ -2548,6 +2548,10 @@ input[type="file"] {
   border-left: none;
 }
 
+.order_payments .font-weight-bold {
+  font-weight: bold !important;
+}
+
 .profile th {
   width: 25%;
 }

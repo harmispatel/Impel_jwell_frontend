@@ -78,6 +78,16 @@ const Shop = () => {
   // sort by searching
   const searchbar = (e) => {
     setIsLoading(true);
+    const queryParams = new URLSearchParams(location.search);
+
+    const searchValue = e.target.value;
+    if (searchValue) {
+      queryParams.set("search_query", searchValue);
+    } else {
+      queryParams.delete("search_query");
+    }
+
+    navigate(`/shop?${queryParams.toString()}`);
     setSearchInput(e.target.value);
   };
 
@@ -91,6 +101,15 @@ const Shop = () => {
 
   const handleSelectChange = (selectedSort) => {
     setIsLoading(true);
+    const queryParams = new URLSearchParams(location.search);
+
+    if (selectedSort) {
+      queryParams.set("sort_by", selectedSort.value.toUpperCase());
+    } else {
+      queryParams.delete("sort_by");
+    }
+
+    navigate(`/shop?${queryParams.toString()}`);
     setSelectedOption(selectedSort);
   };
 
@@ -111,8 +130,10 @@ const Shop = () => {
       .catch((error) => console.log(error));
   };
 
-  const handleSelectCategory = async (selectedCategory) => {
+  const handleSelectCategory = async (categoryId) => {
     setIsLoading(true);
+
+    setSearchInput("");
 
     setSelectedOption("");
 
@@ -121,44 +142,94 @@ const Shop = () => {
 
     setTag(null);
     setSelectedTag(null);
-    navigate(`/shop`);
+    navigate(`/shop${categoryId ? `?category_id=${categoryId.value}` : ""}`);
 
     setPriceRange("");
 
-    setCategory(selectedCategory ? selectedCategory.value : null);
-    setSelectedCategory(selectedCategory);
+    setCategory(categoryId ? categoryId.value : null);
+    setSelectedCategory(categoryId);
   };
 
-  const handleSelectGender = (selectedGender) => {
+  const handleSelectGender = (genderId) => {
     setIsLoading(true);
-    setGender(selectedGender ? selectedGender.value : null);
-    setSelectedGender(selectedGender);
+    const queryParams = new URLSearchParams(location.search);
+    if (genderId) {
+      queryParams.set("gender_id", genderId.value);
+    } else {
+      queryParams.delete("gender_id");
+    }
+
+    navigate(`/shop?${queryParams.toString()}`);
+
+    setGender(genderId ? genderId.value : null);
+    setSelectedGender(genderId);
   };
 
   const handleSelectTag = (selectedTags) => {
     setIsLoading(true);
 
-    const selectedTagId = selectedTags ? parseFloat(selectedTags.value) : null;
+    const queryParams = new URLSearchParams(location.search);
 
+    const selectedTagId = selectedTags ? parseFloat(selectedTags.value) : null;
     if (selectedTagId !== null) {
-      setTag(selectedTagId);
-      setSelectedTag(selectedTags);
-      navigate(`/shop?tag_id=${selectedTagId}`);
+      queryParams.set("tag_id", selectedTagId);
     } else {
-      setTag(null);
-      setSelectedTag(null);
-      navigate(`/shop`);
+      queryParams.delete("tag_id");
     }
+
+    navigate(`/shop?${queryParams.toString()}`);
+
+    setTag(selectedTagId);
+    setSelectedTag(selectedTags);
   };
 
   const handleSliderChange = (e) => {
     setIsLoading(true);
+    const queryParams = new URLSearchParams(location.search);
+
+    queryParams.set("min_price", e[0]);
+    queryParams.set("max_price", e[1]);
+
+    navigate(`/shop?${queryParams.toString()}`);
+
     setPriceRange({ minprice: e[0], maxprice: e[1] });
   };
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
+    const searchId = searchParams.get("search_query");
+    const sortbyId = searchParams.get("sort_by");
+    const categoryId = searchParams.get("category_id");
+    const genderId = searchParams.get("gender_id");
     const tagIds = searchParams.getAll("tag_id");
+
+    if (categoryId) {
+      const Category_ids = categoryData?.find(
+        (item) => item.id === Number(categoryId)
+      );
+
+      if (Category_ids) {
+        setCategory(Number(categoryId));
+        setSelectedCategory({
+          value: Category_ids.id,
+          label: Category_ids.name,
+        });
+      }
+    }
+
+    if (genderId) {
+      const Gender_ids = genderData?.find(
+        (item) => item.id === Number(genderId)
+      );
+
+      if (Gender_ids) {
+        setGender(Number(genderId));
+        setSelectedGender({
+          value: Gender_ids.id,
+          label: Gender_ids.name,
+        });
+      }
+    }
 
     if (tagIds && tagIds.length > 0) {
       setIsLoading(true);
@@ -168,14 +239,14 @@ const Shop = () => {
         setTag(parsedTagIds[0]);
 
         if (parsedTagIds && parsedTagIds.length > 0) {
-          const slectedTagID = filterTag?.find(
+          const selectedTagID = filterTag?.find(
             (item) => item.id === parsedTagIds[0]
           );
 
-          if (slectedTagID) {
+          if (selectedTagID) {
             setSelectedTag({
-              value: slectedTagID.id,
-              label: slectedTagID.name,
+              value: selectedTagID?.id,
+              label: selectedTagID?.name,
             });
           } else {
             console.error("Tag not found with ID:", parsedTagIds[0]);
@@ -186,7 +257,9 @@ const Shop = () => {
         setTag(null);
       }
     } else {
+      setIsLoading(true);
       setTag(null);
+      setSelectedTag("");
     }
   }, [location.search, filterTag?.length]);
 
@@ -438,6 +511,7 @@ const Shop = () => {
                     placeholder="Search by design code"
                     onChange={(e) => searchbar(e)}
                     type="search"
+                    isClearable={true}
                   />
                   {searchInput?.length === 0 && (
                     <BsSearch className="search-icon" />
@@ -456,87 +530,85 @@ const Shop = () => {
               </div>
             </div>
 
-            <div className="">
-              <div className="row">
-                <div className="col-md-3 col-12 mt-2 mt-md-2">
-                  <Select
-                    placeholder="Shop by category"
-                    isClearable={true}
-                    isSearchable={false}
-                    value={selectedCategory}
-                    options={categoryData.map((data) => ({
-                      value: data?.id,
-                      label: data?.name,
-                    }))}
-                    onChange={handleSelectCategory}
-                  />
-                </div>
-                <div className="col-md-3 col-6 mt-2 mt-md-2">
-                  <Select
-                    placeholder="Shop by Gender"
-                    isClearable
-                    isSearchable={false}
-                    value={selectedGender}
-                    options={genderData?.map((data) => ({
-                      value: data?.id,
-                      label: data?.name,
-                    }))}
-                    onChange={handleSelectGender}
-                  />
-                </div>
-                <div className="col-md-3 col-6 mt-2 mt-md-2">
-                  <Select
-                    placeholder="Shop by Tag"
-                    isClearable
-                    isSearchable={false}
-                    value={selectedTag}
-                    options={filterTag?.map((data) => ({
-                      value: data?.id,
-                      label: data?.name,
-                    }))}
-                    onChange={handleSelectTag}
-                  />
-                </div>
-                <div className="col-md-3 col-12 mt-md-0">
-                  <Accordion className="accordian">
-                    <Accordion.Item eventKey="3" className="my-2">
-                      <Accordion.Header>Shop by price</Accordion.Header>
-                      <Accordion.Body className="p-4 mb-2">
-                        <div className="d-flex justify-content-between">
-                          <p>
-                            From :
-                            <strong>
-                              ₹
-                              {PriceRange?.minprice
-                                ? PriceRange?.minprice
-                                : FilterPriceRange.minprice}
-                            </strong>
-                          </p>
-                          <p>
-                            To :
-                            <strong>
-                              ₹
-                              {PriceRange?.maxprice
-                                ? PriceRange?.maxprice
-                                : FilterPriceRange.maxprice}
-                            </strong>
-                          </p>
-                        </div>
-                        <Slider
-                          range
-                          allowCross={false}
-                          min={FilterPriceRange.minprice}
-                          max={FilterPriceRange.maxprice}
-                          marks={{
-                            [FilterPriceRange?.minprice]: "Min",
-                            [FilterPriceRange?.maxprice]: "Max",
-                          }}
-                          onAfterChange={handleSliderChange}
-                        />
-                      </Accordion.Body>
-                    </Accordion.Item>
-                  </Accordion>
-                </div>
+            <div className="row">
+              <div className="col-md-3 col-12 mt-2 mt-md-2">
+                <Select
+                  placeholder="Shop by category"
+                  isClearable={true}
+                  isSearchable={false}
+                  value={selectedCategory}
+                  options={categoryData.map((data) => ({
+                    value: data?.id,
+                    label: data?.name,
+                  }))}
+                  onChange={handleSelectCategory}
+                />
+              </div>
+              <div className="col-md-3 col-6 mt-2 mt-md-2">
+                <Select
+                  placeholder="Shop by Gender"
+                  isClearable
+                  isSearchable={false}
+                  value={selectedGender}
+                  options={genderData?.map((data) => ({
+                    value: data?.id,
+                    label: data?.name,
+                  }))}
+                  onChange={handleSelectGender}
+                />
+              </div>
+              <div className="col-md-3 col-6 mt-2 mt-md-2">
+                <Select
+                  placeholder="Shop by Tag"
+                  isClearable
+                  isSearchable={false}
+                  value={selectedTag}
+                  options={filterTag?.map((data) => ({
+                    value: data?.id,
+                    label: data?.name,
+                  }))}
+                  onChange={handleSelectTag}
+                />
+              </div>
+              <div className="col-md-3 col-12 mt-md-0">
+                <Accordion className="accordian">
+                  <Accordion.Item eventKey="3" className="my-2">
+                    <Accordion.Header>Shop by price</Accordion.Header>
+                    <Accordion.Body className="p-4 mb-2">
+                      <div className="d-flex justify-content-between">
+                        <p>
+                          From :
+                          <strong>
+                            ₹
+                            {PriceRange?.minprice
+                              ? PriceRange?.minprice
+                              : FilterPriceRange.minprice}
+                          </strong>
+                        </p>
+                        <p>
+                          To :
+                          <strong>
+                            ₹
+                            {PriceRange?.maxprice
+                              ? PriceRange?.maxprice
+                              : FilterPriceRange.maxprice}
+                          </strong>
+                        </p>
+                      </div>
+                      <Slider
+                        range
+                        allowCross={false}
+                        min={FilterPriceRange.minprice}
+                        max={FilterPriceRange.maxprice}
+                        marks={{
+                          [FilterPriceRange?.minprice]: "Min",
+                          [FilterPriceRange?.maxprice]: "Max",
+                        }}
+                        onAfterChange={handleSliderChange}
+                      />
+                    </Accordion.Body>
+                  </Accordion.Item>
+                </Accordion>
               </div>
             </div>
             <hr />

@@ -130,7 +130,7 @@ const CategoriesItems = () => {
           <div className="categories_data">
             <div className="row">
               {isLoading ? (
-                <div className="h-100 d-flex justify-content-center">
+                <div className="h-100 d-flex justify-content-center pt-5">
                   <ReactLoading
                     type={"spin"}
                     color={"#053961"}
@@ -142,42 +142,165 @@ const CategoriesItems = () => {
               ) : (
                 <>
                   {categoriesData.length > 0 ? (
-                    categoriesData.map((data) => {
-                      return (
-                        <>
-                          <div className="col-md-3" key={data.id}>
-                            <Link
-                              to={`/shopdetails/${data.id}`}
-                              className="text-decoration-none"
-                              style={{ color: "#000" }}
-                              target="_blank"
-                            >
-                              <div className="category_data py-2">
-                                <img
-                                  src={data.image}
-                                  alt=""
-                                  className="w-100"
-                                />
-                                <div className="product_details d-flex justify-content-between">
-                                  <h4>{data?.name}</h4>
-                                  <h4>
-                                    <b>{data?.code}</b>
-                                  </h4>
+                    <>
+                      {categoriesData.map((data) => {
+                        return (
+                          <>
+                            <div className="col-md-3" key={data.id}>
+                              <Link
+                                to={`/shopdetails/${data.id}`}
+                                className="text-decoration-none"
+                                style={{ color: "#000" }}
+                                target="_blank"
+                              >
+                                <div className="category_data py-2">
+                                  <img
+                                    src={data.image}
+                                    alt=""
+                                    className="w-100"
+                                  />
+                                  <div className="product_details d-flex justify-content-between">
+                                    <h4>{data?.name}</h4>
+                                    <h4>
+                                      <b>{data?.code}</b>
+                                    </h4>
+                                  </div>
+                                  <div className="product_details">
+                                    <h5>
+                                      ₹
+                                      {data?.total_price_18k?.toLocaleString(
+                                        "en-US"
+                                      )}
+                                    </h5>
+                                  </div>
                                 </div>
-                                <div className="product_details">
-                                  <h5>
-                                    ₹
-                                    {data?.total_price_18k?.toLocaleString(
-                                      "en-US"
-                                    )}
-                                  </h5>
-                                </div>
-                              </div>
-                            </Link>
+                              </Link>
+                            </div>
+                          </>
+                        );
+                      })}
+                      <div className="pt-5">
+                        {totalPages > 1 && (
+                          <div className="paginationArea">
+                            <nav aria-label="navigation">
+                              <ul className="pagination">
+                                {/* Previous Page Button */}
+                                <li
+                                  className={`page-item ${
+                                    pagination.currentPage === 1
+                                      ? "disabled"
+                                      : ""
+                                  }`}
+                                  style={{
+                                    display:
+                                      pagination.currentPage === 1
+                                        ? "none"
+                                        : "block",
+                                  }}
+                                >
+                                  <a
+                                    className="page-link"
+                                    onClick={paginationPrev}
+                                  >
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="24"
+                                      height="24"
+                                      viewBox="0 0 24 24"
+                                    >
+                                      <polyline points="15 18 9 12 15 6"></polyline>
+                                    </svg>
+                                    Prev
+                                  </a>
+                                </li>
+
+                                {/* Display pages with ellipses */}
+                                {Array.from({ length: totalPages }).map(
+                                  (_, index) => {
+                                    const pageNumber = index + 1;
+                                    const isCurrentPage =
+                                      pagination.currentPage === pageNumber;
+
+                                    // Display first and last pages
+                                    if (
+                                      pageNumber === 1 ||
+                                      pageNumber === totalPages ||
+                                      (pageNumber >=
+                                        pagination.currentPage - 1 &&
+                                        pageNumber <=
+                                          pagination.currentPage + 1)
+                                    ) {
+                                      return (
+                                        <li
+                                          key={pageNumber}
+                                          className={`page-item ${
+                                            isCurrentPage ? "active" : ""
+                                          }`}
+                                          onClick={() =>
+                                            paginationPage(pageNumber)
+                                          }
+                                        >
+                                          <a className="page-link">
+                                            {pageNumber}
+                                          </a>
+                                        </li>
+                                      );
+                                    }
+
+                                    // Display ellipses
+                                    if (
+                                      index === 1 ||
+                                      index === totalPages - 2
+                                    ) {
+                                      return (
+                                        <li
+                                          key={pageNumber}
+                                          className="page-item disabled"
+                                        >
+                                          <a className="page-link">...</a>
+                                        </li>
+                                      );
+                                    }
+
+                                    return null;
+                                  }
+                                )}
+
+                                {/* Next Page Button */}
+                                <li
+                                  className={`page-item ${
+                                    pagination.currentPage === totalPages
+                                      ? "disabled"
+                                      : ""
+                                  }`}
+                                  style={{
+                                    display:
+                                      pagination.currentPage === totalPages
+                                        ? "none"
+                                        : "block",
+                                  }}
+                                >
+                                  <a
+                                    className="page-link"
+                                    onClick={paginationNext}
+                                  >
+                                    Next
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="24"
+                                      height="24"
+                                      viewBox="0 0 24 24"
+                                    >
+                                      <polyline points="9 18 15 12 9 6"></polyline>
+                                    </svg>
+                                  </a>
+                                </li>
+                              </ul>
+                            </nav>
                           </div>
-                        </>
-                      );
-                    })
+                        )}
+                      </div>
+                    </>
                   ) : (
                     <>
                       <div
@@ -206,103 +329,6 @@ const CategoriesItems = () => {
                     </>
                   )}
                 </>
-              )}
-            </div>
-            <div className="pt-5">
-              {totalPages > 1 && (
-                <div className="paginationArea">
-                  <nav aria-label="navigation">
-                    <ul className="pagination">
-                      {/* Previous Page Button */}
-                      <li
-                        className={`page-item ${
-                          pagination.currentPage === 1 ? "disabled" : ""
-                        }`}
-                        style={{
-                          display:
-                            pagination.currentPage === 1 ? "none" : "block",
-                        }}
-                      >
-                        <a className="page-link" onClick={paginationPrev}>
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                          >
-                            <polyline points="15 18 9 12 15 6"></polyline>
-                          </svg>
-                          Prev
-                        </a>
-                      </li>
-
-                      {/* Display pages with ellipses */}
-                      {Array.from({ length: totalPages }).map((_, index) => {
-                        const pageNumber = index + 1;
-                        const isCurrentPage =
-                          pagination.currentPage === pageNumber;
-
-                        // Display first and last pages
-                        if (
-                          pageNumber === 1 ||
-                          pageNumber === totalPages ||
-                          (pageNumber >= pagination.currentPage - 1 &&
-                            pageNumber <= pagination.currentPage + 1)
-                        ) {
-                          return (
-                            <li
-                              key={pageNumber}
-                              className={`page-item ${
-                                isCurrentPage ? "active" : ""
-                              }`}
-                              onClick={() => paginationPage(pageNumber)}
-                            >
-                              <a className="page-link">{pageNumber}</a>
-                            </li>
-                          );
-                        }
-
-                        // Display ellipses
-                        if (index === 1 || index === totalPages - 2) {
-                          return (
-                            <li key={pageNumber} className="page-item disabled">
-                              <a className="page-link">...</a>
-                            </li>
-                          );
-                        }
-
-                        return null;
-                      })}
-
-                      {/* Next Page Button */}
-                      <li
-                        className={`page-item ${
-                          pagination.currentPage === totalPages
-                            ? "disabled"
-                            : ""
-                        }`}
-                        style={{
-                          display:
-                            pagination.currentPage === totalPages
-                              ? "none"
-                              : "block",
-                        }}
-                      >
-                        <a className="page-link" onClick={paginationNext}>
-                          Next
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                          >
-                            <polyline points="9 18 15 12 9 6"></polyline>
-                          </svg>
-                        </a>
-                      </li>
-                    </ul>
-                  </nav>
-                </div>
               )}
             </div>
           </div>

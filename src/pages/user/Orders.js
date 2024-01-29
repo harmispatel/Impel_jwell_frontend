@@ -337,17 +337,17 @@ const Orders = () => {
                               </thead>
                               <tbody>
                                 <tr>
-                                  <td>
+                                  <th>
                                     <strong>Metal Price :</strong>
-                                  </td>
+                                  </th>
                                   <td>
                                     ₹{Items?.sub_total?.toLocaleString("en-US")}
                                   </td>
                                 </tr>
                                 <tr>
-                                  <td>
+                                  <th>
                                     <strong>Charges :</strong>
-                                  </td>
+                                  </th>
                                   <td>
                                     ₹{Items?.charges?.toLocaleString("en-US")}
                                   </td>
@@ -356,7 +356,7 @@ const Orders = () => {
                                   Items?.dealer_discount_type &&
                                   Items?.dealer_discount_value && (
                                     <tr>
-                                      <td>
+                                      <th>
                                         <strong className="text-success">
                                           Dealer Discount <br />(
                                           {Items?.dealer_code}) &nbsp;
@@ -373,7 +373,7 @@ const Orders = () => {
                                           </span>
                                         </strong>
                                         &nbsp;:
-                                      </td>
+                                      </th>
                                       <td className="text-success">
                                         <p className="m-0">
                                           {Items?.dealer_discount_type ===
@@ -391,9 +391,9 @@ const Orders = () => {
 
                                 <tr>
                                   <th>Total Amount (Approx) :</th>
-                                  <th>
+                                  <td className="font-weight-bold">
                                     ₹{Items?.total?.toLocaleString("en-US")}
-                                  </th>
+                                  </td>
                                 </tr>
                               </tbody>
                             </table>
