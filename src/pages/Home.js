@@ -367,7 +367,6 @@ const Home = () => {
                           to={`/shopdetails/${data.id}`}
                           className="text-decoration-none"
                           style={{ color: "#000" }}
-                          target="_blank"
                         >
                           <div className="profile-pic">
                             <div className="profile_img">
@@ -519,7 +518,6 @@ const Home = () => {
                           to={`/shopdetails/${data.id}`}
                           className="text-decoration-none"
                           style={{ color: "#000" }}
-                          target="_blank"
                         >
                           <div className="profile-pic">
                             <img src={data.image} alt="" />

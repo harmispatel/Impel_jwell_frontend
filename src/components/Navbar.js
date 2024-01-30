@@ -6,6 +6,7 @@ import { BsHandbag, BsHeart } from "react-icons/bs";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { FaCartShopping } from "react-icons/fa6";
 import { IoLogOut } from "react-icons/io5";
+import { AiFillGold } from "react-icons/ai";
 
 import { Tooltip as ReactTooltip } from "react-tooltip";
 
@@ -52,6 +53,7 @@ const Navbar = () => {
   const [isMenuActive, setMenuActive] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [isDropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
   const tagRef = useRef(null);
 
@@ -178,6 +180,7 @@ const Navbar = () => {
       localStorage.removeItem("user_id");
       localStorage.removeItem("total_quantity");
       localStorage.removeItem("savedDiscount");
+      localStorage.removeItem("message");
       localStorage.removeItem("isChecked");
       setIsLoggedOut(true);
       navigate("/login");
@@ -250,6 +253,14 @@ const Navbar = () => {
     setShowDropdown(false);
   };
 
+  const toggleDropdown1 = (e) => {
+    setDropdownOpen(!isDropdownOpen);
+  };
+
+  const closeDropdown = () => {
+    setDropdownOpen(false);
+  };
+
   return (
     <header className={colorChange ? "header sticky_header" : "header"}>
       <nav className="navbar navbar-expand-lg bg-body-tertiary">
@@ -290,15 +301,45 @@ const Navbar = () => {
 
                 <li className="nav-item">
                   <Link
-                    className={
-                      currentRoute === "#" ? "nav-link active" : "nav-link"
-                    }
+                    className={`nav-link ${
+                      currentRoute === "#" ? "active " : ""
+                    }dropdown-toggle`}
                     aria-current="page"
                     to="#"
-                    onClick={handleNavClick}
+                    id="defaultDropdown"
+                    data-bs-toggle="dropdown"
+                    aria-expanded={isDropdownOpen ? "true" : "false"}
+                    aria-haspopup="true"
+                    onClick={toggleDropdown1}
                   >
                     Ready To Dispatch
                   </Link>
+
+                  <ul
+                    className={`dropdown-menu ${isDropdownOpen ? "show" : ""}`}
+                    aria-labelledby="defaultDropdown"
+                  >
+                    <li>
+                      <Link
+                        to="/shop"
+                        className="dropdown-item"
+                        onClick={closeDropdown}
+                      >
+                        <AiFillGold className="me-2" />
+                        GOLD
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to="/shop"
+                        className="dropdown-item"
+                        onClick={closeDropdown}
+                      >
+                        <AiFillGold className="me-2" />
+                        SILVER
+                      </Link>
+                    </li>
+                  </ul>
                 </li>
 
                 <li className="nav-item">
@@ -314,8 +355,8 @@ const Navbar = () => {
                       cursor: "pointer",
                     }}
                   >
-                    Tags
-                    <IoMdArrowDropdown />
+                    Make by order
+                    <IoMdArrowDropdown className="mb-1" />
                   </span>
                   {showDropdown && (
                     <div ref={tagRef} className="dropdown-content">

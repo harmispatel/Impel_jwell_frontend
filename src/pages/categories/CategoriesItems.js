@@ -151,7 +151,6 @@ const CategoriesItems = () => {
                                 to={`/shopdetails/${data.id}`}
                                 className="text-decoration-none"
                                 style={{ color: "#000" }}
-                                target="_blank"
                               >
                                 <div className="category_data py-2">
                                   <img

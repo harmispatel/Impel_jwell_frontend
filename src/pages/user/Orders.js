@@ -235,10 +235,9 @@ const Orders = () => {
                                   <th>Quantity</th>
                                   <th>Gold Type</th>
                                   <th>Gold Color</th>
-
                                   <th>Net Weight</th>
-                                  <th>Metal Price</th>
-                                  <th>Total</th>
+                                  {/* <th>Metal Price</th>
+                                  <th>Total</th> */}
                                 </tr>
                               </thead>
                               <tbody className="text-center">
@@ -249,7 +248,6 @@ const Orders = () => {
                                         <Link
                                           to={`/shopdetails/${datas?.design_id}`}
                                           className="nav-link"
-                                          target="_blank"
                                         >
                                           <img
                                             src={datas?.design_image}
@@ -262,7 +260,6 @@ const Orders = () => {
                                         <Link
                                           to={`/shopdetails/${datas?.design_id}`}
                                           className="nav-link"
-                                          target="_blank"
                                         >
                                           <span>{datas?.design_name}</span>
                                         </Link>
@@ -284,7 +281,7 @@ const Orders = () => {
                                       <td>
                                         <span> {datas?.net_weight} g.</span>
                                       </td>
-                                      <td>
+                                      {/* <td>
                                         <span>
                                           ₹
                                           {datas?.item_sub_total?.toLocaleString(
@@ -301,7 +298,7 @@ const Orders = () => {
                                             )}
                                           </strong>
                                         </span>
-                                      </td>
+                                      </td> */}
                                     </tr>
                                   </>
                                 ))}
@@ -315,7 +312,7 @@ const Orders = () => {
                 </div>
 
                 {/* Order Payments */}
-                <div className="order_payments">
+                {/* <div className="order_payments">
                   <div className="row justify-content-end">
                     <div className="col-lg-4 col-md-4">
                       <div
@@ -402,7 +399,7 @@ const Orders = () => {
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
             )}
           </>

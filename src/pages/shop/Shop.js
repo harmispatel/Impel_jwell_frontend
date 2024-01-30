@@ -31,7 +31,7 @@ const Shop = () => {
 
   const [searchInput, setSearchInput] = useState(null);
 
-  const [selectedOption, setSelectedOption] = useState([]);
+  const [selectedOption, setSelectedOption] = useState(null);
 
   const [categoryData, setCategoryData] = useState([]);
   const [category, setCategory] = useState(null);
@@ -92,19 +92,19 @@ const Shop = () => {
   };
 
   // sort by dropdown functions
-  const options = [
+  const [options] = useState([
     { value: "new_added", label: "New Added" },
-    { value: "low_to_high", label: "Price : low to high" },
-    { value: "high_to_low", label: "Price : high to low" },
+    { value: "low_to_high", label: "Price: low to high" },
+    { value: "high_to_low", label: "Price: high to low" },
     { value: "highest_selling", label: "Top Seller" },
-  ];
+  ]);
 
   const handleSelectChange = (selectedSort) => {
     setIsLoading(true);
     const queryParams = new URLSearchParams(location.search);
 
     if (selectedSort) {
-      queryParams.set("sort_by", selectedSort.value.toUpperCase());
+      queryParams.set("sort_by", selectedSort.value);
     } else {
       queryParams.delete("sort_by");
     }
@@ -142,9 +142,9 @@ const Shop = () => {
 
     setTag(null);
     setSelectedTag(null);
-    navigate(`/shop${categoryId ? `?category_id=${categoryId.value}` : ""}`);
 
     setPriceRange("");
+    navigate(`/shop${categoryId ? `?category_id=${categoryId.value}` : ""}`);
 
     setCategory(categoryId ? categoryId.value : null);
     setSelectedCategory(categoryId);
@@ -197,38 +197,79 @@ const Shop = () => {
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
-    const searchId = searchParams.get("search_query");
     const sortbyId = searchParams.get("sort_by");
     const categoryId = searchParams.get("category_id");
     const genderId = searchParams.get("gender_id");
     const tagIds = searchParams.getAll("tag_id");
+    const lowPrice = searchParams.getAll("min_price");
+    const highPrice = searchParams.getAll("max_price");
 
-    if (categoryId) {
-      const Category_ids = categoryData?.find(
-        (item) => item.id === Number(categoryId)
-      );
-
-      if (Category_ids) {
-        setCategory(Number(categoryId));
-        setSelectedCategory({
-          value: Category_ids.id,
-          label: Category_ids.name,
-        });
-      }
+    if (lowPrice !== null || highPrice !== null) {
+      const selectedPrice = {
+        minprice:
+          lowPrice !== null ? parseFloat(lowPrice) : FilterPriceRange.minprice,
+        maxprice:
+          highPrice !== null
+            ? parseFloat(highPrice)
+            : FilterPriceRange.maxprice,
+      };
+      setPriceRange(selectedPrice);
+    } else {
+      setIsLoading(true);
+      setPriceRange({ minprice: null, maxprice: null });
     }
 
-    if (genderId) {
-      const Gender_ids = genderData?.find(
-        (item) => item.id === Number(genderId)
-      );
+    if (sortbyId && sortbyId.length > 0) {
+      if (sortbyId) {
+        const selectedSort = options.find((item) => item.value === sortbyId);
 
-      if (Gender_ids) {
-        setGender(Number(genderId));
-        setSelectedGender({
-          value: Gender_ids.id,
-          label: Gender_ids.name,
-        });
+        if (selectedSort) {
+          setSelectedOption(selectedSort);
+        }
       }
+    } else {
+      setIsLoading(true);
+      setSelectedOption(null);
+    }
+
+    if (categoryId && categoryId.length > 0) {
+      if (categoryId) {
+        const Category_ids = categoryData?.find(
+          (item) => item.id === Number(categoryId)
+        );
+
+        if (Category_ids) {
+          setCategory(Number(categoryId));
+          setSelectedCategory({
+            value: Category_ids.id,
+            label: Category_ids.name,
+          });
+        }
+      }
+    } else {
+      setIsLoading(true);
+      setCategory(null);
+      setSelectedCategory("");
+    }
+
+    if (genderId && genderId.length > 0) {
+      if (genderId) {
+        const Gender_ids = genderData?.find(
+          (item) => item.id === Number(genderId)
+        );
+
+        if (Gender_ids) {
+          setGender(Number(genderId));
+          setSelectedGender({
+            value: Gender_ids.id,
+            label: Gender_ids.name,
+          });
+        }
+      }
+    } else {
+      setIsLoading(true);
+      setGender(null);
+      setSelectedGender("");
     }
 
     if (tagIds && tagIds.length > 0) {
@@ -261,7 +302,7 @@ const Shop = () => {
       setTag(null);
       setSelectedTag("");
     }
-  }, [location.search, filterTag?.length]);
+  }, [location.search, filterTag?.length, tag]);
 
   const FilterData = (offset = 0) => {
     ShopServices.allfilterdesigns({
@@ -483,8 +524,19 @@ const Shop = () => {
   };
 
   useEffect(() => {
-    FilterData(0);
-    resetPagination();
+    if (
+      category ||
+      tag ||
+      gender ||
+      searchInput ||
+      PriceRange ||
+      selectedOption
+    ) {
+      FilterData(0);
+      resetPagination();
+    } else {
+      FilterData(0);
+    }
   }, [
     category,
     tag,
@@ -635,7 +687,6 @@ const Shop = () => {
                                 <Link
                                   to={`/shopdetails/${data.id}`}
                                   className="product_data"
-                                  target="_blank"
                                 >
                                   {data.image ? (
                                     <img

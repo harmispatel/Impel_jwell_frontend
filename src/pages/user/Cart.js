@@ -40,6 +40,7 @@ const Cart = () => {
   const [shipping_city, setShipping_city] = useState();
   const [isChecked, setIsChecked] = useState(false);
   const [valid, setValid] = useState("");
+  const [message, setMessage] = useState(false);
   const [userData, setUserData] = useState({
     name: "",
     email: "",
@@ -438,6 +439,7 @@ const Cart = () => {
 
     setError(validationErrors);
   }, [isChecked, userData]);
+
   useEffect(() => {
     setIsChecked(profileData?.address_same_as_company === 1);
   }, [profileData?.address_same_as_company]);
@@ -468,6 +470,13 @@ const Cart = () => {
   }, []);
 
   useEffect(() => {
+    const storedMessage = localStorage.getItem("message");
+    if (storedMessage) {
+      setMessage(JSON.parse(storedMessage));
+    }
+  }, []);
+
+  useEffect(() => {
     UserCartItems();
     getProfile();
   }, []);
@@ -483,8 +492,9 @@ const Cart = () => {
           localStorage.setItem("savedDiscount", JSON.stringify(res.data));
           setShow(true);
           setCode(res.data);
+          setMessage(true);
+          localStorage.setItem("message", JSON.stringify(true));
           setIsFormEmpty("");
-          toast.success("dealer code applied successfully");
         }
       })
       .catch((err) => {
@@ -552,6 +562,7 @@ const Cart = () => {
             if (res.status === true) {
               localStorage.removeItem("savedDiscount");
               localStorage.removeItem("cartItems");
+              localStorage.removeItem("message");
               toast.success(res.message);
               setSpinner(true);
               setTimeout(() => {
@@ -582,6 +593,7 @@ const Cart = () => {
             if (res.status === true) {
               localStorage.removeItem("savedDiscount");
               localStorage.removeItem("cartItems");
+              localStorage.removeItem("message");
               toast.success(res.message);
               setSpinner(true);
               setTimeout(() => {
@@ -673,12 +685,12 @@ const Cart = () => {
                                         </span>
                                       </div>
 
-                                      <div className="mt-md-2">
+                                      {/* <div className="mt-md-2">
                                         <text className="h6">
                                           ₹{price?.toLocaleString("en-US")}
                                         </text>
                                         <br />
-                                      </div>
+                                      </div> */}
                                     </div>
 
                                     <div className="col-md-5">
@@ -765,7 +777,7 @@ const Cart = () => {
                       )}
                       <div className="card shadow-0 border">
                         <div className="card-body">
-                          <div className="d-flex justify-content-between">
+                          {/* <div className="d-flex justify-content-between">
                             <p className="mb-2">Metal price :</p>
                             <p className="mb-2 fw-bold">
                               ₹{SubTotal()?.toLocaleString("en-US")}
@@ -824,8 +836,25 @@ const Cart = () => {
                                 </>
                               )}
                             </p>
-                          </div>
-                          <div className="mt-3">
+                          </div> */}
+
+                          {message && (
+                            <div className="message-box">
+                              <span>
+                                You are now eligible for a base discount&nbsp;
+                                <b>
+                                  {code.discount_type === "percentage" ? (
+                                    <>(-{code.discount_value}%)</>
+                                  ) : (
+                                    <>(-{code.discount_value}₹)</>
+                                  )}
+                                </b>
+                                &nbsp;of on making charges.
+                              </span>
+                            </div>
+                          )}
+
+                          <div className="pt-2">
                             <button
                               className="btn btn-success w-100 shadow-0 mb-2"
                               disabled={spinner}
