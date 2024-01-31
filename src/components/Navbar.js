@@ -249,12 +249,12 @@ const Navbar = () => {
     setShowDropdown(!showDropdown);
   };
 
-  const handleItemClick = () => {
-    setShowDropdown(false);
+  const toggleDropdown1 = () => {
+    setDropdownOpen(!isDropdownOpen);
   };
 
-  const toggleDropdown1 = (e) => {
-    setDropdownOpen(!isDropdownOpen);
+  const handleItemClick = () => {
+    setShowDropdown(false);
   };
 
   const closeDropdown = () => {
@@ -299,18 +299,15 @@ const Navbar = () => {
                   </Link>
                 </li>
 
-                <li className="nav-item">
+                <li className="nav-item position-relative">
                   <Link
-                    className={`nav-link ${
-                      currentRoute === "#" ? "active " : ""
-                    }dropdown-toggle`}
+                    onClick={toggleDropdown1}
+                    className="nav-link dropdown-toggle"
                     aria-current="page"
-                    to="#"
                     id="defaultDropdown"
                     data-bs-toggle="dropdown"
                     aria-expanded={isDropdownOpen ? "true" : "false"}
                     aria-haspopup="true"
-                    onClick={toggleDropdown1}
                   >
                     Ready To Dispatch
                   </Link>

@@ -12,6 +12,7 @@ import emptycart from "../../assets/images/empty-cart.png";
 import { Helmet } from "react-helmet-async";
 import { CartSystem } from "../../context/CartContext";
 import { ProfileSystem } from "../../context/ProfileContext";
+import loadinggif from "../../assets/video/Impel-Logo-Animation-GIF.gif";
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -516,6 +517,7 @@ const Cart = () => {
           toast.success("remove design from cart successfully");
           if (res?.data?.total_quantity == 0) {
             localStorage.removeItem("savedDiscount");
+            localStorage.removeItem("message");
           }
         }
       })
@@ -621,14 +623,8 @@ const Cart = () => {
           <div className="row">
             {isLoading ? (
               <>
-                <div className="h-100 d-flex justify-content-center">
-                  <ReactLoading
-                    type={"spin"}
-                    color={"#053961"}
-                    height={"20%"}
-                    width={"10%"}
-                    className="loader"
-                  />
+                <div className="h-100 d-flex justify-content-center loading-container">
+                  <img src={loadinggif} alt="Animated GIF" className="w-25" />
                 </div>
               </>
             ) : (
@@ -849,7 +845,7 @@ const Cart = () => {
                                     <>(-{code.discount_value}₹)</>
                                   )}
                                 </b>
-                                &nbsp;of on making charges.
+                                &nbsp;off on making charges.
                               </span>
                             </div>
                           )}
@@ -885,42 +881,39 @@ const Cart = () => {
                   </>
                 ) : (
                   <>
-                    <div className="container">
-                      <div className="row justify-content-center">
-                        <div className="col-lg-8">
-                          <div className="card border shadow-sm p-4">
-                            <div className="text-center mb-4">
-                              <h2 className="card-title mb-0">
-                                Your Shopping Cart
-                              </h2>
-                            </div>
+                    <div className="row justify-content-center">
+                      <div className="col-lg-8">
+                        <div className="card border shadow-sm p-4">
+                          <div className="text-center mb-4">
+                            <h2 className="card-title mb-0">
+                              Your Shopping Cart
+                            </h2>
+                          </div>
 
-                            <div className="text-center my-4">
-                              <img
-                                src={emptycart}
-                                alt="Empty Cart Illustration"
-                                className="img-fluid mb-3"
-                                style={{ maxWidth: "200px" }}
-                              />
-                              <h5 className="text-muted mb-3">
-                                Oops! Your cart is empty.
-                              </h5>
-                              <p className="text-muted">
-                                Explore our collection and add items to your
-                                cart.
-                              </p>
-                            </div>
+                          <div className="text-center my-4">
+                            <img
+                              src={emptycart}
+                              alt="Empty Cart Illustration"
+                              className="img-fluid mb-3"
+                              style={{ maxWidth: "200px" }}
+                            />
+                            <h5 className="text-muted mb-3">
+                              Oops! Your cart is empty.
+                            </h5>
+                            <p className="text-muted">
+                              Explore our collection and add items to your cart.
+                            </p>
+                          </div>
 
-                            <div className="text-center">
-                              <Link
-                                to="/shop"
-                                className="view_all_btn px-4 py-2"
-                                style={{ borderRadius: "8px" }}
-                              >
-                                <FaLongArrowAltLeft className="mr-2" />{" "}
-                                &nbsp;Back to Shop
-                              </Link>
-                            </div>
+                          <div className="text-center">
+                            <Link
+                              to="/shop"
+                              className="view_all_btn px-4 py-2"
+                              style={{ borderRadius: "8px" }}
+                            >
+                              <FaLongArrowAltLeft className="mr-2" /> &nbsp;Back
+                              to Shop
+                            </Link>
                           </div>
                         </div>
                       </div>

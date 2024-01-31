@@ -1813,6 +1813,20 @@ input[type="file"] {
   color: #ddd;
 }
 
+.order_details td {
+  text-align: end;
+}
+
+.order_details .header-title {
+  color: #dc9662;
+  font-weight: 600;
+}
+
+.order_details span {
+  font-weight: 900;
+  font-size: 14px;
+}
+
 /* Order Page Styles End */
 
 
@@ -1827,7 +1841,31 @@ input[type="file"] {
     align-items: flex-start;
   }
 
-  .dropdown-content {
+  .collapse ul .dropdown-menu {
+    position: absolute !important;
+    top: 10px !important;
+    left: 100% !important;
+    border-radius: 0 !important;
+  }
+
+  .collapse ul .dropdown-menu:before {
+    content: '';
+    position: absolute;
+    top: 5px !important;
+    left: -5px !important;
+    margin-left: -10px;
+    border-width: 0 10px 10px 10px;
+    border-style: solid;
+    border-color: transparent transparent #f8f9fa transparent;
+    z-index: -1;
+    transform: rotate(270deg);
+    width: auto;
+    height: auto;
+    background: none;
+    box-shadow: none;
+  }
+
+  .nav-item .dropdown-content {
     background: #fff;
     border-radius: 5px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, .2);
@@ -1849,6 +1887,32 @@ input[type="file"] {
     box-shadow: 0 10px 20px rgba(0, 0, 0, .2);
     transform: rotate(45deg) translate(-50%, 0);
     z-index: -1;
+  }
+
+  .nav-item .dropdown-content {
+    position: absolute;
+    top: 58% !important;
+    left: 75% !important;
+    background-color: #f9f9f9;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 3;
+    padding: 15px;
+    border-radius: 10px;
+    animation: tag 0.3s ease-out;
+    width: 100%;
+  }
+
+
+  @keyframes tag {
+    0% {
+      transform: translateY(-20px);
+      opacity: 0;
+    }
+
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
   }
 
   .go-top-button {
@@ -2127,15 +2191,28 @@ input[type="file"] {
     position: absolute;
     top: 100px;
     left: -100%;
-    width: 200px;
+    width: 180px;
     background-color: #fff;
     opacity: 0;
-    transition: 0.5s all ease-in-out;
     padding: 0;
     top: 75px;
     left: 0;
     opacity: 1;
     z-index: 9;
+    animation: navbaropen 0.3s ease-out;
+    height: auto !important;
+  }
+
+  @keyframes navbaropen {
+    0% {
+      transform: translateY(-20px);
+      opacity: 0;
+    }
+
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
   }
 
   .more_categories,
@@ -2376,11 +2453,11 @@ input[type="file"] {
 
 .login_detail h2 {
   font-size: 30px;
-  margin-bottom: 20px;
   color: #caa78d;
   text-transform: uppercase;
   text-align: center;
   font-weight: 700;
+  margin-bottom: 20px;
 }
 
 .form__input {
@@ -2460,17 +2537,31 @@ input[type="file"] {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 20px;
+  margin-top: 10px;
+
 }
 
 .message-text {
-  padding: 10px 20px;
+  padding: 10px 12px;
   background-color: #e6f7ff;
   border-radius: 5px;
   color: #333;
   font-weight: 500;
   border: 1px solid #b3d7ff;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  animation: message 0.5s ease-out;
+}
+
+@keyframes message {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Popup model for not any user login styles*/
@@ -2578,7 +2669,7 @@ input[type="file"] {
   display: inline-block;
 }
 
-.dropdown-content {
+.nav-item .dropdown-content {
   position: absolute;
   top: 100%;
   left: 0;
@@ -2587,6 +2678,21 @@ input[type="file"] {
   z-index: 3;
   padding: 15px;
   border-radius: 10px;
+  animation: tag 0.3s ease-out;
+  width: 100%;
+}
+
+
+@keyframes tag {
+  0% {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .address-checkbox-btn input[type=checkbox]+label {
@@ -2652,15 +2758,53 @@ input[type="file"] {
 }
 
 .dropdown-menu {
+  position: absolute;
   padding: 0 !important;
-  border: 1px solid #fff !important;
+  border: 1px solid #f8f9fa !important;
   border-radius: 10px !important;
+  animation: slideInFromTop 0.3s ease-out;
+  background-color: #f8f9fa !important;
+  top: 100% !important;
+  left: 0 !important;
+}
+
+@keyframes slideInFromTop {
+  0% {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.dropdown-menu::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  margin-left: -10px;
+  border-width: 0 10px 10px 10px;
+  border-style: solid;
+  border-color: transparent transparent #f8f9fa transparent;
+  z-index: -1;
 }
 
 
-.dropdown-menu[data-bs-popper] {
-  top: 69% !important;
-  left: 4% !important;
+.dropdown-menu .dropdown-item {
+  font-weight: 600 !important;
+}
+
+.dropdown-menu .dropdown-item:hover {
+  background: #eee;
+}
+
+.dropdown-item.active,
+.dropdown-item:active {
+  background-color: #f8f9fa !important;
+  color: #000 !important;
 }
 
 .message-box {
@@ -2681,4 +2825,33 @@ input[type="file"] {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* MyOrders.css */
+
+.orderlist_pagination .custom-pagination {
+  border: none;
+  margin: 0;
+}
+
+.orderlist_pagination .custom-pagination-item {
+  border: 1px solid #ced4da;
+  margin: 0 3px;
+}
+
+.orderlist_pagination .custom-pagination-item:hover {
+  background-color: #007bff;
+  border-color: #007bff;
+  color: #fff;
+}
+
+.orderlist_pagination .active {
+  background-color: #007bff;
+  border-color: #b1b1b1;
+  color: #fff;
+}
+
+.orderlist_pagination .disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
 }

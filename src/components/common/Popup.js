@@ -48,7 +48,7 @@ const Popup = () => {
         closeTimeoutMS={500}
       >
         <div className="position-relative">
-          <img src={images} alt="image" />
+          <img src={images} alt="image" className="w-100" />
           <Link to="login" className="model_banner_button">
             Login
           </Link>

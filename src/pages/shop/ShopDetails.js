@@ -356,7 +356,7 @@ const ShopDetails = () => {
                       <div className="col-md-6">
                         <div>
                           <h3>{product?.name}</h3>
-                          <h5>
+                          <h5 className="mb-3">
                             Design code : <strong>{product?.code}</strong>
                           </h5>
                           {product?.description && (

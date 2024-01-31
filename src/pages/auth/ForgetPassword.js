@@ -85,11 +85,11 @@ const ForgetPassword = () => {
               <div className="col-md-5">
                 <div className="login_detail">
                   <h2>Forget Password</h2>
-                  <div className={`message-container ${message ? "my-3" : ""}`}>
+                  <div className={`message-container ${message ? "my-1" : ""}`}>
                     {message && <span className="message-text">{message}</span>}
                   </div>
                   <div
-                    className={`message-container ${errmessage ? "my-3" : ""}`}
+                    className={`message-container ${errmessage ? "my-2" : ""}`}
                   >
                     {errmessage && (
                       <span className="message-text text-danger">

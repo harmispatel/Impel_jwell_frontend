@@ -302,7 +302,7 @@ const Shop = () => {
       setTag(null);
       setSelectedTag("");
     }
-  }, [location.search, filterTag?.length, tag]);
+  }, [location.search, filterTag?.length]);
 
   const FilterData = (offset = 0) => {
     ShopServices.allfilterdesigns({
@@ -489,9 +489,11 @@ const Shop = () => {
     setIsLoading(true);
   };
 
-  const paginationPrev = () => {
+  const paginationPrev = (page) => {
+    console.log(page);
     if (pagination.currentPage > 1) {
       const prevPage = pagination.currentPage - 1;
+      console.log(prevPage);
       const newOffset = (prevPage - 1) * pagination.dataShowLength;
       FilterData(newOffset);
       setPagination({ ...pagination, currentPage: prevPage });
@@ -524,28 +526,9 @@ const Shop = () => {
   };
 
   useEffect(() => {
-    if (
-      category ||
-      tag ||
-      gender ||
-      searchInput ||
-      PriceRange ||
-      selectedOption
-    ) {
-      FilterData(0);
-      resetPagination();
-    } else {
-      FilterData(0);
-    }
-  }, [
-    category,
-    tag,
-    gender,
-    searchInput,
-    PriceRange,
-    selectedOption,
-    filterTag?.length,
-  ]);
+    resetPagination();
+    FilterData(0);
+  }, [category, tag, gender, searchInput, PriceRange, selectedOption]);
 
   return (
     <>
