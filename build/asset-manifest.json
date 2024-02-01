@@ -1,9 +1,10 @@
 {
   "files": {
-    "main.css": "/static/css/main.d77cbbe1.css",
-    "main.js": "/static/js/main.a6996661.js",
+    "main.css": "/static/css/main.09067db4.css",
+    "main.js": "/static/js/main.3ed63bcf.js",
     "static/js/787.c4e7f8f9.chunk.js": "/static/js/787.c4e7f8f9.chunk.js",
     "static/media/intro.gif": "/static/media/intro.4d76be8e43539460cf9f.gif",
+    "static/media/Impel-Logo-Animation-GIF.gif": "/static/media/Impel-Logo-Animation-GIF.828060a2d8c484c9a7b5.gif",
     "static/media/Lato-Semibold.ttf": "/static/media/Lato-Semibold.d585c7df44df3024c49b.ttf",
     "static/media/Lato-Regular.ttf": "/static/media/Lato-Regular.80c07943565d91b976e1.ttf",
     "static/media/bg-01.jpeg": "/static/media/bg-01.bf8cd203a9c6445ff403.jpeg",
@@ -12,12 +13,12 @@
     "static/media/logo.png": "/static/media/logo.4b7825a638146a1cdf28.png",
     "static/media/empty-cart.png": "/static/media/empty-cart.30d130f69377623f0ef9.png",
     "index.html": "/index.html",
-    "main.d77cbbe1.css.map": "/static/css/main.d77cbbe1.css.map",
-    "main.a6996661.js.map": "/static/js/main.a6996661.js.map",
+    "main.09067db4.css.map": "/static/css/main.09067db4.css.map",
+    "main.3ed63bcf.js.map": "/static/js/main.3ed63bcf.js.map",
     "787.c4e7f8f9.chunk.js.map": "/static/js/787.c4e7f8f9.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.d77cbbe1.css",
-    "static/js/main.a6996661.js"
+    "static/css/main.09067db4.css",
+    "static/js/main.3ed63bcf.js"
   ]
 }

@@ -1,10 +1,9 @@
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { BsHeart, BsSearch } from "react-icons/bs";
 import { FcLike } from "react-icons/fc";
 import { FaRegStar, FaStar } from "react-icons/fa";
 import toast from "react-hot-toast";
-import { Tooltip as ReactTooltip } from "react-tooltip";
 import ReactLoading from "react-loading";
 import Select from "react-select";
 import Accordion from "react-bootstrap/Accordion";
@@ -16,6 +15,7 @@ import FilterServices from "../../services/Filter";
 import DealerWishlist from "../../services/Dealer/Collection";
 import UserWishlist from "../../services/Auth";
 import { WishlistSystem } from "../../context/WishListContext";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 const Shop = () => {
   const { dispatch: wishlistDispatch } = useContext(WishlistSystem);
@@ -489,11 +489,10 @@ const Shop = () => {
     setIsLoading(true);
   };
 
-  const paginationPrev = (page) => {
-    console.log(page);
+  const paginationPrev = (e) => {
+    e.preventDefault();
     if (pagination.currentPage > 1) {
       const prevPage = pagination.currentPage - 1;
-      console.log(prevPage);
       const newOffset = (prevPage - 1) * pagination.dataShowLength;
       FilterData(newOffset);
       setPagination({ ...pagination, currentPage: prevPage });
@@ -502,7 +501,8 @@ const Shop = () => {
     }
   };
 
-  const paginationNext = () => {
+  const paginationNext = (e) => {
+    e.preventDefault();
     if (pagination.currentPage < totalPages) {
       const nextPage = pagination.currentPage + 1;
       const newOffset = (nextPage - 1) * pagination.dataShowLength;
@@ -529,6 +529,12 @@ const Shop = () => {
     resetPagination();
     FilterData(0);
   }, [category, tag, gender, searchInput, PriceRange, selectedOption]);
+
+  const wishlistTip = <Tooltip id="tooltip">wishlist</Tooltip>;
+  const selectionTip = <Tooltip id="tooltip">My Selections</Tooltip>;
+  const userTip = (
+    <Tooltip id="tooltip">Login to add wishlist products</Tooltip>
+  );
 
   return (
     <>
@@ -690,34 +696,44 @@ const Shop = () => {
                                       {userType == 1 ? (
                                         <>
                                           {email ? (
-                                            <Link
-                                              to="#"
-                                              data-tooltip-id="my-tooltip-12"
-                                              onClick={(e) => {
-                                                if (
-                                                  DealerCollection?.find(
-                                                    (item) =>
-                                                      item?.id === data?.id
-                                                  )
-                                                ) {
-                                                  removeFromSelection(e, data);
-                                                } else {
-                                                  AddToDealerSelection(e, data);
-                                                }
-                                              }}
+                                            <OverlayTrigger
+                                              placement="top"
+                                              overlay={selectionTip}
                                             >
-                                              {DealerCollection?.find(
-                                                (item) => item?.id === data?.id
-                                              ) ? (
-                                                <FaStar />
-                                              ) : (
-                                                <FaRegStar />
-                                              )}
-                                            </Link>
+                                              <Link
+                                                to="#"
+                                                onClick={(e) => {
+                                                  if (
+                                                    DealerCollection?.find(
+                                                      (item) =>
+                                                        item?.id === data?.id
+                                                    )
+                                                  ) {
+                                                    removeFromSelection(
+                                                      e,
+                                                      data
+                                                    );
+                                                  } else {
+                                                    AddToDealerSelection(
+                                                      e,
+                                                      data
+                                                    );
+                                                  }
+                                                }}
+                                              >
+                                                {DealerCollection?.find(
+                                                  (item) =>
+                                                    item?.id === data?.id
+                                                ) ? (
+                                                  <FaStar />
+                                                ) : (
+                                                  <FaRegStar />
+                                                )}
+                                              </Link>
+                                            </OverlayTrigger>
                                           ) : (
                                             <span
                                               onClick={(e) => DealerLogin(e)}
-                                              data-tooltip-id="my-tooltip-12"
                                             >
                                               <FaRegStar />
                                             </span>
@@ -726,37 +742,45 @@ const Shop = () => {
                                       ) : (
                                         <>
                                           {Phone ? (
-                                            <Link
-                                              to="#"
-                                              data-tooltip-id="my-tooltip-9"
-                                              onClick={(e) => {
-                                                if (
-                                                  UsercartItems?.find(
-                                                    (item) =>
-                                                      item.id === data.id
-                                                  )
-                                                ) {
-                                                  removeFromWishList(e, data);
-                                                } else {
-                                                  addToUserWishList(e, data);
-                                                }
-                                              }}
+                                            <OverlayTrigger
+                                              placement="top"
+                                              overlay={wishlistTip}
                                             >
-                                              {UsercartItems?.find(
-                                                (item) => item.id === data.id
-                                              ) ? (
-                                                <FcLike />
-                                              ) : (
-                                                <BsHeart />
-                                              )}
-                                            </Link>
+                                              <Link
+                                                to="#"
+                                                onClick={(e) => {
+                                                  if (
+                                                    UsercartItems?.find(
+                                                      (item) =>
+                                                        item.id === data.id
+                                                    )
+                                                  ) {
+                                                    removeFromWishList(e, data);
+                                                  } else {
+                                                    addToUserWishList(e, data);
+                                                  }
+                                                }}
+                                              >
+                                                {UsercartItems?.find(
+                                                  (item) => item.id === data.id
+                                                ) ? (
+                                                  <FcLike />
+                                                ) : (
+                                                  <BsHeart />
+                                                )}
+                                              </Link>
+                                            </OverlayTrigger>
                                           ) : (
-                                            <span
-                                              onClick={(e) => UserLogin(e)}
-                                              data-tooltip-id="my-tooltip-9"
+                                            <OverlayTrigger
+                                              placement="top"
+                                              overlay={userTip}
                                             >
-                                              <BsHeart />
-                                            </span>
+                                              <span
+                                                onClick={(e) => UserLogin(e)}
+                                              >
+                                                <BsHeart />
+                                              </span>
+                                            </OverlayTrigger>
                                           )}
                                         </>
                                       )}
@@ -802,7 +826,7 @@ const Shop = () => {
                                     <Link
                                       to="#"
                                       className="page-link"
-                                      onClick={paginationPrev}
+                                      onClick={(e) => paginationPrev(e)}
                                     >
                                       <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -889,7 +913,7 @@ const Shop = () => {
                                     <Link
                                       to="#"
                                       className="page-link"
-                                      onClick={paginationNext}
+                                      onClick={(e) => paginationNext(e)}
                                     >
                                       Next
                                       <svg
@@ -915,7 +939,7 @@ const Shop = () => {
                     )}
                   </>
                 )}
-                <ReactTooltip id="my-tooltip-7" place="top" content="cart" />
+                {/* <ReactTooltip id="my-tooltip-7" place="top" content="cart" />
                 <ReactTooltip
                   id="my-tooltip-9"
                   place="bottom"
@@ -925,7 +949,7 @@ const Shop = () => {
                   id="my-tooltip-12"
                   place="bottom"
                   content="My Selections"
-                />
+                /> */}
               </div>
             </div>
           </div>

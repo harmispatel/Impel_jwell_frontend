@@ -756,8 +756,8 @@ const Profile = () => {
                     >
                       <option value="">--city select--</option>
                       {city?.map((usercity, index) => (
-                        <option key={index} value={usercity.id}>
-                          {usercity.name}
+                        <option key={index} value={usercity?.id}>
+                          {usercity?.name}
                         </option>
                       ))}
                     </select>
@@ -852,12 +852,12 @@ const Profile = () => {
                       onChange={(e) => {
                         handleEditChange(e);
                       }}
-                      value={userData.shipping_city}
+                      value={userData?.shipping_city}
                     >
                       <option value="">--shipping City select--</option>
                       {shipping_city?.map((usercity, index) => (
-                        <option key={index} value={usercity.id}>
-                          {usercity.name}
+                        <option key={index} value={usercity?.id}>
+                          {usercity?.name}
                         </option>
                       ))}
                     </select>

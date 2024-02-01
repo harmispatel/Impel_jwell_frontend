@@ -207,7 +207,7 @@ import ReactLoading from "react-loading";
 import { FaEye } from "react-icons/fa";
 import Userservice from "../../services/Cart";
 import { Helmet } from "react-helmet-async";
-import { Pagination } from "react-bootstrap";
+import { OverlayTrigger, Pagination, Tooltip } from "react-bootstrap";
 
 const MyOrders = () => {
   const user_id = localStorage.getItem("user_id");
@@ -221,7 +221,7 @@ const MyOrders = () => {
   const paginate = (array, currentPage, itemsPerPage) => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    return array.slice(startIndex, endIndex);
+    return array?.slice(startIndex, endIndex);
   };
 
   const GetAllOrders = async () => {
@@ -245,7 +245,7 @@ const MyOrders = () => {
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
-
+  const orderDetails = <Tooltip id="tooltip">View order details</Tooltip>;
   return (
     <>
       <Helmet>
@@ -376,12 +376,17 @@ const MyOrders = () => {
                                         </td>
                                         <td>
                                           <span>
-                                            <Link
-                                              to={`/order-details/${datas?.order_id}`}
-                                              className="btn btn-primary btn-sm"
+                                            <OverlayTrigger
+                                              placement="top"
+                                              overlay={orderDetails}
                                             >
-                                              <FaEye />
-                                            </Link>
+                                              <Link
+                                                to={`/order-details/${datas?.order_id}`}
+                                                className="btn btn-primary btn-sm"
+                                              >
+                                                <FaEye />
+                                              </Link>
+                                            </OverlayTrigger>
                                           </span>
                                         </td>
                                       </tr>

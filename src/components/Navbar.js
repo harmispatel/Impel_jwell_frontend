@@ -8,8 +8,6 @@ import { FaCartShopping } from "react-icons/fa6";
 import { IoLogOut } from "react-icons/io5";
 import { AiFillGold } from "react-icons/ai";
 
-import { Tooltip as ReactTooltip } from "react-tooltip";
-
 import Logo from "../assets/images/logo.png";
 import NOimage from "../assets/images/user-demo-image.png";
 
@@ -21,6 +19,7 @@ import profileService from "../services/Auth";
 import { WishlistSystem } from "../context/WishListContext";
 import { CartSystem } from "../context/CartContext";
 import { ProfileSystem } from "../context/ProfileContext";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 const Navbar = () => {
   const { cartItems } = useContext(CartSystem);
@@ -260,6 +259,9 @@ const Navbar = () => {
   const closeDropdown = () => {
     setDropdownOpen(false);
   };
+
+  const wishlistTip = <Tooltip id="tooltip">wishlist</Tooltip>;
+  const cartTip = <Tooltip id="tooltip">cart</Tooltip>;
 
   return (
     <header className={colorChange ? "header sticky_header" : "header"}>
@@ -541,39 +543,35 @@ const Navbar = () => {
                     <ul>
                       <li>
                         {Phone && (
-                          <Link
-                            className="icon"
-                            to="/wishlist"
-                            data-tooltip-id="my-tooltip-2"
-                          >
-                            <BsHeart
-                              style={{ fontSize: "20px", color: "black" }}
-                            />
+                          <OverlayTrigger placement="top" overlay={wishlistTip}>
+                            <Link className="icon" to="/wishlist">
+                              <BsHeart
+                                style={{ fontSize: "20px", color: "black" }}
+                              />
 
-                            {wishliststate.wishlistItems > 0 && (
-                              <div className="cart_count">
-                                {wishliststate.wishlistItems}
-                              </div>
-                            )}
-                          </Link>
+                              {wishliststate.wishlistItems > 0 && (
+                                <div className="cart_count">
+                                  {wishliststate.wishlistItems}
+                                </div>
+                              )}
+                            </Link>
+                          </OverlayTrigger>
                         )}
                       </li>
                       <li>
                         {Phone && (
-                          <Link
-                            className="icon"
-                            to="/cart"
-                            data-tooltip-id="my-tooltip-3"
-                          >
-                            <BsHandbag
-                              style={{ fontSize: "20px", color: "black" }}
-                            />
-                            {cartstate.cartItems > 0 && (
-                              <div className="cart_count">
-                                {cartstate.cartItems}
-                              </div>
-                            )}
-                          </Link>
+                          <OverlayTrigger placement="top" overlay={cartTip}>
+                            <Link className="icon" to="/cart">
+                              <BsHandbag
+                                style={{ fontSize: "20px", color: "black" }}
+                              />
+                              {cartstate.cartItems > 0 && (
+                                <div className="cart_count">
+                                  {cartstate.cartItems}
+                                </div>
+                              )}
+                            </Link>
+                          </OverlayTrigger>
                         )}
                       </li>
                       <li className="login_user" id="user-profile">
@@ -668,13 +666,6 @@ const Navbar = () => {
                     </Link>
                   </li>
                 )}
-
-                <ReactTooltip
-                  id="my-tooltip-2"
-                  place="top"
-                  content="wishlist"
-                />
-                <ReactTooltip id="my-tooltip-3" place="top" content="cart" />
               </ul>
             </div>
           </div>

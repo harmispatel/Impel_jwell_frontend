@@ -1094,15 +1094,6 @@ input[type="file"] {
   transform: translate(0, -50%);
 }
 
-.tooltip {
-  background-color: #333;
-  color: #fff;
-  font-size: 14px;
-  padding: 8px 12px;
-  border-radius: 4px;
-  /* Add more styles as needed */
-}
-
 .csm_sort_btn input[type="radio"]:checked+label {
   background: #de9d6d;
   color: #fff;

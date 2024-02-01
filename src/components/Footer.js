@@ -7,7 +7,7 @@ import profileService from "../services/Home";
 
 const Footer = () => {
   const [siteSetting, setSiteSetting] = useState("");
-  const [customePages, setCustomePages] = useState([]);
+  const [customPages, setCustomPages] = useState([]);
   const currentYear = new Date().getFullYear();
   const copyrightText = siteSetting?.frontend_copyright;
   const updatedCopyrightText = copyrightText?.replace("{year}", currentYear);
@@ -27,7 +27,7 @@ const Footer = () => {
     profileService
       .CustomPages()
       .then((res) => {
-        setCustomePages(res.data);
+        setCustomPages(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -49,15 +49,16 @@ const Footer = () => {
 
           <div className="footer_list">
             <ul>
-              {customePages?.map((pages, index) => (
+              {customPages?.map((pages, index) => (
                 <li>
-                  <Link key={index} to={`page/${pages?.slug}`}>
+                  <Link key={index} to={`page/${pages?.slug}`} target="_blank">
                     <b>{pages?.name}</b>
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
+
           <div className="footer_social_list">
             <ul>
               {siteSetting?.instagram_link ? (

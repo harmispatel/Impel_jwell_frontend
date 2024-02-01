@@ -530,6 +530,7 @@ const Cart = () => {
   };
 
   const Orderplacing = () => {
+    setSpinner(true);
     const totalPrice = code.discount_value
       ? code.discount_type === "percentage"
         ? SubTotal() + SubCharge() - (SubCharge() * code.discount_value) / 100
@@ -566,7 +567,6 @@ const Cart = () => {
               localStorage.removeItem("cartItems");
               localStorage.removeItem("message");
               toast.success(res.message);
-              setSpinner(true);
               setTimeout(() => {
                 navigate(`/order-details/${res.data}`);
               }, 1000);
@@ -1074,8 +1074,8 @@ const Cart = () => {
                         >
                           <option value="">--city select--</option>
                           {city?.map((usercity, index) => (
-                            <option key={index} value={usercity.id}>
-                              {usercity.name}
+                            <option key={index} value={usercity?.id}>
+                              {usercity?.name}
                             </option>
                           ))}
                         </select>
@@ -1180,8 +1180,8 @@ const Cart = () => {
                         >
                           <option value="">--shipping City select--</option>
                           {shipping_city?.map((usercity, index) => (
-                            <option key={index} value={usercity.id}>
-                              {usercity.name}
+                            <option key={index} value={usercity?.id}>
+                              {usercity?.name}
                             </option>
                           ))}
                         </select>

@@ -65,8 +65,8 @@ const DealerLogin = () => {
         userData
       )
       .then((response) => {
-        if (response.data.success === true) {
-          setUser(response.data);
+        if (response?.data?.success === true) {
+          setUser(response?.data);
           localStorage.setItem("isLogin", true);
           localStorage.setItem("token", response.data.data.token);
           localStorage.setItem("user_id", response.data.data.user.id);
@@ -76,9 +76,9 @@ const DealerLogin = () => {
           navigate("/");
         } else {
           navigate("/Dealer_login");
-          toast.error(response.data.message);
-          setLoginData.email("");
-          setLoginData.password("");
+          toast.error(response?.data?.message);
+          setLoginData?.email("");
+          setLoginData?.password("");
           setUser("");
         }
       })

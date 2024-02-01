@@ -13,7 +13,7 @@ import "react-toastify/dist/ReactToastify.css";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import DealerLogIN from "./pages/auth/DealerLogin";
 import Profile from "./pages/user/Profile";
-import Orders from "./pages/user/Orders";
+import OrderDetails from "./pages/user/OrderDetails";
 import ScrollToTop from "./components/ScrollToTop";
 import DealerProtectedRoute from "./utils/DealerProtectedRoute";
 import WishList from "./pages/user/WishList";
@@ -109,7 +109,10 @@ function App() {
                       }
                     />
                     <Route path="my_orders" element={<MyOrders />} />
-                    <Route path="order-details/:id" element={<Orders />} />
+                    <Route
+                      path="order-details/:id"
+                      element={<OrderDetails />}
+                    />
 
                     {/* DEALER PROTECTED */}
                     <Route
