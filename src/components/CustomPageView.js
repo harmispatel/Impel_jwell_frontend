@@ -10,6 +10,7 @@ const CustomPageView = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const CustomPages = () => {
+    setIsLoading(true);
     profileService
       .CustomPages({ page_slug: paramId })
       .then((res) => {
@@ -18,13 +19,13 @@ const CustomPageView = () => {
       })
       .catch((err) => {
         console.log(err);
-        setIsLoading(false);
+        setIsLoading(true);
       });
   };
 
   useEffect(() => {
     CustomPages();
-  }, []);
+  }, [paramId]);
 
   return (
     <>

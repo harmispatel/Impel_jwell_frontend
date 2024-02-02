@@ -9,13 +9,13 @@ import Select from "react-select";
 import Accordion from "react-bootstrap/Accordion";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { Helmet } from "react-helmet-async";
 import ShopServices from "../../services/Shop";
 import FilterServices from "../../services/Filter";
 import DealerWishlist from "../../services/Dealer/Collection";
 import UserWishlist from "../../services/Auth";
 import { WishlistSystem } from "../../context/WishListContext";
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 const Shop = () => {
   const { dispatch: wishlistDispatch } = useContext(WishlistSystem);
@@ -130,7 +130,7 @@ const Shop = () => {
       .catch((error) => console.log(error));
   };
 
-  const handleSelectCategory = async (categoryId) => {
+  const handleSelectCategory = (categoryId) => {
     setIsLoading(true);
 
     setSearchInput("");
@@ -939,17 +939,6 @@ const Shop = () => {
                     )}
                   </>
                 )}
-                {/* <ReactTooltip id="my-tooltip-7" place="top" content="cart" />
-                <ReactTooltip
-                  id="my-tooltip-9"
-                  place="bottom"
-                  content="wishlist"
-                />
-                <ReactTooltip
-                  id="my-tooltip-12"
-                  place="bottom"
-                  content="My Selections"
-                /> */}
               </div>
             </div>
           </div>

@@ -11,7 +11,7 @@ import CategoriesItems from "./pages/categories/CategoriesItems";
 import Login from "./pages/auth/Login";
 import "react-toastify/dist/ReactToastify.css";
 import ProtectedRoute from "./utils/ProtectedRoute";
-import DealerLogIN from "./pages/auth/DealerLogin";
+import DealerLogin from "./pages/auth/DealerLogin";
 import Profile from "./pages/user/Profile";
 import OrderDetails from "./pages/user/OrderDetails";
 import ScrollToTop from "./components/ScrollToTop";
@@ -81,7 +81,7 @@ function App() {
                       path="categories/:id"
                       element={<CategoriesItems />}
                     />
-                    <Route path="page/:slug" element={<CustomPageView />} />
+                    <Route path="page/:id" element={<CustomPageView />} />
 
                     {/* USER PROTECTED */}
                     <Route
@@ -134,7 +134,7 @@ function App() {
 
                     {/* AUTH */}
                     <Route path="/login" element={<Login />} />
-                    <Route path="/Dealer_login" element={<DealerLogIN />} />
+                    <Route path="/Dealer_login" element={<DealerLogin />} />
                     <Route
                       path="/forget-password"
                       element={<ForgetPassword />}

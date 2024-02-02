@@ -51,7 +51,7 @@ const Footer = () => {
             <ul>
               {customPages?.map((pages, index) => (
                 <li>
-                  <Link key={index} to={`page/${pages?.slug}`} target="_blank">
+                  <Link key={index} to={`page/${pages?.slug}`}>
                     <b>{pages?.name}</b>
                   </Link>
                 </li>

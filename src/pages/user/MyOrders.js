@@ -4,6 +4,7 @@
 // import { FaEye } from "react-icons/fa";
 // import Userservice from "../../services/Cart";
 // import { Helmet } from "react-helmet-async";
+// import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 // const MyOrders = () => {
 //   const user_id = localStorage.getItem("user_id");
@@ -26,6 +27,8 @@
 //   useEffect(() => {
 //     GetAllOrders();
 //   }, []);
+
+//   const orderDetails = <Tooltip id="tooltip">View order details</Tooltip>;
 
 //   return (
 //     <>
@@ -157,12 +160,17 @@
 //                                         </td>
 //                                         <td>
 //                                           <span>
-//                                             <Link
-//                                               to={`/order-details/${datas?.order_id}`}
-//                                               className="btn btn-primary btn-sm"
+//                                             <OverlayTrigger
+//                                               placement="top"
+//                                               overlay={orderDetails}
 //                                             >
-//                                               <FaEye />
-//                                             </Link>
+//                                               <Link
+//                                                 to={`/order-details/${datas?.order_id}`}
+//                                                 className="btn btn-primary btn-sm"
+//                                               >
+//                                                 <FaEye />
+//                                               </Link>
+//                                             </OverlayTrigger>
 //                                           </span>
 //                                         </td>
 //                                       </tr>
@@ -219,6 +227,7 @@ const MyOrders = () => {
 
   // Pagination function
   const paginate = (array, currentPage, itemsPerPage) => {
+    if (!Array.isArray(array)) return [];
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     return array?.slice(startIndex, endIndex);
@@ -242,6 +251,7 @@ const MyOrders = () => {
 
   const paginatedItems = paginate(Items, currentPage, itemsPerPage);
   const totalPages = Math.ceil(Items.length / itemsPerPage);
+
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };

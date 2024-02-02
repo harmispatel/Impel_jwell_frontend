@@ -933,10 +933,7 @@ const Cart = () => {
               </Modal.Header>
 
               <Modal.Body>
-                <Form
-                  onSubmit={(e) => handleUpdateProfile(e, selectedData)}
-                  onKeyUp={(e) => FormValidation(e)}
-                >
+                <Form onSubmit={(e) => handleUpdateProfile(e, selectedData)}>
                   <div className="row">
                     <div className="col-md-6">
                       <Form.Group

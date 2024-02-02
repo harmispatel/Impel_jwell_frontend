@@ -22,6 +22,7 @@ import { ProfileSystem } from "../context/ProfileContext";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 const Navbar = () => {
+  const navbarRef = useRef(null);
   const { cartItems } = useContext(CartSystem);
   const { state: cartstate } = useContext(CartSystem);
 
@@ -31,6 +32,7 @@ const Navbar = () => {
   const { state: imagestate } = useContext(ProfileSystem);
   const { state: namestate } = useContext(ProfileSystem);
 
+  const navigate = useNavigate();
   const location = useLocation();
   const currentRoute = location.pathname;
 
@@ -40,25 +42,28 @@ const Navbar = () => {
 
   const [colorChange, setColorchange] = useState(false);
   const [isLoggedOut, setIsLoggedOut] = useState(false);
+
   const [profileData, setProfileData] = useState([]);
   const [image, setImage] = useState([]);
+  const [ProfileMenu, setProfileMenu] = useState(false);
+  const ProfileRef = useRef(null);
+
   const [userCartCounts, setUsererCartCounts] = useState();
   const [wishlistCount, setWishlistCount] = useState();
 
   const [dealerData, setDealerData] = useState([]);
+
   const [tags, setTags] = useState([]);
   const [tag, setTag] = useState([]);
-
-  const [isMenuActive, setMenuActive] = useState(false);
-  const [isCollapsed, setIsCollapsed] = useState(true);
-  const [showDropdown, setShowDropdown] = useState(false);
-  const [isDropdownOpen, setDropdownOpen] = useState(false);
-  const dropdownRef = useRef(null);
+  const [TagDropdown, setTagDropdown] = useState(false);
   const tagRef = useRef(null);
 
-  const searchParams = new URLSearchParams(location.search);
+  const [dispatch, setDispatch] = useState(false);
+  const DispatchRef = useRef(null);
 
-  const navigate = useNavigate();
+  const [isCollapsed, setIsCollapsed] = useState(true);
+
+  const searchParams = new URLSearchParams(location.search);
 
   let tagIds = searchParams.getAll("tag_id");
 
@@ -75,14 +80,19 @@ const Navbar = () => {
     }
   };
 
-  const changeNavbarColor = () => {
-    if (window.scrollY >= 80) {
-      setColorchange(true);
-    } else {
-      setColorchange(false);
-    }
+  const Tags = () => {
+    FilterServices.headerTags()
+      .then((res) => {
+        setTags(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
-  window.addEventListener("scroll", changeNavbarColor);
+
+  useEffect(() => {
+    Tags();
+  }, []);
 
   const UserCartItems = () => {
     UserService.CartList({ phone: Phone })
@@ -98,16 +108,6 @@ const Navbar = () => {
     Userservice.userWishlist({ phone: Phone })
       .then((res) => {
         setWishlistCount(res?.data?.total_quantity);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const Tags = () => {
-    FilterServices.headerTags()
-      .then((res) => {
-        setTags(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -157,10 +157,6 @@ const Navbar = () => {
     }
   }, [DealerEmail, imagestate?.image]);
 
-  useEffect(() => {
-    Tags();
-  }, []);
-
   const handleLogout = () => {
     if (Dealer) {
       localStorage.removeItem("isLogin");
@@ -186,48 +182,83 @@ const Navbar = () => {
     }
   };
 
-  const toggleMenu = () => {
-    setMenuActive(!isMenuActive);
+  const changeNavbarColor = () => {
+    if (window.scrollY >= 80) {
+      setColorchange(true);
+    } else {
+      setColorchange(false);
+    }
+  };
+  window.addEventListener("scroll", changeNavbarColor);
+
+  const TagsDropdown = () => {
+    setTagDropdown(!TagDropdown);
   };
 
-  const handleOutsideClick = (event) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-      setMenuActive(false);
+  const handleTagItemClick = () => {
+    setTagDropdown(false);
+  };
+
+  const ProfileDP = () => {
+    setProfileMenu(!ProfileMenu);
+  };
+
+  const DispatchLink = () => {
+    setDispatch(!dispatch);
+  };
+
+  const handleDispatchClick = (event) => {
+    if (DispatchRef.current && !DispatchRef.current.contains(event.target)) {
+      setDispatch(false);
     }
   };
 
   useEffect(() => {
-    document.addEventListener("mousedown", handleOutsideClick);
-    window.addEventListener("scroll", handleOutsideClick);
+    document.addEventListener("mousedown", handleDispatchClick);
+    window.addEventListener("scroll", handleDispatchClick);
 
     return () => {
-      document.removeEventListener("mousedown", handleOutsideClick);
-      window.removeEventListener("scroll", handleOutsideClick);
+      document.removeEventListener("mousedown", handleDispatchClick);
+      window.removeEventListener("scroll", handleDispatchClick);
     };
   }, []);
 
-  const handleOutsideClickTag = (event) => {
-    if (tagRef.current && !tagRef.current.contains(event.target)) {
-      setShowDropdown(false);
+  const handleProfileClick = (event) => {
+    if (ProfileRef.current && !ProfileRef.current.contains(event.target)) {
+      setProfileMenu(false);
     }
   };
 
   useEffect(() => {
-    document.addEventListener("mousedown", handleOutsideClickTag);
-    window.addEventListener("scroll", handleOutsideClickTag);
+    document.addEventListener("mousedown", handleProfileClick);
+    window.addEventListener("scroll", handleProfileClick);
 
     return () => {
-      document.removeEventListener("mousedown", handleOutsideClickTag);
-      window.removeEventListener("scroll", handleOutsideClickTag);
+      document.removeEventListener("mousedown", handleProfileClick);
+      window.removeEventListener("scroll", handleProfileClick);
+    };
+  }, []);
+
+  const handleTagClick = (event) => {
+    if (tagRef.current && !tagRef.current.contains(event.target)) {
+      setTagDropdown(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleTagClick);
+    window.addEventListener("scroll", handleTagClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleTagClick);
+      window.removeEventListener("scroll", handleTagClick);
     };
   }, []);
 
   const handleNavClick = () => {
     setIsCollapsed(!isCollapsed);
-    setShowDropdown(false);
+    setTagDropdown(false);
   };
-
-  const navbarRef = useRef(null);
 
   const handleScroll = () => {
     const navbar = navbarRef.current;
@@ -243,22 +274,6 @@ const Navbar = () => {
       document.removeEventListener("scroll", handleScroll);
     };
   }, []);
-
-  const toggleDropdown = () => {
-    setShowDropdown(!showDropdown);
-  };
-
-  const toggleDropdown1 = () => {
-    setDropdownOpen(!isDropdownOpen);
-  };
-
-  const handleItemClick = () => {
-    setShowDropdown(false);
-  };
-
-  const closeDropdown = () => {
-    setDropdownOpen(false);
-  };
 
   const wishlistTip = <Tooltip id="tooltip">wishlist</Tooltip>;
   const cartTip = <Tooltip id="tooltip">cart</Tooltip>;
@@ -301,49 +316,47 @@ const Navbar = () => {
                   </Link>
                 </li>
 
-                <li className="nav-item position-relative">
-                  <Link
-                    onClick={toggleDropdown1}
-                    className="nav-link dropdown-toggle"
-                    aria-current="page"
-                    id="defaultDropdown"
-                    data-bs-toggle="dropdown"
-                    aria-expanded={isDropdownOpen ? "true" : "false"}
-                    aria-haspopup="true"
-                  >
-                    Ready To Dispatch
-                  </Link>
+                <li className="nav-item">
+                  <div onClick={DispatchLink} ref={DispatchRef}>
+                    <div
+                      className={`dispatch-dropdown ${
+                        dispatch ? "active" : ""
+                      }`}
+                    >
+                      <ul>
+                        <li>
+                          <Link to="/shop">
+                            <AiFillGold />
+                            GOLD
+                          </Link>
+                        </li>
+                        <li>
+                          <Link to="/shop">
+                            <AiFillGold />
+                            SILVER
+                          </Link>
+                        </li>
+                      </ul>
+                    </div>
 
-                  <ul
-                    className={`dropdown-menu ${isDropdownOpen ? "show" : ""}`}
-                    aria-labelledby="defaultDropdown"
-                  >
-                    <li>
-                      <Link
-                        to="/shop"
-                        className="dropdown-item"
-                        onClick={closeDropdown}
-                      >
-                        <AiFillGold className="me-2" />
-                        GOLD
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        to="/shop"
-                        className="dropdown-item"
-                        onClick={closeDropdown}
-                      >
-                        <AiFillGold className="me-2" />
-                        SILVER
-                      </Link>
-                    </li>
-                  </ul>
+                    <span
+                      className="nav-link dropdown-toggle"
+                      style={{
+                        fontWeight: "500",
+                        color: "#000",
+                        textTransform: "uppercase",
+                        fontSize: "16px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Ready To Dispatch
+                    </span>
+                  </div>
                 </li>
 
                 <li className="nav-item">
                   <span
-                    onClick={toggleDropdown}
+                    onClick={TagsDropdown}
                     className="nav-link"
                     aria-current="page"
                     style={{
@@ -357,7 +370,7 @@ const Navbar = () => {
                     Make by order
                     <IoMdArrowDropdown className="mb-1" />
                   </span>
-                  {showDropdown && (
+                  {TagDropdown && (
                     <div ref={tagRef} className="dropdown-content">
                       <div className="row">
                         {tags?.length ? (
@@ -378,10 +391,10 @@ const Navbar = () => {
                                   to="/shop"
                                   onClick={() => {
                                     handleNavClick();
-                                    handleItemClick();
+                                    handleTagItemClick();
                                   }}
                                 >
-                                  All Jwellery
+                                  All Jewellery
                                 </Link>
                               </div>
                             </div>
@@ -398,7 +411,7 @@ const Navbar = () => {
                                     className="nav-link"
                                     onClick={() => {
                                       handleTag(multitags.id);
-                                      handleItemClick();
+                                      handleTagItemClick();
                                     }}
                                   >
                                     {multitags.name}
@@ -454,11 +467,11 @@ const Navbar = () => {
                       <li className="login_user" id="user-profile">
                         <div
                           class="profile"
-                          onClick={toggleMenu}
-                          ref={dropdownRef}
+                          onClick={ProfileDP}
+                          ref={ProfileRef}
                         >
                           <div
-                            className={`menu ${isMenuActive ? "active" : ""}`}
+                            className={`menu ${ProfileMenu ? "active" : ""}`}
                           >
                             <ul>
                               <li>
@@ -577,11 +590,11 @@ const Navbar = () => {
                       <li className="login_user" id="user-profile">
                         <div
                           class="profile"
-                          onClick={toggleMenu}
-                          ref={dropdownRef}
+                          onClick={ProfileDP}
+                          ref={ProfileRef}
                         >
                           <div
-                            className={`menu ${isMenuActive ? "active" : ""}`}
+                            className={`menu ${ProfileMenu ? "active" : ""}`}
                           >
                             <ul>
                               <li>

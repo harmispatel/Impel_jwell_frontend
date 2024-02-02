@@ -86,6 +86,7 @@ const Profile = () => {
     );
 
     reader.onloadend = () => {
+      console.log("uploadded");
       profileService
         .UserProfileImage(myFormData)
         .then((res) => {
@@ -625,10 +626,7 @@ const Profile = () => {
           </Modal.Header>
 
           <Modal.Body>
-            <Form
-              onSubmit={(e) => handleUpdate(e, selectedData)}
-              onKeyUp={(e) => validateForm(e)}
-            >
+            <Form onSubmit={(e) => handleUpdate(e, selectedData)}>
               <div className="row">
                 <div className="col-md-6">
                   <Form.Group
