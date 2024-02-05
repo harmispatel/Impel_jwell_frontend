@@ -804,6 +804,7 @@ const Shop = () => {
                             );
                           })}
                         </div>
+
                         <div className="pt-5">
                           {totalPages > 1 && (
                             <div className="paginationArea">

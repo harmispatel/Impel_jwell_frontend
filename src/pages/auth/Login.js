@@ -22,6 +22,8 @@ const Login = () => {
   const [show, setShow] = useState(false);
   const [phoneError, setPhoneError] = useState();
   const [spinner, setSpinner] = useState(false);
+  const [minutes, setMinutes] = useState(1);
+  const [seconds, setSeconds] = useState(30);
   const [phonedata, setPhoneData] = useState();
 
   const handlePhoneNumberChange = (newPhoneNumber) => {
@@ -62,7 +64,7 @@ const Login = () => {
       const appVerifier = window.recaptchaVerifier;
       setSpinner(true);
       axios
-        .post("https://harmistechnology.com/admin.indianjewelley/api/login", {
+        .post("http://192.168.1.73/indianjewel/api/login", {
           phone: formatPh,
         })
         .then((res) => {
@@ -101,6 +103,29 @@ const Login = () => {
     }
   };
 
+  const resendOTP = (e) => {
+    e.preventDefault();
+    if (window.recaptchaVerifier) {
+      const appVerifier = window.recaptchaVerifier;
+
+      firebase
+        .auth()
+        .signInWithPhoneNumber(phoneNumber, appVerifier)
+        .then((confirmationResult) => {
+          console.log(confirmationResult);
+          window.confirmationResult = confirmationResult;
+          console.log("OTP has been resent");
+        })
+        .catch((error) => {
+          // Error; SMS not sent
+          console.log(error);
+          console.log("SMS not sent");
+        });
+    } else {
+      console.error("recaptchaVerifier not defined");
+    }
+  };
+
   const handleOtpVerification = (e) => {
     setSpinner(true);
     e.preventDefault();
@@ -128,6 +153,27 @@ const Login = () => {
         setSpinner(false);
       });
   };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (seconds > 0) {
+        setSeconds(seconds - 1);
+      }
+
+      if (seconds === 0) {
+        if (minutes === 0) {
+          clearInterval(interval);
+        } else {
+          setSeconds(59);
+          setMinutes(minutes - 1);
+        }
+      }
+    }, 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [seconds]);
 
   useEffect(() => {
     onCaptchVerify();
@@ -222,16 +268,26 @@ const Login = () => {
                             <button
                               id="sign-in-button"
                               type="button"
-                              onClick={sendOtp}
+                              onClick={resendOTP}
+                              // disabled={seconds > 0 || minutes > 0}
                               className="btn btn-success user_login_btn"
                             >
                               RESEND
                             </button>
+                            {/* {seconds > 0 || minutes > 0 ? (
+                              <p>
+                                Time Remaining:
+                                {minutes < 10 ? `0${minutes}` : minutes}:
+                                {seconds < 10 ? `0${seconds}` : seconds}
+                              </p>
+                            ) : (
+                              <p>Didn't recieve code?</p>
+                            )} */}
                             <button
                               id="sign-in-button"
                               type="submit"
                               className="btn btn-success user_login_btn"
-                              disabled={spinner}
+                              disabled={otp?.length < 6}
                             >
                               {spinner && (
                                 <CgSpinner

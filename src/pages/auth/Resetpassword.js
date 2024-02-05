@@ -125,24 +125,26 @@ const Resetpassword = () => {
                       <div className="text-danger">{errors.password}</div>
                     </div>
                     <div class="form-group">
-                      <input
-                        type={passwordType}
-                        name="confirmPassword"
-                        placeholder="Confirm Password"
-                        class="form__input"
-                        value={input.confirmPassword}
-                        onChange={handleChange}
-                      />
-                      <button
-                        className="btn toggle_btn "
-                        onClick={(e) => togglePassword(e)}
-                      >
-                        {passwordType === "password" ? (
-                          <FaEye />
-                        ) : (
-                          <FaEyeSlash />
-                        )}
-                      </button>
+                      <div className="position-relative">
+                        <input
+                          type={passwordType}
+                          name="confirmPassword"
+                          placeholder="Confirm Password"
+                          class="form__input"
+                          value={input.confirmPassword}
+                          onChange={handleChange}
+                        />
+                        <span
+                          className="toggle_btn"
+                          onClick={(e) => togglePassword(e)}
+                        >
+                          {passwordType === "password" ? (
+                            <FaEye />
+                          ) : (
+                            <FaEyeSlash />
+                          )}
+                        </span>
+                      </div>
                       <div className="text-danger">
                         {errors.confirmPassword}
                       </div>

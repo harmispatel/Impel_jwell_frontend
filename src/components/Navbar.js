@@ -195,10 +195,6 @@ const Navbar = () => {
     setTagDropdown(!TagDropdown);
   };
 
-  const handleTagItemClick = () => {
-    setTagDropdown(false);
-  };
-
   const ProfileDP = () => {
     setProfileMenu(!ProfileMenu);
   };
@@ -355,23 +351,12 @@ const Navbar = () => {
                 </li>
 
                 <li className="nav-item">
-                  <span
-                    onClick={TagsDropdown}
-                    className="nav-link"
-                    aria-current="page"
-                    style={{
-                      fontWeight: "500",
-                      color: "#000",
-                      textTransform: "uppercase",
-                      fontSize: "16px",
-                      cursor: "pointer",
-                    }}
-                  >
-                    Make by order
-                    <IoMdArrowDropdown className="mb-1" />
-                  </span>
-                  {TagDropdown && (
-                    <div ref={tagRef} className="dropdown-content">
+                  <div onClick={TagsDropdown} ref={tagRef}>
+                    <div
+                      className={`make-by-order-dropdown ${
+                        TagDropdown ? "active" : ""
+                      }`}
+                    >
                       <div className="row">
                         {tags?.length ? (
                           <>
@@ -380,7 +365,7 @@ const Navbar = () => {
                                 <Link
                                   className={
                                     currentRoute === "/shop"
-                                      ? "nav-link active tag-shop-link"
+                                      ? "nav-link active"
                                       : "nav-link"
                                   }
                                   style={{
@@ -391,7 +376,6 @@ const Navbar = () => {
                                   to="/shop"
                                   onClick={() => {
                                     handleNavClick();
-                                    handleTagItemClick();
                                   }}
                                 >
                                   All Jewellery
@@ -411,7 +395,6 @@ const Navbar = () => {
                                     className="nav-link"
                                     onClick={() => {
                                       handleTag(multitags.id);
-                                      handleTagItemClick();
                                     }}
                                   >
                                     {multitags.name}
@@ -425,7 +408,7 @@ const Navbar = () => {
                             <Link
                               className={
                                 currentRoute === "/shop"
-                                  ? "nav-link active tag-shop-link"
+                                  ? "nav-link active"
                                   : "nav-link"
                               }
                               style={{ fontSize: "17px", fontWeight: "800" }}
@@ -438,7 +421,20 @@ const Navbar = () => {
                         )}
                       </div>
                     </div>
-                  )}
+
+                    <span
+                      className="nav-link dropdown-toggle"
+                      style={{
+                        fontWeight: "500",
+                        color: "#000",
+                        textTransform: "uppercase",
+                        fontSize: "16px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Make by order
+                    </span>
+                  </div>
                 </li>
 
                 <li className="nav-item">
@@ -446,7 +442,7 @@ const Navbar = () => {
                     className={
                       currentRoute === "/about" ? "nav-link active" : "nav-link"
                     }
-                    to="/about"
+                    to="/page/about"
                     onClick={handleNavClick}
                   >
                     About

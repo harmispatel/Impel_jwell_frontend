@@ -1,6 +1,6 @@
 import Axios from "axios";
 
-const API_URL = `https://harmistechnology.com/admin.indianjewelley/api/`;
+const API_URL = `http://192.168.1.73/indianjewel/api/`;
 
 export default function call({ path, method, data }) {
   const token = localStorage.getItem("accessToken");

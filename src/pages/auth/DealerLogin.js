@@ -60,10 +60,7 @@ const DealerLogin = () => {
     };
 
     axios
-      .post(
-        "https://harmistechnology.com/admin.indianjewelley/api/user-login",
-        userData
-      )
+      .post("http://192.168.1.73/indianjewel/api/user-login", userData)
       .then((response) => {
         if (response?.data?.success === true) {
           setUser(response?.data);
@@ -115,23 +112,25 @@ const DealerLogin = () => {
                       )}
                     </div>
                     <div className="form-group">
-                      <input
-                        type={passwordType}
-                        name="password"
-                        onChange={(e) => handleChange(e)}
-                        placeholder="Password"
-                        class="form__input"
-                      />
-                      <span
-                        className="toggle_btn"
-                        onClick={(e) => togglePassword(e)}
-                      >
-                        {passwordType === "password" ? (
-                          <FaEyeSlash />
-                        ) : (
-                          <FaEye />
-                        )}
-                      </span>
+                      <div className="position-relative">
+                        <input
+                          type={passwordType}
+                          name="password"
+                          onChange={(e) => handleChange(e)}
+                          placeholder="Password"
+                          class="form__input"
+                        />
+                        <span
+                          className="toggle_btn"
+                          onClick={(e) => togglePassword(e)}
+                        >
+                          {passwordType === "password" ? (
+                            <FaEyeSlash />
+                          ) : (
+                            <FaEye />
+                          )}
+                        </span>
+                      </div>
                       {error && error === "Please enter your password." && (
                         <span className="text-danger">{error}</span>
                       )}

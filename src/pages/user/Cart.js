@@ -12,7 +12,7 @@ import emptycart from "../../assets/images/empty-cart.png";
 import { Helmet } from "react-helmet-async";
 import { CartSystem } from "../../context/CartContext";
 import { ProfileSystem } from "../../context/ProfileContext";
-import loadinggif from "../../assets/video/Impel-Logo-Animation-GIF.gif";
+import loadinggif from "../../assets/video/impel-bird-unscreen-ezgif.com-video-to-gif-converter.gif";
 
 const Cart = () => {
   const navigate = useNavigate();

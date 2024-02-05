@@ -12,6 +12,7 @@ import { FaLongArrowAltLeft } from "react-icons/fa";
 import { FaCartShopping } from "react-icons/fa6";
 import { AiFillDelete } from "react-icons/ai";
 import { CartSystem } from "../../context/CartContext";
+import { Button } from "react-bootstrap";
 
 const WishList = () => {
   const phone = localStorage.getItem("phone");
