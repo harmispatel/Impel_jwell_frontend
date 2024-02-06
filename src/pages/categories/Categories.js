@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import ReactLoading from "react-loading";
+import loadinggif from "../../assets/video/impel-bird-unscreen.gif";
 import { Helmet } from "react-helmet-async";
 import categoriesService from "../../services/Home";
 
@@ -35,14 +35,8 @@ const Categories = () => {
             <h3>Categories</h3>
           </div>
           {isLoading ? (
-            <div className="h-100 d-flex justify-content-center">
-              <ReactLoading
-                type={"spin"}
-                color={"#053961"}
-                height={"20%"}
-                width={"10%"}
-                className="loader"
-              />
+            <div className="animation-loading">
+              <img src={loadinggif} alt="Animated GIF" autoPlay />
             </div>
           ) : (
             <div className="categories_data_main">

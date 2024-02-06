@@ -64,7 +64,7 @@ const Login = () => {
       const appVerifier = window.recaptchaVerifier;
       setSpinner(true);
       axios
-        .post("http://192.168.1.73/indianjewel/api/login", {
+        .post("https://harmistechnology.com/admin.indianjewelley/api/login", {
           phone: formatPh,
         })
         .then((res) => {

@@ -4,7 +4,7 @@ import { BsHeart, BsSearch } from "react-icons/bs";
 import { FcLike } from "react-icons/fc";
 import { FaRegStar, FaStar } from "react-icons/fa";
 import toast from "react-hot-toast";
-import ReactLoading from "react-loading";
+import loadinggif from "../../assets/video/impel-bird-unscreen.gif";
 import Select from "react-select";
 import Accordion from "react-bootstrap/Accordion";
 import Slider from "rc-slider";
@@ -656,14 +656,8 @@ const Shop = () => {
             <div className="row">
               <div className="col-md-12">
                 {isLoading ? (
-                  <div className="d-flex justify-content-center pt-5">
-                    <ReactLoading
-                      type={"spin"}
-                      color={"#053961"}
-                      height={"20%"}
-                      width={"10%"}
-                      className="loader pt-5"
-                    />
+                  <div className="animation-loading">
+                    <img src={loadinggif} alt="Animated GIF" autoPlay />
                   </div>
                 ) : (
                   <>

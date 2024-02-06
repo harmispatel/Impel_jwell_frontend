@@ -43,7 +43,7 @@ const Footer = () => {
     <footer className="footer">
       <div className="container">
         <div className="footer_details">
-          <Link className="navbar-brand m-0" to="#">
+          <Link className="navbar-brand m-0" to="/">
             <img src={Logo} alt="logo" width={100} />
           </Link>
 

@@ -20,7 +20,6 @@ import WishList from "./pages/user/WishList";
 import DealerWishList from "./pages/Dealer/WishList";
 import DealerProfile from "./pages/Dealer/Profile";
 import Cart from "./pages/user/Cart";
-import About from "./components/About";
 import { Toaster } from "react-hot-toast";
 import ForgetPassword from "./pages/auth/ForgetPassword";
 import Errorpage from "./components/Errorpage";
@@ -75,7 +74,6 @@ function App() {
                     <Route index element={<Home />} />
                     <Route path="shop" element={<Shop />} />
                     <Route path="shopdetails/:id" element={<ShopDetails />} />
-                    <Route path="about" element={<About />} />
                     <Route path="categories" element={<Categories />} />
                     <Route
                       path="categories/:id"

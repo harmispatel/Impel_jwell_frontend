@@ -60,7 +60,7 @@ const DealerLogin = () => {
     };
 
     axios
-      .post("http://192.168.1.73/indianjewel/api/user-login", userData)
+      .post("https://harmistechnology.com/admin.indianjewelley/api/user-login", userData)
       .then((response) => {
         if (response?.data?.success === true) {
           setUser(response?.data);

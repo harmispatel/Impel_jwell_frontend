@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import ReactLoading from "react-loading";
+import loadinggif from "../../assets/video/impel-bird-unscreen.gif";
 import BreadCrumb from "../../components/common/BreadCrumb";
 import Userservice from "../../services/Cart";
 
@@ -43,14 +43,8 @@ const Orders = () => {
       </Helmet>
       <section className="my_orders">
         {isLoading ? (
-          <div className="h-100 d-flex justify-content-center">
-            <ReactLoading
-              type={"spin"}
-              color={"#053961"}
-              height={"10%"}
-              width={"10%"}
-              className="loader"
-            />
+          <div className="animation-loading">
+            <img src={loadinggif} alt="Animated GIF" autoPlay />
           </div>
         ) : (
           <>

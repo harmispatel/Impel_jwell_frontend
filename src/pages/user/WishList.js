@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import Userservice from "../../services/Auth";
 import { Link } from "react-router-dom";
-import ReactLoading from "react-loading";
+import loadinggif from "../../assets/video/impel-bird-unscreen.gif";
 import { CgSpinner } from "react-icons/cg";
 import { WishlistSystem } from "../../context/WishListContext";
 import UserCartService from "../../services/Cart";
@@ -132,19 +132,10 @@ const WishList = () => {
       </Helmet>
       <section className="wishlist">
         <div className="container">
-          <h2 className="text-center pb-3 text-uppercase fw-bolder">
-            My Wishlist
-          </h2>
           <div>
             {isLoading ? (
-              <div className="h-100 d-flex justify-content-center">
-                <ReactLoading
-                  type={"spin"}
-                  color={"#053961"}
-                  height={"20%"}
-                  width={"10%"}
-                  className="loader"
-                />
+              <div className="animation-loading">
+                <img src={loadinggif} alt="Animated GIF" autoPlay />
               </div>
             ) : (
               <>
@@ -152,6 +143,9 @@ const WishList = () => {
                   <>
                     <div className="new-wishlist-section">
                       <div className="row">
+                        <h2 className="text-center pb-3 text-uppercase fw-bolder">
+                          My Wishlist
+                        </h2>
                         {items?.map((product) => {
                           return (
                             <div class="col-md-6 col-lg-3">
@@ -226,36 +220,37 @@ const WishList = () => {
                     </div>
                   </>
                 ) : (
-                  <div className="container">
-                    <div className="row justify-content-center">
-                      <div className="col-lg-8">
-                        <div className="card border shadow-sm p-4">
-                          <div className="text-center my-4">
-                            <img
-                              src={emptycart}
-                              alt="Empty Cart Illustration"
-                              className="img-fluid mb-3"
-                              style={{ maxWidth: "200px" }}
-                            />
-                            <h5 className="text-muted mb-3">
-                              Oops! Your Wishlist is empty.
-                            </h5>
-                            <p className="text-muted">
-                              Explore our collection and add your favourite
-                              products in your wishlist
-                            </p>
-                          </div>
+                  <div className="row justify-content-center">
+                    <div className="col-lg-8">
+                      <div className="card border shadow-sm p-4">
+                        <div className="text-center mb-4">
+                          <h2 className="card-title mb-0">My Wishlist</h2>
+                        </div>
+                        <div className="text-center my-4">
+                          <img
+                            src={emptycart}
+                            alt="Empty Cart Illustration"
+                            className="img-fluid mb-3"
+                            style={{ maxWidth: "200px" }}
+                          />
+                          <h5 className="text-muted mb-3">
+                            Oops! Your Wishlist is empty.
+                          </h5>
+                          <p className="text-muted">
+                            Explore our collection and add your favourite
+                            products in your wishlist
+                          </p>
+                        </div>
 
-                          <div className="text-center">
-                            <Link
-                              to="/shop"
-                              className="view_all_btn px-4 py-2"
-                              style={{ borderRadius: "8px" }}
-                            >
-                              <FaLongArrowAltLeft className="mr-2" /> &nbsp;Back
-                              to Shop
-                            </Link>
-                          </div>
+                        <div className="text-center">
+                          <Link
+                            to="/shop"
+                            className="view_all_btn px-4 py-2"
+                            style={{ borderRadius: "8px" }}
+                          >
+                            <FaLongArrowAltLeft className="mr-2" /> &nbsp;Back
+                            to Shop
+                          </Link>
                         </div>
                       </div>
                     </div>

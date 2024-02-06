@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import emptycart from "../../assets/images/empty-cart.png";
 import { Link } from "react-router-dom";
-import ReactLoading from "react-loading";
+import loadinggif from "../../assets/video/impel-bird-unscreen.gif";
 import toast from "react-hot-toast";
 import { CgSpinner } from "react-icons/cg";
 import { FaLongArrowAltLeft } from "react-icons/fa";
@@ -61,13 +61,9 @@ const DealerWishList = () => {
           <h2>My Selections</h2>
           {isLoading ? (
             <div className="h-100 d-flex justify-content-center">
-              <ReactLoading
-                type={"spin"}
-                color={"#053961"}
-                height={"20%"}
-                width={"10%"}
-                className="loader"
-              />
+              <div className="animation-loading">
+                <img src={loadinggif} alt="Animated GIF" autoPlay />
+              </div>
             </div>
           ) : (
             <>

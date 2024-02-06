@@ -13,7 +13,7 @@ const Popup = () => {
   useEffect(() => {
     localStorage.setItem("showPopup", JSON.stringify(showPopup));
     localStorage.setItem("redirectPath", location.pathname);
-  }, [showPopup]);
+  }, [showPopup, location.pathname]);
 
   useEffect(() => {
     if (window.location.reload && !showPopup) {
@@ -47,8 +47,8 @@ const Popup = () => {
         }}
         closeTimeoutMS={500}
       >
-        <div className="position-relative">
-          <img src={images} alt="image" className="w-100" />
+        <div className="position-relative modal_content">
+          <img src={images} alt="image" />
           <Link to="login" className="model_banner_button">
             Login
           </Link>
@@ -59,5 +59,3 @@ const Popup = () => {
 };
 
 export default Popup;
-
-// 600000

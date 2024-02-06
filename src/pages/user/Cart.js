@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import UserService from "../../services/Cart";
 import profileService from "../../services/Auth";
-import ReactLoading from "react-loading";
 import toast from "react-hot-toast";
 import { Button, Col, Form, Modal } from "react-bootstrap";
 import { CgSpinner } from "react-icons/cg";
@@ -12,7 +11,7 @@ import emptycart from "../../assets/images/empty-cart.png";
 import { Helmet } from "react-helmet-async";
 import { CartSystem } from "../../context/CartContext";
 import { ProfileSystem } from "../../context/ProfileContext";
-import loadinggif from "../../assets/video/impel-bird-unscreen-ezgif.com-video-to-gif-converter.gif";
+import loadinggif from "../../assets/video/impel-bird-unscreen.gif";
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -489,6 +488,7 @@ const Cart = () => {
         if (res.status === false) {
           setIsFormEmpty(res.message);
           setShow(false);
+          setDealer_Code("");
         } else {
           localStorage.setItem("savedDiscount", JSON.stringify(res.data));
           setShow(true);
@@ -620,24 +620,24 @@ const Cart = () => {
 
       <section className="cart">
         <div className="container">
-          <div className="row">
-            {isLoading ? (
-              <>
-                <div className="h-100 d-flex justify-content-center loading-container">
-                  <img src={loadinggif} alt="Animated GIF" className="w-25" />
-                </div>
-              </>
-            ) : (
-              <>
-                {Items?.length ? (
-                  <>
+          {isLoading ? (
+            <>
+              <div className="animation-loading">
+                <img src={loadinggif} alt="Animated GIF" autoPlay />
+              </div>
+            </>
+          ) : (
+            <>
+              {Items?.length ? (
+                <>
+                  <div className="row">
                     <div className="col-md-9">
                       <div className="card border shadow-0">
                         <div className="m-4">
                           <h4 className="card-title mb-4">
                             Your shopping cart
                           </h4>
-                          <div className="row gy-3 mb-4">
+                          <div className="row gy-3">
                             <>
                               <hr />
                               {Items?.map((data, index) => {
@@ -655,7 +655,7 @@ const Cart = () => {
                                         >
                                           <img
                                             src={data.image}
-                                            className="border rounded me-3 w-100"
+                                            className="border rounded me-3 w-100 p-2"
                                             alt=""
                                           />
                                         </Link>
@@ -680,13 +680,6 @@ const Cart = () => {
                                           </b>
                                         </span>
                                       </div>
-
-                                      {/* <div className="mt-md-2">
-                                        <text className="h6">
-                                          ₹{price?.toLocaleString("en-US")}
-                                        </text>
-                                        <br />
-                                      </div> */}
                                     </div>
 
                                     <div className="col-md-5">
@@ -720,7 +713,7 @@ const Cart = () => {
                       </div>
                     </div>
 
-                    <div className="col-lg-3">
+                    <div className="col-lg-3 mt-3 mt-md-0">
                       {!show && (
                         <div className="card mb-3 border shadow-0">
                           <div className="card-body">
@@ -728,7 +721,7 @@ const Cart = () => {
                               {/* <div className="form-group">
                               <label className="form-label">Have coupon?</label>
                               <div className="input-group">
-                                <input  
+                                <input
                                   type="text"
                                   className="form-control border"
                                   name=""
@@ -878,343 +871,337 @@ const Cart = () => {
                         </div>
                       </div>
                     </div>
-                  </>
-                ) : (
-                  <>
-                    <div className="row justify-content-center">
-                      <div className="col-lg-8">
-                        <div className="card border shadow-sm p-4">
-                          <div className="text-center mb-4">
-                            <h2 className="card-title mb-0">
-                              Your Shopping Cart
-                            </h2>
-                          </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="row justify-content-center">
+                    <div className="col-lg-8">
+                      <div className="card border shadow-sm p-4">
+                        <div className="text-center mb-4">
+                          <h2 className="card-title mb-0">
+                            Your Shopping Cart
+                          </h2>
+                        </div>
 
-                          <div className="text-center my-4">
-                            <img
-                              src={emptycart}
-                              alt="Empty Cart Illustration"
-                              className="img-fluid mb-3"
-                              style={{ maxWidth: "200px" }}
-                            />
-                            <h5 className="text-muted mb-3">
-                              Oops! Your cart is empty.
-                            </h5>
-                            <p className="text-muted">
-                              Explore our collection and add items to your cart.
-                            </p>
-                          </div>
+                        <div className="text-center my-4">
+                          <img
+                            src={emptycart}
+                            alt="Empty Cart Illustration"
+                            className="img-fluid mb-3"
+                            style={{ maxWidth: "200px" }}
+                          />
+                          <h5 className="text-muted mb-3">
+                            Oops! Your cart is empty.
+                          </h5>
+                          <p className="text-muted">
+                            Explore our collection and add items to your cart.
+                          </p>
+                        </div>
 
-                          <div className="text-center">
-                            <Link
-                              to="/shop"
-                              className="view_all_btn px-4 py-2"
-                              style={{ borderRadius: "8px" }}
-                            >
-                              <FaLongArrowAltLeft className="mr-2" /> &nbsp;Back
-                              to Shop
-                            </Link>
-                          </div>
+                        <div className="text-center">
+                          <Link
+                            to="/shop"
+                            className="view_all_btn px-4 py-2"
+                            style={{ borderRadius: "8px" }}
+                          >
+                            <FaLongArrowAltLeft className="mr-2" /> &nbsp;Back
+                            to Shop
+                          </Link>
                         </div>
                       </div>
                     </div>
-                  </>
-                )}
-              </>
-            )}
+                  </div>
+                </>
+              )}
+            </>
+          )}
 
-            <Modal
-              className="form_intent profile_model"
-              centered
-              show={showEdit}
-            >
-              <Modal.Header>
-                <Modal.Title>Edit Profile</Modal.Title>
-              </Modal.Header>
+          <Modal className="form_intent profile_model" centered show={showEdit}>
+            <Modal.Header>
+              <Modal.Title>Edit Profile</Modal.Title>
+            </Modal.Header>
 
-              <Modal.Body>
-                <Form onSubmit={(e) => handleUpdateProfile(e, selectedData)}>
-                  <div className="row">
-                    <div className="col-md-6">
-                      <Form.Group
-                        as={Col}
-                        className="mb-2"
-                        controlId="formGridState"
-                      >
-                        <Form.Label>
-                          Name
-                          <span className="text-danger">
-                            <b>*</b>
-                          </span>
-                        </Form.Label>
-                        <Form.Control
-                          name="name"
-                          defaultValue={selectedData.name}
-                          onChange={(e) => handleChange(e)}
-                          placeholder="Enter Your Name"
-                        />
-                        {error.nameErr && (
-                          <span className="text-danger">{error.nameErr}</span>
-                        )}
-                      </Form.Group>
-                    </div>
-                    <div className="col-md-6">
-                      <Form.Group
-                        as={Col}
-                        className="mb-2"
-                        controlId="formGridState"
-                      >
-                        <Form.Label>
-                          Email<span className="text-danger">*</span>
-                        </Form.Label>
-                        <Form.Control
-                          name="email"
-                          defaultValue={selectedData.email}
-                          onChange={(e) => handleChange(e)}
-                          placeholder="Enter Your Email"
-                        />
-                        <span className="text-danger">{error.emailErr}</span>
-                      </Form.Group>
-                    </div>
-                    <div className="col-md-6">
-                      <Form.Group
-                        as={Col}
-                        className="mb-2"
-                        controlId="formGridState"
-                      >
-                        <Form.Label>Phone</Form.Label>
-                        <Form.Control
-                          defaultValue={profileData?.phone?.replace("+91", "")}
-                          disabled
-                        />
-                      </Form.Group>
-                    </div>
-
-                    <div className="col-md-6 mb-3">
-                      <Form.Group className="mb-2" controlId="formGridAddress1">
-                        <Form.Label>
-                          Pan-card
-                          {valid ? <span className="text-danger">*</span> : ""}
-                        </Form.Label>
-                        <Form.Control
-                          name="pan_no"
-                          defaultValue={selectedData.pan_no}
-                          onChange={(e) => handleChange(e)}
-                          placeholder="Enter Your Pancard number"
-                        />
-                        {valid && <span className="text-danger">{valid}</span>}
-                      </Form.Group>
-                    </div>
-
-                    <hr />
-                    <div className="col-md-6">
-                      <Form.Group
-                        as={Col}
-                        className="mb-2"
-                        controlId="formGridZip"
-                      >
-                        <Form.Label>
-                          Billing Address<span className="text-danger">*</span>
-                        </Form.Label>
-                        <textarea
-                          name="address"
-                          className="form-control"
-                          defaultValue={selectedData.address}
-                          onChange={(e) => {
-                            handleChange(e);
-                          }}
-                          placeholder="Enter Your Address"
-                        />
-                        {error.addressErr && (
-                          <span className="text-danger">
-                            {error.addressErr}
-                          </span>
-                        )}
-                      </Form.Group>
-                    </div>
-                    <div className="col-md-6">
-                      <Form.Group className="mb-2" controlId="formGridAddress1">
-                        <Form.Label>
-                          State<span className="text-danger">*</span>
-                        </Form.Label>
-                        <select
-                          className="form-control"
-                          name="state"
-                          onChange={(e) => {
-                            handleChange(e);
-                            fetchCity(e.target.value);
-                          }}
-                          value={userData.state}
-                        >
-                          <option value="">--state select--</option>
-                          {profileData?.states?.map((userstate, index) => (
-                            <option key={index} value={userstate.id}>
-                              {userstate.name}
-                            </option>
-                          ))}
-                        </select>
-                        <span className="text-danger">{error.stateErr}</span>
-                      </Form.Group>
-                    </div>
-                    <div className="col-md-6">
-                      <Form.Group className="mb-2" controlId="formGridAddress1">
-                        <Form.Label>
-                          City<span className="text-danger">*</span>
-                        </Form.Label>
-                        <select
-                          className="form-control"
-                          name="city"
-                          onChange={(e) => {
-                            handleChange(e);
-                          }}
-                          value={userData.city}
-                        >
-                          <option value="">--city select--</option>
-                          {city?.map((usercity, index) => (
-                            <option key={index} value={usercity?.id}>
-                              {usercity?.name}
-                            </option>
-                          ))}
-                        </select>
-                        <span className="text-danger">{error.cityErr}</span>
-                      </Form.Group>
-                    </div>
-                    <div className="col-md-6 mb-3">
-                      <Form.Group className="mb-2" controlId="formGridAddress1">
-                        <Form.Label>
-                          Pincode<span className="text-danger">*</span>
-                        </Form.Label>
-                        <Form.Control
-                          name="pincode"
-                          defaultValue={selectedData.pincode}
-                          onChange={(e) => handleChange(e)}
-                          placeholder="Enter Your Pincode"
-                          maxLength={6}
-                        />
-                        <span className="text-danger">{error.pincodeErr}</span>
-                      </Form.Group>
-                    </div>
-                    <div className="address-checkbox-btn">
-                      <input
-                        type="checkbox"
-                        id="checkbox"
-                        name="address_same_as_company"
-                        className="address-checkbox"
-                        checked={isChecked}
-                        onChange={handleCheckboxChange}
-                        style={{ cursor: "pointer" }}
+            <Modal.Body>
+              <Form onSubmit={(e) => handleUpdateProfile(e, selectedData)}>
+                <div className="row">
+                  <div className="col-md-6">
+                    <Form.Group
+                      as={Col}
+                      className="mb-2"
+                      controlId="formGridState"
+                    >
+                      <Form.Label>
+                        Name
+                        <span className="text-danger">
+                          <b>*</b>
+                        </span>
+                      </Form.Label>
+                      <Form.Control
+                        name="name"
+                        defaultValue={selectedData.name}
+                        onChange={(e) => handleChange(e)}
+                        placeholder="Enter Your Name"
                       />
-                      <label
-                        htmlFor="checkbox"
-                        className="ms-1 address-check-text"
-                        style={{ cursor: "pointer" }}
-                      >
-                        Shipping Address is as same above then check this box
-                      </label>
-                    </div>
-                    <hr className="mt-3" />
-                    <div className="col-md-6">
-                      <Form.Group
-                        as={Col}
-                        className="mb-2"
-                        controlId="formGridZip"
-                      >
-                        <Form.Label>
-                          Shipping Address<span className="text-danger">*</span>
-                        </Form.Label>
-                        <textarea
-                          name="shipping_address"
-                          className="form-control"
-                          value={userData.shipping_address}
-                          onChange={(e) => {
-                            handleChange(e);
-                          }}
-                          placeholder="Enter Your Address"
-                        />
-                        <span className="text-danger">
-                          {error.shipping_address_err}
-                        </span>
-                      </Form.Group>
-                    </div>
-                    <div className="col-md-6">
-                      <Form.Group className="mb-2" controlId="formGridAddress1">
-                        <Form.Label>
-                          Shipping-State<span className="text-danger">*</span>
-                        </Form.Label>
-                        <select
-                          className="form-control"
-                          name="shipping_state"
-                          onChange={(e) => {
-                            handleChange(e);
-                            fetchShippingCity(e.target.value);
-                          }}
-                          value={userData.shipping_state}
-                        >
-                          <option value="">--shipping state select--</option>
-                          {profileData?.states?.map((userstate, index) => (
-                            <option key={index} value={userstate.id}>
-                              {userstate.name}
-                            </option>
-                          ))}
-                        </select>
-                        <span className="text-danger">
-                          {error.shipping_state_err}
-                        </span>
-                      </Form.Group>
-                    </div>
-                    <div className="col-md-6">
-                      <Form.Group className="mb-2" controlId="formGridAddress1">
-                        <Form.Label>
-                          Shipping-City<span className="text-danger">*</span>
-                        </Form.Label>
-                        <select
-                          className="form-control"
-                          name="shipping_city"
-                          onChange={(e) => {
-                            handleChange(e);
-                          }}
-                          value={userData.shipping_city}
-                        >
-                          <option value="">--shipping City select--</option>
-                          {shipping_city?.map((usercity, index) => (
-                            <option key={index} value={usercity?.id}>
-                              {usercity?.name}
-                            </option>
-                          ))}
-                        </select>
-                        <span className="text-danger">
-                          {error.shipping_city_err}
-                        </span>
-                      </Form.Group>
-                    </div>
-                    <div className="col-md-6 mb-3">
-                      <Form.Group className="mb-2" controlId="formGridAddress1">
-                        <Form.Label>
-                          Shipping Pincode<span className="text-danger">*</span>
-                        </Form.Label>
-                        <Form.Control
-                          name="shipping_pincode"
-                          value={userData.shipping_pincode}
-                          onChange={(e) => handleChange(e)}
-                          placeholder="Enter Your Pincode"
-                          maxLength={6}
-                        />
-                        <span className="text-danger">
-                          {error.shipping_pincode_err}
-                        </span>
-                      </Form.Group>
-                    </div>
+                      {error.nameErr && (
+                        <span className="text-danger">{error.nameErr}</span>
+                      )}
+                    </Form.Group>
+                  </div>
+                  <div className="col-md-6">
+                    <Form.Group
+                      as={Col}
+                      className="mb-2"
+                      controlId="formGridState"
+                    >
+                      <Form.Label>
+                        Email<span className="text-danger">*</span>
+                      </Form.Label>
+                      <Form.Control
+                        name="email"
+                        defaultValue={selectedData.email}
+                        onChange={(e) => handleChange(e)}
+                        placeholder="Enter Your Email"
+                      />
+                      <span className="text-danger">{error.emailErr}</span>
+                    </Form.Group>
+                  </div>
+                  <div className="col-md-6">
+                    <Form.Group
+                      as={Col}
+                      className="mb-2"
+                      controlId="formGridState"
+                    >
+                      <Form.Label>Phone</Form.Label>
+                      <Form.Control
+                        defaultValue={profileData?.phone?.replace("+91", "")}
+                        disabled
+                      />
+                    </Form.Group>
                   </div>
 
-                  <div className="text-center">
-                    <Button variant="primary" type="submit">
-                      Update
-                    </Button>
+                  <div className="col-md-6 mb-3">
+                    <Form.Group className="mb-2" controlId="formGridAddress1">
+                      <Form.Label>
+                        Pan-card
+                        {valid ? <span className="text-danger">*</span> : ""}
+                      </Form.Label>
+                      <Form.Control
+                        name="pan_no"
+                        defaultValue={selectedData.pan_no}
+                        onChange={(e) => handleChange(e)}
+                        placeholder="Enter Your Pancard number"
+                      />
+                      {valid && <span className="text-danger">{valid}</span>}
+                    </Form.Group>
                   </div>
-                </Form>
-              </Modal.Body>
-            </Modal>
-          </div>
+
+                  <hr />
+                  <div className="col-md-6">
+                    <Form.Group
+                      as={Col}
+                      className="mb-2"
+                      controlId="formGridZip"
+                    >
+                      <Form.Label>
+                        Billing Address<span className="text-danger">*</span>
+                      </Form.Label>
+                      <textarea
+                        name="address"
+                        className="form-control"
+                        defaultValue={selectedData.address}
+                        onChange={(e) => {
+                          handleChange(e);
+                        }}
+                        placeholder="Enter Your Address"
+                      />
+                      {error.addressErr && (
+                        <span className="text-danger">{error.addressErr}</span>
+                      )}
+                    </Form.Group>
+                  </div>
+                  <div className="col-md-6">
+                    <Form.Group className="mb-2" controlId="formGridAddress1">
+                      <Form.Label>
+                        State<span className="text-danger">*</span>
+                      </Form.Label>
+                      <select
+                        className="form-control"
+                        name="state"
+                        onChange={(e) => {
+                          handleChange(e);
+                          fetchCity(e.target.value);
+                        }}
+                        value={userData.state}
+                      >
+                        <option value="">--state select--</option>
+                        {profileData?.states?.map((userstate, index) => (
+                          <option key={index} value={userstate.id}>
+                            {userstate.name}
+                          </option>
+                        ))}
+                      </select>
+                      <span className="text-danger">{error.stateErr}</span>
+                    </Form.Group>
+                  </div>
+                  <div className="col-md-6">
+                    <Form.Group className="mb-2" controlId="formGridAddress1">
+                      <Form.Label>
+                        City<span className="text-danger">*</span>
+                      </Form.Label>
+                      <select
+                        className="form-control"
+                        name="city"
+                        onChange={(e) => {
+                          handleChange(e);
+                        }}
+                        value={userData.city}
+                      >
+                        <option value="">--city select--</option>
+                        {city?.map((usercity, index) => (
+                          <option key={index} value={usercity?.id}>
+                            {usercity?.name}
+                          </option>
+                        ))}
+                      </select>
+                      <span className="text-danger">{error.cityErr}</span>
+                    </Form.Group>
+                  </div>
+                  <div className="col-md-6 mb-3">
+                    <Form.Group className="mb-2" controlId="formGridAddress1">
+                      <Form.Label>
+                        Pincode<span className="text-danger">*</span>
+                      </Form.Label>
+                      <Form.Control
+                        name="pincode"
+                        defaultValue={selectedData.pincode}
+                        onChange={(e) => handleChange(e)}
+                        placeholder="Enter Your Pincode"
+                        maxLength={6}
+                      />
+                      <span className="text-danger">{error.pincodeErr}</span>
+                    </Form.Group>
+                  </div>
+                  <div className="address-checkbox-btn">
+                    <input
+                      type="checkbox"
+                      id="checkbox"
+                      name="address_same_as_company"
+                      className="address-checkbox"
+                      checked={isChecked}
+                      onChange={handleCheckboxChange}
+                      style={{ cursor: "pointer" }}
+                    />
+                    <label
+                      htmlFor="checkbox"
+                      className="ms-1 address-check-text"
+                      style={{ cursor: "pointer" }}
+                    >
+                      Shipping Address is as same above then check this box
+                    </label>
+                  </div>
+                  <hr className="mt-3" />
+                  <div className="col-md-6">
+                    <Form.Group
+                      as={Col}
+                      className="mb-2"
+                      controlId="formGridZip"
+                    >
+                      <Form.Label>
+                        Shipping Address<span className="text-danger">*</span>
+                      </Form.Label>
+                      <textarea
+                        name="shipping_address"
+                        className="form-control"
+                        value={userData.shipping_address}
+                        onChange={(e) => {
+                          handleChange(e);
+                        }}
+                        placeholder="Enter Your Address"
+                      />
+                      <span className="text-danger">
+                        {error.shipping_address_err}
+                      </span>
+                    </Form.Group>
+                  </div>
+                  <div className="col-md-6">
+                    <Form.Group className="mb-2" controlId="formGridAddress1">
+                      <Form.Label>
+                        Shipping-State<span className="text-danger">*</span>
+                      </Form.Label>
+                      <select
+                        className="form-control"
+                        name="shipping_state"
+                        onChange={(e) => {
+                          handleChange(e);
+                          fetchShippingCity(e.target.value);
+                        }}
+                        value={userData.shipping_state}
+                      >
+                        <option value="">--shipping state select--</option>
+                        {profileData?.states?.map((userstate, index) => (
+                          <option key={index} value={userstate.id}>
+                            {userstate.name}
+                          </option>
+                        ))}
+                      </select>
+                      <span className="text-danger">
+                        {error.shipping_state_err}
+                      </span>
+                    </Form.Group>
+                  </div>
+                  <div className="col-md-6">
+                    <Form.Group className="mb-2" controlId="formGridAddress1">
+                      <Form.Label>
+                        Shipping-City<span className="text-danger">*</span>
+                      </Form.Label>
+                      <select
+                        className="form-control"
+                        name="shipping_city"
+                        onChange={(e) => {
+                          handleChange(e);
+                        }}
+                        value={userData.shipping_city}
+                      >
+                        <option value="">--shipping City select--</option>
+                        {shipping_city?.map((usercity, index) => (
+                          <option key={index} value={usercity?.id}>
+                            {usercity?.name}
+                          </option>
+                        ))}
+                      </select>
+                      <span className="text-danger">
+                        {error.shipping_city_err}
+                      </span>
+                    </Form.Group>
+                  </div>
+                  <div className="col-md-6 mb-3">
+                    <Form.Group className="mb-2" controlId="formGridAddress1">
+                      <Form.Label>
+                        Shipping Pincode<span className="text-danger">*</span>
+                      </Form.Label>
+                      <Form.Control
+                        name="shipping_pincode"
+                        value={userData.shipping_pincode}
+                        onChange={(e) => handleChange(e)}
+                        placeholder="Enter Your Pincode"
+                        maxLength={6}
+                      />
+                      <span className="text-danger">
+                        {error.shipping_pincode_err}
+                      </span>
+                    </Form.Group>
+                  </div>
+                </div>
+
+                <div className="text-center">
+                  <Button variant="primary" type="submit">
+                    Update
+                  </Button>
+                </div>
+              </Form>
+            </Modal.Body>
+          </Modal>
         </div>
       </section>
     </>

@@ -1,6 +1,6 @@
 // import React, { useEffect, useState } from "react";
 // import { Link } from "react-router-dom";
-// import ReactLoading from "react-loading";
+// import loadinggif from "../../assets/video/impel-bird-unscreen.gif";
 // import { FaEye } from "react-icons/fa";
 // import Userservice from "../../services/Cart";
 // import { Helmet } from "react-helmet-async";
@@ -37,15 +37,13 @@
 //       </Helmet>
 //       <section className="cart">
 //         {isLoading ? (
-//           <div className="h-100 d-flex justify-content-center">
-//             <ReactLoading
-//               type={"spin"}
-//               color={"#053961"}
-//               height={"10%"}
-//               width={"10%"}
-//               className="loader"
-//             />
-//           </div>
+//           <div className="animation-loading">
+//           <img
+//           src={loadinggif}
+//          alt="Animated GIF"
+//           autoPlay
+//         />
+//      </div>
 //         ) : (
 //           <>
 //             <div className="container">
@@ -211,7 +209,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import ReactLoading from "react-loading";
+import loadinggif from "../../assets/video/impel-bird-unscreen.gif";
 import { FaEye } from "react-icons/fa";
 import Userservice from "../../services/Cart";
 import { Helmet } from "react-helmet-async";
@@ -263,14 +261,8 @@ const MyOrders = () => {
       </Helmet>
       <section className="cart">
         {isLoading ? (
-          <div className="h-100 d-flex justify-content-center">
-            <ReactLoading
-              type={"spin"}
-              color={"#053961"}
-              height={"10%"}
-              width={"10%"}
-              className="loader"
-            />
+          <div className="animation-loading">
+            <img src={loadinggif} alt="Animated GIF" autoPlay />
           </div>
         ) : (
           <>

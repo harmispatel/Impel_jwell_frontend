@@ -11,7 +11,7 @@ import { RxChevronLeft, RxChevronRight, RxCross1 } from "react-icons/rx";
 import { BsCartDash, BsHandbagFill } from "react-icons/bs";
 import { CgSpinner } from "react-icons/cg";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
-import ReactLoading from "react-loading";
+import loadinggif from "../../assets/video/impel-bird-unscreen.gif";
 import { Helmet } from "react-helmet-async";
 import { WishlistSystem } from "../../context/WishListContext";
 import UserCartService from "../../services/Cart";
@@ -278,15 +278,8 @@ const ShopDetails = () => {
                   thirdName="Shopdetails"
                 />
                 {isLoading ? (
-                  <div className="h-100 d-flex justify-content-center pt-5">
-                    <ReactLoading
-                      type={"spin"}
-                      color={"#053961"}
-                      delay={"2"}
-                      height={"20%"}
-                      width={"10%"}
-                      className="loader"
-                    />
+                  <div className="animation-loading">
+                    <img src={loadinggif} alt="Animated GIF" autoPlay />
                   </div>
                 ) : (
                   <>

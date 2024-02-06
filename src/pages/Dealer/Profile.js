@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
-import ReactLoading from "react-loading";
+import loadinggif from "../../assets/video/impel-bird-unscreen.gif";
 import profileService from "../../services/Auth";
 import { ProfileSystem } from "../../context/ProfileContext";
 
@@ -92,14 +92,8 @@ const DealerProfile = () => {
         <div className="container py-5">
           <div class="row">
             {isLoading ? (
-              <div className="h-100 d-flex justify-content-center">
-                <ReactLoading
-                  type={"spin"}
-                  color={"#053961"}
-                  height={"10%"}
-                  width={"10%"}
-                  className="loader"
-                />
+              <div className="animation-loading">
+                <img src={loadinggif} alt="Animated GIF" autoPlay />
               </div>
             ) : (
               <>
@@ -249,7 +243,7 @@ const DealerProfile = () => {
                             {profileData?.documents?.map((file, index) => (
                               <Link
                                 to={file?.document}
-                                class="btn btn-sm btn-light m-2"
+                                class="light-up-button m-2"
                                 style={{ border: "1px solid #ccc" }}
                                 target="_blank"
                               >

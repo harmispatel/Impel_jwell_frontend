@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Button, Col, Form, Modal } from "react-bootstrap";
 import toast from "react-hot-toast";
-import ReactLoading from "react-loading";
+import loadinggif from "../../assets/video/impel-bird-unscreen.gif";
 import profileService from "../../services/Auth";
 import { Helmet } from "react-helmet-async";
 import { MdEditSquare } from "react-icons/md";
@@ -459,21 +459,15 @@ const Profile = () => {
         <div className="container">
           <div className="row">
             {isLoading ? (
-              <div className="h-100 d-flex justify-content-center">
-                <ReactLoading
-                  type={"spin"}
-                  color={"#053961"}
-                  height={"10%"}
-                  width={"10%"}
-                  className="loader"
-                />
+              <div className="animation-loading">
+                <img src={loadinggif} alt="Animated GIF" autoPlay />
               </div>
             ) : (
               <>
                 <div className="col-xl-4">
                   <div className="card mb-4 mb-xl-0">
                     <div>
-                      <div className="card-header">Profile Picture</div>
+                      <div className="card-header">Profile Image</div>
                       <div className="upload-btn">
                         <div className="button-wrap py-3"></div>
                       </div>

@@ -3,7 +3,6 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { FaBars, FaStar, FaUser, FaUserAlt } from "react-icons/fa";
 import { BsHandbag, BsHeart } from "react-icons/bs";
-import { IoMdArrowDropdown } from "react-icons/io";
 import { FaCartShopping } from "react-icons/fa6";
 import { IoLogOut } from "react-icons/io5";
 import { AiFillGold } from "react-icons/ai";
@@ -517,7 +516,7 @@ const Navbar = () => {
                               </>
                             )}
                           </div>
-                          <div class="user">
+                          <div class="user dropdown-toggle">
                             {dealerData?.name ? (
                               <span className="ms-2">
                                 <b
@@ -526,7 +525,6 @@ const Navbar = () => {
                                   }}
                                 >
                                   {dealerData?.name}
-                                  <IoMdArrowDropdown />
                                 </b>
                               </span>
                             ) : (
@@ -538,7 +536,6 @@ const Navbar = () => {
                                     }}
                                   >
                                     Hello! Dealer
-                                    <IoMdArrowDropdown />
                                   </b>
                                 </span>
                               </>
@@ -552,7 +549,10 @@ const Navbar = () => {
                     <ul>
                       <li>
                         {Phone && (
-                          <OverlayTrigger placement="top" overlay={wishlistTip}>
+                          <OverlayTrigger
+                            placement="bottom"
+                            overlay={wishlistTip}
+                          >
                             <Link className="icon" to="/wishlist">
                               <BsHeart
                                 style={{ fontSize: "20px", color: "black" }}
@@ -569,7 +569,7 @@ const Navbar = () => {
                       </li>
                       <li>
                         {Phone && (
-                          <OverlayTrigger placement="top" overlay={cartTip}>
+                          <OverlayTrigger placement="bottom" overlay={cartTip}>
                             <Link className="icon" to="/cart">
                               <BsHandbag
                                 style={{ fontSize: "20px", color: "black" }}
@@ -635,7 +635,7 @@ const Navbar = () => {
                               />
                             )}
                           </div>
-                          <div class="user">
+                          <div class="user dropdown-toggle">
                             {profileData?.length ? (
                               <span className="ms-2">
                                 <b
@@ -644,7 +644,6 @@ const Navbar = () => {
                                   }}
                                 >
                                   {profileData}
-                                  <IoMdArrowDropdown />
                                 </b>
                               </span>
                             ) : (
@@ -656,7 +655,6 @@ const Navbar = () => {
                                     }}
                                   >
                                     Hello! user
-                                    <IoMdArrowDropdown />
                                   </b>
                                 </span>
                               </>

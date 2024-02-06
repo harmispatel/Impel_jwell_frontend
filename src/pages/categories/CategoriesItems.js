@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import BreadCrumb from "../../components/common/BreadCrumb";
-import ReactLoading from "react-loading";
+import loadinggif from "../../assets/video/impel-bird-unscreen.gif";
 import { FaLongArrowAltLeft } from "react-icons/fa";
 import homeService from "../../services/Home";
 import categoryDetail from "../../services/Shop";
@@ -130,14 +130,8 @@ const CategoriesItems = () => {
           <div className="categories_data">
             <div className="row">
               {isLoading ? (
-                <div className="h-100 d-flex justify-content-center pt-5">
-                  <ReactLoading
-                    type={"spin"}
-                    color={"#053961"}
-                    height={"20%"}
-                    width={"10%"}
-                    className="loader"
-                  />
+                <div className="animation-loading">
+                  <img src={loadinggif} alt="Animated GIF" autoPlay />
                 </div>
               ) : (
                 <>

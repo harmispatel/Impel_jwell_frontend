@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import profileService from "../services/Home";
 import { useParams } from "react-router-dom";
-import ReactLoading from "react-loading";
+import loadinggif from "../assets/video/impel-bird-unscreen.gif";
 import { Helmet } from "react-helmet-async";
 
 const CustomPageView = () => {
@@ -39,14 +39,8 @@ const CustomPageView = () => {
       </Helmet>
       <section className="wishlist">
         {isLoading ? (
-          <div className="h-100 d-flex justify-content-center">
-            <ReactLoading
-              type={"spin"}
-              color={"#053961"}
-              height={"10%"}
-              width={"10%"}
-              className="loader"
-            />
+          <div className="animation-loading">
+            <img src={loadinggif} alt="Animated GIF" autoPlay />
           </div>
         ) : (
           <>
