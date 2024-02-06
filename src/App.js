@@ -9,7 +9,6 @@ import ShopDetails from "./pages/shop/ShopDetails";
 import Categories from "./pages/categories/Categories";
 import CategoriesItems from "./pages/categories/CategoriesItems";
 import Login from "./pages/auth/Login";
-import "react-toastify/dist/ReactToastify.css";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import DealerLogin from "./pages/auth/DealerLogin";
 import Profile from "./pages/user/Profile";
