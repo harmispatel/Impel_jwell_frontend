@@ -696,6 +696,7 @@ const Shop = () => {
                                             >
                                               <Link
                                                 to="#"
+                                                className="heart-icon"
                                                 onClick={(e) => {
                                                   if (
                                                     DealerCollection?.find(
@@ -742,6 +743,7 @@ const Shop = () => {
                                             >
                                               <Link
                                                 to="#"
+                                                className="heart-icon"
                                                 onClick={(e) => {
                                                   if (
                                                     UsercartItems?.find(

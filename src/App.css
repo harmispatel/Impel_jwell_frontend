@@ -1186,6 +1186,14 @@ input[type="file"] {
   overflow: hidden;
 }
 
+.heart-icon {
+  transition: transform 0.3s ease;
+}
+
+.heart-icon:hover {
+  transform: scale(1.2);
+}
+
 .product_data,
 .category_data {
   text-decoration: none;
