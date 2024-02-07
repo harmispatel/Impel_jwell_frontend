@@ -130,7 +130,7 @@ const DealerWishList = () => {
                             style={{ maxWidth: "200px" }}
                           />
                           <h5 className="text-muted mb-3">
-                            Oops! Your Selections is empty.
+                            Oops! Your Selections is empty. 
                           </h5>
                           <p className="text-muted">
                             Explore our collection and add your favourite

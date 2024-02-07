@@ -195,12 +195,12 @@ const Login = () => {
                       <>
                         <form onSubmit={sendOtp}>
                           <h2>Customer Login</h2>
-                          <div className="form-group my-3">
+                          <div className="my-3">
                             <PhoneInput
                               international
-                              countryCallingCodeEditable={false}
                               defaultCountry="IN"
-                              className="form-control phone_input"
+                              countryCallingCodeEditable={false}
+                              className="form-control"
                               name="phoneNumber"
                               value={phoneNumber}
                               onChange={handlePhoneNumberChange}

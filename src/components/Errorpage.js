@@ -1,6 +1,7 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
+import errorimage from "../assets/images/404-page-removebg-preview.png";
 
 const Errorpage = () => {
   return (
@@ -11,7 +12,7 @@ const Errorpage = () => {
       <div className="container">
         <div class="utility-page-wrap">
           <div class="utility-page-content">
-            <h1 class="error-title">404</h1>
+            <img src={errorimage} alt="" className="w-100" />
             <h3>Page Not Found</h3>
             <div class="error-description">
               The page you are looking for doesn't exist or has been moved

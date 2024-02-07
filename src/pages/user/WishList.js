@@ -7,12 +7,11 @@ import { WishlistSystem } from "../../context/WishListContext";
 import UserCartService from "../../services/Cart";
 import toast from "react-hot-toast";
 import { Helmet } from "react-helmet-async";
-import emptycart from "../../assets/images/empty-cart.png";
+import emptywishlist from "../../assets/images/empty-wishlist.png";
 import { FaLongArrowAltLeft } from "react-icons/fa";
 import { FaCartShopping } from "react-icons/fa6";
 import { AiFillDelete } from "react-icons/ai";
 import { CartSystem } from "../../context/CartContext";
-import { Button } from "react-bootstrap";
 
 const WishList = () => {
   const phone = localStorage.getItem("phone");
@@ -228,7 +227,7 @@ const WishList = () => {
                         </div>
                         <div className="text-center my-4">
                           <img
-                            src={emptycart}
+                            src={emptywishlist}
                             alt="Empty Cart Illustration"
                             className="img-fluid mb-3"
                             style={{ maxWidth: "200px" }}

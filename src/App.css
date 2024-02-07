@@ -27,11 +27,6 @@ body {
   border-color: #caa78d !important;
 }
 
-.phone_input {
-  border: none;
-  padding: 5px 10px;
-}
-
 .otp-card h6 {
   color: red;
   font-size: 25px
@@ -1400,7 +1395,7 @@ input[type="file"] {
 }
 
 .yellow-gold {
-  background-color: #ffdc8e !important;
+  background-color: #e9d59c  !important;
 }
 
 .rose-gold {
@@ -1408,7 +1403,8 @@ input[type="file"] {
 }
 
 .white-gold {
-  background-color: #FFFFF4 !important;
+  background-color: #eceef0 !important;
+  color: #000 !important;
 }
 
 .btn-check:checked+.btn,
@@ -2137,7 +2133,6 @@ input[type="file"] {
     width: 350px !important;
   }
 }
-
 /* Mobile Responsive Style End For 767px */
 
 /* Mobile Responsive Style Start For 991px*/
@@ -2238,7 +2233,6 @@ input[type="file"] {
     margin: 0;
   }
 }
-
 /* Mobile Responsive Style End For 991px*/
 
 /* Spinner Styles Start */
@@ -2255,7 +2249,6 @@ input[type="file"] {
     transform: rotate(360deg);
   }
 }
-
 /* Spinner Styles End */
 
 #user-profile nav {
