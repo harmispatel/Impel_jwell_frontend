@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import loadinggif from "../../assets/video/impel-bird-unscreen.gif";
 import profileService from "../../services/Auth";
 import { Helmet } from "react-helmet-async";
-import { MdEditSquare } from "react-icons/md";
+import { FaPencilAlt } from "react-icons/fa";
 import { CgSpinner } from "react-icons/cg";
 import { ProfileSystem } from "../../context/ProfileContext";
 
@@ -238,23 +238,21 @@ const Profile = () => {
   const validateForm = () => {
     let isValid = true;
     const validationErrors = { ...error };
-    if (!userData.name.trim()) {
+
+    if (!userData.name || !userData.name.trim()) {
       validationErrors.nameErr = "Name is required";
       isValid = false;
     } else {
       validationErrors.nameErr = "";
     }
 
-    if (!userData.email.trim()) {
+    if (!userData.email || !userData.email.trim()) {
       validationErrors.emailErr = "Email is required";
       isValid = false;
     } else if (
       !/^[a-zA-Z\d\.-]+@[a-zA-Z\d\.-]+\.[a-zA-Z]{2,}$/i.test(userData.email)
     ) {
       validationErrors.emailErr = "Invalid email address";
-      isValid = false;
-    } else if (userData.email.indexOf("@") === -1) {
-      validationErrors.emailErr = "Email address must contain @ symbol";
       isValid = false;
     } else {
       validationErrors.emailErr = "";
@@ -273,14 +271,14 @@ const Profile = () => {
       validationErrors.pancardErr = "";
     }
 
-    if (!userData.address.trim()) {
+    if (!userData.address || !userData.address.trim()) {
       validationErrors.addressErr = "Address is required";
       isValid = false;
     } else {
       validationErrors.addressErr = "";
     }
 
-    if (!userData.pincode.trim()) {
+    if (!userData.pincode || !userData.pincode.trim()) {
       validationErrors.pincodeErr = "Pincode is required";
       isValid = false;
     } else if (!pincodeRegex.test(userData.pincode.trim())) {
@@ -290,28 +288,29 @@ const Profile = () => {
       validationErrors.pincodeErr = "";
     }
 
-    if (userData.state == "" || userData.state == undefined) {
-      validationErrors.stateErr = "State must be select";
+    if (!userData.state || userData.state === "") {
+      validationErrors.stateErr = "State must be selected";
       isValid = false;
     } else {
       validationErrors.stateErr = "";
     }
-    if (userData.city == "" || userData.city == undefined) {
-      validationErrors.cityErr = "City must be select";
+
+    if (!userData.city || userData.city === "") {
+      validationErrors.cityErr = "City must be selected";
       isValid = false;
     } else {
       validationErrors.cityErr = "";
     }
 
     if (!isChecked) {
-      if (!isChecked && !userData.shipping_address.trim()) {
+      if (!userData.shipping_address || !userData.shipping_address.trim()) {
         validationErrors.shipping_address_err = "Shipping address is required";
         isValid = false;
       } else {
         validationErrors.shipping_address_err = "";
       }
 
-      if (!userData.shipping_pincode.trim()) {
+      if (!userData.shipping_pincode || !userData.shipping_pincode.trim()) {
         validationErrors.shipping_pincode_err = "Shipping pincode is required";
         isValid = false;
       } else if (!pincodeRegex.test(userData.shipping_pincode.trim())) {
@@ -322,17 +321,15 @@ const Profile = () => {
         validationErrors.shipping_pincode_err = "";
       }
 
-      if (
-        userData.shipping_state == "" ||
-        userData.shipping_state == undefined
-      ) {
-        validationErrors.shipping_state_err = "Shipping state must be select";
+      if (!userData.shipping_state || userData.shipping_state === "") {
+        validationErrors.shipping_state_err = "Shipping state must be selected";
         isValid = false;
       } else {
         validationErrors.shipping_state_err = "";
       }
-      if (userData.shipping_city == "" || userData.shipping_city == undefined) {
-        validationErrors.shipping_city_err = "Shipping city must be select";
+
+      if (!userData.shipping_city || userData.shipping_city === "") {
+        validationErrors.shipping_city_err = "Shipping city must be selected";
         isValid = false;
       } else {
         validationErrors.shipping_city_err = "";
@@ -343,40 +340,10 @@ const Profile = () => {
       validationErrors.shipping_state_err = "";
       validationErrors.shipping_city_err = "";
     }
+
     setError(validationErrors);
     return isValid;
   };
-
-  useEffect(() => {
-    const validationErrors = {
-      shipping_address_err: "",
-      shipping_state_err: "",
-      shipping_city_err: "",
-      shipping_pincode_err: "",
-    };
-
-    if (!isChecked) {
-      if (!userData.shipping_address.trim()) {
-        validationErrors.shipping_address_err = "Shipping address is required";
-      }
-      if (!userData.shipping_pincode.trim()) {
-        validationErrors.shipping_pincode_err = "Shipping pincode is required";
-      }
-      if (!userData.shipping_state || userData.shipping_state === undefined) {
-        validationErrors.shipping_state_err = "Shipping state must be select";
-      }
-      if (!userData.shipping_city || userData.shipping_city === undefined) {
-        validationErrors.shipping_city_err = "Shipping city must be select";
-      }
-    } else {
-      validationErrors.shipping_address_err = "";
-      validationErrors.shipping_state_err = "";
-      validationErrors.shipping_city_err = "";
-      validationErrors.shipping_pincode_err = "";
-    }
-
-    setError(validationErrors);
-  }, [isChecked, userData]);
 
   const handleUpdate = async (e) => {
     e.preventDefault();
@@ -464,10 +431,21 @@ const Profile = () => {
               </div>
             ) : (
               <>
-                <div className="col-xl-4">
+                <div className="text-end mb-3">
+                  <button
+                    onClick={() => handleEdit(profileData)}
+                    className="edit_profile_btn primary"
+                  >
+                    Edit profile
+                    <FaPencilAlt className="ms-2" />
+                  </button>
+                </div>
+                <div className="col-xl-3">
                   <div className="card mb-4 mb-xl-0">
                     <div>
-                      <div className="card-header">Profile Image</div>
+                      <div className="card-header text-center">
+                        <b>Profile Image</b>
+                      </div>
                       <div className="upload-btn">
                         <div className="button-wrap py-3"></div>
                       </div>
@@ -522,18 +500,12 @@ const Profile = () => {
                     </div>
                   </div>
                 </div>
-                <div className="col-xl-8">
+                <div className="col-xl-5">
                   <div className="card mb-4">
-                    <div className="card-header">
-                      <div className="d-flex align-items-center justify-content-between">
-                        <span>Account Details</span>
-                        <button
-                          onClick={() => handleEdit(profileData)}
-                          className="btn btn-sm btn-primary"
-                        >
-                          <MdEditSquare />
-                        </button>
-                      </div>
+                    <div class="card-header text-center">
+                      <span>
+                        <b>Account Details</b>
+                      </span>
                     </div>
                     <div className="card-body">
                       <table class="table">
@@ -568,14 +540,22 @@ const Profile = () => {
                           </tr>
                           <tr>
                             <th scope="col">Pancard : </th>
-                            <td>{profileData.pan_no}</td>
+                            {profileData.pan_no?.length > 0 ? (
+                              <td>{profileData.pan_no}</td>
+                            ) : (
+                              <td>
+                                <b>-</b>
+                              </td>
+                            )}
                           </tr>
                         </tbody>
                       </table>
                     </div>
                   </div>
-                  <div className="card shippping_address_card">
-                    <div class="card-header">
+                </div>
+                <div className="col-xl-4">
+                  <div className="card mb-4">
+                    <div class="card-header text-center">
                       <span>
                         <b>Shipping Address</b>
                       </span>

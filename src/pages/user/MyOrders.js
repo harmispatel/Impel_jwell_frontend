@@ -253,6 +253,7 @@ const MyOrders = () => {
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
+  
   const orderDetails = <Tooltip id="tooltip">View order details</Tooltip>;
   return (
     <>
