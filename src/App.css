@@ -19,7 +19,6 @@ body {
   background-color: #faf7f5 !important;
 }
 
-
 /* User Login Page Style  Start*/
 
 .user_login_btn {
@@ -48,94 +47,12 @@ body {
   padding: 60px 0;
 }
 
-.login_main {
-  width: 100%;
-  height: calc(100vh - 100px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.login_inr {
-  padding: 30px;
-  background-color: #fff;
-  border-radius: 30px;
-}
-
-.login_title {
-  margin-bottom: 30px;
-}
-
-.login_title h1 {
-  font-size: 40px;
-  color: #ffc107;
-  margin: 0;
-  padding-bottom: 15px;
-  border-bottom: 1px solid #000;
-  text-align: center;
-  position: relative;
-}
-
-.login_title h1:after,
-.login_title h1:before {
-  content: "";
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  background-color: transparent;
-  border-radius: 50%;
-  border: 1px solid #000;
-  bottom: -5px;
-}
-
-.login_title h1:after {
-  left: -10px;
-}
-
-.login_title h1:before {
-  right: -10px;
-}
-
-.login_info_inr,
-.delivery_info_inr {
-  padding: 0 60px;
-}
-
-.login_info_inr_title,
-.delivery_login_info_inr_title {
-  margin-bottom: 30px;
-}
-
-.login_info_inr_title h3 {
-  font-size: 30px;
-  margin: 0;
-  line-height: 30px;
-  margin-bottom: 15px;
-}
-
-.login_info_inr_title p {
-  font-size: 20px;
-  margin: 0;
-  line-height: 16px;
-}
-
-.login_info_inr .form-group .form-control {
-  background-color: #eef0f4;
-  padding: 40px 20px;
-  border-radius: 10px;
-  border: none;
-  height: auto !important;
-  font-size: 16px;
-}
-
-.login_info_inr .form-group .form-control:focus {
-  box-shadow: none;
-}
 
 .PhoneInputInput {
   border: none;
   padding: 10px;
   border-radius: 5px;
+  align-items: normal !important;
 }
 
 .otp_box input {
@@ -145,42 +62,30 @@ body {
   border: 1px solid #000;
 }
 
+.otp_box .form-control {
+  display: block;
+  width: 100%;
+  height: 42px;
+  padding: 7px 12px;
+  font-size: 16px;
+  line-height: 1.42857143;
+  color: #4a4a4a !important;
+  background-color: #fff;
+  border: 1px solid #d5d7d8;
+  border-radius: 5px;
+  box-shadow: inset 1px 1px 2px hsl(0deg 0% 60% / 65%);
+}
+
 .otp_box>div {
   justify-content: space-between;
 }
 
-.login_info_inr .form-group .login_bt,
-.delivery_info_inr .form-group .login_bt {
-  width: 100%;
-  background-color: #fff;
-  border: 2px solid #ffc107;
-  color: #ffc107;
-  padding: 10px 20px;
-  transition: 0.5s all ease-in-out;
-  margin-bottom: 5px;
-}
-
-.login_info_inr .form-group .login_bt:hover {
-  background-color: #fff;
-  color: #ffc107;
-}
 
 .delivery_info_inr .form-group .login_bt:hover {
   background-color: #ffc107;
   color: #fff;
 }
 
-.login_info_inr .form-group,
-.delivery_info_inr .form-group a {
-  font-size: 18px;
-  color: #ffc107;
-  margin: 0;
-}
-
-.login_info_inr .form-group a {
-  color: #ffc107;
-  text-decoration: none;
-}
 
 /* User Login Page Style End*/
 
@@ -655,6 +560,74 @@ input[type="file"] {
 
 .button-wrap {
   position: relative;
+}
+
+.edit-user-form .form-control {
+  display: block;
+  width: 100%;
+  height: 42px;
+  padding: 7px 12px;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.42857143;
+  color: #4a4a4a !important;
+  background-color: #fff;
+  border: 1px solid #d5d7d8;
+  border-radius: 5px;
+  box-shadow: inset 1px 1px 2px hsl(0deg 0% 60% / 65%);
+}
+
+.edit-user-form .form-control:focus {
+  color: #4a4a4a !important;
+  background-color: #fff !important;
+  border: 1px solid #d5d7d8 !important;
+  border-radius: 5px !important;
+  box-shadow: inset 1px 1px 2px hsl(0deg 0% 60% / 65%) !important;
+}
+
+.form-group .form-control {
+  display: block;
+  width: 100%;
+  height: 42px;
+  padding: 7px 12px;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.42857143;
+  color: #4a4a4a !important;
+  background-color: #fff;
+  border: 1px solid #d5d7d8;
+  border-radius: 5px;
+  box-shadow: inset 1px 1px 2px hsl(0deg 0% 60% / 65%);
+}
+
+.form-group .form-control:focus {
+  color: #4a4a4a !important;
+  background-color: #fff !important;
+  border: 1px solid #d5d7d8 !important;
+  border-radius: 5px !important;
+  box-shadow: inset 1px 1px 2px hsl(0deg 0% 60% / 65%) !important;
+}
+
+.edit-user-form label {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.update_order_btn {
+  background-color: #000;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  text-transform: uppercase;
+  padding: 10px 35px;
+}
+
+.update_order_btn:hover {
+  background-color: #000;
+  color: #fff;
+  border-radius: 5px;
 }
 
 .profile-image {
@@ -1395,7 +1368,7 @@ input[type="file"] {
 }
 
 .yellow-gold {
-  background-color: #e9d59c  !important;
+  background-color: #e9d59c !important;
 }
 
 .rose-gold {
@@ -1666,6 +1639,7 @@ input[type="file"] {
   border: 2px solid #656565;
   color: #000000;
   background-color: #f8f8f8;
+  border-radius: 5px;
 }
 
 .user_profile_view .primary:hover {
@@ -1925,11 +1899,6 @@ input[type="file"] {
   }
 
 
-  .login_info_inr,
-  .delivery_info_inr {
-    padding: 0;
-  }
-
   .menu::before {
     left: 85% !important;
   }
@@ -2088,29 +2057,6 @@ input[type="file"] {
     padding: 20px 0 0;
   }
 
-
-  .login_main {
-    height: auto;
-  }
-
-  .login_inr {
-    border-radius: 15px;
-    padding: 20px;
-  }
-
-  .login_info_inr_title {
-    margin-bottom: 20px;
-  }
-
-  .login_info_inr_title h3 {
-    font-size: 25px;
-    margin: 0;
-  }
-
-  .login_info_inr {
-    padding: 0;
-  }
-
   .footer_list ul {
     margin: 30px 0;
   }
@@ -2133,6 +2079,7 @@ input[type="file"] {
     width: 350px !important;
   }
 }
+
 /* Mobile Responsive Style End For 767px */
 
 /* Mobile Responsive Style Start For 991px*/
@@ -2233,6 +2180,7 @@ input[type="file"] {
     margin: 0;
   }
 }
+
 /* Mobile Responsive Style End For 991px*/
 
 /* Spinner Styles Start */
@@ -2249,6 +2197,7 @@ input[type="file"] {
     transform: rotate(360deg);
   }
 }
+
 /* Spinner Styles End */
 
 #user-profile nav {
@@ -2397,6 +2346,10 @@ input[type="file"] {
   font-size: 1.2em;
 }
 
+.user-login-form .form-control {
+  height: 50px !important;
+}
+
 
 
 /* dealer login form */
@@ -2416,17 +2369,27 @@ input[type="file"] {
   margin-bottom: 20px;
 }
 
-.form__input {
+.login .form-control {
   width: 100%;
-  border: 0px solid transparent;
-  border-radius: 4px;
-  border-bottom: 1px solid #aaa;
-  padding: 10px 20px;
-  outline: none;
-  border-bottom-color: #caa78d;
-  box-shadow: 0 0 5px rgba(208, 166, 143, .4);
-  transition: all .5s ease;
+  height: 42px;
+  padding: 7px 12px;
+  font-size: 16px;
+  line-height: 1.42857143;
+  color: #4a4a4a !important;
+  background-color: #fff;
+  border: 1px solid #d5d7d8;
+  border-radius: 5px;
+  box-shadow: inset 1px 1px 2px hsl(0deg 0% 60% / 65)
 }
+
+.login .form-control:focus {
+  color: #4a4a4a !important;
+  background-color: #fff !important;
+  border: 1px solid #d5d7d8 !important;
+  border-radius: 5px !important;
+  box-shadow: inset 1px 1px 2px hsl(0deg 0% 60% / 65%) !important;
+}
+
 
 .login_detail .form-group:first-child {
   margin: 0;
@@ -2981,4 +2944,62 @@ input[type="file"] {
   font-weight: 800;
   text-align: center;
   text-decoration: none;
+}
+
+/* Shop Page Styles */
+.item-product {
+  background: #fff;
+  padding: 15px;
+  position: relative;
+  margin-bottom: 30px;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px #e4e4e4;
+  transition: box-shadow .15s ease-out;
+}
+
+.item-product:hover {
+  box-shadow: 0px 9px 12px rgba(0, 0, 0, 0.25) !important;
+}
+
+.item-product a {
+  text-decoration: none;
+}
+
+.product-info {
+  padding: 5px 0;
+}
+
+.wishlist-top {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 35px;
+  height: 35px;
+  border: 1px solid rgb(0 0 0 / 30%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+}
+
+.wishlist-top a {
+  color: #000;
+  font-size: 18px;
+  line-height: 18px;
+}
+
+.product-info h4 {
+  font-size: 20px;
+  line-height: 20px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #000;
+}
+
+.product-info label {
+  font-size: 18px;
+  font-weight: 500;
+  color: #000;
 }

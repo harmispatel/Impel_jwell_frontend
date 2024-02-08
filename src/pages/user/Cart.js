@@ -924,7 +924,7 @@ const Cart = () => {
 
             <Modal.Body>
               <Form onSubmit={(e) => handleUpdateProfile(e, selectedData)}>
-                <div className="row">
+                <div className="row edit-user-form">
                   <div className="col-md-6">
                     <Form.Group
                       as={Col}
@@ -1194,10 +1194,13 @@ const Cart = () => {
                   </div>
                 </div>
 
-                <div className="text-center">
-                  <Button variant="primary" type="submit">
-                    Update
-                  </Button>
+                <div class="text-center">
+                  <button class="update_order_btn">
+                    {spinner && (
+                      <CgSpinner size={20} className="animate_spin mx-3" />
+                    )}
+                    {spinner ? "" : "Update"}
+                  </button>
                 </div>
               </Form>
             </Modal.Body>

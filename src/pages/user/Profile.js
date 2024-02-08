@@ -64,7 +64,7 @@ const Profile = () => {
     const file = e.target.files[0];
     const maxSize = 5 * 1024 * 1024;
 
-    if (file.size > maxSize) {
+    if (file?.size > maxSize) {
       toast.error("File size exceeds the 5 MB limit");
       fileInput.value = "";
       return;
@@ -86,7 +86,7 @@ const Profile = () => {
     );
 
     reader.onloadend = () => {
-      console.log("uploadded");
+      setIsLoading(true);
       profileService
         .UserProfileImage(myFormData)
         .then((res) => {
@@ -97,9 +97,11 @@ const Profile = () => {
               payload: { image: !imagestate?.image },
             });
             toast.success(res.message);
+            setIsLoading(false);
           } else {
             getProfile();
             toast.error(res.message);
+            setIsLoading(false);
           }
         })
         .catch((error) => {
@@ -436,8 +438,7 @@ const Profile = () => {
                     onClick={() => handleEdit(profileData)}
                     className="edit_profile_btn primary"
                   >
-                    Edit profile
-                    <FaPencilAlt className="ms-2" />
+                    <FaPencilAlt />
                   </button>
                 </div>
                 <div className="col-xl-3">
@@ -601,7 +602,7 @@ const Profile = () => {
 
           <Modal.Body>
             <Form onSubmit={(e) => handleUpdate(e, selectedData)}>
-              <div className="row">
+              <div className="row edit-user-form">
                 <div className="col-md-6">
                   <Form.Group
                     as={Col}
@@ -616,6 +617,7 @@ const Profile = () => {
                       defaultValue={selectedData.name}
                       onChange={(e) => handleEditChange(e)}
                       placeholder="Enter Your Name"
+                      className="form-control"
                     />
                     {error.nameErr && (
                       <span className="text-danger">{error.nameErr}</span>
@@ -857,13 +859,13 @@ const Profile = () => {
                 </div>
               </div>
 
-              <div className="text-center">
-                <Button variant="primary" type="submit">
+              <div class="text-center">
+                <button class="update_order_btn">
                   {spinner && (
-                    <CgSpinner size={20} className="animate_spin me-2" />
+                    <CgSpinner size={20} className="animate_spin mx-3" />
                   )}
-                  Update
-                </Button>
+                  {spinner ? "" : "Update"}
+                </button>
               </div>
             </Form>
           </Modal.Body>

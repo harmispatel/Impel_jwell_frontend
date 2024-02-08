@@ -118,7 +118,7 @@ const Resetpassword = () => {
                         type={passwordType}
                         name="password"
                         placeholder="Password"
-                        class="form__input"
+                        class="form-control"
                         value={input.password}
                         onChange={handleChange}
                       />
@@ -130,7 +130,7 @@ const Resetpassword = () => {
                           type={passwordType}
                           name="confirmPassword"
                           placeholder="Confirm Password"
-                          class="form__input"
+                          class="form-control"
                           value={input.confirmPassword}
                           onChange={handleChange}
                         />

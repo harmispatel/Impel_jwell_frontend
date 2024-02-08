@@ -60,7 +60,10 @@ const DealerLogin = () => {
     };
 
     axios
-      .post("https://harmistechnology.com/admin.indianjewelley/api/user-login", userData)
+      .post(
+        "https://harmistechnology.com/admin.indianjewelley/api/user-login",
+        userData
+      )
       .then((response) => {
         if (response?.data?.success === true) {
           setUser(response?.data);
@@ -105,7 +108,7 @@ const DealerLogin = () => {
                         name="email"
                         onChange={(e) => handleChange(e)}
                         placeholder="Registered Email ID"
-                        class="form__input"
+                        class="form-control"
                       />
                       {error && error === "Please enter your email." && (
                         <span className="text-danger">{error}</span>
@@ -118,7 +121,7 @@ const DealerLogin = () => {
                           name="password"
                           onChange={(e) => handleChange(e)}
                           placeholder="Password"
-                          class="form__input"
+                          class="form-control"
                         />
                         <span
                           className="toggle_btn"

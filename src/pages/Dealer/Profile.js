@@ -237,8 +237,8 @@ const DealerProfile = () => {
                             />
                           </div>
                         </div>
-                        <div class="col-md-4 mb-3 text-center">
-                          <h5>Documents</h5>
+                        <div class="col-md-4 mb-3 ">
+                          <h5 className="text-center">Documents</h5>
                           <div>
                             {profileData?.documents?.map((file, index) => (
                               <Link

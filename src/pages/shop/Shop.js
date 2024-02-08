@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { BsHeart, BsSearch } from "react-icons/bs";
+import { FiHeart } from "react-icons/fi";
 import { FcLike } from "react-icons/fc";
 import { FaRegStar, FaStar } from "react-icons/fa";
 import toast from "react-hot-toast";
@@ -329,7 +330,7 @@ const Shop = () => {
       })
       .catch((err) => {
         console.log(err);
-        setIsLoading(false);
+        setIsLoading(true);
       });
   };
 
@@ -666,27 +667,44 @@ const Shop = () => {
                         <div className="row">
                           {filterData?.map((data) => {
                             return (
-                              <div className="col-md-3">
-                                <Link
-                                  to={`/shopdetails/${data.id}`}
-                                  className="product_data"
-                                >
-                                  {data.image ? (
-                                    <img
-                                      src={data.image}
-                                      key={data.id}
-                                      alt=""
-                                      className="w-100"
-                                    />
-                                  ) : (
-                                    <img
-                                      src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930"
-                                      alt=""
-                                      className="w-100"
-                                    />
-                                  )}
-                                  <div className="edit">
-                                    <div>
+                              <>
+                                <div class="col-md-3 col-sm-4 col-xs-6">
+                                  <div class="item-product text-center">
+                                    <Link to={`/shopdetails/${data?.id}`}>
+                                      <div class="product-thumb">
+                                        {data?.image ? (
+                                          <>
+                                            <img
+                                              src={data?.image}
+                                              alt={data?.name}
+                                              className="w-100"
+                                            />
+                                          </>
+                                        ) : (
+                                          <>
+                                            <img
+                                              src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930"
+                                              alt=""
+                                              className="w-100"
+                                            />
+                                          </>
+                                        )}
+                                      </div>
+                                      <div class="product-info">
+                                        <h4>
+                                          {data?.name}&nbsp;
+                                          <span>({data?.code})</span>
+                                        </h4>
+
+                                        <label>
+                                          ₹
+                                          {data?.price_18k?.toLocaleString(
+                                            "en-US"
+                                          )}
+                                        </label>
+                                      </div>
+                                    </Link>
+                                    <div class="wishlist-top">
                                       {userType == 1 ? (
                                         <>
                                           {email ? (
@@ -696,7 +714,7 @@ const Shop = () => {
                                             >
                                               <Link
                                                 to="#"
-                                                className="heart-icon"
+                                                class=""
                                                 onClick={(e) => {
                                                   if (
                                                     DealerCollection?.find(
@@ -743,7 +761,7 @@ const Shop = () => {
                                             >
                                               <Link
                                                 to="#"
-                                                className="heart-icon"
+                                                class=""
                                                 onClick={(e) => {
                                                   if (
                                                     UsercartItems?.find(
@@ -762,7 +780,7 @@ const Shop = () => {
                                                 ) ? (
                                                   <FcLike />
                                                 ) : (
-                                                  <BsHeart />
+                                                  <FiHeart />
                                                 )}
                                               </Link>
                                             </OverlayTrigger>
@@ -773,8 +791,9 @@ const Shop = () => {
                                             >
                                               <span
                                                 onClick={(e) => UserLogin(e)}
+                                                class=""
                                               >
-                                                <BsHeart />
+                                                <FiHeart />
                                               </span>
                                             </OverlayTrigger>
                                           )}
@@ -782,21 +801,8 @@ const Shop = () => {
                                       )}
                                     </div>
                                   </div>
-
-                                  <div className="product_details d-flex justify-content-between">
-                                    <h4>{data?.name}</h4>
-                                    <h4>
-                                      <b>{data?.code}</b>
-                                    </h4>
-                                  </div>
-                                  <div className="product_details">
-                                    <h5>
-                                      ₹
-                                      {data?.price_18k?.toLocaleString("en-US")}
-                                    </h5>
-                                  </div>
-                                </Link>
-                              </div>
+                                </div>
+                              </>
                             );
                           })}
                         </div>

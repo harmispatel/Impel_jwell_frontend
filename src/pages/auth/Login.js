@@ -195,7 +195,7 @@ const Login = () => {
                       <>
                         <form onSubmit={sendOtp}>
                           <h2>Customer Login</h2>
-                          <div className="my-3">
+                          <div className="my-3 user-login-form">
                             <PhoneInput
                               international
                               defaultCountry="IN"

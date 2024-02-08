@@ -104,7 +104,7 @@ const ForgetPassword = () => {
                         name="email"
                         onChange={(e) => handleChange(e)}
                         placeholder="Registered Email ID"
-                        class="form__input"
+                        class="form-control"
                         value={email}
                       />
                       {error && <span className="text-danger">{error}</span>}
