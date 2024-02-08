@@ -22,8 +22,6 @@ const Login = () => {
   const [show, setShow] = useState(false);
   const [phoneError, setPhoneError] = useState();
   const [spinner, setSpinner] = useState(false);
-  const [minutes, setMinutes] = useState(1);
-  const [seconds, setSeconds] = useState(30);
   const [phonedata, setPhoneData] = useState();
 
   const handlePhoneNumberChange = (newPhoneNumber) => {
@@ -105,25 +103,24 @@ const Login = () => {
 
   const resendOTP = (e) => {
     e.preventDefault();
-    if (window.recaptchaVerifier) {
-      const appVerifier = window.recaptchaVerifier;
-
-      firebase
-        .auth()
-        .signInWithPhoneNumber(phoneNumber, appVerifier)
-        .then((confirmationResult) => {
-          console.log(confirmationResult);
-          window.confirmationResult = confirmationResult;
-          console.log("OTP has been resent");
-        })
-        .catch((error) => {
-          // Error; SMS not sent
-          console.log(error);
-          console.log("SMS not sent");
-        });
-    } else {
-      console.error("recaptchaVerifier not defined");
-    }
+    const formatPh = `${phoneNumber}`;
+    e.preventDefault();
+    const auth = getAuth();
+    signInWithPhoneNumber(auth, formatPh)
+      .then((confirmationResult) => {
+        window.confirmationResult = confirmationResult;
+        toast.success("OTP resend successfully!");
+        setShow(true);
+      })
+      .catch((err) => {
+        console.log(err);
+        setTimeout(() => {
+          window.location.reload(true);
+        }, 2000);
+      })
+      .finally(() => {
+        setSpinner(false);
+      });
   };
 
   const handleOtpVerification = (e) => {
@@ -153,27 +150,6 @@ const Login = () => {
         setSpinner(false);
       });
   };
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (seconds > 0) {
-        setSeconds(seconds - 1);
-      }
-
-      if (seconds === 0) {
-        if (minutes === 0) {
-          clearInterval(interval);
-        } else {
-          setSeconds(59);
-          setMinutes(minutes - 1);
-        }
-      }
-    }, 1000);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, [seconds]);
 
   useEffect(() => {
     onCaptchVerify();
@@ -269,20 +245,11 @@ const Login = () => {
                               id="sign-in-button"
                               type="button"
                               onClick={resendOTP}
-                              // disabled={seconds > 0 || minutes > 0}
                               className="btn btn-success user_login_btn"
                             >
                               RESEND
                             </button>
-                            {/* {seconds > 0 || minutes > 0 ? (
-                              <p>
-                                Time Remaining:
-                                {minutes < 10 ? `0${minutes}` : minutes}:
-                                {seconds < 10 ? `0${seconds}` : seconds}
-                              </p>
-                            ) : (
-                              <p>Didn't recieve code?</p>
-                            )} */}
+
                             <button
                               id="sign-in-button"
                               type="submit"

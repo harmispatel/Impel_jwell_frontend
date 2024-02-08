@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.7a6d0ae4.css",
-    "main.js": "/static/js/main.eda00bac.js",
+    "main.css": "/static/css/main.52e90ebf.css",
+    "main.js": "/static/js/main.df536aa4.js",
     "static/js/787.c4e7f8f9.chunk.js": "/static/js/787.c4e7f8f9.chunk.js",
     "static/media/intro.gif": "/static/media/intro.4d76be8e43539460cf9f.gif",
     "static/media/impel-bird-unscreen.gif": "/static/media/impel-bird-unscreen.6a73585a4d5183f7a00c.gif",
@@ -9,16 +9,17 @@
     "static/media/Lato-Regular.ttf": "/static/media/Lato-Regular.80c07943565d91b976e1.ttf",
     "static/media/bg-01.jpeg": "/static/media/bg-01.bf8cd203a9c6445ff403.jpeg",
     "static/media/download.png": "/static/media/download.4913e5663dce71ad1011.png",
+    "static/media/404-page-removebg-preview.png": "/static/media/404-page-removebg-preview.d28480e3cf7109dd1f98.png",
     "static/media/kada.jpg": "/static/media/kada.b79ea5404bef4b5f77f5.jpg",
     "static/media/logo.png": "/static/media/logo.4b7825a638146a1cdf28.png",
     "static/media/empty-cart.png": "/static/media/empty-cart.30d130f69377623f0ef9.png",
     "index.html": "/index.html",
-    "main.7a6d0ae4.css.map": "/static/css/main.7a6d0ae4.css.map",
-    "main.eda00bac.js.map": "/static/js/main.eda00bac.js.map",
+    "main.52e90ebf.css.map": "/static/css/main.52e90ebf.css.map",
+    "main.df536aa4.js.map": "/static/js/main.df536aa4.js.map",
     "787.c4e7f8f9.chunk.js.map": "/static/js/787.c4e7f8f9.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.7a6d0ae4.css",
-    "static/js/main.eda00bac.js"
+    "static/css/main.52e90ebf.css",
+    "static/js/main.df536aa4.js"
   ]
 }

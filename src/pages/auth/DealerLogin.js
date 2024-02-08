@@ -77,8 +77,6 @@ const DealerLogin = () => {
         } else {
           navigate("/Dealer_login");
           toast.error(response?.data?.message);
-          setLoginData({ email: "", password: "" });
-          setUser("");
         }
       })
       .catch((err) => {

@@ -97,7 +97,6 @@ const Profile = () => {
               payload: { image: !imagestate?.image },
             });
             toast.success(res.message);
-            setIsLoading(false);
           } else {
             getProfile();
             toast.error(res.message);
@@ -110,6 +109,7 @@ const Profile = () => {
     };
     if (file) {
       reader.readAsDataURL(file);
+      setIsLoading(false);
     }
   };
 
@@ -792,7 +792,7 @@ const Profile = () => {
                 <div className="col-md-6">
                   <Form.Group className="mb-2" controlId="formGridAddress1">
                     <Form.Label>
-                      Shipping-State<span className="text-danger">*</span>
+                      Shipping State<span className="text-danger">*</span>
                     </Form.Label>
                     <select
                       className="form-control"
@@ -818,7 +818,7 @@ const Profile = () => {
                 <div className="col-md-6">
                   <Form.Group className="mb-2" controlId="formGridAddress1">
                     <Form.Label>
-                      Shipping-City<span className="text-danger">*</span>
+                      Shipping City<span className="text-danger">*</span>
                     </Form.Label>
                     <select
                       className="form-control"

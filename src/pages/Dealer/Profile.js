@@ -40,6 +40,7 @@ const DealerProfile = () => {
     );
 
     reader.onloadend = () => {
+      setIsLoading(true);
       profileService
         .UserProfileImage(myFormData)
         .then((res) => {
@@ -62,6 +63,7 @@ const DealerProfile = () => {
 
     if (file) {
       reader.readAsDataURL(file);
+      setIsLoading(false);
     }
   };
 
