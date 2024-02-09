@@ -182,11 +182,8 @@ const Navbar = () => {
   };
 
   const changeNavbarColor = () => {
-    if (window.scrollY >= 80) {
-      setColorchange(true);
-    } else {
-      setColorchange(false);
-    }
+    const scrollValue = document?.documentElement?.scrollTop;
+    scrollValue > 100 ? setColorchange(true) : setColorchange(false);
   };
   window.addEventListener("scroll", changeNavbarColor);
 
@@ -274,7 +271,9 @@ const Navbar = () => {
   const cartTip = <Tooltip id="tooltip">cart</Tooltip>;
 
   return (
-    <header className={colorChange ? "header sticky_header" : "header"}>
+    <header
+      className={`${colorChange === true ? "header sticky_header" : "header"}`}
+    >
       <nav className="navbar navbar-expand-lg bg-body-tertiary">
         <div className="container">
           <div className="header_inner">

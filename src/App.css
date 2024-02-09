@@ -1,3 +1,7 @@
+html {
+  scroll-behavior: smooth;
+}
+
 @font-face {
   font-family: 'Lato';
   src: url('./assets/fonts/Lato-Regular.ttf');
@@ -100,10 +104,34 @@ body {
   box-shadow: 0 0 5px 2px rgb(0 0 0 / 20%);
   color: #000;
   position: fixed;
-  top: 0;
+  top: 0; 
   left: 0;
   width: 100%;
   z-index: 999;
+  -webkit-transition: all 15ms ease-in-out;
+  -moz-transition: all 15ms ease-in-out;
+  -o-transition: all 15ms ease-in-out;
+  -ms-transition: all 15ms ease-in-out;
+  transition: all 15ms ease-in-out;
+  animation-name: stickyTransition;
+  -webkit-animation-duration: 0.5s;
+  animation-duration: 0.5s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+
+@keyframes stickyTransition {
+  0% {
+    opacity: 0;
+    -webkit-transform: translate3d(0, -100%, 0);
+    transform: translate3d(0, -100%, 0);
+  }
+
+  100% {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+  }
 }
 
 .header .navbar {
@@ -2418,10 +2446,13 @@ input[type="file"] {
 .dealer_login_btn {
   width: 100%;
   background-color: #caa78d !important;
-  border-color: #caa78d !important;
+  border-color: #413227 !important;
   margin-bottom: 10px;
   text-transform: uppercase;
   font-weight: 600;
+  cursor: pointer;
+  border-radius: 5px;
+  padding: 5px 0;
 }
 
 .login_detail p {

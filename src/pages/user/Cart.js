@@ -862,7 +862,7 @@ const Cart = () => {
                             </button>
                             <Link
                               to="/shop"
-                              className="btn btn-light w-100 border mt-2"
+                              className="light-up-button w-100 rounded-2 mt-2"
                               style={{ display: spinner ? "none" : "block" }}
                             >
                               Back to shop

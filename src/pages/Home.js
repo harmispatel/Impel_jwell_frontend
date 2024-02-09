@@ -139,6 +139,7 @@ const Home = () => {
     bannerSlider?.bottom_banners &&
     bannerSlider?.bottom_banners[0].tag_id;
 
+
   return (
     <>
       <Helmet>

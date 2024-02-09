@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { CgSpinner } from "react-icons/cg";
 import { Helmet } from "react-helmet-async";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import ReCAPTCHA from "react-google-recaptcha";
 
 const DealerLogin = () => {
+  const recaptcha = useRef();
+
   const navigate = useNavigate();
   const [loginData, setLoginData] = useState({
     email: "",
@@ -19,6 +22,7 @@ const DealerLogin = () => {
   const [error, setError] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [spinner, setSpinner] = useState(false);
+  const [captcha, setCaptcha] = useState("");
 
   const handleChange = (e) => {
     setLoginData({ ...loginData, [e.target.name]: e.target.value });
@@ -35,7 +39,7 @@ const DealerLogin = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    const captchaValue = recaptcha?.current?.getValue();
     setError(null);
     setIsSubmitting(true);
 
@@ -48,6 +52,11 @@ const DealerLogin = () => {
       setError("Please enter your password.");
       return;
     }
+    if (!captchaValue) {
+      setCaptcha("Please verify the reCAPTCHA!");
+      return;
+    }
+    setError(null);
     setIsSubmitting(true);
     setSpinner(true);
     let formdata = new FormData();
@@ -87,6 +96,9 @@ const DealerLogin = () => {
       });
   };
 
+  const onCaptchaChange = () => {
+    setCaptcha("");
+  };
   return (
     <>
       <Helmet>
@@ -109,7 +121,7 @@ const DealerLogin = () => {
                         class="form-control"
                       />
                       {error && error === "Please enter your email." && (
-                        <span className="text-danger">{error}</span>
+                        <span className="text-danger fw-bolder">{error}</span>
                       )}
                     </div>
                     <div className="form-group">
@@ -133,15 +145,24 @@ const DealerLogin = () => {
                         </span>
                       </div>
                       {error && error === "Please enter your password." && (
-                        <span className="text-danger">{error}</span>
+                        <span className="text-danger fw-bolder">{error}</span>
+                      )}
+                    </div>
+                    <div className="mt-4 d-flex align-items-center justify-content-center">
+                      <ReCAPTCHA
+                        ref={recaptcha}
+                        sitekey="6Lc7Em0pAAAAAHHha3qWzytW6qKfkBqh8ResnmfR"
+                        onChange={onCaptchaChange}
+                      />
+                    </div>
+                    <div className="text-center fw-bolder">
+                      {captcha && (
+                        <span className="text-danger">{captcha}</span>
                       )}
                     </div>
 
                     <div className="form-group">
-                      <button
-                        className="btn btn-success dealer_login_btn fw-bolder"
-                        style={{ fontSize: "18px" }}
-                      >
+                      <button className="dealer_login_btn">
                         {spinner && (
                           <CgSpinner size={20} className="animate_spin me-2" />
                         )}
