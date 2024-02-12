@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import BreadCrumb from "../../components/common/BreadCrumb";
 import loadinggif from "../../assets/video/impel-bird-unscreen.gif";
 import { FaLongArrowAltLeft } from "react-icons/fa";
@@ -7,6 +7,7 @@ import homeService from "../../services/Home";
 import categoryDetail from "../../services/Shop";
 
 const CategoriesItems = () => {
+  const navigate = useNavigate();
   const paramId = useParams();
   const [category, SetCategory] = useState([]);
   const [selectedCategory, setselectedCategory] = useState(0);
@@ -73,6 +74,11 @@ const CategoriesItems = () => {
     setPagination({ ...pagination, currentPage: page });
     scrollup();
     setIsLoading(true);
+    // if (page == 1) {
+    //   navigate(`/categories/${paramId?.id}`);
+    // } else {
+    //   navigate(`/categories/${paramId?.id}${page ? `?page_no=${page}` : ""}`);
+    // }
   };
 
   const paginationPrev = () => {
@@ -84,6 +90,13 @@ const CategoriesItems = () => {
       CategoriesData(calculatedOffset);
       scrollup();
       setIsLoading(true);
+      // if (prevPage == 1) {
+      //   navigate(`/categories/${paramId?.id}`);
+      // } else {
+      //   navigate(
+      //     `/categories/${paramId?.id}${prevPage ? `?page_no=${prevPage}` : ""}`
+      //   );
+      // }
     }
   };
 
@@ -96,6 +109,9 @@ const CategoriesItems = () => {
       CategoriesData(calculatedOffset);
       scrollup();
       setIsLoading(true);
+      // navigate(
+      //   `/categories/${paramId?.id}${nextPage ? `?page_no=${nextPage}` : ""}`
+      // );
     }
   };
 
