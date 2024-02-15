@@ -1896,10 +1896,6 @@ input[type="file"] {
     width: 45% !important;
   }
 
-  .user_profile_view th {
-    width: 35% !important;
-  }
-
   .shippping_address_card th {
     width: 35% !important;
   }
@@ -2566,9 +2562,6 @@ input[type="file"] {
   font-weight: bold !important;
 }
 
-.profile th {
-  width: 25%;
-}
 
 .shippping_address_card th {
   width: 25%;
