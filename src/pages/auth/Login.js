@@ -184,10 +184,13 @@ const Login = () => {
                             country={"in"}
                             value={phoneNumber}
                             onChange={handlePhoneNumberChange}
+                            placeholder="Enter Your Phone Number"
                             enableSearch
                             disableSearchIcon
-                            placeholder="Enter Your Phone Number"
-                            disableDropdown={false}
+                            countryCodeEditable={false}
+                            disableDropdown
+                            enableAreaCodes={true}
+                            autoFormat
                           />
                           {phoneError && (
                             <div className="text-danger">{phoneError}</div>
@@ -245,6 +248,7 @@ const Login = () => {
                             OTPLength={6}
                             otpType="number"
                             disabled={false}
+                            placeholder="000000"
                           />
                         </div>
                         <span className="timer">
