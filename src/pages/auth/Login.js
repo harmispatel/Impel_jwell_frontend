@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "react-phone-number-input/style.css";
-import PhoneInput from "react-phone-number-input";
-import OTPInput from "react-otp-input";
+import OTPInput from "otp-input-react";
 import firebase from "./firebase.config";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 
 import {
   RecaptchaVerifier,
@@ -29,7 +29,7 @@ const Login = () => {
     if (!newPhoneNumber) {
       setPhoneError("Please enter your mobile");
       isValid = false;
-    } else if (newPhoneNumber.length !== 13) {
+    } else if (newPhoneNumber.length !== 12) {
       setPhoneError("Your mobile number should be 10 digits");
       isValid = false;
     } else {
@@ -54,11 +54,11 @@ const Login = () => {
     e.preventDefault();
     if (!phoneNumber) {
       setPhoneError("Please enter your mobile");
-    } else if (phoneNumber.length !== 13) {
+    } else if (phoneNumber.length !== 12) {
       setPhoneError("Your mobile number should be 10 digits");
     } else {
       setPhoneError("");
-      const formatPh = `${phoneNumber}`;
+      const formatPh = `+${phoneNumber}`;
       const appVerifier = window.recaptchaVerifier;
       setSpinner(true);
       axios
@@ -132,7 +132,7 @@ const Login = () => {
       .then((result) => {
         if (result) {
           toast.success("Login Successfully...");
-          localStorage.setItem("phone", phoneNumber);
+          localStorage.setItem("phone", "+" + phoneNumber);
           localStorage.setItem("user_type", phonedata?.user_type);
           localStorage.setItem("user_id", phonedata?.user_id);
           localStorage.setItem("verification", phonedata?.verification);
@@ -155,6 +155,8 @@ const Login = () => {
     onCaptchVerify();
   }, []);
 
+  const PhoneNumber = phoneNumber.replace("91", "");
+
   return (
     <>
       <Helmet>
@@ -163,112 +165,113 @@ const Login = () => {
       <section className="login">
         <div class="container">
           <div className="">
-            <div class="row justify-content-center">
+            <div class="row justify-content-center text-align-center">
               <div className="col-md-5">
-                <div className="login_detail">
-                  <div id="recaptcha-container">
-                    {show === false && (
-                      <>
-                        <form onSubmit={sendOtp}>
-                          <h2>Customer Login</h2>
-                          <div className="my-3 user-login-form">
-                            <PhoneInput
-                              international
-                              defaultCountry="IN"
-                              countryCallingCodeEditable={false}
-                              className="form-control"
-                              name="phoneNumber"
-                              value={phoneNumber}
-                              onChange={handlePhoneNumberChange}
-                              placeholder="Enter Your Phone Number"
-                              maxLength={16}
+                <div className="user-login-form">
+                  {show === false && (
+                    <>
+                      <form
+                        onSubmit={sendOtp}
+                        className="d-flex flex-column gap-2 form w-100"
+                      >
+                        <h5>Welcome</h5>
+                        <span>
+                          Enter phone number to continue and we will send a
+                          verification code to this number.
+                        </span>
+                        <div className="my-3">
+                          <PhoneInput
+                            country={"in"}
+                            value={phoneNumber}
+                            onChange={handlePhoneNumberChange}
+                            enableSearch
+                            disableSearchIcon
+                            placeholder="Enter Your Phone Number"
+                            disableDropdown={false}
+                          />
+                          {phoneError && (
+                            <div className="text-danger">{phoneError}</div>
+                          )}
+                        </div>
+                        <button
+                          type="submit"
+                          className="customer_login_btn"
+                          id="sign-in-button"
+                          disabled={spinner}
+                        >
+                          {spinner && (
+                            <CgSpinner
+                              size={20}
+                              className="animate_spin text-center mx-2"
+                              role="button"
                             />
-                            {phoneError && (
-                              <div className="text-danger">{phoneError}</div>
+                          )}
+                          {spinner ? "" : "Login To Continue"}
+                        </button>
+                        <div className="col-md-12 text-end">
+                          <Link
+                            to="/Dealer_login"
+                            className="text-decoration-none text-success"
+                            style={{ fontWeight: "700", fontSize: "18px" }}
+                          >
+                            Dealer Login ?
+                          </Link>
+                        </div>
+                      </form>
+                    </>
+                  )}
+
+                  {show === true && (
+                    <>
+                      <form
+                        onSubmit={handleOtpVerification}
+                        className="d-flex flex-column gap-2 form w-100"
+                      >
+                        <h5>Enter Verification Code</h5>
+                        <span>
+                          We have sent a verification code to
+                          <p>
+                            {PhoneNumber.substring(0, 2) +
+                              "*".repeat(PhoneNumber.length - 4) +
+                              PhoneNumber.slice(-2)}
+                          </p>
+                        </span>
+                        <div>
+                          <OTPInput
+                            className="otp-container"
+                            value={otp}
+                            onChange={setOtp}
+                            autoFocus
+                            OTPLength={6}
+                            otpType="number"
+                            disabled={false}
+                          />
+                        </div>
+                        <span className="timer">
+                          <button>Resend OTP</button>
+                        </span>
+                        <span className="button-container d-flex gap-5">
+                          <button
+                            type="submit"
+                            id="sign-in-button"
+                            disabled={otp?.length < 6}
+                          >
+                            {spinner && (
+                              <CgSpinner
+                                size={20}
+                                className="animate_spin text-center mx-3"
+                              />
                             )}
-                          </div>
-                          <div className="row">
-                            <div className="col-md-12">
-                              <button
-                                className="btn btn-success dealer_login_btn fw-bolder"
-                                style={{ fontSize: "18px" }}
-                                id="sign-in-button"
-                                disabled={spinner}
-                              >
-                                {spinner && (
-                                  <CgSpinner
-                                    size={20}
-                                    className="animate_spin text-center mx-2"
-                                    role="button"
-                                  />
-                                )}
-                                {spinner ? "" : "Login "}
-                              </button>
-                            </div>
-                          </div>
-                          <div className="col-md-12 text-end">
-                            <Link
-                              to="/Dealer_login"
-                              className="text-decoration-none text-success"
-                              style={{ fontWeight: "700", fontSize: "18px" }}
-                            >
-                              Dealer Login ?
-                            </Link>
-                          </div>
-                        </form>
-                      </>
-                    )}
-
-                    {show === true && (
-                      <>
-                        <form onSubmit={handleOtpVerification}>
-                          <h2>Enter OTP</h2>
-                          <div className="form-group my-3 otp_box">
-                            <OTPInput
-                              value={otp}
-                              className="form-control"
-                              onChange={setOtp}
-                              shouldAutoFocus={true}
-                              numInputs={6}
-                              renderSeparator={<span>-</span>}
-                              renderInput={(props) => (
-                                <input
-                                  {...props}
-                                  type="tel"
-                                  inputMode="numeric"
-                                />
-                              )}
-                            />
-                          </div>
-                          <div className="d-flex justify-content-between">
-                            <button
-                              id="sign-in-button"
-                              type="button"
-                              onClick={resendOTP}
-                              className="btn btn-success user_login_btn"
-                            >
-                              RESEND
-                            </button>
-
-                            <button
-                              id="sign-in-button"
-                              type="submit"
-                              className="btn btn-success user_login_btn"
-                              disabled={otp?.length < 6}
-                            >
-                              {spinner && (
-                                <CgSpinner
-                                  size={20}
-                                  className="animate_spin text-center mx-3"
-                                />
-                              )}
-                              {spinner ? "" : "VERIFY"}
-                            </button>
-                          </div>
-                        </form>
-                      </>
-                    )}
-                  </div>
+                            {spinner ? "" : " Verify and Proceed"}
+                          </button>
+                        </span>
+                      </form>
+                    </>
+                  )}
+                  <div
+                    id="recaptcha-container"
+                    style={{ display: "none" }}
+                  ></div>
                 </div>
               </div>
             </div>

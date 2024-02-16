@@ -49,41 +49,15 @@ body {
   align-items: center;
   justify-content: center;
   padding: 60px 0;
+  height: 100vh;
 }
 
-
-.PhoneInputInput {
-  border: none;
-  padding: 10px;
-  border-radius: 5px;
-  align-items: normal !important;
+.reset_password {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 0;
 }
-
-.otp_box input {
-  width: 40px !important;
-  height: 40px;
-  border-radius: 5px;
-  border: 1px solid #000;
-}
-
-.otp_box .form-control {
-  display: block;
-  width: 100%;
-  height: 42px;
-  padding: 7px 12px;
-  font-size: 16px;
-  line-height: 1.42857143;
-  color: #4a4a4a !important;
-  background-color: #fff;
-  border: 1px solid #d5d7d8;
-  border-radius: 5px;
-  box-shadow: inset 1px 1px 2px hsl(0deg 0% 60% / 65%);
-}
-
-.otp_box>div {
-  justify-content: space-between;
-}
-
 
 .delivery_info_inr .form-group .login_bt:hover {
   background-color: #ffc107;
@@ -104,7 +78,7 @@ body {
   box-shadow: 0 0 5px 2px rgb(0 0 0 / 20%);
   color: #000;
   position: fixed;
-  top: 0; 
+  top: 0;
   left: 0;
   width: 100%;
   z-index: 999;
@@ -1904,6 +1878,14 @@ input[type="file"] {
     padding: 15px 5px !important;
   }
 
+  .user-login-form .react-tel-input input {
+    width: 100% !important;
+  }
+
+  .user-login-form {
+    padding: 30px 8px !important;
+  }
+
   .model_banner_button {
     display: inline-block !important;
     position: absolute !important;
@@ -2077,8 +2059,7 @@ input[type="file"] {
   }
 
   .login {
-    height: auto;
-    padding: 20px 0 0;
+    padding: 0 !important;
   }
 
   .footer_list ul {
@@ -2370,48 +2351,176 @@ input[type="file"] {
   font-size: 1.2em;
 }
 
-.user-login-form .form-control {
-  height: 50px !important;
+/* User Login Form Styles Start*/
+.user-login-form {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 4px 4px 50px #cccccc8c;
+}
+
+.user-login-form h5 {
+  font-size: 1.8rem;
+  font-weight: bolder;
+  text-align: center;
+}
+
+.user-login-form span {
+  font-size: 16px;
+  color: #8b8b8b;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+}
+
+.user-login-form span p {
+  color: #e97e0a;
+  margin: 0;
+  margin-left: 5px;
 }
 
 
+.user-login-form .PhoneInput {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  font-size: 2rem;
+}
+
+.user-login-form .react-tel-input input {
+  color: #141A1F;
+  position: relative !important;
+  border-radius: 5px;
+  background: #141a1f0d;
+  padding-left: 20px;
+  border: 1px solid #141A1F80;
+  height: 50px;
+  flex-grow: 1;
+  font-size: 16px;
+  order: 1;
+}
+
+.user-login-form .react-tel-input input:focus {
+  box-shadow: none !important;
+  border: 1px solid #141A1F;
+}
+
+.user-login-form .react-tel-input input::placeholder {
+  text-align: start;
+}
+
+.user-login-form .react-tel-input .selected-flag {
+  width: 35px;
+}
+
+.user-login-form .react-tel-input {
+  display: flex;
+  gap: 20px;
+}
+
+.user-login-form .react-tel-input .flag-dropdown {
+  display: flex;
+  position: relative !important;
+  order: 0 !important;
+  align-items: center;
+  flex-direction: row;
+  gap: 3px;
+  padding: 15px;
+  height: 50px;
+  border-radius: 8px;
+  background: #141a1f0d;
+  border: 1px solid #141A1F80;
+  color: #141A1F;
+  justify-content: flex-start;
+}
+
+.user-login-form .PhoneInput .PhoneInputCountry select {
+  width: 55px;
+  background-color: #f2f3f9;
+}
+
+.user-login-form .PhoneInput .PhoneInputCountry img {
+  height: 100%;
+  width: 35px;
+  margin: 0;
+  padding: 0;
+}
+
+.user-login-form button[type=submit] {
+  font-size: 16px;
+  font-weight: 700 !important;
+  letter-spacing: 1px;
+  padding: 10px;
+  color: #fff !important;
+  text-decoration: none;
+  background-color: #CAA78C !important;
+  width: 100% !important;
+  border: none;
+}
+
+.user-login-form button[type=submit]:hover {
+  background-color: #e97e0a;
+  color: #F8F8F8;
+  opacity: 1;
+}
+
+/* otp box css start */
+.user-login-form .otp-container {
+  margin: 18px 4%;
+  font-size: 2rem;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.user-login-form .otp-container>input {
+  margin-right: 3px;
+  background-color: #ddd;
+  font-size: 19px;
+  border: none;
+  font-weight: 800;
+}
+
+.user-login-form .otp-container>input:focus-visible {
+  border: none !important;
+  outline: none !important;
+}
+
+.user-login-form .timer button {
+  background-color: transparent;
+  color: #e97e0a;
+  font-size: 16px;
+  font-weight: 900;
+  border: none;
+}
+
+.user-login-form .button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.user-login-form .button-container button {
+  margin-top: 10px;
+  font-size: 16px;
+  font-weight: 700 !important;
+  letter-spacing: 1px;
+  padding: 10px;
+  color: #ffffff;
+  text-decoration: none;
+  background-color: #CAA78C;
+}
+
+/* User Login Form Styles End*/
 
 /* dealer login form */
 .login_detail {
   background-color: #fff;
   padding: 30px;
-  border-radius: 20px;
+  border-radius: 8px;
   box-shadow: 4px 4px 50px #cccccc8c;
-}
-
-.login_detail h2 {
-  font-size: 30px;
-  color: #caa78d;
-  text-transform: uppercase;
-  text-align: center;
-  font-weight: 700;
-  margin-bottom: 20px;
-}
-
-.login .form-control {
-  width: 100%;
-  height: 42px;
-  padding: 7px 12px;
-  font-size: 16px;
-  line-height: 1.42857143;
-  color: #4a4a4a !important;
-  background-color: #fff;
-  border: 1px solid #d5d7d8;
-  border-radius: 5px;
-  box-shadow: inset 1px 1px 2px hsl(0deg 0% 60% / 65)
-}
-
-.login .form-control:focus {
-  color: #4a4a4a !important;
-  background-color: #fff !important;
-  border: 1px solid #d5d7d8 !important;
-  border-radius: 5px !important;
-  box-shadow: inset 1px 1px 2px hsl(0deg 0% 60% / 65%) !important;
 }
 
 

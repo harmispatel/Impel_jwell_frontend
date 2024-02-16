@@ -33,11 +33,11 @@ import ProfileProvider from "./context/ProfileContext";
 import { useEffect } from "react";
 
 function App() {
+  const location = useLocation();
   const navigate = useNavigate();
   const userType = localStorage.getItem("user_type");
   const popupshow = localStorage.getItem("user_type");
   const helmetContext = {};
-  const location = useLocation();
 
   const shouldShowPopup =
     !["/login", "/Dealer_login", "/forget-password"].some((path) =>
@@ -58,6 +58,19 @@ function App() {
     }
   }, [userType, location.pathname, navigate]);
 
+  function renderLayout() {
+    if (
+      location.pathname.startsWith("/login") ||
+      location.pathname.startsWith("/forget-password") ||
+      location.pathname.startsWith("/reset-password") ||
+      location.pathname.startsWith("/Dealer_login")
+    ) {
+      return null; 
+    } else {
+      return <Layout />;
+    }
+  }
+
   return (
     <>
       <WishlistProvider>
@@ -68,7 +81,7 @@ function App() {
               {shouldShowPopup && popupshow == null ? <Popup /> : <></>}
               <Routes>
                 <>
-                  <Route path="/" element={<Layout />}>
+                  <Route path="/" element={renderLayout()}>
                     {/* COMMON COMPONENT */}
                     <Route index element={<Home />} />
                     <Route path="shop" element={<Shop />} />
