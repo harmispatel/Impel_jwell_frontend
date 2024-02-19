@@ -252,7 +252,7 @@ const Login = () => {
                             OTPLength={6}
                             otpType="number"
                             disabled={false}
-                            placeholder="000000"
+                            placeholder="------"
                           />
                         </div>
                         <span className="timer">

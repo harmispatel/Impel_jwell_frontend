@@ -681,6 +681,8 @@ const Profile = () => {
                       name="address"
                       className="form-control"
                       defaultValue={selectedData.address}
+                      rows={4}
+                      style={{ resize: "none", height: "auto" }}
                       onChange={(e) => {
                         handleEditChange(e);
                       }}
@@ -781,6 +783,8 @@ const Profile = () => {
                       name="shipping_address"
                       className="form-control"
                       value={userData.shipping_address}
+                      rows={4}
+                      style={{ resize: "none", height: "auto" }}
                       onChange={(e) => handleEditChange(e)}
                       placeholder="Enter Your Shipping Address"
                     />

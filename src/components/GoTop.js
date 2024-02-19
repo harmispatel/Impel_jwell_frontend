@@ -25,7 +25,7 @@ const GoTop = () => {
     <div>
       {backButton && (
         <button className="btn go-top-button" onClick={scrollup}>
-          <FaAngleUp />
+          <FaAngleUp style={{ color: "#fff" }} />
         </button>
       )}
     </div>

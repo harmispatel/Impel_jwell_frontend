@@ -65,7 +65,7 @@ function App() {
       location.pathname.startsWith("/reset-password") ||
       location.pathname.startsWith("/Dealer_login")
     ) {
-      return null; 
+      return null;
     } else {
       return <Layout />;
     }

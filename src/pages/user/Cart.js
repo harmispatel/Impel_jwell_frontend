@@ -1010,6 +1010,8 @@ const Cart = () => {
                         name="address"
                         className="form-control"
                         defaultValue={selectedData.address}
+                        rows={4}
+                        style={{ resize: "none", height: "auto" }}
                         onChange={(e) => {
                           handleChange(e);
                         }}
@@ -1114,6 +1116,8 @@ const Cart = () => {
                         name="shipping_address"
                         className="form-control"
                         value={userData.shipping_address}
+                        rows={4}
+                        style={{ resize: "none", height: "auto" }}
                         onChange={(e) => {
                           handleChange(e);
                         }}

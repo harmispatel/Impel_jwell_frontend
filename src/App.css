@@ -2,6 +2,23 @@ html {
   scroll-behavior: smooth;
 }
 
+* {
+  scroll-behavior: smooth;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #db9662;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #2ac231;
+}
+
 @font-face {
   font-family: 'Lato';
   src: url('./assets/fonts/Lato-Regular.ttf');

@@ -78,17 +78,16 @@ const Shop = () => {
 
   // sort by searching
   const searchbar = (e) => {
-    setIsLoading(true);
-    const queryParams = new URLSearchParams(location.search);
+    // const queryParams = new URLSearchParams(location.search);
 
-    const searchValue = e.target.value;
-    if (searchValue) {
-      queryParams.set("search_query", searchValue);
-    } else {
-      queryParams.delete("search_query");
-    }
+    // const searchValue = e.target.value;
+    // if (searchValue) {
+    //   queryParams.set("search_query", searchValue);
+    // } else {
+    //   queryParams.delete("search_query");
+    // }
 
-    navigate(`/shop?${queryParams.toString()}`);
+    // navigate(`/shop?${queryParams.toString()}`);
     setSearchInput(e.target.value);
   };
 
@@ -711,20 +710,29 @@ const Shop = () => {
                                             <OverlayTrigger
                                               placement="top"
                                               overlay={selectionTip}
-                                              onClick={(e) => {
-                                                if (
-                                                  DealerCollection?.find(
-                                                    (item) =>
-                                                      item?.id === data?.id
-                                                  )
-                                                ) {
-                                                  removeFromSelection(e, data);
-                                                } else {
-                                                  AddToDealerSelection(e, data);
-                                                }
-                                              }}
                                             >
-                                              <Link to="#" class="">
+                                              <Link
+                                                to="#"
+                                                class=""
+                                                onClick={(e) => {
+                                                  if (
+                                                    DealerCollection?.find(
+                                                      (item) =>
+                                                        item?.id === data?.id
+                                                    )
+                                                  ) {
+                                                    removeFromSelection(
+                                                      e,
+                                                      data
+                                                    );
+                                                  } else {
+                                                    AddToDealerSelection(
+                                                      e,
+                                                      data
+                                                    );
+                                                  }
+                                                }}
+                                              >
                                                 {DealerCollection?.find(
                                                   (item) =>
                                                     item?.id === data?.id
@@ -749,20 +757,23 @@ const Shop = () => {
                                             <OverlayTrigger
                                               placement="top"
                                               overlay={wishlistTip}
-                                              onClick={(e) => {
-                                                if (
-                                                  UsercartItems?.find(
-                                                    (item) =>
-                                                      item.id === data.id
-                                                  )
-                                                ) {
-                                                  removeFromWishList(e, data);
-                                                } else {
-                                                  addToUserWishList(e, data);
-                                                }
-                                              }}
                                             >
-                                              <Link to="#" class="">
+                                              <Link
+                                                to="#"
+                                                class=""
+                                                onClick={(e) => {
+                                                  if (
+                                                    UsercartItems?.find(
+                                                      (item) =>
+                                                        item.id === data.id
+                                                    )
+                                                  ) {
+                                                    removeFromWishList(e, data);
+                                                  } else {
+                                                    addToUserWishList(e, data);
+                                                  }
+                                                }}
+                                              >
                                                 {UsercartItems?.find(
                                                   (item) => item.id === data.id
                                                 ) ? (

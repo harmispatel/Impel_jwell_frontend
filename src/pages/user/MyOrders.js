@@ -253,7 +253,7 @@ const MyOrders = () => {
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
-  
+
   const orderDetails = <Tooltip id="tooltip">View order details</Tooltip>;
   return (
     <>
@@ -400,7 +400,10 @@ const MyOrders = () => {
                             ) : (
                               <>
                                 <tr className="text-center">
-                                  <td colSpan="7" className="p-3">
+                                  <td
+                                    colSpan={user_type == 1 ? 9 : 7}
+                                    className="p-3"
+                                  >
                                     <span
                                       className="text-danger"
                                       style={{ fontSize: "26px" }}
