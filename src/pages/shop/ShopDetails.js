@@ -35,6 +35,7 @@ const ShopDetails = () => {
   const [relatedProduct, setRelatedProduct] = useState([]);
   const [img, setImg] = useState();
   const [productImages, setProduuctImages] = useState([]);
+  const [ogImages, setOgImages] = useState([]);
   const [productQuantity, setProductQuantity] = useState(1);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -58,6 +59,7 @@ const ShopDetails = () => {
           setProduct(res.data);
           setImg(res.data.image);
           setProduuctImages(res.data.multiple_image);
+          setOgImages(res?.data?.og_images);
           setIsLoading(false);
         }, 500);
       })
@@ -322,7 +324,7 @@ const ShopDetails = () => {
                                     </span>
                                     <img
                                       className="w-50"
-                                      src={productImages[currentImageIndex]}
+                                      src={ogImages[currentImageIndex]}
                                       alt={`Product Image ${currentImageIndex}`}
                                     />
                                     <div className="lightbox-navigation">

@@ -4,6 +4,7 @@ import OTPInput from "otp-input-react";
 import firebase from "./firebase.config";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
+import Logo from "../../assets/images/logo.png";
 
 import {
   RecaptchaVerifier,
@@ -62,7 +63,7 @@ const Login = () => {
       const appVerifier = window.recaptchaVerifier;
       setSpinner(true);
       axios
-        .post("https://harmistechnology.com/admin.indianjewelley/api/login", {
+        .post("https://admin.impel.store/api/login", {
           phone: formatPh,
         })
         .then((res) => {
@@ -124,8 +125,8 @@ const Login = () => {
   };
 
   const handleOtpVerification = (e) => {
-    setSpinner(true);
     e.preventDefault();
+    setSpinner(true);
     const code = otp;
     window.confirmationResult
       .confirm(code)
@@ -174,6 +175,9 @@ const Login = () => {
                         onSubmit={sendOtp}
                         className="d-flex flex-column gap-2 form w-100"
                       >
+                        <div className="text-center">
+                          <img src={Logo} alt="logo" />
+                        </div>
                         <h5>Welcome</h5>
                         <span>
                           Enter phone number to continue and we will send a

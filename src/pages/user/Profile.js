@@ -565,7 +565,7 @@ const Profile = () => {
                       <table class="table">
                         <tbody>
                           <tr>
-                            <th scope="col">Address : </th>
+                            <th scope="col">Shipping Address : </th>
                             <td>{profileData.shipping_address}</td>
                           </tr>
                           <tr>

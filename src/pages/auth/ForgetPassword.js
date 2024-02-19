@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import DealerServices from "../../services/Dealer/ResetPassword";
 import { CgSpinner } from "react-icons/cg";
+import Logo from "../../assets/images/logo.png";
 import { Helmet } from "react-helmet-async";
 
 const ForgetPassword = () => {
@@ -84,6 +85,9 @@ const ForgetPassword = () => {
             <div class="row justify-content-center">
               <div className="col-md-5">
                 <div className="login_detail">
+                  <div className="text-center">
+                    <img src={Logo} alt="logo" />
+                  </div>
                   <h2>Forget Password</h2>
                   <div className={`message-container ${message ? "my-1" : ""}`}>
                     {message && <span className="message-text">{message}</span>}
@@ -109,10 +113,7 @@ const ForgetPassword = () => {
                       />
                       {error && <span className="text-danger">{error}</span>}
                     </div>
-                    <button
-                      className="btn btn-success dealer_login_btn mt-3 fw-bolder"
-                      style={{ fontSize: "18px" }}
-                    >
+                    <button className="forget_pass_btn">
                       {spinner && (
                         <CgSpinner size={20} className="animate_spin me-2" />
                       )}

@@ -6,6 +6,7 @@ import { CgSpinner } from "react-icons/cg";
 import { Helmet } from "react-helmet-async";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import ReCAPTCHA from "react-google-recaptcha";
+import Logo from "../../assets/images/logo.png";
 
 const DealerLogin = () => {
   const recaptcha = useRef();
@@ -69,10 +70,7 @@ const DealerLogin = () => {
     };
 
     axios
-      .post(
-        "https://harmistechnology.com/admin.indianjewelley/api/user-login",
-        userData
-      )
+      .post("https://admin.impel.store/api/user-login", userData)
       .then((response) => {
         if (response?.data?.success === true) {
           setUser(response?.data);
@@ -110,6 +108,9 @@ const DealerLogin = () => {
             <div class="row justify-content-center">
               <div className="col-md-5">
                 <div className="login_detail">
+                  <div className="text-center">
+                    <img src={Logo} alt="logo" />
+                  </div>
                   <h2>Dealer Login</h2>
                   <form onSubmit={handleSubmit}>
                     <div class="form-group">

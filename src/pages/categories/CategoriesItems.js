@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import BreadCrumb from "../../components/common/BreadCrumb";
 import loadinggif from "../../assets/video/impel-bird-unscreen.gif";
 import { FaLongArrowAltLeft } from "react-icons/fa";
@@ -7,7 +7,6 @@ import homeService from "../../services/Home";
 import categoryDetail from "../../services/Shop";
 
 const CategoriesItems = () => {
-  const navigate = useNavigate();
   const paramId = useParams();
   const [category, SetCategory] = useState([]);
   const [selectedCategory, setselectedCategory] = useState(0);
@@ -156,34 +155,41 @@ const CategoriesItems = () => {
                       {categoriesData.map((data) => {
                         return (
                           <>
-                            <div className="col-md-3" key={data.id}>
-                              <Link
-                                to={`/shopdetails/${data.id}`}
-                                className="text-decoration-none"
-                                style={{ color: "#000" }}
-                              >
-                                <div className="category_data py-2">
-                                  <img
-                                    src={data.image}
-                                    alt=""
-                                    className="w-100"
-                                  />
-                                  <div className="product_details d-flex justify-content-between">
-                                    <h4>{data?.name}</h4>
+                            <div class="col-md-3 col-sm-4 col-xs-6">
+                              <div class="item-product text-center">
+                                <Link to={`/shopdetails/${data?.id}`}>
+                                  <div class="product-thumb">
+                                    {data?.image ? (
+                                      <>
+                                        <img
+                                          src={data?.image}
+                                          alt={data?.name}
+                                          className="w-100"
+                                        />
+                                      </>
+                                    ) : (
+                                      <>
+                                        <img
+                                          src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930"
+                                          alt=""
+                                          className="w-100"
+                                        />
+                                      </>
+                                    )}
+                                  </div>
+                                  <div class="product-info">
                                     <h4>
-                                      <b>{data?.code}</b>
+                                      {data?.name}&nbsp;
+                                      <span>({data?.code})</span>
                                     </h4>
-                                  </div>
-                                  <div className="product_details">
-                                    <h5>
+
+                                    <label>
                                       ₹
-                                      {data?.total_price_18k?.toLocaleString(
-                                        "en-US"
-                                      )}
-                                    </h5>
+                                      {data?.price_18k?.toLocaleString("en-US")}
+                                    </label>
                                   </div>
-                                </div>
-                              </Link>
+                                </Link>
+                              </div>
                             </div>
                           </>
                         );

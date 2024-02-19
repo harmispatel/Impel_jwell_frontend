@@ -711,29 +711,20 @@ const Shop = () => {
                                             <OverlayTrigger
                                               placement="top"
                                               overlay={selectionTip}
+                                              onClick={(e) => {
+                                                if (
+                                                  DealerCollection?.find(
+                                                    (item) =>
+                                                      item?.id === data?.id
+                                                  )
+                                                ) {
+                                                  removeFromSelection(e, data);
+                                                } else {
+                                                  AddToDealerSelection(e, data);
+                                                }
+                                              }}
                                             >
-                                              <Link
-                                                to="#"
-                                                class=""
-                                                onClick={(e) => {
-                                                  if (
-                                                    DealerCollection?.find(
-                                                      (item) =>
-                                                        item?.id === data?.id
-                                                    )
-                                                  ) {
-                                                    removeFromSelection(
-                                                      e,
-                                                      data
-                                                    );
-                                                  } else {
-                                                    AddToDealerSelection(
-                                                      e,
-                                                      data
-                                                    );
-                                                  }
-                                                }}
-                                              >
+                                              <Link to="#" class="">
                                                 {DealerCollection?.find(
                                                   (item) =>
                                                     item?.id === data?.id
@@ -758,23 +749,20 @@ const Shop = () => {
                                             <OverlayTrigger
                                               placement="top"
                                               overlay={wishlistTip}
+                                              onClick={(e) => {
+                                                if (
+                                                  UsercartItems?.find(
+                                                    (item) =>
+                                                      item.id === data.id
+                                                  )
+                                                ) {
+                                                  removeFromWishList(e, data);
+                                                } else {
+                                                  addToUserWishList(e, data);
+                                                }
+                                              }}
                                             >
-                                              <Link
-                                                to="#"
-                                                class=""
-                                                onClick={(e) => {
-                                                  if (
-                                                    UsercartItems?.find(
-                                                      (item) =>
-                                                        item.id === data.id
-                                                    )
-                                                  ) {
-                                                    removeFromWishList(e, data);
-                                                  } else {
-                                                    addToUserWishList(e, data);
-                                                  }
-                                                }}
-                                              >
+                                              <Link to="#" class="">
                                                 {UsercartItems?.find(
                                                   (item) => item.id === data.id
                                                 ) ? (
@@ -788,11 +776,9 @@ const Shop = () => {
                                             <OverlayTrigger
                                               placement="top"
                                               overlay={userTip}
+                                              onClick={(e) => UserLogin(e)}
                                             >
-                                              <span
-                                                onClick={(e) => UserLogin(e)}
-                                                class=""
-                                              >
+                                              <span class="">
                                                 <FiHeart />
                                               </span>
                                             </OverlayTrigger>

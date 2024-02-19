@@ -5,6 +5,7 @@ import { Helmet } from "react-helmet-async";
 import DealerServices from "../../services/Dealer/ResetPassword";
 import { CgSpinner } from "react-icons/cg";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import Logo from "../../assets/images/logo.png";
 
 const Resetpassword = () => {
   const token = useParams();
@@ -111,6 +112,9 @@ const Resetpassword = () => {
             <div class="row justify-content-center">
               <div className="col-md-5">
                 <div className="login_detail">
+                  <div className="text-center">
+                    <img src={Logo} alt="logo" />
+                  </div>
                   <h2>Reset Password</h2>
                   <form onSubmit={handleSubmit}>
                     <div class="form-group">
@@ -150,10 +154,7 @@ const Resetpassword = () => {
                       </div>
                     </div>
                     <div class="form-group">
-                      <button
-                        className="btn btn-success dealer_login_btn fw-bolder"
-                        style={{ fontSize: "18px" }}
-                      >
+                      <button className="reset_pass_btn">
                         {spinner && (
                           <CgSpinner size={20} className="animate_spin me-2" />
                         )}
