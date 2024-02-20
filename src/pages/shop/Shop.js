@@ -787,9 +787,11 @@ const Shop = () => {
                                             <OverlayTrigger
                                               placement="top"
                                               overlay={userTip}
-                                              onClick={(e) => UserLogin(e)}
                                             >
-                                              <span class="">
+                                              <span
+                                                class=""
+                                                onClick={(e) => UserLogin(e)}
+                                              >
                                                 <FiHeart />
                                               </span>
                                             </OverlayTrigger>

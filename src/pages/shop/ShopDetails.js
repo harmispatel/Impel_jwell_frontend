@@ -56,9 +56,9 @@ const ShopDetails = () => {
       .product_detail(data)
       .then((res) => {
         setTimeout(() => {
-          setProduct(res.data);
-          setImg(res.data.image);
-          setProduuctImages(res.data.multiple_image);
+          setProduct(res?.data);
+          setImg(res?.data?.image);
+          setProduuctImages(res?.data?.multiple_image);
           setOgImages(res?.data?.og_images);
           setIsLoading(false);
         }, 500);
@@ -190,7 +190,7 @@ const ShopDetails = () => {
 
   const navigateLightbox = (step) => {
     const newIndex =
-      (currentImageIndex + step + productImages.length) % productImages.length;
+      (currentImageIndex + step + ogImages?.length) % ogImages?.length;
     setCurrentImageIndex(newIndex);
   };
 
