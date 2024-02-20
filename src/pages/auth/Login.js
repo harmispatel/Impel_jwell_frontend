@@ -28,7 +28,7 @@ const Login = () => {
   const handlePhoneNumberChange = (newPhoneNumber) => {
     let isValid = true;
     if (!newPhoneNumber) {
-      setPhoneError("Please enter your mobile");
+      setPhoneError("Please enter your mobile number");
       isValid = false;
     } else if (newPhoneNumber.length !== 12) {
       setPhoneError("Your mobile number should be 10 digits");
@@ -54,7 +54,7 @@ const Login = () => {
   const sendOtp = (e) => {
     e.preventDefault();
     if (!phoneNumber) {
-      setPhoneError("Please enter your mobile");
+      setPhoneError("Please enter your mobile number");
     } else if (phoneNumber.length !== 12) {
       setPhoneError("Your mobile number should be 10 digits");
     } else {
@@ -63,7 +63,7 @@ const Login = () => {
       const appVerifier = window.recaptchaVerifier;
       setSpinner(true);
       axios
-        .post("https://admin.impel.store/api/login", {
+        .post("https://harmistechnology.com/admin.indianjewelley/api/login", {
           phone: formatPh,
         })
         .then((res) => {
@@ -197,7 +197,12 @@ const Login = () => {
                             autoFormat
                           />
                           {phoneError && (
-                            <div className="text-danger">{phoneError}</div>
+                            <div
+                              className="text-danger ms-5 ps-5"
+                              style={{ fontWeight: "600" }}
+                            >
+                              {phoneError}
+                            </div>
                           )}
                         </div>
                         <button

@@ -70,7 +70,10 @@ const DealerLogin = () => {
     };
 
     axios
-      .post("https://admin.impel.store/api/user-login", userData)
+      .post(
+        "https://harmistechnology.com/admin.indianjewelley/api/user-login",
+        userData
+      )
       .then((response) => {
         if (response?.data?.success === true) {
           setUser(response?.data);
@@ -122,7 +125,12 @@ const DealerLogin = () => {
                         class="form-control"
                       />
                       {error && error === "Please enter your email." && (
-                        <span className="text-danger fw-bolder">{error}</span>
+                        <span
+                          className="text-danger"
+                          style={{ fontWeight: "600" }}
+                        >
+                          {error}
+                        </span>
                       )}
                     </div>
                     <div className="form-group">
@@ -146,7 +154,12 @@ const DealerLogin = () => {
                         </span>
                       </div>
                       {error && error === "Please enter your password." && (
-                        <span className="text-danger fw-bolder">{error}</span>
+                        <span
+                          className="text-danger"
+                          style={{ fontWeight: "600" }}
+                        >
+                          {error}
+                        </span>
                       )}
                     </div>
                     <div className="mt-4 d-flex align-items-center justify-content-center">

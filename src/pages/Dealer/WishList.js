@@ -58,7 +58,6 @@ const DealerWishList = () => {
       </Helmet>
       <section className="wishlist">
         <div className="container">
-          <h2>My Selections</h2>
           {isLoading ? (
             <div className="h-100 d-flex justify-content-center">
               <div className="animation-loading">
@@ -71,6 +70,7 @@ const DealerWishList = () => {
                 <>
                   <div className="new-wishlist-section">
                     <div className="row">
+                      <h2 className="mb-3">My Selections</h2>
                       {checkList?.map((product) => {
                         return (
                           <div class="col-md-6 col-lg-3">
@@ -122,6 +122,9 @@ const DealerWishList = () => {
                   <div className="row justify-content-center">
                     <div className="col-lg-8">
                       <div className="card border shadow-sm p-4">
+                        <div className="text-center mb-4">
+                          <h2 className="card-title mb-0">My Selections</h2>
+                        </div>
                         <div className="text-center my-4">
                           <img
                             src={emptycart}
@@ -130,7 +133,7 @@ const DealerWishList = () => {
                             style={{ maxWidth: "200px" }}
                           />
                           <h5 className="text-muted mb-3">
-                            Oops! Your Selections is empty. 
+                            Oops! Your Selections is empty.
                           </h5>
                           <p className="text-muted">
                             Explore our collection and add your favourite

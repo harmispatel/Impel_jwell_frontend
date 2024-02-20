@@ -111,7 +111,7 @@ const ForgetPassword = () => {
                         class="form-control"
                         value={email}
                       />
-                      {error && <span className="text-danger">{error}</span>}
+                      {error && <span className="text-danger" style={{ fontWeight: "600" }}>{error}</span>}
                     </div>
                     <button className="forget_pass_btn">
                       {spinner && (

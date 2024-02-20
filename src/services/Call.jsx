@@ -1,9 +1,10 @@
 import Axios from "axios";
 
-const API_URL = `https://admin.impel.store/api/`;
+const API_URL = `https://harmistechnology.com/admin.indianjewelley/api/`;
 
 export default function call({ path, method, data }) {
-  const token = localStorage.getItem("accessToken");
+  // const token = localStorage.getItem("accessToken");
+  const token = localStorage.getItem("token");
   
   return new Promise((resolve, reject) => {
     const config = {
