@@ -503,13 +503,13 @@ const Profile = () => {
                 </div>
                 <div className="col-xl-5">
                   <div className="card mb-4">
-                    <div class="card-header text-center">
+                    <div className="card-header text-center">
                       <span>
                         <b>Account Details</b>
                       </span>
                     </div>
                     <div className="card-body">
-                      <table class="table">
+                      <table className="table">
                         <tbody>
                           <tr>
                             <th scope="col">Full Name : </th>
@@ -556,13 +556,13 @@ const Profile = () => {
                 </div>
                 <div className="col-xl-4">
                   <div className="card mb-4">
-                    <div class="card-header text-center">
+                    <div className="card-header text-center">
                       <span>
                         <b>Shipping Address</b>
                       </span>
                     </div>
-                    <div class="card-body">
-                      <table class="table">
+                    <div className="card-body">
+                      <table className="table">
                         <tbody>
                           <tr>
                             <th scope="col">Shipping Address : </th>
@@ -863,8 +863,8 @@ const Profile = () => {
                 </div>
               </div>
 
-              <div class="text-center">
-                <button class="update_order_btn">
+              <div className="text-center">
+                <button className="update_order_btn">
                   {spinner && (
                     <CgSpinner size={20} className="animate_spin mx-3" />
                   )}

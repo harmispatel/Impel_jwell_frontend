@@ -389,7 +389,7 @@ const ShopDetails = () => {
                               {goldColor === "yellow_gold" && (
                                 <>
                                   <div className="crt-btn">
-                                    <div class="radio-item">
+                                    <div className="radio-item">
                                       <input
                                         name="radio1"
                                         id="22k"
@@ -828,18 +828,18 @@ const ShopDetails = () => {
                                     <></>
                                   ) : (
                                     <div
-                                      class="buttons d-flex"
+                                      className="buttons d-flex"
                                       onClick={(e) => UserLogin(e)}
                                     >
-                                      <div class="add_cart align-items-center d-flex">
+                                      <div className="add_cart align-items-center d-flex">
                                         <div>
-                                          <button class="btn btn-outline-dark">
+                                          <button className="btn btn-outline-dark">
                                             <BsHandbagFill className="me-2" />
                                             Add To Cart
                                           </button>
                                         </div>
                                         <div>
-                                          <button class="btn btn-outline-dark align-items-center">
+                                          <button className="btn btn-outline-dark align-items-center">
                                             <FaRegHeart className="me-2" />
                                             Add To Wishlist
                                           </button>

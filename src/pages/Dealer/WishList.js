@@ -73,16 +73,16 @@ const DealerWishList = () => {
                       <h2 className="mb-3">My Selections</h2>
                       {checkList?.map((product) => {
                         return (
-                          <div class="col-md-6 col-lg-3">
+                          <div className="col-md-6 col-lg-3">
                             <div className="card">
                               <img
-                                class=""
+                                className=""
                                 src={product?.image}
                                 alt={product?.name}
                               />
-                              <div class="card-body text-center">
-                                <div class="cvp">
-                                  <h5 class="card-title fw-bolder">
+                              <div className="card-body text-center">
+                                <div className="cvp">
+                                  <h5 className="card-title fw-bolder">
                                     <Link
                                       to={`/shopdetails/${product?.id}`}
                                       className="product_data"
@@ -93,7 +93,7 @@ const DealerWishList = () => {
 
                                   <div className="wishlist_item_btn">
                                     <button
-                                      class="btn btn-danger remove"
+                                      className="btn btn-danger remove"
                                       onClick={() =>
                                         removeFromWishList(product?.id)
                                       }

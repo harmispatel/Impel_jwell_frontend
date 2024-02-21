@@ -106,9 +106,9 @@ const DealerLogin = () => {
         <title>Impel Store - Dealer Login</title>
       </Helmet>
       <section className="login">
-        <div class="container">
+        <div className="container">
           <div className="">
-            <div class="row justify-content-center">
+            <div className="row justify-content-center">
               <div className="col-md-5">
                 <div className="login_detail">
                   <div className="text-center">
@@ -116,13 +116,14 @@ const DealerLogin = () => {
                   </div>
                   <h2>Dealer Login</h2>
                   <form onSubmit={handleSubmit}>
-                    <div class="form-group">
+                    <div className="form-group">
                       <input
                         type="text"
                         name="email"
                         onChange={(e) => handleChange(e)}
                         placeholder="Registered Email ID"
-                        class="form-control"
+                        className="form-control"
+                        autoComplete="off"
                       />
                       {error && error === "Please enter your email." && (
                         <span
@@ -140,7 +141,8 @@ const DealerLogin = () => {
                           name="password"
                           onChange={(e) => handleChange(e)}
                           placeholder="Password"
-                          class="form-control"
+                          className="form-control"
+                          autoComplete="off"
                         />
                         <span
                           className="toggle_btn"

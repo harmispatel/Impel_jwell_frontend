@@ -82,7 +82,7 @@ const Navbar = () => {
   const Tags = () => {
     FilterServices.headerTags()
       .then((res) => {
-        setTags(res.data);
+        setTags(res?.data);
       })
       .catch((err) => {
         console.log(err);
@@ -460,7 +460,7 @@ const Navbar = () => {
                     <ul>
                       <li className="login_user" id="user-profile">
                         <div
-                          class="profile"
+                          className="profile"
                           onClick={ProfileDP}
                           ref={ProfileRef}
                         >
@@ -492,7 +492,7 @@ const Navbar = () => {
                             </ul>
                           </div>
 
-                          <div class="img-box">
+                          <div className="img-box">
                             {dealerData?.profile ? (
                               <img
                                 src={dealerData?.profile}
@@ -515,7 +515,7 @@ const Navbar = () => {
                               </>
                             )}
                           </div>
-                          <div class="user dropdown-toggle">
+                          <div className="user dropdown-toggle">
                             {dealerData?.name ? (
                               <span className="ms-2">
                                 <b
@@ -584,7 +584,7 @@ const Navbar = () => {
                       </li>
                       <li className="login_user" id="user-profile">
                         <div
-                          class="profile"
+                          className="profile"
                           onClick={ProfileDP}
                           ref={ProfileRef}
                         >
@@ -613,7 +613,7 @@ const Navbar = () => {
                             </ul>
                           </div>
 
-                          <div class="img-box">
+                          <div className="img-box">
                             {image?.length ? (
                               <img
                                 src={image}
@@ -634,7 +634,7 @@ const Navbar = () => {
                               />
                             )}
                           </div>
-                          <div class="user dropdown-toggle">
+                          <div className="user dropdown-toggle">
                             {profileData?.length ? (
                               <span className="ms-2">
                                 <b

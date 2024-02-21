@@ -107,9 +107,9 @@ const Resetpassword = () => {
         <title>Impel Store - Reset Password</title>
       </Helmet>
       <section className="login">
-        <div class="container">
+        <div className="container">
           <div className="">
-            <div class="row justify-content-center">
+            <div className="row justify-content-center">
               <div className="col-md-5">
                 <div className="login_detail">
                   <div className="text-center">
@@ -117,24 +117,24 @@ const Resetpassword = () => {
                   </div>
                   <h2>Reset Password</h2>
                   <form onSubmit={handleSubmit}>
-                    <div class="form-group">
+                    <div className="form-group">
                       <input
                         type={passwordType}
                         name="password"
                         placeholder="Password"
-                        class="form-control"
+                        className="form-control"
                         value={input.password}
                         onChange={handleChange}
                       />
                       <div className="text-danger">{errors.password}</div>
                     </div>
-                    <div class="form-group">
+                    <div className="form-group">
                       <div className="position-relative">
                         <input
                           type={passwordType}
                           name="confirmPassword"
                           placeholder="Confirm Password"
-                          class="form-control"
+                          className="form-control"
                           value={input.confirmPassword}
                           onChange={handleChange}
                         />
@@ -153,7 +153,7 @@ const Resetpassword = () => {
                         {errors.confirmPassword}
                       </div>
                     </div>
-                    <div class="form-group">
+                    <div className="form-group">
                       <button className="reset_pass_btn">
                         {spinner && (
                           <CgSpinner size={20} className="animate_spin me-2" />

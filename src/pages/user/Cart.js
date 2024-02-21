@@ -3,9 +3,17 @@ import { Link, useNavigate } from "react-router-dom";
 import UserService from "../../services/Cart";
 import profileService from "../../services/Auth";
 import toast from "react-hot-toast";
-import { Button, Col, Form, Modal } from "react-bootstrap";
+import {
+  Button,
+  Col,
+  Form,
+  Modal,
+  OverlayTrigger,
+  Tooltip,
+} from "react-bootstrap";
 import { CgSpinner } from "react-icons/cg";
 import { FaLongArrowAltLeft } from "react-icons/fa";
+import { IoIosCloseCircleOutline } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
 import emptycart from "../../assets/images/empty-cart.png";
 import { Helmet } from "react-helmet-async";
@@ -461,6 +469,15 @@ const Cart = () => {
     setDealer_Code(e.target.value);
   };
 
+  const removeCoupon = () => {
+    toast.success("Coupon has been removed");
+    setDealer_Code("");
+    setMessage(false);
+    setShow(false);
+    localStorage.removeItem("savedDiscount");
+    localStorage.removeItem("message");
+  };
+
   useEffect(() => {
     const savedDiscount = localStorage.getItem("savedDiscount");
     if (savedDiscount) {
@@ -611,6 +628,8 @@ const Cart = () => {
       setSpinner(false);
     }
   };
+
+  const removeCouping = <Tooltip id="tooltip">Remove Coupon</Tooltip>;
 
   return (
     <>
@@ -829,6 +848,23 @@ const Cart = () => {
 
                           {message && (
                             <div className="message-box">
+                              <div className="text-end">
+                                <OverlayTrigger
+                                  placement="top"
+                                  overlay={removeCouping}
+                                >
+                                  <Link className="icon" to="#">
+                                    <IoIosCloseCircleOutline
+                                      onClick={removeCoupon}
+                                      style={{
+                                        color: "#ff0000",
+                                        fontSize: "25px",
+                                        cursor: "pointer",
+                                      }}
+                                    />
+                                  </Link>
+                                </OverlayTrigger>
+                              </div>
                               <span>
                                 You are now eligible for a base discount&nbsp;
                                 <b>
@@ -1198,8 +1234,8 @@ const Cart = () => {
                   </div>
                 </div>
 
-                <div class="text-center">
-                  <button class="update_order_btn">
+                <div className="text-center">
+                  <button className="update_order_btn">
                     {spinner && (
                       <CgSpinner size={20} className="animate_spin mx-3" />
                     )}

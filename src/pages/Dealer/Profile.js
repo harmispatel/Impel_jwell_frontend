@@ -92,20 +92,20 @@ const DealerProfile = () => {
       </Helmet>
       <section className="dealer_profile_data">
         <div className="container py-5">
-          <div class="row">
+          <div className="row">
             {isLoading ? (
               <div className="animation-loading">
                 <img src={loadinggif} alt="Animated GIF" autoPlay />
               </div>
             ) : (
               <>
-                <div class="col-md-6 mb-3">
-                  <div class="card" style={{ height: "100%" }}>
-                    <div class="card-header">
+                <div className="col-md-6 mb-3">
+                  <div className="card" style={{ height: "100%" }}>
+                    <div className="card-header">
                       <strong>Owner Information</strong>
                     </div>
-                    <div class="card-body">
-                      <table class="table">
+                    <div className="card-body">
+                      <table className="table">
                         <tbody>
                           <tr>
                             <th scope="col">Full Name : </th>
@@ -128,13 +128,13 @@ const DealerProfile = () => {
                     </div>
                   </div>
                 </div>
-                <div class="col-md-6 mb-3">
-                  <div class="card">
-                    <div class="card-header">
+                <div className="col-md-6 mb-3">
+                  <div className="card">
+                    <div className="card-header">
                       <strong>Company Information</strong>
                     </div>
-                    <div class="card-body">
-                      <table class="table">
+                    <div className="card-body">
+                      <table className="table">
                         <tbody>
                           <tr>
                             <th scope="col">Company Name : </th>
@@ -165,14 +165,14 @@ const DealerProfile = () => {
                     </div>
                   </div>
                 </div>
-                <div class="col-md-12 mb-3">
-                  <div class="card">
-                    <div class="card-header">
+                <div className="col-md-12 mb-3">
+                  <div className="card">
+                    <div className="card-header">
                       <strong>Logo & Documents</strong>
                     </div>
-                    <div class="card-body">
-                      <div class="row">
-                        <div class="col-md-4 mb-3 text-center">
+                    <div className="card-body">
+                      <div className="row">
+                        <div className="col-md-4 mb-3 text-center">
                           <h5>Profile Picture</h5>
                           <div>
                             {profileData?.profile && (
@@ -223,7 +223,7 @@ const DealerProfile = () => {
                             )}
                           </div>
                         </div>
-                        <div class="col-md-4 mb-3 text-center">
+                        <div className="col-md-4 mb-3 text-center">
                           <h5>Company Logo</h5>
                           <div>
                             <img
@@ -239,13 +239,13 @@ const DealerProfile = () => {
                             />
                           </div>
                         </div>
-                        <div class="col-md-4 mb-3 ">
+                        <div className="col-md-4 mb-3 ">
                           <h5 className="text-center">Documents</h5>
                           <div>
                             {profileData?.documents?.map((file, index) => (
                               <Link
                                 to={file?.document}
-                                class="light-up-button m-2"
+                                className="light-up-button m-2"
                                 style={{ border: "1px solid #ccc" }}
                                 target="_blank"
                               >

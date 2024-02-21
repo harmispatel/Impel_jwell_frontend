@@ -195,7 +195,7 @@ const Home = () => {
             <h3>Browse our categories</h3>
             <Link
               to="/categories"
-              class="custom-btn btn-16 mb-4"
+              className="custom-btn btn-16 mb-4"
               style={{ textDecoration: "none" }}
             >
               View All
@@ -373,7 +373,7 @@ const Home = () => {
                             <div className="profile_img">
                               <img src={data.image} alt="" />
                             </div>
-                            {/* <div class="edit">
+                            {/* <div className="edit">
                           <div>
                             <a
                               href="#"

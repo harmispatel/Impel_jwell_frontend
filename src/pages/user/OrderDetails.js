@@ -52,11 +52,11 @@ const Orders = () => {
               {status === false ? (
                 <div className="row justify-content-center text-center">
                   <div className="col-md-12">
-                    <div class="order-error-section pt-5">
-                      <div class="page">
+                    <div className="order-error-section pt-5">
+                      <div className="page">
                         Ooops!!! The Order you are looking for is not found
                       </div>
-                      <Link to="/" class="back-home">
+                      <Link to="/" className="back-home">
                         Back to home
                       </Link>
                     </div>

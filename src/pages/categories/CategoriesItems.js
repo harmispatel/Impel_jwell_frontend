@@ -155,10 +155,10 @@ const CategoriesItems = () => {
                       {categoriesData.map((data) => {
                         return (
                           <>
-                            <div class="col-md-3 col-sm-4 col-xs-6">
-                              <div class="item-product text-center">
+                            <div className="col-md-3 col-sm-4 col-xs-6">
+                              <div className="item-product text-center">
                                 <Link to={`/shopdetails/${data?.id}`}>
-                                  <div class="product-thumb">
+                                  <div className="product-thumb">
                                     {data?.image ? (
                                       <>
                                         <img
@@ -177,7 +177,7 @@ const CategoriesItems = () => {
                                       </>
                                     )}
                                   </div>
-                                  <div class="product-info">
+                                  <div className="product-info">
                                     <h4>
                                       {data?.name}&nbsp;
                                       <span>({data?.code})</span>

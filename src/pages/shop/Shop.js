@@ -667,10 +667,10 @@ const Shop = () => {
                           {filterData?.map((data) => {
                             return (
                               <>
-                                <div class="col-md-3 col-sm-4 col-xs-6">
-                                  <div class="item-product text-center">
+                                <div className="col-md-3 col-sm-4 col-xs-6">
+                                  <div className="item-product text-center">
                                     <Link to={`/shopdetails/${data?.id}`}>
-                                      <div class="product-thumb">
+                                      <div className="product-thumb">
                                         {data?.image ? (
                                           <>
                                             <img
@@ -689,7 +689,7 @@ const Shop = () => {
                                           </>
                                         )}
                                       </div>
-                                      <div class="product-info">
+                                      <div className="product-info">
                                         <h4>
                                           {data?.name}&nbsp;
                                           <span>({data?.code})</span>
@@ -703,7 +703,7 @@ const Shop = () => {
                                         </label>
                                       </div>
                                     </Link>
-                                    <div class="wishlist-top">
+                                    <div className="wishlist-top">
                                       {userType == 1 ? (
                                         <>
                                           {email ? (
@@ -713,7 +713,7 @@ const Shop = () => {
                                             >
                                               <Link
                                                 to="#"
-                                                class=""
+                                                className=""
                                                 onClick={(e) => {
                                                   if (
                                                     DealerCollection?.find(
@@ -760,7 +760,7 @@ const Shop = () => {
                                             >
                                               <Link
                                                 to="#"
-                                                class=""
+                                                className=""
                                                 onClick={(e) => {
                                                   if (
                                                     UsercartItems?.find(
@@ -789,7 +789,7 @@ const Shop = () => {
                                               overlay={userTip}
                                             >
                                               <span
-                                                class=""
+                                                className=""
                                                 onClick={(e) => UserLogin(e)}
                                               >
                                                 <FiHeart />

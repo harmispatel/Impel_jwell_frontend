@@ -164,9 +164,9 @@ const Login = () => {
         <title>Impel Store - Login</title>
       </Helmet>
       <section className="login">
-        <div class="container">
+        <div className="container">
           <div className="">
-            <div class="row justify-content-center text-align-center">
+            <div className="row justify-content-center text-align-center">
               <div className="col-md-5">
                 <div className="user-login-form">
                   {show === false && (

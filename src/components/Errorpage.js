@@ -10,14 +10,14 @@ const Errorpage = () => {
         <title>Impel Store - Not found URL</title>
       </Helmet>
       <div className="container">
-        <div class="utility-page-wrap">
-          <div class="utility-page-content">
+        <div className="utility-page-wrap">
+          <div className="utility-page-content">
             <img src={errorimage} alt="" className="w-100" />
             <h3>Page Not Found</h3>
-            <div class="error-description">
+            <div className="error-description">
               The page you are looking for doesn't exist or has been moved
             </div>
-            <Link to="/" class="dark-button w-button">
+            <Link to="/" className="dark-button w-button">
               Back to Home
             </Link>
           </div>

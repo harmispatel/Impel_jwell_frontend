@@ -80,9 +80,9 @@ const ForgetPassword = () => {
         <title>Impel Store - Forget Password</title>
       </Helmet>
       <section className="login">
-        <div class="container">
+        <div className="container">
           <div className="">
-            <div class="row justify-content-center">
+            <div className="row justify-content-center">
               <div className="col-md-5">
                 <div className="login_detail">
                   <div className="text-center">
@@ -102,13 +102,13 @@ const ForgetPassword = () => {
                     )}
                   </div>
                   <form onSubmit={handleSubmit}>
-                    <div class="form-group">
+                    <div className="form-group">
                       <input
                         type="text"
                         name="email"
                         onChange={(e) => handleChange(e)}
                         placeholder="Registered Email ID"
-                        class="form-control"
+                        className="form-control"
                         value={email}
                       />
                       {error && <span className="text-danger" style={{ fontWeight: "600" }}>{error}</span>}
