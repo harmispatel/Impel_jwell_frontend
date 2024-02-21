@@ -39,10 +39,10 @@ function App() {
   const popupshow = localStorage.getItem("user_type");
   const helmetContext = {};
 
-  const shouldShowPopup =
-    !["/login", "/Dealer_login", "/forget-password"].some((path) =>
-      location.pathname.startsWith(path)
-    ) && !location.pathname.startsWith("/reset-password/");
+  // const shouldShowPopup =
+  //   !["/login", "/Dealer_login", "/forget-password"].some((path) =>
+  //     location.pathname.startsWith(path)
+  //   ) && !location.pathname.startsWith("/reset-password/");
 
   useEffect(() => {
     if (userType == 1 && location.pathname === "/login") {
@@ -78,7 +78,7 @@ function App() {
           <CartProvider>
             <ScrollToTop />
             <HelmetProvider context={helmetContext}>
-              {shouldShowPopup && popupshow == null ? <Popup /> : <></>}
+              {/* {shouldShowPopup && popupshow == null ? <Popup /> : <></>} */}
               <Routes>
                 <>
                   <Route path="/" element={renderLayout()}>

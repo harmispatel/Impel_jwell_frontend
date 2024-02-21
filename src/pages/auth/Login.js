@@ -63,7 +63,7 @@ const Login = () => {
       const appVerifier = window.recaptchaVerifier;
       setSpinner(true);
       axios
-        .post("https://harmistechnology.com/admin.indianjewelley/api/login", {
+        .post("https://admin.impel.store/api/login", {
           phone: formatPh,
         })
         .then((res) => {
