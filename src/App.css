@@ -188,7 +188,6 @@ body {
   transform: perspective(600px) rotateX(0deg)translate(-50%, 0);
 }
 
-
 .login_dropdown {
   position: absolute;
   background: #fff;

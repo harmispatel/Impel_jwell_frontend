@@ -554,8 +554,8 @@ const Shop = () => {
                     type="search"
                     isClearable={true}
                   />
-                  {searchInput?.length === 0 && (
-                    <BsSearch className="search-icon" />
+                  {searchInput && searchInput.length >= 1 ? null : (
+                    <BsSearch className="search-icon cursor-pointer" />
                   )}
                 </div>
               </div>
@@ -697,7 +697,7 @@ const Shop = () => {
 
                                         <label>
                                           ₹
-                                          {data?.price_18k?.toLocaleString(
+                                          {data?.total_price_18k?.toLocaleString(
                                             "en-US"
                                           )}
                                         </label>

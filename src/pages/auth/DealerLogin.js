@@ -71,7 +71,7 @@ const DealerLogin = () => {
 
     axios
       .post(
-        "https://admin.impel.store/api/user-login",
+        "https://harmistechnology.com/admin.indianjewelley/api/user-login",
         userData
       )
       .then((response) => {

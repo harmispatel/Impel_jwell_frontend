@@ -506,7 +506,7 @@ const ShopDetails = () => {
                                               g. (Approx.)
                                             </td>
                                           </tr>
-                                          <tr>
+                                          {/* <tr>
                                             <th>Less Gems Stone</th>
                                             <td>
                                               {productdetail?.less_gems_stone}
@@ -519,7 +519,7 @@ const ShopDetails = () => {
                                               {productdetail?.less_cz_stone}
                                               g.
                                             </td>
-                                          </tr>
+                                          </tr> */}
                                           <tr>
                                             <th>Net Weight</th>
                                             <td>
@@ -528,10 +528,10 @@ const ShopDetails = () => {
                                             </td>
                                           </tr>
                                           <tr>
-                                            <th>Metal price</th>
+                                            <th>Metal value</th>
                                             <td>₹{productdetail?.price_22k}</td>
                                           </tr>
-                                          <tr>
+                                          {/* <tr>
                                             <th>CZ Stone Charges</th>
                                             <td>
                                               ₹{productdetail?.cz_stone_price}
@@ -542,7 +542,7 @@ const ShopDetails = () => {
                                             <td>
                                               ₹{productdetail?.gemstone_price}
                                             </td>
-                                          </tr>
+                                          </tr> */}
                                           <tr>
                                             <th>Making charge</th>
                                             <td>
@@ -567,7 +567,7 @@ const ShopDetails = () => {
                                               g. (Approx.)
                                             </td>
                                           </tr>
-                                          <tr>
+                                          {/* <tr>
                                             <th>Less Gems Stone</th>
                                             <td>
                                               {productdetail?.less_gems_stone}
@@ -580,7 +580,7 @@ const ShopDetails = () => {
                                               {productdetail?.less_cz_stone}
                                               g.
                                             </td>
-                                          </tr>
+                                          </tr> */}
                                           <tr>
                                             <th>Net Weight</th>
                                             <td>
@@ -589,10 +589,10 @@ const ShopDetails = () => {
                                             </td>
                                           </tr>
                                           <tr>
-                                            <th>Metal price</th>
+                                            <th>Metal value</th>
                                             <td>₹{productdetail?.price_20k}</td>
                                           </tr>
-                                          <tr>
+                                          {/* <tr>
                                             <th>CZ Stone Charges</th>
                                             <td>
                                               ₹{productdetail?.cz_stone_price}
@@ -603,7 +603,7 @@ const ShopDetails = () => {
                                             <td>
                                               ₹{productdetail?.gemstone_price}
                                             </td>
-                                          </tr>
+                                          </tr> */}
                                           <tr>
                                             <th>Making charge</th>
                                             <td>
@@ -628,7 +628,7 @@ const ShopDetails = () => {
                                               g. (Approx.)
                                             </td>
                                           </tr>
-                                          <tr>
+                                          {/* <tr>
                                             <th>Less Gems Stone</th>
                                             <td>
                                               {productdetail?.less_gems_stone}
@@ -641,7 +641,7 @@ const ShopDetails = () => {
                                               {productdetail?.less_cz_stone}
                                               g.
                                             </td>
-                                          </tr>
+                                          </tr> */}
                                           <tr>
                                             <th>Net Weight</th>
                                             <td>
@@ -650,10 +650,10 @@ const ShopDetails = () => {
                                             </td>
                                           </tr>
                                           <tr>
-                                            <th>Metal price</th>
+                                            <th>Metal value</th>
                                             <td>₹{productdetail?.price_18k}</td>
                                           </tr>
-                                          <tr>
+                                          {/* <tr>
                                             <th>CZ Stone Charges</th>
                                             <td>
                                               ₹{productdetail?.cz_stone_price}
@@ -664,7 +664,7 @@ const ShopDetails = () => {
                                             <td>
                                               ₹{productdetail?.gemstone_price}
                                             </td>
-                                          </tr>
+                                          </tr> */}
                                           <tr>
                                             <th>Making charge</th>
                                             <td>
@@ -689,7 +689,7 @@ const ShopDetails = () => {
                                               g. (Approx.)
                                             </td>
                                           </tr>
-                                          <tr>
+                                          {/* <tr>
                                             <th>Less Gems Stone</th>
                                             <td>
                                               {productdetail?.less_gems_stone}
@@ -702,7 +702,7 @@ const ShopDetails = () => {
                                               {productdetail?.less_cz_stone}
                                               g.
                                             </td>
-                                          </tr>
+                                          </tr> */}
                                           <tr>
                                             <th>Net Weight</th>
                                             <td>
@@ -711,10 +711,10 @@ const ShopDetails = () => {
                                             </td>
                                           </tr>
                                           <tr>
-                                            <th>Metal price</th>
+                                            <th>Metal value</th>
                                             <td>₹{productdetail?.price_14k}</td>
                                           </tr>
-                                          <tr>
+                                          {/* <tr>
                                             <th>CZ Stone Charges</th>
                                             <td>
                                               ₹{productdetail?.cz_stone_price}
@@ -725,7 +725,7 @@ const ShopDetails = () => {
                                             <td>
                                               ₹{productdetail?.gemstone_price}
                                             </td>
-                                          </tr>
+                                          </tr> */}
                                           <tr>
                                             <th>Making charge</th>
                                             <td>

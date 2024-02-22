@@ -786,7 +786,7 @@ const Cart = () => {
                       <div className="card shadow-0 border">
                         <div className="card-body">
                           {/* <div className="d-flex justify-content-between">
-                            <p className="mb-2">Metal price :</p>
+                            <p className="mb-2">Metal value :</p>
                             <p className="mb-2 fw-bold">
                               ₹{SubTotal()?.toLocaleString("en-US")}
                             </p>

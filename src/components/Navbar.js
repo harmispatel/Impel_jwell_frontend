@@ -183,7 +183,7 @@ const Navbar = () => {
 
   const changeNavbarColor = () => {
     const scrollValue = document?.documentElement?.scrollTop;
-    scrollValue > 100 ? setColorchange(true) : setColorchange(false);
+    scrollValue > 0 ? setColorchange(true) : setColorchange(false);
   };
   window.addEventListener("scroll", changeNavbarColor);
 

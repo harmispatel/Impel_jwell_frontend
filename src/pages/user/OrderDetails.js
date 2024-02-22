@@ -233,7 +233,7 @@ const Orders = () => {
                                     <th>Gold Type</th>
                                     <th>Gold Color</th>
                                     <th>Net Weight</th>
-                                    {/* <th>Metal Price</th>
+                                    {/* <th>Metal Value</th>
                                   <th>Total</th> */}
                                   </tr>
                                 </thead>
@@ -334,7 +334,7 @@ const Orders = () => {
                               <tbody>
                                 <tr>
                                   <th>
-                                    <strong>Metal Price :</strong>
+                                    <strong>Metal Value :</strong>
                                   </th>
                                   <td>
                                     ₹{Items?.sub_total?.toLocaleString("en-US")}
