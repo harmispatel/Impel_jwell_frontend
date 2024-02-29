@@ -1,14 +1,14 @@
 import Axios from "axios";
-
-const API_URL = `https://harmistechnology.com/admin.indianjewelley/api/`;
+const api = process.env.REACT_APP_API_KEY;
+const subApi = process.env.REACT_APP_API_SUB_KEY;
 
 export default function call({ path, method, data }) {
   // const token = localStorage.getItem("accessToken");
   const token = localStorage.getItem("token");
-  
+
   return new Promise((resolve, reject) => {
     const config = {
-      url: API_URL + path,
+      url: api + subApi + path,
       method,
       data,
     };

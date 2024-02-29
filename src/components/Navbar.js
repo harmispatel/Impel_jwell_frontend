@@ -339,7 +339,7 @@ const Navbar = () => {
                         fontWeight: "500",
                         color: "#000",
                         textTransform: "uppercase",
-                        fontSize: "16px",
+                        fontSize: "14px",
                         cursor: "pointer",
                       }}
                     >
@@ -367,7 +367,7 @@ const Navbar = () => {
                                       : "nav-link"
                                   }
                                   style={{
-                                    fontSize: "16px",
+                                    fontSize: "14px",
                                     fontWeight: "800",
                                     textTransform: "uppercase",
                                   }}
@@ -426,7 +426,7 @@ const Navbar = () => {
                         fontWeight: "500",
                         color: "#000",
                         textTransform: "uppercase",
-                        fontSize: "16px",
+                        fontSize: "14px",
                         cursor: "pointer",
                       }}
                     >
@@ -438,19 +438,20 @@ const Navbar = () => {
                 <li className="nav-item">
                   <Link
                     className={
-                      currentRoute === "/about" ? "nav-link active" : "nav-link"
+                      currentRoute === "/customization" ? "nav-link active" : "nav-link"
                     }
-                    to="/page/about"
+                    to="/customization"
+                    // to="/page/customization"
                     onClick={handleNavClick}
                   >
-                    About
+                    Customization
                   </Link>
                 </li>
               </ul>
             </div>
 
             <Link className="navbar-brand m-0" to="/">
-              <img src={Logo} alt="logo" height={100} />
+              <img src={Logo} alt="logo" height={70} />
             </Link>
 
             <div className="header_icon">
@@ -484,7 +485,7 @@ const Navbar = () => {
                                 </Link>
                               </li>
                               <li>
-                                <Link to="/Dealer_login" onClick={handleLogout}>
+                                <Link to="/" onClick={handleLogout}>
                                   <IoLogOut />
                                   Logout
                                 </Link>
@@ -605,7 +606,7 @@ const Navbar = () => {
                                 </Link>
                               </li>
                               <li>
-                                <Link to="/login" onClick={handleLogout}>
+                                <Link to="/" onClick={handleLogout}>
                                   <IoLogOut />
                                   Logout
                                 </Link>

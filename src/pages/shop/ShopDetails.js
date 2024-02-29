@@ -18,6 +18,7 @@ import UserCartService from "../../services/Cart";
 import Userservice from "../../services/Auth";
 import productDetail from "../../services/Shop";
 import { CartSystem } from "../../context/CartContext";
+import { Accordion } from "react-bootstrap";
 
 const ShopDetails = () => {
   const location = useLocation();
@@ -47,6 +48,12 @@ const ShopDetails = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [spinner, setSpinner] = useState(false);
   const [spinner2, setSpinner2] = useState(false);
+  const [accordionOpen, setAccordionOpen] = useState(true);
+
+  const toggleAccordion = () => {
+    setAccordionOpen(false);
+  };
+
 
   const productData = async () => {
     const data = {
@@ -486,266 +493,371 @@ const ShopDetails = () => {
                               )}
                             </div>
                             <div className="mt-3">
+                              <Accordion className="accordian">
+                                <Accordion.Item eventKey="3" className="my-2">
+                                  <Accordion.Header onClick={toggleAccordion}>
+                                    Approximate -Estimate
+                                  </Accordion.Header>
+                                  <Accordion.Body className="">
+                                    <div className="mt-3">
+                                      {goldColor && goldType && (
+                                        <>
+                                          <table className="table table-bordered text-center">
+                                            <tbody>
+                                              {goldType === "22k" && (
+                                                <>
+                                                  <tr>
+                                                    <th>Gross Weight</th>
+                                                    <td>
+                                                      {
+                                                        productdetail?.gross_weight_22k
+                                                      }
+                                                      g. (Approx.)
+                                                    </td>
+                                                  </tr>
+                                                  {/* <tr>
+                                            <th>Less Gems Stone</th>
+                                            <td>
+                                              {productdetail?.less_gems_stone}
+                                              g.
+                                            </td>
+                                          </tr>
+                                          <tr>
+                                            <th>Less C.Z. Stone</th>
+                                            <td>
+                                              {productdetail?.less_cz_stone}
+                                              g.
+                                            </td>
+                                          </tr> */}
+                                                  <tr>
+                                                    <th>Net Weight</th>
+                                                    <td>
+                                                      {
+                                                        productdetail?.net_weight_22k
+                                                      }
+                                                      g.
+                                                    </td>
+                                                  </tr>
+                                                  <tr>
+                                                    <th>Metal value</th>
+                                                    <td>
+                                                      ₹
+                                                      {productdetail?.price_22k}
+                                                    </td>
+                                                  </tr>
+                                                  {/* <tr>
+                                            <th>CZ Stone Charges</th>
+                                            <td>
+                                              ₹{productdetail?.cz_stone_price}
+                                            </td>
+                                          </tr>
+                                          <tr>
+                                            <th>Gem stone charges</th>
+                                            <td>
+                                              ₹{productdetail?.gemstone_price}
+                                            </td>
+                                          </tr> */}
+                                                  <tr>
+                                                    <th>Making charge</th>
+                                                    <td>
+                                                      ₹
+                                                      {
+                                                        productdetail?.making_charge
+                                                      }
+                                                    </td>
+                                                  </tr>
+                                                  <tr>
+                                                    <th>Total Amount</th>
+                                                    <td>
+                                                      ₹
+                                                      {
+                                                        productdetail?.total_price_22k
+                                                      }
+                                                      (Approx.)
+                                                    </td>
+                                                  </tr>
+                                                </>
+                                              )}
+                                              {goldType === "20k" && (
+                                                <>
+                                                  <tr>
+                                                    <th>Gross Weight</th>
+                                                    <td>
+                                                      {
+                                                        productdetail?.gross_weight_20k
+                                                      }
+                                                      g. (Approx.)
+                                                    </td>
+                                                  </tr>
+                                                  {/* <tr>
+                                            <th>Less Gems Stone</th>
+                                            <td>
+                                              {productdetail?.less_gems_stone}
+                                              g.
+                                            </td>
+                                          </tr>
+                                          <tr>
+                                            <th>Less C.Z. Stone</th>
+                                            <td>
+                                              {productdetail?.less_cz_stone}
+                                              g.
+                                            </td>
+                                          </tr> */}
+                                                  <tr>
+                                                    <th>Net Weight</th>
+                                                    <td>
+                                                      {
+                                                        productdetail?.net_weight_20k
+                                                      }
+                                                      g.
+                                                    </td>
+                                                  </tr>
+                                                  <tr>
+                                                    <th>Metal value</th>
+                                                    <td>
+                                                      ₹
+                                                      {productdetail?.price_20k}
+                                                    </td>
+                                                  </tr>
+                                                  {/* <tr>
+                                            <th>CZ Stone Charges</th>
+                                            <td>
+                                              ₹{productdetail?.cz_stone_price}
+                                            </td>
+                                          </tr>
+                                          <tr>
+                                            <th>Gem stone charges</th>
+                                            <td>
+                                              ₹{productdetail?.gemstone_price}
+                                            </td>
+                                          </tr> */}
+                                                  <tr>
+                                                    <th>Making charge</th>
+                                                    <td>
+                                                      ₹
+                                                      {
+                                                        productdetail?.making_charge
+                                                      }
+                                                    </td>
+                                                  </tr>
+                                                  <tr>
+                                                    <th>Total Amount</th>
+                                                    <td>
+                                                      ₹
+                                                      {
+                                                        productdetail?.total_price_20k
+                                                      }
+                                                      (Approx.)
+                                                    </td>
+                                                  </tr>
+                                                </>
+                                              )}
+                                              {goldType === "18k" && (
+                                                <>
+                                                  <tr>
+                                                    <th>Gross Weight</th>
+                                                    <td>
+                                                      {
+                                                        productdetail?.gross_weight_18k
+                                                      }
+                                                      g. (Approx.)
+                                                    </td>
+                                                  </tr>
+                                                  {/* <tr>
+                                            <th>Less Gems Stone</th>
+                                            <td>
+                                              {productdetail?.less_gems_stone}
+                                              g.
+                                            </td>
+                                          </tr>
+                                          <tr>
+                                            <th>Less C.Z. Stone</th>
+                                            <td>
+                                              {productdetail?.less_cz_stone}
+                                              g.
+                                            </td>
+                                          </tr> */}
+                                                  <tr>
+                                                    <th>Net Weight</th>
+                                                    <td>
+                                                      {
+                                                        productdetail?.net_weight_18k
+                                                      }
+                                                      g.
+                                                    </td>
+                                                  </tr>
+                                                  <tr>
+                                                    <th>Metal value</th>
+                                                    <td>
+                                                      ₹
+                                                      {productdetail?.price_18k}
+                                                    </td>
+                                                  </tr>
+                                                  {/* <tr>
+                                            <th>CZ Stone Charges</th>
+                                            <td>
+                                              ₹{productdetail?.cz_stone_price}
+                                            </td>
+                                          </tr>
+                                          <tr>
+                                            <th>Gem stone charges</th>
+                                            <td>
+                                              ₹{productdetail?.gemstone_price}
+                                            </td>
+                                          </tr> */}
+                                                  <tr>
+                                                    <th>Making charge</th>
+                                                    <td>
+                                                      ₹
+                                                      {
+                                                        productdetail?.making_charge
+                                                      }
+                                                    </td>
+                                                  </tr>
+                                                  <tr>
+                                                    <th>Total Amount</th>
+                                                    <td>
+                                                      ₹
+                                                      {
+                                                        productdetail?.total_price_18k
+                                                      }
+                                                      (Approx.)
+                                                    </td>
+                                                  </tr>
+                                                </>
+                                              )}
+                                              {goldType === "14k" && (
+                                                <>
+                                                  <tr>
+                                                    <th>Gross Weight</th>
+                                                    <td>
+                                                      {
+                                                        productdetail?.gross_weight_14k
+                                                      }
+                                                      g. (Approx.)
+                                                    </td>
+                                                  </tr>
+                                                  {/* <tr>
+                                            <th>Less Gems Stone</th>
+                                            <td>
+                                              {productdetail?.less_gems_stone}
+                                              g.
+                                            </td>
+                                          </tr>
+                                          <tr>
+                                            <th>Less C.Z. Stone</th>
+                                            <td>
+                                              {productdetail?.less_cz_stone}
+                                              g.
+                                            </td>
+                                          </tr> */}
+                                                  <tr>
+                                                    <th>Net Weight</th>
+                                                    <td>
+                                                      {
+                                                        productdetail?.net_weight_14k
+                                                      }
+                                                      g.
+                                                    </td>
+                                                  </tr>
+                                                  <tr>
+                                                    <th>Metal value</th>
+                                                    <td>
+                                                      ₹
+                                                      {productdetail?.price_14k}
+                                                    </td>
+                                                  </tr>
+                                                  {/* <tr>
+                                            <th>CZ Stone Charges</th>
+                                            <td>
+                                              ₹{productdetail?.cz_stone_price}
+                                            </td>
+                                          </tr>
+                                          <tr>
+                                            <th>Gem stone charges</th>
+                                            <td>
+                                              ₹{productdetail?.gemstone_price}
+                                            </td>
+                                          </tr> */}
+                                                  <tr>
+                                                    <th>Making charge</th>
+                                                    <td>
+                                                      ₹
+                                                      {
+                                                        productdetail?.making_charge
+                                                      }
+                                                    </td>
+                                                  </tr>
+                                                  <tr>
+                                                    <th>Total Amount</th>
+                                                    <td>
+                                                      ₹
+                                                      {
+                                                        productdetail?.total_price_14k
+                                                      }
+                                                      (Approx.)
+                                                    </td>
+                                                  </tr>
+                                                </>
+                                              )}
+                                            </tbody>
+                                          </table>
+                                        </>
+                                      )}
+                                    </div>
+                                  </Accordion.Body>
+                                </Accordion.Item>
+                              </Accordion>
+                            </div>
+                            {accordionOpen && 
+                            
+                            <div className="mt-3">
                               {goldColor && goldType && (
                                 <>
                                   <table className="table table-bordered text-center">
-                                    <thead>
-                                      <tr>
-                                        <th colspan="3">
-                                          Approximate -Estimate
-                                        </th>
-                                      </tr>
-                                    </thead>
                                     <tbody>
                                       {goldType === "22k" && (
-                                        <>
-                                          <tr>
-                                            <th>Gross Weight</th>
-                                            <td>
-                                              {productdetail?.gross_weight_22k}
-                                              g. (Approx.)
-                                            </td>
-                                          </tr>
-                                          {/* <tr>
-                                            <th>Less Gems Stone</th>
-                                            <td>
-                                              {productdetail?.less_gems_stone}
-                                              g.
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <th>Less C.Z. Stone</th>
-                                            <td>
-                                              {productdetail?.less_cz_stone}
-                                              g.
-                                            </td>
-                                          </tr> */}
-                                          <tr>
-                                            <th>Net Weight</th>
-                                            <td>
-                                              {productdetail?.net_weight_22k}
-                                              g.
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <th>Metal value</th>
-                                            <td>₹{productdetail?.price_22k}</td>
-                                          </tr>
-                                          {/* <tr>
-                                            <th>CZ Stone Charges</th>
-                                            <td>
-                                              ₹{productdetail?.cz_stone_price}
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <th>Gem stone charges</th>
-                                            <td>
-                                              ₹{productdetail?.gemstone_price}
-                                            </td>
-                                          </tr> */}
-                                          <tr>
-                                            <th>Making charge</th>
-                                            <td>
-                                              ₹{productdetail?.making_charge}
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <th>Total Amount</th>
-                                            <td>
-                                              ₹{productdetail?.total_price_22k}
-                                              (Approx.)
-                                            </td>
-                                          </tr>
-                                        </>
+                                        <tr>
+                                          <th>Total Amount</th>
+                                          <td>
+                                            ₹{productdetail?.total_price_22k}
+                                            (Approx.)
+                                          </td>
+                                        </tr>
                                       )}
                                       {goldType === "20k" && (
-                                        <>
-                                          <tr>
-                                            <th>Gross Weight</th>
-                                            <td>
-                                              {productdetail?.gross_weight_20k}
-                                              g. (Approx.)
-                                            </td>
-                                          </tr>
-                                          {/* <tr>
-                                            <th>Less Gems Stone</th>
-                                            <td>
-                                              {productdetail?.less_gems_stone}
-                                              g.
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <th>Less C.Z. Stone</th>
-                                            <td>
-                                              {productdetail?.less_cz_stone}
-                                              g.
-                                            </td>
-                                          </tr> */}
-                                          <tr>
-                                            <th>Net Weight</th>
-                                            <td>
-                                              {productdetail?.net_weight_20k}
-                                              g.
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <th>Metal value</th>
-                                            <td>₹{productdetail?.price_20k}</td>
-                                          </tr>
-                                          {/* <tr>
-                                            <th>CZ Stone Charges</th>
-                                            <td>
-                                              ₹{productdetail?.cz_stone_price}
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <th>Gem stone charges</th>
-                                            <td>
-                                              ₹{productdetail?.gemstone_price}
-                                            </td>
-                                          </tr> */}
-                                          <tr>
-                                            <th>Making charge</th>
-                                            <td>
-                                              ₹{productdetail?.making_charge}
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <th>Total Amount</th>
-                                            <td>
-                                              ₹{productdetail?.total_price_20k}
-                                              (Approx.)
-                                            </td>
-                                          </tr>
-                                        </>
+                                        <tr>
+                                          <th>Total Amount</th>
+                                          <td>
+                                            ₹{productdetail?.total_price_20k}
+                                            (Approx.)
+                                          </td>
+                                        </tr>
                                       )}
                                       {goldType === "18k" && (
-                                        <>
-                                          <tr>
-                                            <th>Gross Weight</th>
-                                            <td>
-                                              {productdetail?.gross_weight_18k}
-                                              g. (Approx.)
-                                            </td>
-                                          </tr>
-                                          {/* <tr>
-                                            <th>Less Gems Stone</th>
-                                            <td>
-                                              {productdetail?.less_gems_stone}
-                                              g.
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <th>Less C.Z. Stone</th>
-                                            <td>
-                                              {productdetail?.less_cz_stone}
-                                              g.
-                                            </td>
-                                          </tr> */}
-                                          <tr>
-                                            <th>Net Weight</th>
-                                            <td>
-                                              {productdetail?.net_weight_18k}
-                                              g.
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <th>Metal value</th>
-                                            <td>₹{productdetail?.price_18k}</td>
-                                          </tr>
-                                          {/* <tr>
-                                            <th>CZ Stone Charges</th>
-                                            <td>
-                                              ₹{productdetail?.cz_stone_price}
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <th>Gem stone charges</th>
-                                            <td>
-                                              ₹{productdetail?.gemstone_price}
-                                            </td>
-                                          </tr> */}
-                                          <tr>
-                                            <th>Making charge</th>
-                                            <td>
-                                              ₹{productdetail?.making_charge}
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <th>Total Amount</th>
-                                            <td>
-                                              ₹{productdetail?.total_price_18k}
-                                              (Approx.)
-                                            </td>
-                                          </tr>
-                                        </>
+                                        <tr>
+                                          <th>Total Amount</th>
+                                          <td>
+                                            ₹{productdetail?.total_price_18k}
+                                            (Approx.)
+                                          </td>
+                                        </tr>
                                       )}
                                       {goldType === "14k" && (
-                                        <>
-                                          <tr>
-                                            <th>Gross Weight</th>
-                                            <td>
-                                              {productdetail?.gross_weight_14k}
-                                              g. (Approx.)
-                                            </td>
-                                          </tr>
-                                          {/* <tr>
-                                            <th>Less Gems Stone</th>
-                                            <td>
-                                              {productdetail?.less_gems_stone}
-                                              g.
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <th>Less C.Z. Stone</th>
-                                            <td>
-                                              {productdetail?.less_cz_stone}
-                                              g.
-                                            </td>
-                                          </tr> */}
-                                          <tr>
-                                            <th>Net Weight</th>
-                                            <td>
-                                              {productdetail?.net_weight_14k}
-                                              g.
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <th>Metal value</th>
-                                            <td>₹{productdetail?.price_14k}</td>
-                                          </tr>
-                                          {/* <tr>
-                                            <th>CZ Stone Charges</th>
-                                            <td>
-                                              ₹{productdetail?.cz_stone_price}
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <th>Gem stone charges</th>
-                                            <td>
-                                              ₹{productdetail?.gemstone_price}
-                                            </td>
-                                          </tr> */}
-                                          <tr>
-                                            <th>Making charge</th>
-                                            <td>
-                                              ₹{productdetail?.making_charge}
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <th>Total Amount</th>
-                                            <td>
-                                              ₹{productdetail?.total_price_14k}
-                                              (Approx.)
-                                            </td>
-                                          </tr>
-                                        </>
+                                        <tr>
+                                          <th>Total Amount</th>
+                                          <td>
+                                            ₹{productdetail?.total_price_14k}
+                                            (Approx.)
+                                          </td>
+                                        </tr>
                                       )}
                                     </tbody>
                                   </table>
                                 </>
                               )}
                             </div>
+                            }
                           </div>
                           <div className="button d-flex pt-2">
                             <div className="add_cart align-items-center d-flex">
@@ -760,8 +872,12 @@ const ShopDetails = () => {
                                         className="btn btn-outline-dark"
                                         to="/cart"
                                       >
-                                        <BsCartDash className="me-2" /> Go To
-                                        Cart
+                                        <BsCartDash
+                                          style={{
+                                            fontSize: "26px",
+                                            cursor: "pointer",
+                                          }}
+                                        />
                                       </Link>
                                     </>
                                   ) : (
@@ -777,13 +893,17 @@ const ShopDetails = () => {
                                           {spinner && (
                                             <CgSpinner
                                               size={20}
-                                              className="animate_spin me-2"
+                                              className="animate_spin"
                                             />
                                           )}
                                           {!spinner && (
-                                            <BsHandbagFill className="me-2" />
+                                            <BsHandbagFill
+                                              style={{
+                                                fontSize: "26px",
+                                                cursor: "pointer",
+                                              }}
+                                            />
                                           )}
-                                          Add To Cart
                                         </button>
                                       </div>
                                       <div>
@@ -800,21 +920,29 @@ const ShopDetails = () => {
                                             (item) => item?.id === product?.id
                                           ) ? (
                                             <div className="btn-success">
-                                              <FaHeart className="me-2" />
-                                              WISHLISTED
+                                              <FaHeart
+                                                style={{
+                                                  fontSize: "26px",
+                                                  cursor: "pointer",
+                                                }}
+                                              />
                                             </div>
                                           ) : (
                                             <div className="btn-success">
                                               {spinner2 && (
                                                 <CgSpinner
                                                   size={20}
-                                                  className="animate_spin me-2"
+                                                  className="animate_spin"
                                                 />
                                               )}
                                               {!spinner2 && (
-                                                <FaRegHeart className="me-2" />
+                                                <FaRegHeart
+                                                  style={{
+                                                    fontSize: "26px",
+                                                    cursor: "pointer",
+                                                  }}
+                                                />
                                               )}
-                                              Add To Wishlist
                                             </div>
                                           )}
                                         </button>
@@ -833,16 +961,24 @@ const ShopDetails = () => {
                                     >
                                       <div className="add_cart align-items-center d-flex">
                                         <div>
-                                          <button className="btn btn-outline-dark">
-                                            <BsHandbagFill className="me-2" />
-                                            Add To Cart
-                                          </button>
+                                          <spam className="btn btn-outline-dark">
+                                            <BsHandbagFill
+                                              style={{
+                                                fontSize: "26px",
+                                                cursor: "pointer",
+                                              }}
+                                            />
+                                          </spam>
                                         </div>
                                         <div>
-                                          <button className="btn btn-outline-dark align-items-center">
-                                            <FaRegHeart className="me-2" />
-                                            Add To Wishlist
-                                          </button>
+                                          <span className="btn btn-outline-dark">
+                                            <FaRegHeart
+                                              style={{
+                                                fontSize: "26px",
+                                                cursor: "pointer",
+                                              }}
+                                            />
+                                          </span>
                                         </div>
                                       </div>
                                     </div>

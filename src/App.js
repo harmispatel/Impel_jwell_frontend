@@ -31,6 +31,8 @@ import CartProvider from "./context/CartContext";
 import WishlistProvider from "./context/WishListContext";
 import ProfileProvider from "./context/ProfileContext";
 import { useEffect } from "react";
+import Customization from "./components/Customization";
+import Collection from "./components/common/Collection";
 
 function App() {
   const location = useLocation();
@@ -77,6 +79,7 @@ function App() {
         <ProfileProvider>
           <CartProvider>
             <ScrollToTop />
+            <Collection />
             <HelmetProvider context={helmetContext}>
               {/* {shouldShowPopup && popupshow == null ? <Popup /> : <></>} */}
               <Routes>
@@ -85,6 +88,7 @@ function App() {
                     {/* COMMON COMPONENT */}
                     <Route index element={<Home />} />
                     <Route path="shop" element={<Shop />} />
+                    <Route path="customization" element={<Customization />} />
                     <Route path="shopdetails/:id" element={<ShopDetails />} />
                     <Route path="categories" element={<Categories />} />
                     <Route

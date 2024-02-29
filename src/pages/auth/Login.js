@@ -220,16 +220,16 @@ const Login = () => {
                           )}
                           {spinner ? "" : "Login To Continue"}
                         </button>
-                        <div className="col-md-12 text-end">
-                          <Link
-                            to="/Dealer_login"
-                            className="text-decoration-none text-success"
-                            style={{ fontWeight: "700", fontSize: "18px" }}
-                          >
-                            Dealer Login ?
-                          </Link>
-                        </div>
                       </form>
+                      <div className="col-md-12 text-end">
+                        <Link
+                          to="/Dealer_login"
+                          className="text-decoration-none text-success"
+                          style={{ fontWeight: "700", fontSize: "18px" }}
+                        >
+                          Dealer Login ?
+                        </Link>
+                      </div>
                     </>
                   )}
 

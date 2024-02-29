@@ -19,7 +19,7 @@ html {
   background: #2ac231;
 }
 
-@font-face {
+/* @font-face {
   font-family: 'Lato';
   src: url('./assets/fonts/Lato-Regular.ttf');
   font-weight: 400;
@@ -29,14 +29,14 @@ html {
   font-family: 'Lato';
   src: url('./assets/fonts/Lato-Semibold.ttf');
   font-weight: 600;
-}
+} */
 
 body {
   box-sizing: border-box;
   margin: 0;
   padding: 0%;
   /* font-family: Arial, Helvetica, sans-serif !important; */
-  font-family: 'Rajdhani' !important;
+  font-family: "KoHo" !important;
   background-color: #faf7f5 !important;
 }
 
@@ -150,7 +150,7 @@ body {
 
 .collapse ul li a,
 .collapse ul li span .nav-link {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
   color: #000;
   text-transform: uppercase;
@@ -254,7 +254,7 @@ body {
   align-items: center;
   top: -6px;
   right: -6px;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 900;
 }
 
@@ -434,7 +434,6 @@ body {
   text-transform: uppercase;
   margin-bottom: 30px;
   font-size: 40px;
-  font-family: 'Lato';
   font-weight: 700;
 }
 
@@ -476,7 +475,6 @@ body {
   color: #fff;
   border-radius: 5px;
   padding: 9px 16px;
-  font-family: 'Lato', sans-serif;
   font-weight: 500;
   background: transparent;
   cursor: pointer;
@@ -1462,8 +1460,8 @@ input[type="file"] {
 }
 
 .Shop_product {
-  margin-top: 130px;
-  padding: 80px 0;
+  margin-top: 50px;
+  padding: 30px 0;
   background-color: #fff;
 }
 
@@ -1602,7 +1600,7 @@ input[type="file"] {
 .new-wishlist-section .btn {
   border-radius: 5px !important;
   box-shadow: 3px 3px 3px rgb(33 33 33 / 40%);
-  font-size: 14px;
+  font-size: 13px;
   padding: 10px;
   font-weight: 900;
   display: flex;
@@ -1929,6 +1927,10 @@ input[type="file"] {
     width: 200px !important;
     right: 0;
     left: unset !important;
+  }
+
+  .banner_detail_iner{
+    text-align: center !important;
   }
 
   .header_inner {
@@ -3175,8 +3177,6 @@ input[type="file"] {
   right: 10px;
   width: 35px;
   height: 35px;
-  border: 1px solid rgb(0 0 0 / 30%);
-  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -3188,6 +3188,7 @@ input[type="file"] {
   color: #000;
   font-size: 18px;
   line-height: 18px;
+  font-size: 22px;
 }
 
 .product-info h4 {
@@ -3202,4 +3203,20 @@ input[type="file"] {
   font-size: 18px;
   font-weight: 500;
   color: #000;
+}
+
+.womans-toggle {
+  position: fixed;
+  top: 50%;
+  left: 0;
+  transform: rotate(-90deg) translate3d(0, -74px, 0);
+  z-index: 999;
+  background-color: #ffffff;
+  color: #db9662;
+  font-size: 16px;
+  font-weight: 700;
+  text-decoration: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, .2);
 }

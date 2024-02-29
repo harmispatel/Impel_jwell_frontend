@@ -690,10 +690,10 @@ const Shop = () => {
                                         )}
                                       </div>
                                       <div className="product-info">
-                                        <h4>
+                                        {/* <h4>
                                           {data?.name}&nbsp;
                                           <span>({data?.code})</span>
-                                        </h4>
+                                        </h4> */}
 
                                         <label>
                                           ₹
@@ -792,7 +792,9 @@ const Shop = () => {
                                                 className=""
                                                 onClick={(e) => UserLogin(e)}
                                               >
-                                                <FiHeart />
+                                                <FiHeart
+                                                  style={{ fontSize: "22px" }}
+                                                />
                                               </span>
                                             </OverlayTrigger>
                                           )}

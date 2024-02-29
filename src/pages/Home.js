@@ -139,7 +139,6 @@ const Home = () => {
     bannerSlider?.bottom_banners &&
     bannerSlider?.bottom_banners[0].tag_id;
 
-
   return (
     <>
       <Helmet>
@@ -147,6 +146,7 @@ const Home = () => {
       </Helmet>
 
       {/* home */}
+
       <section className="banner">
         <div className="banner_content">
           <div className="banner_detail_iner animate__animated animate__fadeInLeft">
@@ -164,7 +164,7 @@ const Home = () => {
             spaceBetween={50}
             slidesPerView={1}
             loop={true}
-            autoplay={{ delay: 2000 }}
+            autoplay={{ delay: 4000 }}
           >
             {/* {bannerSlider.map((data, index) => {
               return (
@@ -226,7 +226,7 @@ const Home = () => {
               spaceBetween={50}
               loop={true}
               autoplay={{
-                delay: 800,
+                delay: 4000,
                 disableOnInteraction: false,
               }}
             >
@@ -355,7 +355,7 @@ const Home = () => {
               spaceBetween={20}
               loop={true}
               autoplay={{
-                delay: 1200,
+                delay: 4000,
                 disableOnInteraction: false,
               }}
             >
@@ -506,7 +506,7 @@ const Home = () => {
               spaceBetween={10}
               loop={true}
               autoplay={{
-                delay: 1000,
+                delay: 4000,
                 disableOnInteraction: false,
               }}
             >
