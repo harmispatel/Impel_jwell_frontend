@@ -150,8 +150,10 @@ const Home = () => {
       <section className="banner">
         <div className="banner_content">
           <div className="banner_detail_iner animate__animated animate__fadeInLeft">
-            <h1>TRY TO SOMETHING NEW</h1>
-            <p>Because every piece caries a precious story</p>
+            <h2>TRY TO SOMETHING NEW</h2>
+            <p style={{ fontSize: "18px" }}>
+              Because every piece caries a precious story
+            </p>
 
             <Link to="/shop" className="home_more_btn">
               Explore More

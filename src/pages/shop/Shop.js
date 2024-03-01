@@ -17,6 +17,7 @@ import FilterServices from "../../services/Filter";
 import DealerWishlist from "../../services/Dealer/Collection";
 import UserWishlist from "../../services/Auth";
 import { WishlistSystem } from "../../context/WishListContext";
+import Loader from "../../components/common/Loader"
 
 const Shop = () => {
   const { dispatch: wishlistDispatch } = useContext(WishlistSystem);
@@ -657,7 +658,7 @@ const Shop = () => {
               <div className="col-md-12">
                 {isLoading ? (
                   <div className="animation-loading">
-                    <img src={loadinggif} alt="Animated GIF" autoPlay />
+                    <Loader />
                   </div>
                 ) : (
                   <>

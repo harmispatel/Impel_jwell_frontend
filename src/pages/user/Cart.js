@@ -3,14 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import UserService from "../../services/Cart";
 import profileService from "../../services/Auth";
 import toast from "react-hot-toast";
-import {
-  Button,
-  Col,
-  Form,
-  Modal,
-  OverlayTrigger,
-  Tooltip,
-} from "react-bootstrap";
+import { Col, Form, Modal, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { CgSpinner } from "react-icons/cg";
 import { FaLongArrowAltLeft } from "react-icons/fa";
 import { IoIosCloseCircleOutline } from "react-icons/io";
@@ -19,7 +12,7 @@ import emptycart from "../../assets/images/empty-cart.png";
 import { Helmet } from "react-helmet-async";
 import { CartSystem } from "../../context/CartContext";
 import { ProfileSystem } from "../../context/ProfileContext";
-import loadinggif from "../../assets/video/impel-bird-unscreen.gif";
+import Loader from "../../components/common/Loader";
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -642,7 +635,7 @@ const Cart = () => {
           {isLoading ? (
             <>
               <div className="animation-loading">
-                <img src={loadinggif} alt="Animated GIF" autoPlay />
+                <Loader />
               </div>
             </>
           ) : (
@@ -658,7 +651,9 @@ const Cart = () => {
                           </h4>
                           <div className="row gy-3">
                             <>
-                              <hr />
+                              <div className="col-md-12">
+                                <hr className="mt-0" />
+                              </div>
                               {Items?.map((data, index) => {
                                 const Pricekey =
                                   "metal_price_" + data.gold_type;
@@ -681,7 +676,7 @@ const Cart = () => {
                                       </div>
                                     </div>
                                     <div className="col-md-4">
-                                      <div className="">
+                                      <div className="cart_product_name">
                                         <Link
                                           to={`/shopdetails/${data.design_id}`}
                                           className="nav-link"
@@ -722,7 +717,9 @@ const Cart = () => {
                                         </Link>
                                       </div>
                                     </div>
-                                    <hr />
+                                    <div className="col-md-12">
+                                      <hr className="mt-0" />
+                                    </div>
                                   </>
                                 );
                               })}
@@ -896,13 +893,13 @@ const Cart = () => {
                               )}
                               Place Order
                             </button>
-                            <Link
-                              to="/shop"
-                              className="light-up-button w-100 rounded-2 mt-2"
-                              style={{ display: spinner ? "none" : "block" }}
+                            <button
+                              type="button"
+                              class="light-up-button w-100 rounded-2"
+                              onClick={() => navigate("/shop")}
                             >
                               Back to shop
-                            </Link>
+                            </button>
                           </div>
                         </div>
                       </div>
@@ -1032,7 +1029,9 @@ const Cart = () => {
                     </Form.Group>
                   </div>
 
-                  <hr />
+                  <div className="col-md-12">
+                    <hr className="mt-0" />
+                  </div>
                   <div className="col-md-6">
                     <Form.Group
                       as={Col}
@@ -1138,7 +1137,9 @@ const Cart = () => {
                       Shipping Address is as same above then check this box
                     </label>
                   </div>
-                  <hr className="mt-3" />
+                  <div className="col-md-12">
+                    <hr className="mt-3" />
+                  </div>
                   <div className="col-md-6">
                     <Form.Group
                       as={Col}

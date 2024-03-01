@@ -4,6 +4,7 @@ import { Helmet } from "react-helmet-async";
 import loadinggif from "../../assets/video/impel-bird-unscreen.gif";
 import BreadCrumb from "../../components/common/BreadCrumb";
 import Userservice from "../../services/Cart";
+import Loader from "../../components/common/Loader"
 
 const Orders = () => {
   const id = useParams();
@@ -44,7 +45,7 @@ const Orders = () => {
       <section className="my_orders">
         {isLoading ? (
           <div className="animation-loading">
-            <img src={loadinggif} alt="Animated GIF" autoPlay />
+            <Loader/>
           </div>
         ) : (
           <>

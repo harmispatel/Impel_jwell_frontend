@@ -208,14 +208,16 @@
 // export default MyOrders;
 
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import loadinggif from "../../assets/video/impel-bird-unscreen.gif";
 import { FaEye } from "react-icons/fa";
 import Userservice from "../../services/Cart";
 import { Helmet } from "react-helmet-async";
 import { OverlayTrigger, Pagination, Tooltip } from "react-bootstrap";
+import Loader from "../../components/common/Loader";
 
 const MyOrders = () => {
+  const navigate = useNavigate();
   const user_id = localStorage.getItem("user_id");
   const user_type = localStorage.getItem("user_type");
   const [Items, setItems] = useState([]);
@@ -263,7 +265,7 @@ const MyOrders = () => {
       <section className="cart">
         {isLoading ? (
           <div className="animation-loading">
-            <img src={loadinggif} alt="Animated GIF" autoPlay />
+            <Loader />
           </div>
         ) : (
           <>
@@ -383,12 +385,16 @@ const MyOrders = () => {
                                               placement="top"
                                               overlay={orderDetails}
                                             >
-                                              <Link
-                                                to={`/order-details/${datas?.order_id}`}
+                                              <button
+                                                onClick={() =>
+                                                  navigate(
+                                                    `/order-details/${datas?.order_id}`
+                                                  )
+                                                }
                                                 className="btn btn-primary btn-sm"
                                               >
                                                 <FaEye />
-                                              </Link>
+                                              </button>
                                             </OverlayTrigger>
                                           </span>
                                         </td>

@@ -7,7 +7,6 @@ import profileService from "../services/Home";
 
 const Footer = () => {
   const [siteSetting, setSiteSetting] = useState("");
-  const [customPages, setCustomPages] = useState([]);
   const currentYear = new Date().getFullYear();
   const copyrightText = siteSetting?.frontend_copyright;
   const updatedCopyrightText = copyrightText?.replace("{year}", currentYear);
@@ -23,20 +22,8 @@ const Footer = () => {
       });
   };
 
-  const CustomPages = () => {
-    profileService
-      .CustomPages()
-      .then((res) => {
-        setCustomPages(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
   useEffect(() => {
     SiteSetting();
-    CustomPages();
   }, []);
 
   return (
@@ -49,13 +36,26 @@ const Footer = () => {
 
           <div className="footer_list">
             <ul>
-              {customPages?.map((pages, index) => (
-                <li>
-                  <Link key={index} to={`page/${pages?.slug}`}>
-                    <b>{pages?.name}</b>
-                  </Link>
-                </li>
-              ))}
+              <li className="text-uppercase pb-2 pb-md-0">
+                <Link to="/faq">
+                  <b>Faq</b>
+                </Link>
+              </li>
+              <li className="text-uppercase pb-2 pb-md-0">
+                <Link to="/stores">
+                  <b>stores</b>
+                </Link>
+              </li>
+              <li className="text-uppercase pb-2 pb-md-0">
+                <Link to="/about-us">
+                  <b>about-us</b>
+                </Link>
+              </li>
+              <li className="text-uppercase">
+                <Link to="/shopping-and-returns">
+                  <b>shopping and returns</b>
+                </Link>
+              </li>
             </ul>
           </div>
 

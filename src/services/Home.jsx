@@ -50,7 +50,7 @@ const SiteSetting = async () => {
 
 const CustomPages = async (data) => {
   let d = await call({
-    path: "custom-pages",
+    path: "get-page-details",
     method: "POST",
     data,
   });

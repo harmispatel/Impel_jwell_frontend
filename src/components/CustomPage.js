@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import profileService from "../services/Home";
-import { useParams } from "react-router-dom";
-import loadinggif from "../assets/video/impel-bird-unscreen.gif";
 import { Helmet } from "react-helmet-async";
+import Loader from "./common/Loader";
 
-const CustomPageView = () => {
-  const paramId = useParams();
+const CustomPage = ({ page_slug }) => {
+  const paramId = page_slug;
   const [pageDetails, setPageDetails] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -14,7 +13,7 @@ const CustomPageView = () => {
     profileService
       .CustomPages({ page_slug: paramId })
       .then((res) => {
-        setPageDetails(res.data);
+        setPageDetails(res?.data);
         setIsLoading(false);
       })
       .catch((err) => {
@@ -32,28 +31,31 @@ const CustomPageView = () => {
       <Helmet>
         <title>
           Impel Store -
-          {pageDetails[0]?.name && pageDetails[0]?.name
-            ? pageDetails[0]?.name
-            : ""}
+          {pageDetails?.name && pageDetails?.name ? pageDetails?.name : ""}
         </title>
       </Helmet>
       <section className="wishlist">
         {isLoading ? (
           <div className="animation-loading">
-            <img src={loadinggif} alt="Animated GIF" autoPlay />
+            <Loader />
           </div>
         ) : (
           <>
             <div className="container">
               <div className="row">
                 <div className="text-center">
-                  <h4>{pageDetails[0]?.name}</h4>
+                  <h1>{pageDetails?.name}</h1>
+                </div>
+                <div className="text-center mt-3 mb-3">
+                  {page_slug === "about-us" && (
+                    <img src={pageDetails?.image} alt="" className=" w-75" />
+                  )}
                 </div>
                 <div className="col-md-12">
                   <div className="">
                     <div
                       dangerouslySetInnerHTML={{
-                        __html: pageDetails[0]?.content,
+                        __html: pageDetails?.content,
                       }}
                     />
                   </div>
@@ -67,4 +69,4 @@ const CustomPageView = () => {
   );
 };
 
-export default CustomPageView;
+export default CustomPage;

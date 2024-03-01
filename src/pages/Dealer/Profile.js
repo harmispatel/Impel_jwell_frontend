@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import loadinggif from "../../assets/video/impel-bird-unscreen.gif";
 import profileService from "../../services/Auth";
 import { ProfileSystem } from "../../context/ProfileContext";
+import Loader from "../../components/common/Loader"
 
 const DealerProfile = () => {
   const { dispatch: image, state: imagestate } = useContext(ProfileSystem);
@@ -95,7 +96,7 @@ const DealerProfile = () => {
           <div className="row">
             {isLoading ? (
               <div className="animation-loading">
-                <img src={loadinggif} alt="Animated GIF" autoPlay />
+                <Loader />
               </div>
             ) : (
               <>

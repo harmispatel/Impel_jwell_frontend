@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import loadinggif from "../../assets/video/impel-bird-unscreen.gif";
 import { Helmet } from "react-helmet-async";
 import categoriesService from "../../services/Home";
+import Loader from "../../components/common/Loader"
 
 const Categories = () => {
   const [allCategories, setAllCategories] = useState([]);
@@ -36,7 +37,7 @@ const Categories = () => {
           </div>
           {isLoading ? (
             <div className="animation-loading">
-              <img src={loadinggif} alt="Animated GIF" autoPlay />
+              <Loader/>
             </div>
           ) : (
             <div className="categories_data_main">

@@ -19,6 +19,7 @@ import Userservice from "../../services/Auth";
 import productDetail from "../../services/Shop";
 import { CartSystem } from "../../context/CartContext";
 import { Accordion } from "react-bootstrap";
+import Loader from "../../components/common/Loader";
 
 const ShopDetails = () => {
   const location = useLocation();
@@ -51,9 +52,8 @@ const ShopDetails = () => {
   const [accordionOpen, setAccordionOpen] = useState(true);
 
   const toggleAccordion = () => {
-    setAccordionOpen(false);
+    setAccordionOpen(!accordionOpen);
   };
-
 
   const productData = async () => {
     const data = {
@@ -262,6 +262,7 @@ const ShopDetails = () => {
     navigate("/login");
   };
 
+
   return (
     <>
       <Helmet>
@@ -288,7 +289,7 @@ const ShopDetails = () => {
                 />
                 {isLoading ? (
                   <div className="animation-loading">
-                    <img src={loadinggif} alt="Animated GIF" autoPlay />
+                    <Loader />
                   </div>
                 ) : (
                   <>
@@ -368,7 +369,7 @@ const ShopDetails = () => {
                           <div>
                             <div>
                               <button
-                                className={`btn yellow-gold ${
+                                className={`yellow-gold ${
                                   goldColor === "yellow_gold" ? "active" : ""
                                 }`}
                                 onClick={() => handleGoldColor("yellow_gold")}
@@ -376,7 +377,7 @@ const ShopDetails = () => {
                                 Yellow Gold
                               </button>
                               <button
-                                className={`btn rose-gold mx-3 ${
+                                className={`rose-gold  mx-3 ${
                                   goldColor === "rose_gold" ? "active" : ""
                                 }`}
                                 onClick={() => handleGoldColor("rose_gold")}
@@ -384,7 +385,7 @@ const ShopDetails = () => {
                                 Rose Gold
                               </button>
                               <button
-                                className={`btn white-gold mt-2 mt-md-0 ${
+                                className={`white-gold  mt-md-0 ${
                                   goldColor === "white_gold" ? "active" : ""
                                 }`}
                                 onClick={() => handleGoldColor("white_gold")}
@@ -498,11 +499,11 @@ const ShopDetails = () => {
                                   <Accordion.Header onClick={toggleAccordion}>
                                     Approximate -Estimate
                                   </Accordion.Header>
-                                  <Accordion.Body className="">
-                                    <div className="mt-3">
+                                  <Accordion.Body className="p-0">
+                                    <div>
                                       {goldColor && goldType && (
                                         <>
-                                          <table className="table table-bordered text-center">
+                                          <table className="table table-bordered mb-0">
                                             <tbody>
                                               {goldType === "22k" && (
                                                 <>
@@ -809,55 +810,54 @@ const ShopDetails = () => {
                                 </Accordion.Item>
                               </Accordion>
                             </div>
-                            {accordionOpen && 
-                            
-                            <div className="mt-3">
-                              {goldColor && goldType && (
-                                <>
-                                  <table className="table table-bordered text-center">
-                                    <tbody>
-                                      {goldType === "22k" && (
-                                        <tr>
-                                          <th>Total Amount</th>
-                                          <td>
-                                            ₹{productdetail?.total_price_22k}
-                                            (Approx.)
-                                          </td>
-                                        </tr>
-                                      )}
-                                      {goldType === "20k" && (
-                                        <tr>
-                                          <th>Total Amount</th>
-                                          <td>
-                                            ₹{productdetail?.total_price_20k}
-                                            (Approx.)
-                                          </td>
-                                        </tr>
-                                      )}
-                                      {goldType === "18k" && (
-                                        <tr>
-                                          <th>Total Amount</th>
-                                          <td>
-                                            ₹{productdetail?.total_price_18k}
-                                            (Approx.)
-                                          </td>
-                                        </tr>
-                                      )}
-                                      {goldType === "14k" && (
-                                        <tr>
-                                          <th>Total Amount</th>
-                                          <td>
-                                            ₹{productdetail?.total_price_14k}
-                                            (Approx.)
-                                          </td>
-                                        </tr>
-                                      )}
-                                    </tbody>
-                                  </table>
-                                </>
-                              )}
-                            </div>
-                            }
+                            {accordionOpen && (
+                              <div className="mt-3">
+                                {goldColor && goldType && (
+                                  <>
+                                    <table className="table table-bordered">
+                                      <tbody>
+                                        {goldType === "22k" && (
+                                          <tr>
+                                            <th>Total Amount</th>
+                                            <td>
+                                              ₹{productdetail?.total_price_22k}
+                                              (Approx.)
+                                            </td>
+                                          </tr>
+                                        )}
+                                        {goldType === "20k" && (
+                                          <tr>
+                                            <th>Total Amount</th>
+                                            <td>
+                                              ₹{productdetail?.total_price_20k}
+                                              (Approx.)
+                                            </td>
+                                          </tr>
+                                        )}
+                                        {goldType === "18k" && (
+                                          <tr>
+                                            <th>Total Amount</th>
+                                            <td>
+                                              ₹{productdetail?.total_price_18k}
+                                              (Approx.)
+                                            </td>
+                                          </tr>
+                                        )}
+                                        {goldType === "14k" && (
+                                          <tr>
+                                            <th>Total Amount</th>
+                                            <td>
+                                              ₹{productdetail?.total_price_14k}
+                                              (Approx.)
+                                            </td>
+                                          </tr>
+                                        )}
+                                      </tbody>
+                                    </table>
+                                  </>
+                                )}
+                              </div>
+                            )}
                           </div>
                           <div className="button d-flex pt-2">
                             <div className="add_cart align-items-center d-flex">

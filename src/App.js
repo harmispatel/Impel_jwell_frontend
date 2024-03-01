@@ -22,17 +22,15 @@ import Cart from "./pages/user/Cart";
 import { Toaster } from "react-hot-toast";
 import ForgetPassword from "./pages/auth/ForgetPassword";
 import Errorpage from "./components/Errorpage";
-import Popup from "./components/common/Popup";
 import MyOrders from "./pages/user/MyOrders";
-import CustomPageView from "./components/CustomPageView";
 import { HelmetProvider } from "react-helmet-async";
 import Resetpassword from "./pages/auth/Resetpassword";
 import CartProvider from "./context/CartContext";
 import WishlistProvider from "./context/WishListContext";
 import ProfileProvider from "./context/ProfileContext";
 import { useEffect } from "react";
-import Customization from "./components/Customization";
-import Collection from "./components/common/Collection";
+import CustomPage from "./components/CustomPage";
+import WomansClub from "./components/common/WomansClub";
 
 function App() {
   const location = useLocation();
@@ -79,7 +77,7 @@ function App() {
         <ProfileProvider>
           <CartProvider>
             <ScrollToTop />
-            <Collection />
+            <WomansClub />
             <HelmetProvider context={helmetContext}>
               {/* {shouldShowPopup && popupshow == null ? <Popup /> : <></>} */}
               <Routes>
@@ -88,14 +86,17 @@ function App() {
                     {/* COMMON COMPONENT */}
                     <Route index element={<Home />} />
                     <Route path="shop" element={<Shop />} />
-                    <Route path="customization" element={<Customization />} />
+                    <Route path="customization" element={<CustomPage page_slug="customization"/>} />
+                    <Route path="faq" element={<CustomPage page_slug="faq"/>} />
+                    <Route path="about-us" element={<CustomPage page_slug="about-us" />} />
+                    <Route path="shopping-and-returns" element={<CustomPage page_slug="shopping-and-returns" />} />
+                    <Route path="stores" element={<CustomPage page_slug="stores" />} />
                     <Route path="shopdetails/:id" element={<ShopDetails />} />
                     <Route path="categories" element={<Categories />} />
                     <Route
                       path="categories/:id"
                       element={<CategoriesItems />}
                     />
-                    <Route path="page/:id" element={<CustomPageView />} />
 
                     {/* USER PROTECTED */}
                     <Route

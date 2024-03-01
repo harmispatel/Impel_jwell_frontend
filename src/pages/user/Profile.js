@@ -7,6 +7,7 @@ import { Helmet } from "react-helmet-async";
 import { FaPencilAlt } from "react-icons/fa";
 import { CgSpinner } from "react-icons/cg";
 import { ProfileSystem } from "../../context/ProfileContext";
+import Loader from "../../components/common/Loader"
 
 const Profile = () => {
   const { dispatch: profilename, state: namestate } = useContext(ProfileSystem);
@@ -429,7 +430,7 @@ const Profile = () => {
           <div className="row">
             {isLoading ? (
               <div className="animation-loading">
-                <img src={loadinggif} alt="Animated GIF" autoPlay />
+                <Loader />
               </div>
             ) : (
               <>
@@ -670,8 +671,9 @@ const Profile = () => {
                     )}
                   </Form.Group>
                 </div>
-
-                <hr />
+                <div className="col-md-12">
+                  <hr className="mt-0"/>
+                </div>
                 <div className="col-md-6">
                   <Form.Group as={Col} className="mb-2" controlId="formGridZip">
                     <Form.Label>
@@ -773,7 +775,9 @@ const Profile = () => {
                     Shipping Address is as same above then check this box
                   </label>
                 </div>
-                <hr className="mt-3" />
+                <div className="col-md-12">
+                  <hr className="mt-3" />
+                </div>
                 <div className="col-md-6">
                   <Form.Group as={Col} className="mb-2" controlId="formGridZip">
                     <Form.Label>

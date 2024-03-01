@@ -8,6 +8,7 @@ import { FaLongArrowAltLeft } from "react-icons/fa";
 import DealerWishlist from "../../services/Dealer/Collection";
 import { Helmet } from "react-helmet-async";
 import { AiFillDelete } from "react-icons/ai";
+import Loader from "../../components/common/Loader"
 
 const DealerWishList = () => {
   const DealerEmail = localStorage.getItem("email");
@@ -61,7 +62,7 @@ const DealerWishList = () => {
           {isLoading ? (
             <div className="h-100 d-flex justify-content-center">
               <div className="animation-loading">
-                <img src={loadinggif} alt="Animated GIF" autoPlay />
+                <Loader/>
               </div>
             </div>
           ) : (

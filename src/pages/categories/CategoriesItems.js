@@ -5,6 +5,7 @@ import loadinggif from "../../assets/video/impel-bird-unscreen.gif";
 import { FaLongArrowAltLeft } from "react-icons/fa";
 import homeService from "../../services/Home";
 import categoryDetail from "../../services/Shop";
+import Loader from "../../components/common/Loader"
 
 const CategoriesItems = () => {
   const paramId = useParams();
@@ -146,7 +147,7 @@ const CategoriesItems = () => {
             <div className="row">
               {isLoading ? (
                 <div className="animation-loading">
-                  <img src={loadinggif} alt="Animated GIF" autoPlay />
+                  <Loader/>
                 </div>
               ) : (
                 <>
@@ -178,10 +179,10 @@ const CategoriesItems = () => {
                                     )}
                                   </div>
                                   <div className="product-info">
-                                    <h4>
+                                    {/* <h4>
                                       {data?.name}&nbsp;
                                       <span>({data?.code})</span>
-                                    </h4>
+                                    </h4> */}
 
                                     <label>
                                       ₹
