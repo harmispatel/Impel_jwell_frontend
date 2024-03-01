@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./WomansClub.css";
 import Select from "react-select";
 
@@ -20,6 +20,8 @@ const WomansClub = () => {
     campaign: false,
   });
 
+  console.log(errors);
+
   const handleCheckboxChange = (event) => {
     const { name, checked } = event.target;
     setIsChecked({ ...isChecked, [name]: checked });
@@ -30,33 +32,33 @@ const WomansClub = () => {
     const newErrors = {};
 
     if (!details.fullName.trim()) {
-      newErrors.fullName = "Full Name is required";
+      newErrors.fullName = "Full name is required!";
       valid = false;
     }
 
     if (!details.number.trim()) {
-      newErrors.number = "Number is required";
+      newErrors.number = "Mobile number is required!";
       valid = false;
     } else if (details.number.length !== 10 || isNaN(details.number)) {
-      newErrors.number = "Your mobile number should be 10 digits";
+      newErrors.number = "Your mobile number should be 10 digits!";
       valid = false;
     }
 
     if (!details.email.trim()) {
-      newErrors.email = "Email is required";
+      newErrors.email = "Email is required!";
       valid = false;
     } else if (!/\S+@\S+\.\S+/.test(details.email)) {
-      newErrors.email = "Email is invalid";
+      newErrors.email = "Email is invalid!";
       valid = false;
     }
 
     if (!details.city.trim()) {
-      newErrors.city = "City is required";
+      newErrors.city = "City is required!";
       valid = false;
     }
 
     if (!details.message.trim()) {
-      newErrors.message = "Message is required";
+      newErrors.message = "Message is required!";
       valid = false;
     }
     if (
@@ -67,7 +69,7 @@ const WomansClub = () => {
       !isChecked.exibitions &&
       !isChecked.campaign
     ) {
-      newErrors.checkbox = "Please select at least one option";
+      newErrors.checkbox = "Please select at least one option!";
       valid = false;
     }
 
@@ -103,6 +105,31 @@ const WomansClub = () => {
     }
   };
 
+  useEffect(() => {
+    const offcanvasExample = document.getElementById("offcanvasExample");
+    offcanvasExample.addEventListener("hidden.bs.offcanvas", () => {
+      setErrors({});
+      setDetails({
+        fullName: "",
+        number: "",
+        email: "",
+        city: "",
+        message: "",
+      });
+      setIsChecked({
+        instagram: false,
+        facebook: false,
+        pinterest: false,
+        family: false,
+        exibitions: false,
+        campaign: false,
+      });
+    });
+
+    return () => {
+      offcanvasExample.removeEventListener("hidden.bs.offcanvas", () => {});
+    };
+  }, []);
   return (
     <>
       <button
@@ -118,6 +145,8 @@ const WomansClub = () => {
         <div
           class="offcanvas offcanvas-start"
           tabindex="-1"
+          data-bs-backdrop="false"
+          data-bs-scroll="false"
           id="offcanvasExample"
           aria-labelledby="offcanvasExampleLabel"
         >
@@ -144,17 +173,14 @@ const WomansClub = () => {
                       <div className="contact_form">
                         <form onSubmit={handleSubmit}>
                           <div className="row">
-                            <div className="col-md-4">
+                            <div className="col-md-12">
                               <div className="form-group position-relative">
-                                <label>Full Name</label>
+                                <label htmlFor="fullName" className="form-label">Full Name</label>
                                 <input
                                   type="text"
+                                  id="fullName"
                                   name="fullName"
-                                  className={
-                                    errors.fullName
-                                      ? "form-control is-invalid"
-                                      : "form-control"
-                                  }
+                                  className={`form-control ${errors.fullName ? 'is-invalid' : ''}`}
                                   placeholder="Enter full name"
                                   value={details.fullName}
                                   onChange={handleChange}
@@ -166,18 +192,17 @@ const WomansClub = () => {
                                 )}
                               </div>
                             </div>
-                            <div className="col-md-4">
+                            <div className="col-md-12">
                               <div className="form-group position-relative">
-                                <label>Mobile Number (whatsapp)</label>
+                                <label htmlFor="mobileNumber">
+                                  Mobile Number (whatsapp)
+                                </label>
                                 <input
                                   type="tel"
                                   name="number"
-                                  className={
-                                    errors.number
-                                      ? "form-control is-invalid"
-                                      : "form-control"
-                                  }
-                                  placeholder="Enter phone number"
+                                  id="mobileNumber"
+                                  className={`form-control ${errors.number ? 'is-invalid' : ''}`}
+                                  placeholder="Enter mobile number"
                                   value={details.number}
                                   onChange={handleChange}
                                   maxlength="10"
@@ -190,18 +215,15 @@ const WomansClub = () => {
                                 )}
                               </div>
                             </div>
-                            <div className="col-md-4">
+                            <div className="col-md-12">
                               <div className="form-group position-relative">
-                                <label>Email</label>
+                                <label htmlFor="email">Email</label>
                                 <input
                                   type="text"
                                   name="email"
-                                  className={
-                                    errors.email
-                                      ? "form-control is-invalid"
-                                      : "form-control"
-                                  }
-                                  placeholder="Enter valid email"
+                                  id="email"
+                                  className={`form-control ${errors.email ? 'is-invalid' : ''}`}
+                                  placeholder="Enter email"
                                   value={details.email}
                                   onChange={handleChange}
                                 />
@@ -212,17 +234,14 @@ const WomansClub = () => {
                                 )}
                               </div>
                             </div>
-                            <div className="col-md-6">
+                            <div className="col-md-12">
                               <div className="form-group position-relative">
-                                <label>City Name</label>
+                                <label htmlFor="city">City</label>
                                 <input
                                   type="text"
                                   name="city"
-                                  className={
-                                    errors.city
-                                      ? "form-control is-invalid"
-                                      : "form-control"
-                                  }
+                                  id="city"
+                                  className={`form-control ${errors.city ? 'is-invalid' : ''}`}
                                   placeholder="Enter city"
                                   value={details.city}
                                   onChange={handleChange}
@@ -235,7 +254,7 @@ const WomansClub = () => {
                               </div>
                             </div>
 
-                            <div className="col-md-6">
+                            <div className="col-md-12">
                               <div className="form-group position-relative">
                                 <label>How You Know About Us ?</label>
                                 <div className="row">
@@ -333,7 +352,13 @@ const WomansClub = () => {
                                   </div>
                                 </div>
                                 {errors.checkbox && (
-                                  <div className="invalid-feedback">
+                                  <div
+                                    style={{
+                                      fontSize: "13px",
+                                      fontWeight: "400",
+                                      color: "#FF0000",
+                                    }}
+                                  >
                                     {errors.checkbox}
                                   </div>
                                 )}
@@ -342,16 +367,12 @@ const WomansClub = () => {
 
                             <div className="col-md-12">
                               <div className="form-group position-relative">
-                                <label>If Any Special Request ?</label>
+                                <label htmlFor="message">If Any Special Request ?</label>
                                 <textarea
                                   name="message"
-                                  id=""
-                                  className={
-                                    errors.message
-                                      ? "form-control is-invalid"
-                                      : "form-control"
-                                  }
-                                  rows="3"
+                                  id="message"
+                                  className={`form-control ${errors.message ? 'is-invalid' : ''}`}
+                                  rows="5"
                                   placeholder="Enter message"
                                   value={details.message}
                                   onChange={handleChange}
