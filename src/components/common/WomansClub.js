@@ -143,29 +143,29 @@ const WomansClub = () => {
       </button>
       <div className="womans_club">
         <div
-          class="offcanvas offcanvas-start"
+          className="offcanvas offcanvas-start"
           tabindex="-1"
           data-bs-backdrop="false"
           data-bs-scroll="false"
           id="offcanvasExample"
           aria-labelledby="offcanvasExampleLabel"
         >
-          <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasExampleLabel">
+          <div className="offcanvas-header">
+            <h5 className="offcanvas-title" id="offcanvasExampleLabel">
               Contact information
             </h5>
             <button
               type="button"
-              class="btn-close text-reset"
+              className="btn-close text-reset"
               data-bs-dismiss="offcanvas"
               aria-label="Close"
             ></button>
           </div>
-          <div class="offcanvas-body">
-            <div className="text-center">
+          <div className="offcanvas-body">
+            <div className="text-center" style={{ fontSize: "15px" }}>
               PLEASE PROVIDE INFORMATION AND WE WILL GET BACK TO YOU SOON
             </div>
-            <div class="mt-3">
+            <div className="mt-3">
               <section id="contact-us" className="contact-us">
                 <div className="">
                   <div className="contact-main">
@@ -175,12 +175,19 @@ const WomansClub = () => {
                           <div className="row">
                             <div className="col-md-12">
                               <div className="form-group position-relative">
-                                <label htmlFor="fullName" className="form-label">Full Name</label>
+                                <label
+                                  htmlFor="fullName"
+                                  className="form-label"
+                                >
+                                  Full Name
+                                </label>
                                 <input
                                   type="text"
                                   id="fullName"
                                   name="fullName"
-                                  className={`form-control ${errors.fullName ? 'is-invalid' : ''}`}
+                                  className={`form-control ${
+                                    errors.fullName ? "is-invalid" : ""
+                                  }`}
                                   placeholder="Enter full name"
                                   value={details.fullName}
                                   onChange={handleChange}
@@ -201,7 +208,9 @@ const WomansClub = () => {
                                   type="tel"
                                   name="number"
                                   id="mobileNumber"
-                                  className={`form-control ${errors.number ? 'is-invalid' : ''}`}
+                                  className={`form-control ${
+                                    errors.number ? "is-invalid" : ""
+                                  }`}
                                   placeholder="Enter mobile number"
                                   value={details.number}
                                   onChange={handleChange}
@@ -222,7 +231,9 @@ const WomansClub = () => {
                                   type="text"
                                   name="email"
                                   id="email"
-                                  className={`form-control ${errors.email ? 'is-invalid' : ''}`}
+                                  className={`form-control ${
+                                    errors.email ? "is-invalid" : ""
+                                  }`}
                                   placeholder="Enter email"
                                   value={details.email}
                                   onChange={handleChange}
@@ -241,7 +252,9 @@ const WomansClub = () => {
                                   type="text"
                                   name="city"
                                   id="city"
-                                  className={`form-control ${errors.city ? 'is-invalid' : ''}`}
+                                  className={`form-control ${
+                                    errors.city ? "is-invalid" : ""
+                                  }`}
                                   placeholder="Enter city"
                                   value={details.city}
                                   onChange={handleChange}
@@ -259,7 +272,7 @@ const WomansClub = () => {
                                 <label>How You Know About Us ?</label>
                                 <div className="row">
                                   <div className="col-md-5 col-5">
-                                    <div class="checkbox-wrapper-42">
+                                    <div className="checkbox-wrapper-42">
                                       <input
                                         id="instagram"
                                         name="instagram"
@@ -268,15 +281,15 @@ const WomansClub = () => {
                                         onChange={handleCheckboxChange}
                                       />
                                       <label
-                                        class="cbx"
+                                        className="cbx"
                                         for="instagram"
                                       ></label>
-                                      <label class="lbl" for="instagram">
+                                      <label className="lbl" for="instagram">
                                         Instagram
                                       </label>
                                     </div>
 
-                                    <div class="checkbox-wrapper-42">
+                                    <div className="checkbox-wrapper-42">
                                       <input
                                         id="facebook"
                                         name="facebook"
@@ -284,12 +297,15 @@ const WomansClub = () => {
                                         checked={isChecked.facebook}
                                         onChange={handleCheckboxChange}
                                       />
-                                      <label class="cbx" for="facebook"></label>
-                                      <label class="lbl" for="facebook">
+                                      <label
+                                        className="cbx"
+                                        for="facebook"
+                                      ></label>
+                                      <label className="lbl" for="facebook">
                                         Facebook
                                       </label>
                                     </div>
-                                    <div class="checkbox-wrapper-42">
+                                    <div className="checkbox-wrapper-42">
                                       <input
                                         id="pinterest"
                                         name="pinterest"
@@ -298,16 +314,16 @@ const WomansClub = () => {
                                         onChange={handleCheckboxChange}
                                       />
                                       <label
-                                        class="cbx"
+                                        className="cbx"
                                         for="pinterest"
                                       ></label>
-                                      <label class="lbl" for="pinterest">
+                                      <label className="lbl" for="pinterest">
                                         Pinterest
                                       </label>
                                     </div>
                                   </div>
                                   <div className="col-md-7 col-7">
-                                    <div class="checkbox-wrapper-42">
+                                    <div className="checkbox-wrapper-42">
                                       <input
                                         id="family"
                                         name="family"
@@ -315,12 +331,15 @@ const WomansClub = () => {
                                         checked={isChecked.family}
                                         onChange={handleCheckboxChange}
                                       />
-                                      <label class="cbx" for="family"></label>
-                                      <label class="lbl" for="family">
+                                      <label
+                                        className="cbx"
+                                        for="family"
+                                      ></label>
+                                      <label className="lbl" for="family">
                                         Friend or family
                                       </label>
                                     </div>
-                                    <div class="checkbox-wrapper-42">
+                                    <div className="checkbox-wrapper-42">
                                       <input
                                         id="exibitions"
                                         name="exibitions"
@@ -329,14 +348,14 @@ const WomansClub = () => {
                                         onChange={handleCheckboxChange}
                                       />
                                       <label
-                                        class="cbx"
+                                        className="cbx"
                                         for="exibitions"
                                       ></label>
-                                      <label class="lbl" for="exibitions">
+                                      <label className="lbl" for="exibitions">
                                         Our Exibitions
                                       </label>
                                     </div>
-                                    <div class="checkbox-wrapper-42">
+                                    <div className="checkbox-wrapper-42">
                                       <input
                                         id="campaign"
                                         name="campaign"
@@ -344,8 +363,11 @@ const WomansClub = () => {
                                         checked={isChecked.campaign}
                                         onChange={handleCheckboxChange}
                                       />
-                                      <label class="cbx" for="campaign"></label>
-                                      <label class="lbl" for="campaign">
+                                      <label
+                                        className="cbx"
+                                        for="campaign"
+                                      ></label>
+                                      <label className="lbl" for="campaign">
                                         Our any campaign
                                       </label>
                                     </div>
@@ -367,11 +389,15 @@ const WomansClub = () => {
 
                             <div className="col-md-12">
                               <div className="form-group position-relative">
-                                <label htmlFor="message">If Any Special Request ?</label>
+                                <label htmlFor="message">
+                                  If Any Special Request ?
+                                </label>
                                 <textarea
                                   name="message"
                                   id="message"
-                                  className={`form-control ${errors.message ? 'is-invalid' : ''}`}
+                                  className={`form-control ${
+                                    errors.message ? "is-invalid" : ""
+                                  }`}
                                   rows="5"
                                   placeholder="Enter message"
                                   value={details.message}

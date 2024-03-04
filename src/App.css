@@ -637,11 +637,11 @@ input[type="file"] {
   background-color: #000;
   border-radius: 5px;
   color: #fff;
-  font-size: 16px;
-  font-weight: bold;
+  font-size: 12px;
+  font-weight: 800;
   text-align: center;
   text-transform: uppercase;
-  padding: 10px 35px;
+  padding: 8px 24px;
 }
 
 .update_order_btn:hover {

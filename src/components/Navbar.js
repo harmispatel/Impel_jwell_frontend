@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { FaBars, FaStar, FaUser, FaUserAlt } from "react-icons/fa";
@@ -136,21 +136,21 @@ const Navbar = () => {
       });
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     UserCartItems();
   }, [cartItems]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     UserWishlist();
   }, [wishlistItems]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (Phone) {
       getUserProfile();
     }
   }, [Phone, namestate?.profilename, imagestate?.image]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (DealerEmail) {
       getProfileData();
     }
