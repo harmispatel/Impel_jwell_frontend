@@ -56,11 +56,22 @@ const CustomPages = async (data) => {
   });
   return d;
 };
+
+const WomansJoin = async (data) => {
+  let d = await call({
+    path: "womans-club-request",
+    method: "POST",
+    data,
+  });
+  return d;
+};
+
 const exportObject = {
   banners,
   category,
   TopSelling,
   RecentAdd,
+  WomansJoin,
   CustomPages,
   Featured,
   SiteSetting,

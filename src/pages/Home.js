@@ -1,23 +1,27 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import FilterServices from "../services/Filter";
+
 import {
   Navigation,
   Pagination,
   Scrollbar,
   A11y,
   Autoplay,
+  EffectFade,
 } from "swiper/modules";
+
 import "swiper/css";
+import "swiper/css/pagination";
 import "swiper/css/navigation";
-import "swiper/css/autoplay";
+import "swiper/css/effect-fade";
+
 import banner_1 from "../assets/images/bg-01.jpeg";
 import Ring from "../assets/images/ring.png";
 import Kada from "../assets/images/kada.jpg";
 import Gold_Ring from "../assets/images/gold_ring.png";
 import homeService from "../services/Home";
 import { Link, useLocation } from "react-router-dom";
-import gif from "../assets/images/intro.gif";
 import { Helmet } from "react-helmet-async";
 
 const Home = () => {
@@ -33,6 +37,7 @@ const Home = () => {
   tagIds = tagIds.map((i) => parseFloat(i));
 
   const [bannerSlider, SetBannerSlider] = useState([]);
+  const [hero, setHero] = useState([]);
   const [category, SetCategory] = useState([]);
   const [newAdd, SetNewAdd] = useState([]);
   // const [Featured, SetFeatured] = useState([]);
@@ -64,7 +69,7 @@ const Home = () => {
     setTag([...tag, parseFloat(e.target.value)]);
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     banners();
     Category();
     Tags();
@@ -79,6 +84,7 @@ const Home = () => {
       .banners()
       .then((res) => {
         SetBannerSlider(res.data);
+        setHero(res.data?.top_banners);
       })
       .catch((err) => {
         console.log(err);
@@ -146,47 +152,28 @@ const Home = () => {
       </Helmet>
 
       {/* home */}
-
       <section className="banner">
-        <div className="banner_content">
-          <div className="banner_detail_iner animate__animated animate__fadeInLeft">
-            <h2>TRY TO SOMETHING NEW</h2>
-            <p style={{ fontSize: "18px" }}>
-              Because every piece caries a precious story
-            </p>
-
-            <Link to="/shop" className="home_more_btn">
-              Explore More
-            </Link>
-          </div>
-        </div>
-        <div className="banner_slide">
+        <div className="main-swiper">
           <Swiper
-            modules={[Pagination, Scrollbar, A11y, Autoplay]}
-            spaceBetween={50}
-            slidesPerView={1}
+            spaceBetween={30}
+            effect={"fade"}
+            centeredSlides={true}
             loop={true}
-            autoplay={{ delay: 4000 }}
+            autoplay={{
+              delay: 4000,
+              disableOnInteraction: false,
+            }}
+            modules={[Autoplay, EffectFade]}
+            className="mySwiper"
           >
-            {/* {bannerSlider.map((data, index) => {
+            {hero?.map((image, i) => {
               return (
-                <SwiperSlide key={index}>
-                  <img src={data.image} alt="" />
+                <SwiperSlide key={i}>
+                  <img src={image?.image} alt="" className=" w-100" />
                 </SwiperSlide>
               );
-            })} */}
-            <SwiperSlide>
-              <img src={gif} alt="" />
-            </SwiperSlide>
+            })}
           </Swiper>
-
-          {/* <video  
-            playsInline
-            loop
-            muted
-            src={introBanner} 
-            ref={videoEl}
-            className="w-100" /> */}
         </div>
       </section>
 
@@ -287,6 +274,9 @@ const Home = () => {
                     <h2>Exquisite Jewelry for Everyone</h2>
                     <label></label>
                     <p>Discover our awesome rings collection</p>
+                    <button className="btn discover_btn">
+                      Discover The Collection
+                    </button>
                   </>
                 )}
 
@@ -450,6 +440,9 @@ const Home = () => {
                     <div className="info_img">
                       <img src={Gold_Ring} width="150px" alt="" />
                     </div>
+                    <button className="btn discover_btn">
+                      Discover The Collection
+                    </button>
                   </>
                 )}
 

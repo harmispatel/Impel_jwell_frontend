@@ -441,7 +441,6 @@ const Navbar = () => {
                       currentRoute === "/customization" ? "nav-link active" : "nav-link"
                     }
                     to="/customization"
-                    // to="/page/customization"
                     onClick={handleNavClick}
                   >
                     Customization

@@ -346,13 +346,8 @@ body {
 }
 
 
-.banner {
-  position: relative;
-  height: calc(100vh - 94px);
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  align-items: end;
-  /* padding-top: 94px; */
+.banner img {
+  height: calc(100vh - 96px);
 }
 
 .banner_content {
@@ -386,7 +381,8 @@ body {
   border-radius: 0;
 }
 
-.swiper-slide img {
+.new_arrivals .swiper-slide img,
+.Top_sellers .swiper-slide img {
   display: block;
   border-radius: 50%;
   width: 100%;
@@ -916,6 +912,7 @@ input[type="file"] {
   opacity: 0.6;
   padding: 10px;
   margin: 0 10px;
+  font-size: 14px;
 }
 
 .footer_copyright h2 {
@@ -1827,6 +1824,14 @@ input[type="file"] {
     box-shadow: none;
   }
 
+  .login_detail {
+    padding: 10px !important;
+  }
+
+  .user-login-form span {
+    font-size: 14px !important;
+  }
+
   .make-by-order-dropdown {
     position: absolute !important;
     top: 56% !important;
@@ -1875,6 +1880,10 @@ input[type="file"] {
   .go-top-button {
     bottom: 25px !important;
     right: 25px !important;
+  }
+
+  .banner img {
+    height: 100%;
   }
 
   .dealer_profile_data th {
@@ -3209,7 +3218,7 @@ input[type="file"] {
   background-color: #ffffff;
   color: #db9662;
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 600;
   text-decoration: none;
   border-radius: 5px;
   padding: 10px 20px;
@@ -3529,9 +3538,11 @@ input[type="file"] {
 .yellow-gold.active {
   border: 2px solid black !important;
 }
+
 .white-gold.active {
   border: 2px solid black !important;
 }
+
 .rose-gold.active {
   border: 2px solid black !important;
 }

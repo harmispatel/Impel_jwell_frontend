@@ -77,7 +77,11 @@ function App() {
         <ProfileProvider>
           <CartProvider>
             <ScrollToTop />
-            <WomansClub />
+            {!location.pathname.startsWith("/login") &&
+              !location.pathname.startsWith("/forget-password") &&
+              !location.pathname.startsWith("/reset-password") &&
+              !location.pathname.startsWith("/Dealer_login") && <WomansClub />}
+
             <HelmetProvider context={helmetContext}>
               {/* {shouldShowPopup && popupshow == null ? <Popup /> : <></>} */}
               <Routes>
@@ -86,11 +90,26 @@ function App() {
                     {/* COMMON COMPONENT */}
                     <Route index element={<Home />} />
                     <Route path="shop" element={<Shop />} />
-                    <Route path="customization" element={<CustomPage page_slug="customization"/>} />
-                    <Route path="faq" element={<CustomPage page_slug="faq"/>} />
-                    <Route path="about-us" element={<CustomPage page_slug="about-us" />} />
-                    <Route path="shopping-and-returns" element={<CustomPage page_slug="shopping-and-returns" />} />
-                    <Route path="stores" element={<CustomPage page_slug="stores" />} />
+                    <Route
+                      path="customization"
+                      element={<CustomPage page_slug="customization" />}
+                    />
+                    <Route
+                      path="faq"
+                      element={<CustomPage page_slug="faq" />}
+                    />
+                    <Route
+                      path="about-us"
+                      element={<CustomPage page_slug="about-us" />}
+                    />
+                    <Route
+                      path="shopping-and-returns"
+                      element={<CustomPage page_slug="shopping-and-returns" />}
+                    />
+                    <Route
+                      path="stores"
+                      element={<CustomPage page_slug="stores" />}
+                    />
                     <Route path="shopdetails/:id" element={<ShopDetails />} />
                     <Route path="categories" element={<Categories />} />
                     <Route

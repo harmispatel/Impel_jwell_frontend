@@ -63,7 +63,7 @@ const Login = () => {
       const appVerifier = window.recaptchaVerifier;
       setSpinner(true);
       axios
-        .post("https://harmistechnology.com/admin.indianjewelley/api/login", {
+        .post("https://admin.impel.store/api/login", {
           phone: formatPh,
         })
         .then((res) => {
@@ -176,7 +176,9 @@ const Login = () => {
                         className="d-flex flex-column gap-2 form w-100"
                       >
                         <div className="text-center">
-                          <img src={Logo} alt="logo" />
+                          <Link to="/">
+                            <img src={Logo} alt="logo" />
+                          </Link>
                         </div>
                         <h5>Welcome</h5>
                         <span>

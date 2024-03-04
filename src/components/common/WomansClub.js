@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./WomansClub.css";
-import Select from "react-select";
+import homeService from "../../services/Home";
+import toast from "react-hot-toast";
+import { CgSpinner } from "react-icons/cg";
 
 const WomansClub = () => {
   const [details, setDetails] = useState({
@@ -10,21 +12,29 @@ const WomansClub = () => {
     city: "",
     message: "",
   });
-  const [errors, setErrors] = useState({});
+
   const [isChecked, setIsChecked] = useState({
     instagram: false,
     facebook: false,
     pinterest: false,
-    family: false,
-    exibitions: false,
-    campaign: false,
+    friend_or_family: false,
+    our_exibitions: false,
+    our_any_campaign: false,
   });
 
-  console.log(errors);
+  const [errors, setErrors] = useState({});
+  const [spinner, setSpinner] = useState(false);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setDetails({ ...details, [name]: value });
+    setErrors({ ...errors, [name]: "" });
+  };
 
   const handleCheckboxChange = (event) => {
     const { name, checked } = event.target;
     setIsChecked({ ...isChecked, [name]: checked });
+    setErrors({ ...errors, [name]: "" });
   };
 
   const validateForm = () => {
@@ -60,14 +70,20 @@ const WomansClub = () => {
     if (!details.message.trim()) {
       newErrors.message = "Message is required!";
       valid = false;
+    } else if (details.message.trim().length < 50) {
+      newErrors.message = "Message must contain at least 50 characters!";
+      valid = false;
     }
+
     if (
-      !isChecked.instagram &&
-      !isChecked.facebook &&
-      !isChecked.pinterest &&
-      !isChecked.family &&
-      !isChecked.exibitions &&
-      !isChecked.campaign
+      !(
+        isChecked.instagram ||
+        isChecked.facebook ||
+        isChecked.pinterest ||
+        isChecked.friend_or_family ||
+        isChecked.our_exibitions ||
+        isChecked.our_any_campaign
+      )
     ) {
       newErrors.checkbox = "Please select at least one option!";
       valid = false;
@@ -77,31 +93,58 @@ const WomansClub = () => {
     return valid;
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setDetails({ ...details, [name]: value });
-    setErrors({ ...errors, [name]: "" });
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {
-      alert("Form submitted");
-      setDetails({
-        fullName: "",
-        number: "",
-        email: "",
-        city: "",
-        message: "",
-      });
-      setIsChecked({
-        instagram: false,
-        facebook: false,
-        pinterest: false,
-        family: false,
-        exibitions: false,
-        campaign: false,
-      });
+      setSpinner(true);
+      let formdata = new FormData();
+      formdata.append("name", details.fullName);
+      formdata.append("mobile", details.number);
+      formdata.append("email", details.email);
+      formdata.append("city", details.city);
+      formdata.append(
+        "how_you_know",
+        Object.keys(isChecked).filter((key) => isChecked[key])
+      );
+      formdata.append("message", details.message);
+
+      const requestData = {
+        name: details.fullName,
+        mobile: details.number,
+        email: details.email,
+        city: details.city,
+        how_you_know: Object.keys(isChecked).filter((key) => isChecked[key]),
+        message: details.message,
+      };
+
+      homeService
+        .WomansJoin(requestData)
+        .then((res) => {
+          if (res?.status === true) {
+            toast.success(res?.message);
+            setSpinner(false);
+            document
+              .getElementById("offcanvasExample")
+              .classList.remove("show");
+            setDetails({
+              fullName: "",
+              number: "",
+              email: "",
+              city: "",
+              message: "",
+            });
+            setIsChecked({
+              instagram: false,
+              facebook: false,
+              pinterest: false,
+              friend_or_family: false,
+              our_exibitions: false,
+              our_any_campaign: false,
+            });
+          }
+        })
+        .catch((err) => console.log(err))
+        .finally(() => setSpinner(false));
     }
   };
 
@@ -130,6 +173,7 @@ const WomansClub = () => {
       offcanvasExample.removeEventListener("hidden.bs.offcanvas", () => {});
     };
   }, []);
+
   return (
     <>
       <button
@@ -171,7 +215,7 @@ const WomansClub = () => {
                   <div className="contact-main">
                     <div className="contact_box">
                       <div className="contact_form">
-                        <form onSubmit={handleSubmit}>
+                        <form id="joinForm" onSubmit={handleSubmit}>
                           <div className="row">
                             <div className="col-md-12">
                               <div className="form-group position-relative">
@@ -326,9 +370,9 @@ const WomansClub = () => {
                                     <div className="checkbox-wrapper-42">
                                       <input
                                         id="family"
-                                        name="family"
+                                        name="friend_or_family"
                                         type="checkbox"
-                                        checked={isChecked.family}
+                                        checked={isChecked.friend_or_family}
                                         onChange={handleCheckboxChange}
                                       />
                                       <label
@@ -342,9 +386,9 @@ const WomansClub = () => {
                                     <div className="checkbox-wrapper-42">
                                       <input
                                         id="exibitions"
-                                        name="exibitions"
+                                        name="our_exibitions"
                                         type="checkbox"
-                                        checked={isChecked.exibitions}
+                                        checked={isChecked.our_exibitions}
                                         onChange={handleCheckboxChange}
                                       />
                                       <label
@@ -358,9 +402,9 @@ const WomansClub = () => {
                                     <div className="checkbox-wrapper-42">
                                       <input
                                         id="campaign"
-                                        name="campaign"
+                                        name="our_any_campaign"
                                         type="checkbox"
-                                        checked={isChecked.campaign}
+                                        checked={isChecked.our_any_campaign}
                                         onChange={handleCheckboxChange}
                                       />
                                       <label
@@ -413,7 +457,15 @@ const WomansClub = () => {
                             </div>
                             <div className="col-md-12">
                               <div className="form-group text-center m-0">
-                                <button className="btn sub-btn">Submit</button>
+                                <button className="sub-btn">
+                                  {spinner && (
+                                    <CgSpinner
+                                      size={20}
+                                      className="animate_spin"
+                                    />
+                                  )}
+                                  {spinner ? "" : "Submit"}
+                                </button>
                               </div>
                             </div>
                           </div>
