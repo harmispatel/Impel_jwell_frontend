@@ -1,6 +1,10 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { Link, useLocation } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
+
 import FilterServices from "../services/Filter";
+import homeService from "../services/Home";
 
 import {
   Navigation,
@@ -20,9 +24,6 @@ import banner_1 from "../assets/images/bg-01.jpeg";
 import Ring from "../assets/images/ring.png";
 import Kada from "../assets/images/kada.jpg";
 import Gold_Ring from "../assets/images/gold_ring.png";
-import homeService from "../services/Home";
-import { Link, useLocation } from "react-router-dom";
-import { Helmet } from "react-helmet-async";
 
 const Home = () => {
   const location = useLocation();
@@ -151,33 +152,42 @@ const Home = () => {
         <title>Impel Store - Home</title>
       </Helmet>
 
-      {/* home */}
+     {/* First Banner */}
       <section className="banner">
-        <div className="main-swiper">
-          <Swiper
-            spaceBetween={30}
-            effect={"fade"}
-            centeredSlides={true}
-            loop={true}
-            autoplay={{
-              delay: 4000,
-              disableOnInteraction: false,
-            }}
-            modules={[Autoplay, EffectFade]}
-            className="mySwiper"
-          >
-            {hero?.map((image, i) => {
-              return (
-                <SwiperSlide key={i}>
-                  <img src={image?.image} alt="" className=" w-100" />
-                </SwiperSlide>
-              );
-            })}
-          </Swiper>
-        </div>
+        <Swiper
+          spaceBetween={30}
+          effect={"fade"}
+          centeredSlides={true}
+          loop={true}
+          autoplay={{
+            delay: 4000,
+            disableOnInteraction: false,
+          }}
+          modules={[Autoplay, EffectFade]}
+          className="mySwiper"
+        >
+          {hero?.map((image, i) => {
+            return (
+              <SwiperSlide key={i}>
+                <Link
+                  to={`/shop?tag_id=${
+                    tagIds?.includes(image?.tag_id) ? tagIds : image?.tag_id
+                  }`}
+                  onClick={(e) => handleTag(e)}
+                >
+                  <img
+                    className="img-fluid"
+                    alt=""
+                    style={{ backgroundImage: `url(${image?.image})` }}
+                  />
+                </Link>
+              </SwiperSlide>
+            );
+          })}
+        </Swiper>
       </section>
 
-      {/* categories */}
+      {/* Categories */}
       <section className="more_categories">
         <div className="container">
           <div className="more_categories_detail">
@@ -250,7 +260,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* first banner */}
+      {/* Second Banner */}
       <section className="discover_banner">
         <div className="container">
           <div className="banner_info">
@@ -403,7 +413,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* second banner */}
+      {/* Third Banner */}
       <section className="explore_banner">
         <div className="container">
           <div className="banner_info">
@@ -463,13 +473,17 @@ const Home = () => {
                       Discover The Collection
                     </Link>
                   )}
+
+                <div className="info_img">
+                  <img src={Ring} width="100px" alt="" />
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* top_sellers */}
+      {/* Top_Sellers */}
       <section className="Top_sellers">
         <div className="container">
           <div className="seller_header">

@@ -184,6 +184,10 @@ const WomansClub = () => {
         aria-controls="offcanvasExample"
       >
         Join our women's club
+        <span class="top"></span>
+        <span class="right"></span>
+        <span class="bottom"></span>
+        <span class="left"></span>
       </button>
       <div className="womans_club">
         <div

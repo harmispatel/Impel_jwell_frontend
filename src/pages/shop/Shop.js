@@ -17,7 +17,7 @@ import FilterServices from "../../services/Filter";
 import DealerWishlist from "../../services/Dealer/Collection";
 import UserWishlist from "../../services/Auth";
 import { WishlistSystem } from "../../context/WishListContext";
-import Loader from "../../components/common/Loader"
+import Loader from "../../components/common/Loader";
 
 const Shop = () => {
   const { dispatch: wishlistDispatch } = useContext(WishlistSystem);
@@ -809,8 +809,8 @@ const Shop = () => {
                           })}
                         </div>
 
-                        <div className="pt-5">
-                          {totalPages > 1 && (
+                        {totalPages > 1 && (
+                          <div className="pt-5">
                             <div className="paginationArea">
                               <nav aria-label="navigation">
                                 <ul className="pagination">
@@ -934,8 +934,8 @@ const Shop = () => {
                                 </ul>
                               </nav>
                             </div>
-                          )}
-                        </div>
+                          </div>
+                        )}
                       </>
                     ) : (
                       <div className="not-products">

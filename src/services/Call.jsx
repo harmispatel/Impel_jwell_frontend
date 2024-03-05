@@ -1,6 +1,5 @@
 import Axios from "axios";
 const api = process.env.REACT_APP_API_KEY;
-const subApi = process.env.REACT_APP_API_SUB_KEY;
 
 export default function call({ path, method, data }) {
   // const token = localStorage.getItem("accessToken");
@@ -8,7 +7,7 @@ export default function call({ path, method, data }) {
 
   return new Promise((resolve, reject) => {
     const config = {
-      url: api + subApi + path,
+      url: api + path,
       method,
       data,
     };

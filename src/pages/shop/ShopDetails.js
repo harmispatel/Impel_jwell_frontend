@@ -385,7 +385,7 @@ const ShopDetails = () => {
                                 Rose Gold
                               </button>
                               <button
-                                className={`white-gold  mt-md-0 ${
+                                className={`white-gold  mt-md-0 mt-3${
                                   goldColor === "white_gold" ? "active" : ""
                                 }`}
                                 onClick={() => handleGoldColor("white_gold")}

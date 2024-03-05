@@ -24,6 +24,8 @@ const Login = () => {
   const [phoneError, setPhoneError] = useState();
   const [spinner, setSpinner] = useState(false);
   const [phonedata, setPhoneData] = useState();
+  const [timer, setTimer] = useState(null);
+  const [disabled, setDisabled] = useState(true);
 
   const handlePhoneNumberChange = (newPhoneNumber) => {
     let isValid = true;
@@ -71,9 +73,6 @@ const Login = () => {
           if (response.status === 0) {
             toast.error(response.message);
             navigate("/login");
-            setTimeout(() => {
-              window.location.reload(true);
-            }, 1000);
             return;
           } else {
             const auth = getAuth();
@@ -83,12 +82,10 @@ const Login = () => {
                 toast.success("OTP sent successfully!");
                 setPhoneData(res.data);
                 setShow(true);
+                setTimer(60);
               })
               .catch((err) => {
                 console.log(err);
-                setTimeout(() => {
-                  window.location.reload(true);
-                }, 2000);
               })
               .finally(() => {
                 setSpinner(false);
@@ -104,20 +101,20 @@ const Login = () => {
 
   const resendOTP = (e) => {
     e.preventDefault();
-    const formatPh = `${phoneNumber}`;
-    e.preventDefault();
+    setSpinner(true);
+    const formatPh = `+${phoneNumber}`;
     const auth = getAuth();
-    signInWithPhoneNumber(auth, formatPh)
+    const appVerifier = window.recaptchaVerifier;
+    signInWithPhoneNumber(auth, formatPh, appVerifier)
       .then((confirmationResult) => {
         window.confirmationResult = confirmationResult;
         toast.success("OTP resend successfully!");
         setShow(true);
+        setTimer(60);
+        setDisabled(true);
       })
       .catch((err) => {
         console.log(err);
-        setTimeout(() => {
-          window.location.reload(true);
-        }, 2000);
       })
       .finally(() => {
         setSpinner(false);
@@ -155,6 +152,27 @@ const Login = () => {
   useEffect(() => {
     onCaptchVerify();
   }, []);
+
+  useEffect(() => {
+    let interval;
+    if (timer > 0) {
+      interval = setInterval(() => {
+        setTimer((prevTimer) => prevTimer - 1);
+      }, 1000);
+    } else if (timer === 0) {
+      setDisabled(false); // Enable the button once the timer reaches 0
+    }
+
+    return () => clearInterval(interval); // Cleanup the interval on unmount or timer reset
+  }, [timer]);
+
+  const formatTime = (time) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = time % 60;
+    return `${minutes.toString().padStart(2, "0")}:${seconds
+      .toString()
+      .padStart(2, "0")}`;
+  };
 
   const PhoneNumber = phoneNumber.replace("91", "");
 
@@ -262,9 +280,7 @@ const Login = () => {
                             placeholder="------"
                           />
                         </div>
-                        <span className="timer">
-                          <button>Resend OTP</button>
-                        </span>
+
                         <span className="button-container d-flex gap-5">
                           <button
                             type="submit"
@@ -281,6 +297,18 @@ const Login = () => {
                           </button>
                         </span>
                       </form>
+                      {/* <span className="timer mt-2">
+                        <button onClick={resendOTP} disabled={disabled}>
+                          {timer === 0 ? (
+                            `Resend OTP`
+                          ) : (
+                            <>
+                              Resend OTP in :
+                              <strong> {formatTime(timer)} </strong>{" "}
+                            </>
+                          )}
+                        </button>
+                      </span> */}
                     </>
                   )}
                   <div

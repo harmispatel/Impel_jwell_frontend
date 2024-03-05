@@ -256,7 +256,7 @@ const MyOrders = () => {
     setCurrentPage(pageNumber);
   };
 
-  const orderDetails = <Tooltip id="tooltip">View order details</Tooltip>;
+  const orderDetails = <Tooltip id="tooltip">View order</Tooltip>;
   return (
     <>
       <Helmet>
