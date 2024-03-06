@@ -31,6 +31,8 @@ import ProfileProvider from "./context/ProfileContext";
 import { useEffect } from "react";
 import CustomPage from "./components/CustomPage";
 import WomansClub from "./components/common/WomansClub";
+import Topseller from "./pages/shop/Topseller";
+import LatestDesign from "./pages/shop/LatestDesign"
 
 function App() {
   const location = useLocation();
@@ -107,15 +109,19 @@ function App() {
                       element={<CustomPage page_slug="shopping-and-returns" />}
                     />
                     <Route
-                      path="stores"
-                      element={<CustomPage page_slug="stores" />}
+                      path="contact-us"
+                      element={<CustomPage page_slug="contact-us" />}
                     />
+
                     <Route path="shopdetails/:id" element={<ShopDetails />} />
                     <Route path="categories" element={<Categories />} />
                     <Route
                       path="categories/:id"
                       element={<CategoriesItems />}
                     />
+                    <Route path="top-selling-designs" element={<Topseller />} />
+                    <Route path="latest-designs" element={<LatestDesign />} />
+
 
                     {/* USER PROTECTED */}
                     <Route

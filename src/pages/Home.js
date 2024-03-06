@@ -45,6 +45,7 @@ const Home = () => {
   const [TopSell, SetTopSell] = useState([]);
   const [tags, setTags] = useState([]);
   const [tag, setTag] = useState([]);
+  const [review, setReview] = useState("");
 
   const videoEl = useRef(null);
 
@@ -75,6 +76,7 @@ const Home = () => {
     Category();
     Tags();
     RecentAdd();
+    Reviews();
     // FeaturedProduct();
     HighSell();
     attemptPlay();
@@ -108,6 +110,17 @@ const Home = () => {
       .RecentAdd()
       .then((res) => {
         SetNewAdd(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const Reviews = () => {
+    homeService
+      .TestiMonials()
+      .then((res) => {
+        setReview(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -152,18 +165,19 @@ const Home = () => {
         <title>Impel Store - Home</title>
       </Helmet>
 
-     {/* First Banner */}
+      {/* First Banner */}
       <section className="banner">
         <Swiper
           spaceBetween={30}
           effect={"fade"}
           centeredSlides={true}
           loop={true}
+          navigation={true}
           autoplay={{
             delay: 4000,
             disableOnInteraction: false,
           }}
-          modules={[Autoplay, EffectFade]}
+          modules={[Autoplay, EffectFade, Navigation]}
           className="mySwiper"
         >
           {hero?.map((image, i) => {
@@ -332,6 +346,13 @@ const Home = () => {
           <div className="new_arrival_detail">
             <h3>New Arrivals</h3>
           </div>
+          <Link
+            to="/latest-designs"
+            className="custom-btn btn-16 mb-4"
+            style={{ textDecoration: "none" }}
+          >
+            View All
+          </Link>
           <div className="new_arrival_slide">
             <Swiper
               slidesPerView={2}
@@ -353,9 +374,10 @@ const Home = () => {
                   spaceBetween: 50,
                 },
               }}
-              modules={[Pagination, Scrollbar, A11y, Autoplay]}
+              modules={[Pagination, Navigation, Scrollbar, A11y, Autoplay]}
               spaceBetween={20}
               loop={true}
+              navigation={true}
               autoplay={{
                 delay: 4000,
                 disableOnInteraction: false,
@@ -421,11 +443,7 @@ const Home = () => {
               {bannerSlider &&
               bannerSlider?.bottom_banners &&
               bannerSlider?.bottom_banners[0] ? (
-                <img
-                  src={bannerSlider?.bottom_banners[0]?.image}
-                  className="w-100"
-                  alt=""
-                />
+                <img src={bannerSlider?.bottom_banners[0]?.image} alt="" />
               ) : (
                 <img src={Kada} className="w-100" alt="" />
               )}
@@ -447,7 +465,7 @@ const Home = () => {
                     <h2>Exquisite Jewelry for Everyone</h2>
                     <label></label>
                     <p>Discover our awesome rings collection</p>
-                    <div className="info_img">
+                    <div className="info_img_1">
                       <img src={Gold_Ring} width="150px" alt="" />
                     </div>
                     <button className="btn discover_btn">
@@ -489,6 +507,13 @@ const Home = () => {
           <div className="seller_header">
             <h3>Top sellers</h3>
           </div>
+          <Link
+            to="/top-selling-designs"
+            className="custom-btn btn-16 mb-4"
+            style={{ textDecoration: "none" }}
+          >
+            View All
+          </Link>
           <div className="seller_slider">
             <Swiper
               slidesPerView={2}
@@ -510,9 +535,9 @@ const Home = () => {
                   spaceBetween: 50,
                 },
               }}
-              Navigation={true}
               modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
               spaceBetween={10}
+              navigation={true}
               loop={true}
               autoplay={{
                 delay: 4000,
@@ -549,62 +574,48 @@ const Home = () => {
       </section>
 
       {/* testimonials */}
-      {/* <section className="testimonial">
-        <div className="container">
-          <div className="testimonial_header">
-            <img
-              src="https://websitedemos.net/jewellery-store-04/wp-content/uploads/sites/935/2021/08/quotation-mark.png"
-              alt=""
-              className="w-100"
-            />
-            <h3>TESTIMONIALS</h3>
+      {review?.length && (
+        <section className="testimonial">
+          <div className="container">
+            <div className="testimonial_header">
+              <img
+                src="https://websitedemos.net/jewellery-store-04/wp-content/uploads/sites/935/2021/08/quotation-mark.png"
+                alt=""
+                className="w-100"
+              />
+              <h3>TESTIMONIALS</h3>
+            </div>
+            <div className="testimonial_slide">
+              <Swiper
+                modules={[Pagination, Scrollbar, A11y, Autoplay, Navigation]}
+                spaceBetween={20}
+                navigation={true}
+                slidesPerView={1}
+                loop={true}
+                autoplay={{
+                  delay: 1500,
+                  disableOnInteraction: false,
+                }}
+              >
+                <>
+                  {review?.map((data, index) => (
+                    <SwiperSlide key={index}>
+                      <div className="testimonial_details">
+                        <p>{data?.message}</p>
+                        <img
+                          className="testimonial-image"
+                          src={data?.image}
+                          alt=""
+                        />
+                      </div>
+                    </SwiperSlide>
+                  ))}
+                </>
+              </Swiper>
+            </div>
           </div>
-          <div className="testimonial_slide">
-            <Swiper
-              modules={[Pagination, Scrollbar, A11y, Autoplay]}
-              spaceBetween={20}
-              slidesPerView={1}
-              loop={true}
-              autoplay={{
-                delay: 1500,
-                disableOnInteraction: false,
-              }}
-            >
-              <SwiperSlide>
-                <div className="testimonial_details">
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                    <br />
-                    sed do eiusmod tempor incididunt ut labore et dolore magna
-                    <br />
-                    aliqua veniam...
-                  </p>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                <div className="testimonial_details">
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                    <br />
-                    sed do eiusmod tempor incididunt ut labore et dolore <br />
-                    magna aliqua veniam...
-                  </p>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                <div className="testimonial_details">
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                    <br />
-                    sed do eiusmod tempor incididunt ut labore et dolore <br />
-                    magna aliqua veniam...
-                  </p>
-                </div>
-              </SwiperSlide>
-            </Swiper>
-          </div>
-        </div>
-      </section> */}
+        </section>
+      )}
 
       {/* Featured product */}
       {/* <section className="Featured_products">

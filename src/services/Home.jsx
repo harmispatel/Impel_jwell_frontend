@@ -66,6 +66,15 @@ const WomansJoin = async (data) => {
   return d;
 };
 
+const TestiMonials = async () => {
+  let d = await call({
+    path: "reviews",
+    method: "GET",
+  });
+  return d;
+};
+
+
 const exportObject = {
   banners,
   category,
@@ -75,6 +84,7 @@ const exportObject = {
   CustomPages,
   Featured,
   SiteSetting,
+  TestiMonials,
 };
 
 export default exportObject;

@@ -1011,7 +1011,7 @@ input[type="file"] {
 }
 
 .explore_banner .banner_info .banner_img img {
-  width: calc(100% - 120px) !important;
+  width: calc(100% - 120px);
   margin: -50px 0 -50px 0;
 }
 
@@ -1931,7 +1931,7 @@ input[type="file"] {
   }
 
   .explore_banner .banner_info_inr .info_img {
-    bottom: -60px;
+    bottom: -60px !important;
     right: 0;
     left: 50%;
     transform: translate(-50%, 0);
@@ -2043,7 +2043,7 @@ input[type="file"] {
   .new_arrival_detail h3,
   .seller_header h3,
   .testimonial_header h3 {
-    font-size: 30px;
+    font-size: 27px;
     margin-bottom: 20px;
   }
 
@@ -2138,6 +2138,20 @@ input[type="file"] {
 
   .modal_content img {
     width: 350px !important;
+  }
+
+  .swiper-button-prev,
+  .swiper-button-next {
+    color: #000 !important;
+    width: 30px !important;
+    height: 30px !important;
+    border-radius: 50% !important;
+    background-color: #cacaca !important;
+  }
+
+  .swiper-button-prev:after,
+  .swiper-button-next:after {
+    font-size: 25px !important;
   }
 }
 
@@ -2236,8 +2250,13 @@ input[type="file"] {
     width: 100%;
   }
 
+  .explore_banner .banner_info_inr .info_img {
+    right: 0;
+    bottom: -80px;
+  }
+
   .explore_banner .banner_info .banner_img img {
-    width: 100% !important;
+    width: calc(100% + 140px);
     margin: 0;
   }
 }
@@ -3248,7 +3267,7 @@ input[type="file"] {
   transform: rotate(-90deg) translate3d(0, -74px, 0);
   z-index: 999;
   background-color: #ffffff;
-  color: #db9662;
+  color: #000000;
   font-size: 16px;
   font-weight: 600;
   text-decoration: none;
@@ -3577,4 +3596,35 @@ input[type="file"] {
 
 .rose-gold.active {
   border: 2px solid black !important;
+}
+
+
+.swiper-button-prev,
+.swiper-button-next {
+  color: #000 !important;
+  width: 50px !important;
+  height: 50px !important;
+  border-radius: 50% !important;
+  background-color: #cacaca !important;
+}
+
+.swiper-button-prev:after,
+.swiper-button-next:after {
+  font-size: 25px !important;
+}
+
+.swiper-button-next:after,
+.swiper-rtl .swiper-button-prev:after {
+  content: '\2192' !important;
+}
+
+.swiper-button-prev:after,
+.swiper-rtl .swiper-button-prev:after {
+  content: '\2190' !important;
+}
+
+.testimonial-image {
+  width: 100px;
+  border-radius: 50%;
+  height: 100px;
 }

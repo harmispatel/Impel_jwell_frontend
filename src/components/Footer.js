@@ -42,8 +42,8 @@ const Footer = () => {
                 </Link>
               </li>
               <li className="text-uppercase pb-2 pb-md-0">
-                <Link to="/stores">
-                  <b>stores</b>
+                <Link to="/contact-us">
+                  <b>contact-us</b>
                 </Link>
               </li>
               <li className="text-uppercase pb-2 pb-md-0">
