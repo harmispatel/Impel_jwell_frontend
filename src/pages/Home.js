@@ -1,7 +1,8 @@
 import React, { useLayoutEffect, useRef, useState } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
+import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
 import { Link, useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import { FaLongArrowAltRight, FaLongArrowAltLeft } from "react-icons/fa";
 
 import FilterServices from "../services/Filter";
 import homeService from "../services/Home";
@@ -26,6 +27,12 @@ import Kada from "../assets/images/kada.jpg";
 import Gold_Ring from "../assets/images/gold_ring.png";
 
 const Home = () => {
+  const firstbannerRef = useRef(null);
+  const secondbannerRef = useRef(null);
+  const thirdbannerRef = useRef(null);
+  const fourthbannerRef = useRef(null);
+  const fifthbannerRef = useRef(null);
+
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   let tagIds = searchParams.getAll("tag_id");
@@ -166,39 +173,55 @@ const Home = () => {
       </Helmet>
 
       {/* First Banner */}
-      <section className="banner">
+      <section className="banner position-relative">
         <Swiper
           spaceBetween={30}
           effect={"fade"}
           centeredSlides={true}
           loop={true}
-          navigation={true}
           autoplay={{
             delay: 4000,
             disableOnInteraction: false,
           }}
           modules={[Autoplay, EffectFade, Navigation]}
           className="mySwiper"
+          onSwiper={(swiper) => (firstbannerRef.current = swiper)}
         >
           {hero?.map((image, i) => {
             return (
-              <SwiperSlide key={i}>
-                <Link
-                  to={`/shop?tag_id=${
-                    tagIds?.includes(image?.tag_id) ? tagIds : image?.tag_id
-                  }`}
-                  onClick={(e) => handleTag(e)}
-                >
-                  <img
-                    className="img-fluid"
-                    alt=""
-                    style={{ backgroundImage: `url(${image?.image})` }}
-                  />
-                </Link>
-              </SwiperSlide>
+              <>
+                <SwiperSlide key={i}>
+                  <Link
+                    to={`/shop?tag_id=${
+                      tagIds?.includes(image?.tag_id) ? tagIds : image?.tag_id
+                    }`}
+                    onClick={(e) => handleTag(e)}
+                  >
+                    <img
+                      className="img-fluid"
+                      alt=""
+                      style={{ backgroundImage: `url(${image?.image})` }}
+                    />
+                  </Link>
+                </SwiperSlide>
+              </>
             );
           })}
         </Swiper>
+        <div className="first_banner_button">
+          <button
+            onClick={() => firstbannerRef?.current?.slidePrev()}
+            className="prev-button-swiper"
+          >
+            <FaLongArrowAltLeft className="swiper-icon" />
+          </button>
+          <button
+            onClick={() => firstbannerRef?.current?.slideNext()}
+            className="next-button-swiper"
+          >
+            <FaLongArrowAltRight className="swiper-icon" />
+          </button>
+        </div>
       </section>
 
       {/* Categories */}
@@ -213,6 +236,20 @@ const Home = () => {
             >
               View All
             </Link>
+          </div>
+          <div className="second_banner_button">
+            <button
+              onClick={() => secondbannerRef?.current?.slidePrev()}
+              className="prev-button-swiper"
+            >
+              <FaLongArrowAltLeft className="swiper-icon" />
+            </button>
+            <button
+              onClick={() => secondbannerRef?.current?.slideNext()}
+              className="next-button-swiper"
+            >
+              <FaLongArrowAltRight className="swiper-icon" />
+            </button>
           </div>
           <div className="more_categories_slide">
             <Swiper
@@ -242,6 +279,7 @@ const Home = () => {
                 delay: 4000,
                 disableOnInteraction: false,
               }}
+              onSwiper={(swiper) => (secondbannerRef.current = swiper)}
             >
               {category?.length ? (
                 <>
@@ -353,6 +391,20 @@ const Home = () => {
           >
             View All
           </Link>
+          <div className="second_banner_button">
+            <button
+              onClick={() => thirdbannerRef?.current?.slidePrev()}
+              className="prev-button-swiper"
+            >
+              <FaLongArrowAltLeft className="swiper-icon" />
+            </button>
+            <button
+              onClick={() => thirdbannerRef?.current?.slideNext()}
+              className="next-button-swiper"
+            >
+              <FaLongArrowAltRight className="swiper-icon" />
+            </button>
+          </div>
           <div className="new_arrival_slide">
             <Swiper
               slidesPerView={2}
@@ -377,7 +429,7 @@ const Home = () => {
               modules={[Pagination, Navigation, Scrollbar, A11y, Autoplay]}
               spaceBetween={20}
               loop={true}
-              navigation={true}
+              onSwiper={(swiper) => (thirdbannerRef.current = swiper)}
               autoplay={{
                 delay: 4000,
                 disableOnInteraction: false,
@@ -514,6 +566,20 @@ const Home = () => {
           >
             View All
           </Link>
+          <div className="second_banner_button">
+            <button
+              onClick={() => fourthbannerRef?.current?.slidePrev()}
+              className="prev-button-swiper"
+            >
+              <FaLongArrowAltLeft className="swiper-icon" />
+            </button>
+            <button
+              onClick={() => fourthbannerRef?.current?.slideNext()}
+              className="next-button-swiper"
+            >
+              <FaLongArrowAltRight className="swiper-icon" />
+            </button>
+          </div>
           <div className="seller_slider">
             <Swiper
               slidesPerView={2}
@@ -537,8 +603,8 @@ const Home = () => {
               }}
               modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
               spaceBetween={10}
-              navigation={true}
               loop={true}
+              onSwiper={(swiper) => (fourthbannerRef.current = swiper)}
               autoplay={{
                 delay: 4000,
                 disableOnInteraction: false,
@@ -585,15 +651,29 @@ const Home = () => {
               />
               <h3>TESTIMONIALS</h3>
             </div>
+            <div className="second_banner_button">
+              <button
+                onClick={() => fifthbannerRef?.current?.slidePrev()}
+                className="prev-button-swiper"
+              >
+                <FaLongArrowAltLeft className="swiper-icon" />
+              </button>
+              <button
+                onClick={() => fifthbannerRef?.current?.slideNext()}
+                className="next-button-swiper"
+              >
+                <FaLongArrowAltRight className="swiper-icon" />
+              </button>
+            </div>
             <div className="testimonial_slide">
               <Swiper
                 modules={[Pagination, Scrollbar, A11y, Autoplay, Navigation]}
                 spaceBetween={20}
-                navigation={true}
                 slidesPerView={1}
                 loop={true}
+                onSwiper={(swiper) => (fifthbannerRef.current = swiper)}
                 autoplay={{
-                  delay: 1500,
+                  delay: 5000,
                   disableOnInteraction: false,
                 }}
               >
@@ -601,7 +681,12 @@ const Home = () => {
                   {review?.map((data, index) => (
                     <SwiperSlide key={index}>
                       <div className="testimonial_details">
-                        <p>{data?.message}</p>
+                        <span>
+                          <b>{data?.customer}</b>
+                        </span>
+                        <p>
+                          <q>{data?.messsage}</q>
+                        </p>
                         <img
                           className="testimonial-image"
                           src={data?.image}

@@ -9,6 +9,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 import Logo from "../../assets/images/logo.png";
 
 const DealerLogin = () => {
+  const api = process.env.REACT_APP_API_KEY;
   const recaptcha = useRef();
 
   const navigate = useNavigate();
@@ -70,7 +71,7 @@ const DealerLogin = () => {
     };
 
     axios
-      .post("https://harmistechnology.com/admin.indianjewelley/api/user-login", userData)
+      .post(api + "user-login", userData)
       .then((response) => {
         if (response?.data?.success === true) {
           setUser(response?.data);

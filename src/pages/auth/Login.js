@@ -17,6 +17,7 @@ import { CgSpinner } from "react-icons/cg";
 import { Helmet } from "react-helmet-async";
 
 const Login = () => {
+  const api = process.env.REACT_APP_API_KEY;
   const navigate = useNavigate();
   const [phoneNumber, setPhoneNumber] = useState("");
   const [otp, setOtp] = useState("");
@@ -65,7 +66,7 @@ const Login = () => {
       const appVerifier = window.recaptchaVerifier;
       setSpinner(true);
       axios
-        .post("https://harmistechnology.com/admin.indianjewelley/api/login", {
+        .post(api + "login", {
           phone: formatPh,
         })
         .then((res) => {

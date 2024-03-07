@@ -68,7 +68,7 @@ const WomansJoin = async (data) => {
 
 const TestiMonials = async () => {
   let d = await call({
-    path: "reviews",
+    path: "testimonials",
     method: "GET",
   });
   return d;
