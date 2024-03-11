@@ -7,7 +7,7 @@ html {
 }
 
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -3613,38 +3613,41 @@ input[type="file"] {
 
 .prev-button-swiper,
 .next-button-swiper {
-  color: #000;
-  width: 41px;
-  height: 41px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  width: 38px;
+  height: 38px;
   border: none;
   border-radius: 50%;
-  background-color: #cacaca;
+  background-color: #db9662;
 }
 
 .prev-button-swiper .swiper-icon,
 .next-button-swiper .swiper-icon {
-  font-size: 25px;
+  font-size: 28px;
 }
 
 .prev-button-swiper:hover,
 .next-button-swiper:hover {
-  background-color: rgba(157, 154, 154, 0.5);
+  background-color: #db9662;
 }
 
 .first_banner_button {
   position: absolute;
-  top: 95%;
+  top: 96%;
   transform: translateY(-50%);
   width: 100%;
   display: flex;
   justify-content: center;
-  gap: 15px;
+  gap: 10px;
   z-index: 100;
 }
 
 .second_banner_button {
   display: flex;
   justify-content: end;
-  gap: 15px;
+  gap: 10px;
   margin-bottom: 20px;
 }

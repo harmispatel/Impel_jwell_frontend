@@ -3,6 +3,7 @@ import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
 import { Link, useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { FaLongArrowAltRight, FaLongArrowAltLeft } from "react-icons/fa";
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 
 import FilterServices from "../services/Filter";
 import homeService from "../services/Home";
@@ -213,13 +214,13 @@ const Home = () => {
             onClick={() => firstbannerRef?.current?.slidePrev()}
             className="prev-button-swiper"
           >
-            <FaLongArrowAltLeft className="swiper-icon" />
+            <MdKeyboardArrowLeft className="swiper-icon" />
           </button>
           <button
             onClick={() => firstbannerRef?.current?.slideNext()}
             className="next-button-swiper"
           >
-            <FaLongArrowAltRight className="swiper-icon" />
+            <MdKeyboardArrowRight className="swiper-icon" />
           </button>
         </div>
       </section>
@@ -242,13 +243,13 @@ const Home = () => {
               onClick={() => secondbannerRef?.current?.slidePrev()}
               className="prev-button-swiper"
             >
-              <FaLongArrowAltLeft className="swiper-icon" />
+              <MdKeyboardArrowLeft className="swiper-icon" />
             </button>
             <button
               onClick={() => secondbannerRef?.current?.slideNext()}
               className="next-button-swiper"
             >
-              <FaLongArrowAltRight className="swiper-icon" />
+              <MdKeyboardArrowRight className="swiper-icon" />
             </button>
           </div>
           <div className="more_categories_slide">
@@ -396,13 +397,13 @@ const Home = () => {
               onClick={() => thirdbannerRef?.current?.slidePrev()}
               className="prev-button-swiper"
             >
-              <FaLongArrowAltLeft className="swiper-icon" />
+              <MdKeyboardArrowLeft className="swiper-icon" />
             </button>
             <button
               onClick={() => thirdbannerRef?.current?.slideNext()}
               className="next-button-swiper"
             >
-              <FaLongArrowAltRight className="swiper-icon" />
+              <MdKeyboardArrowRight className="swiper-icon" />
             </button>
           </div>
           <div className="new_arrival_slide">
@@ -571,13 +572,13 @@ const Home = () => {
               onClick={() => fourthbannerRef?.current?.slidePrev()}
               className="prev-button-swiper"
             >
-              <FaLongArrowAltLeft className="swiper-icon" />
+              <MdKeyboardArrowLeft className="swiper-icon" />
             </button>
             <button
               onClick={() => fourthbannerRef?.current?.slideNext()}
               className="next-button-swiper"
             >
-              <FaLongArrowAltRight className="swiper-icon" />
+              <MdKeyboardArrowRight className="swiper-icon" />
             </button>
           </div>
           <div className="seller_slider">
@@ -656,13 +657,13 @@ const Home = () => {
                 onClick={() => fifthbannerRef?.current?.slidePrev()}
                 className="prev-button-swiper"
               >
-                <FaLongArrowAltLeft className="swiper-icon" />
+                <MdKeyboardArrowLeft className="swiper-icon" />
               </button>
               <button
                 onClick={() => fifthbannerRef?.current?.slideNext()}
                 className="next-button-swiper"
               >
-                <FaLongArrowAltRight className="swiper-icon" />
+                <MdKeyboardArrowRight className="swiper-icon" />
               </button>
             </div>
             <div className="testimonial_slide">
