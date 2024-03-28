@@ -67,10 +67,7 @@ const WomansClub = () => {
       valid = false;
     }
 
-    if (!details.message.trim()) {
-      newErrors.message = "Message is required!";
-      valid = false;
-    } else if (details.message.trim().length < 50) {
+    if (details.message && details.message.length < 50) {
       newErrors.message = "Message must contain at least 50 characters!";
       valid = false;
     }

@@ -1711,13 +1711,13 @@ input[type="file"] {
 .custom_lightbox_inr .close-button {
   position: absolute;
   top: 20px;
-  right: 20px;
+  right: 10px;
   color: #fff;
   font-size: 20px;
-  width: 50px;
-  height: 50px;
+  width: 45px;
+  height: 45px;
   background: #000;
-  border-radius: 5px;
+  border-radius: 50%;
   padding: 10px;
   display: flex;
   align-items: center;
@@ -1725,13 +1725,30 @@ input[type="file"] {
   cursor: pointer;
 }
 
+.lightbox-navigation{
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  z-index: 100;
+}
 
 .lightbox-navigation .btn {
   position: absolute;
   top: 50%;
   color: #fff;
   transform: translate(0, -50%);
-  font-size: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border: none;
+  border-radius: 50%;
+  background-color: #db9662;
 }
 
 .lightbox-navigation .btn:first-child {
@@ -1740,6 +1757,15 @@ input[type="file"] {
 
 .lightbox-navigation .btn:last-child {
   right: 0;
+}
+
+.lightbox-navigation .btn:hover {
+  color: #fff;
+  background-color: #db9662;
+}
+
+.lightbox-navigation .swiper-icon{
+  font-size: 30px;
 }
 
 .sidebar .accordion-button:not(.collapsed),

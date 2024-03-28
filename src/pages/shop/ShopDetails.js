@@ -20,6 +20,7 @@ import productDetail from "../../services/Shop";
 import { CartSystem } from "../../context/CartContext";
 import { Accordion } from "react-bootstrap";
 import Loader from "../../components/common/Loader";
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 
 const ShopDetails = () => {
   const location = useLocation();
@@ -197,7 +198,8 @@ const ShopDetails = () => {
 
   const navigateLightbox = (step) => {
     const newIndex =
-      (currentImageIndex + step + ogImages?.length) % ogImages?.length;
+      (currentImageIndex + step + productImages?.length) %
+      productImages?.length;
     setCurrentImageIndex(newIndex);
   };
 
@@ -261,7 +263,6 @@ const ShopDetails = () => {
     localStorage.setItem("redirectPath", location.pathname);
     navigate("/login");
   };
-
 
   return (
     <>
@@ -332,23 +333,37 @@ const ShopDetails = () => {
                                     </span>
                                     <img
                                       className="w-50"
-                                      src={ogImages[currentImageIndex]}
+                                      src={productImages[currentImageIndex]}
                                       alt={`Product Image ${currentImageIndex}`}
                                     />
                                     <div className="lightbox-navigation">
                                       <button
+                                        onClick={() => navigateLightbox(-1)}
+                                        className="prev-button-swiper ms-2"
+                                      >
+                                        <MdKeyboardArrowLeft className="swiper-icon" />
+                                      </button>
+                                      <button
+                                        onClick={() => navigateLightbox(1)}
+                                        className="next-button-swiper me-2"
+                                      >
+                                        <MdKeyboardArrowRight className="swiper-icon" />
+                                      </button>
+                                    </div>
+                                    {/* <div className="lightbox-navigation">
+                                      <button
                                         className="btn"
                                         onClick={() => navigateLightbox(-1)}
                                       >
-                                        <RxChevronLeft />
+                                        <MdKeyboardArrowLeft className="swiper-icon" />
                                       </button>
                                       <button
                                         className="btn"
                                         onClick={() => navigateLightbox(1)}
                                       >
-                                        <RxChevronRight />
+                                        <MdKeyboardArrowRight className="swiper-icon" />
                                       </button>
-                                    </div>
+                                    </div> */}
                                   </div>
                                 </div>
                               )}
