@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import UserService from "../../services/Cart";
 import profileService from "../../services/Auth";
 import toast from "react-hot-toast";
@@ -16,6 +16,7 @@ import Loader from "../../components/common/Loader";
 
 const Cart = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { dispatch: profilename, state: namestate } = useContext(ProfileSystem);
   const { dispatch: removefromcartDispatch } = useContext(CartSystem);
   const { dispatch: resetcartcount } = useContext(CartSystem);
@@ -41,6 +42,7 @@ const Cart = () => {
   const [shipping_city, setShipping_city] = useState();
   const [isChecked, setIsChecked] = useState(false);
   const [valid, setValid] = useState("");
+  const [payment_link, setPayment_Link] = useState('')
   const [message, setMessage] = useState(false);
   const [userData, setUserData] = useState({
     name: "",
@@ -458,6 +460,22 @@ const Cart = () => {
       });
   };
 
+  const handlePayment = () => {
+    UserService.Payment({
+      user_id: user_id,
+      total: code?.discount_value
+        ? code.discount_type === "percentage"
+          ? SubTotal() + SubCharge() - (SubCharge() * code.discount_value) / 100
+          : SubTotal() + SubCharge() - code.discount_value
+        : SubTotal() + SubCharge(),
+    })
+      .then((res) => {
+        setPayment_Link(res.data)
+        // window.location.href = res.data;
+      })
+      .catch((err) => console.log(err));
+  };
+
   const handleDealercode = (e) => {
     setDealer_Code(e.target.value);
   };
@@ -540,6 +558,7 @@ const Cart = () => {
   };
 
   const Orderplacing = () => {
+
     setSpinner(true);
     const totalPrice = code.discount_value
       ? code.discount_type === "percentage"
@@ -555,6 +574,7 @@ const Cart = () => {
         setShowEdit(true);
         setSpinner(false);
       } else if (totalPrice < 200000) {
+        
         UserService.Placeorder({
           user_id: user_id,
           dealer_code: code?.dealer_code,
@@ -585,6 +605,7 @@ const Cart = () => {
           })
           .catch((error) => console.log(error));
       } else {
+        
         UserService.Placeorder({
           user_id: user_id,
           dealer_code: code?.dealer_code,
@@ -884,6 +905,10 @@ const Cart = () => {
                                 Orderplacing(e);
                                 handleProfileData(profileData);
                               }}
+                              // onClick={() => {
+                              //   handlePayment();
+                              //   handleProfileData(profileData);
+                              // }}
                             >
                               {spinner && (
                                 <CgSpinner
@@ -891,7 +916,7 @@ const Cart = () => {
                                   className="animate_spin me-2"
                                 />
                               )}
-                              Place Order
+                              Proceed to Payment
                             </button>
                             <button
                               type="button"

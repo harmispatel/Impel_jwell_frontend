@@ -29,6 +29,7 @@ const CartList = async (data) => {
   });
   return d;
 };
+
 const Placeorder = async (data) => {
   let d = await call({
     path: "user/purchase-order",
@@ -38,9 +39,20 @@ const Placeorder = async (data) => {
   });
   return d;
 };
+
 const DealerCode = async (data) => {
   let d = await call({
     path: "apply-dealer-code",
+    method: "POST",
+    enctype: "multipart/form-data",
+    data,
+  });
+  return d;
+};
+
+const Payment = async (data) => {
+  let d = await call({
+    path: "cashfree/payments/doCashFreePayment",
     method: "POST",
     enctype: "multipart/form-data",
     data,
@@ -82,6 +94,7 @@ const exportObject = {
   AddtoCart,
   RemovetoCart,
   CartList,
+  Payment,
   DealerCode,
   Updatecart,
   Placeorder,
