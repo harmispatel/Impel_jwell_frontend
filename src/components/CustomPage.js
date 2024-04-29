@@ -2,15 +2,17 @@ import React, { useEffect, useState } from "react";
 import profileService from "../services/Home";
 import { Helmet } from "react-helmet-async";
 import Loader from "./common/Loader";
+import { useParams } from "react-router-dom";
 
-const CustomPage = ({ page_slug }) => {
+const CustomPage = () => {
+  const params = useParams();
   const [pageDetails, setPageDetails] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const CustomPages = () => {
     setIsLoading(true);
     profileService
-      .CustomPages({ page_slug: page_slug })
+      .CustomPages({ page_slug: params?.id })
       .then((res) => {
         setPageDetails(res?.data);
         setIsLoading(false);
@@ -23,7 +25,7 @@ const CustomPage = ({ page_slug }) => {
 
   useEffect(() => {
     CustomPages();
-  }, [page_slug]);
+  }, [params?.id]);
 
   return (
     <>
@@ -46,7 +48,7 @@ const CustomPage = ({ page_slug }) => {
                   <h1>{pageDetails?.name}</h1>
                 </div>
                 <div className="text-center mt-3 mb-3">
-                  {page_slug === "about-us" && (
+                  {params?.id === "about-us" && (
                     <img src={pageDetails?.image} alt="" className=" w-100" />
                   )}
                 </div>

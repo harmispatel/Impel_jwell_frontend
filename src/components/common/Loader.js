@@ -3,8 +3,8 @@ import "./Loader.css";
 const Loading = () => {
   return (
     <>
-      {/* <div class="diamondCon">
-        <ul class="diamond">
+      {/* <div className="diamondCon">
+        <ul className="diamond">
           <li></li>
           <li></li>
           <li></li>
@@ -13,10 +13,10 @@ const Loading = () => {
           <li></li>
           <li></li>
         </ul>
-        <div class="textCon">Impel</div>
+        <div className="textCon">Impel</div>
       </div> */}
-      <div class="loading-container">
-        <div class="loading-text">
+      <div className="loading-container">
+        <div className="loading-text">
           <span>L</span>
           <span>O</span>
           <span>A</span>

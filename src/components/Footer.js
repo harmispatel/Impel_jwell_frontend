@@ -7,6 +7,7 @@ import profileService from "../services/Home";
 
 const Footer = () => {
   const [siteSetting, setSiteSetting] = useState("");
+  const [getPage, setGetPage] = useState([]);
   const currentYear = new Date().getFullYear();
   const copyrightText = siteSetting?.frontend_copyright;
   const updatedCopyrightText = copyrightText?.replace("{year}", currentYear);
@@ -22,8 +23,20 @@ const Footer = () => {
       });
   };
 
+  const getPagess = async () => {
+    await profileService
+      .GetPages()
+      .then((res) => {
+        setGetPage(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   useEffect(() => {
     SiteSetting();
+    getPagess();
   }, []);
 
   return (
@@ -36,26 +49,15 @@ const Footer = () => {
 
           <div className="footer_list">
             <ul>
-              <li className="text-uppercase pb-2 pb-md-0">
-                <Link to="/faq">
-                  <b>Faq</b>
-                </Link>
-              </li>
-              <li className="text-uppercase pb-2 pb-md-0">
-                <Link to="/contact-us">
-                  <b>contact-us</b>
-                </Link>
-              </li>
-              <li className="text-uppercase pb-2 pb-md-0">
-                <Link to="/about-us">
-                  <b>about-us</b>
-                </Link>
-              </li>
-              <li className="text-uppercase">
-                <Link to="/shopping-and-returns">
-                  <b>shopping and returns</b>
-                </Link>
-              </li>
+              {getPage?.map((page, index) => {
+                return (
+                  <li className="text-uppercase pb-2 pb-md-0">
+                    <Link to={`${page?.slug}`}>
+                      <b>{page?.name}</b>
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
           </div>
 

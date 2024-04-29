@@ -1,4 +1,10 @@
-import React, { useContext, useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, {
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { FaBars, FaStar, FaUser, FaUserAlt } from "react-icons/fa";
@@ -19,6 +25,7 @@ import { WishlistSystem } from "../context/WishListContext";
 import { CartSystem } from "../context/CartContext";
 import { ProfileSystem } from "../context/ProfileContext";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import axios from "axios";
 
 const Navbar = () => {
   const navbarRef = useRef(null);
@@ -51,6 +58,8 @@ const Navbar = () => {
   const [wishlistCount, setWishlistCount] = useState();
 
   const [dealerData, setDealerData] = useState([]);
+
+  const [goldData, setGoldData] = useState([]);
 
   const [tags, setTags] = useState([]);
   const [tag, setTag] = useState([]);
@@ -135,6 +144,61 @@ const Navbar = () => {
         console.log(err);
       });
   };
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const data = {
+  //         PageNo: 1,
+  //         PageSize: 100,
+  //         DeviceID: 0,
+  //         SortBy: "",
+  //         SearchText: "",
+  //         TranType: "",
+  //         CommaSeperate_ItemGroupID: "",
+  //         CommaSeperate_ItemID: "",
+  //         CommaSeperate_StyleID: "",
+  //         CommaSeperate_ProductID: "",
+  //         CommaSeperate_SubItemID: "",
+  //         CommaSeperate_AppItemCategoryID: "",
+  //         CommaSeperate_ItemSubID: "",
+  //         CommaSeperate_KarigarID: "",
+  //         CommaSeperate_BranchID: "",
+  //         CommaSeperate_Size: "",
+  //         CommaSeperate_CounterID: "",
+  //         MaxNetWt: 0,
+  //         MinNetWt: 100,
+  //         OnlyCartItem: false,
+  //         OnlyWishlistItem: false,
+  //         StockStatus: "",
+  //         DoNotShowInClientApp: 0,
+  //         HasTagImage: 0,
+  //       };
+
+  //       const response = await fetch(
+  //         "https://api.indianjewelcast.com/api/Tag/GetAll",
+  //         {
+  //           method: "POST",
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //           },
+  //           body: JSON.stringify(data),
+  //         }
+  //       );
+
+  //       if (!response.ok) {
+  //         throw new Error("Failed to fetch data");
+  //       }
+
+  //       const responseData = await response.json();
+  //       console.log(responseData);
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
 
   useLayoutEffect(() => {
     UserCartItems();
@@ -319,13 +383,13 @@ const Navbar = () => {
                     >
                       <ul>
                         <li>
-                          <Link to="/shop">
+                          <Link to="/ready-to-dispatch">
                             <AiFillGold />
                             GOLD
                           </Link>
                         </li>
                         <li>
-                          <Link to="/shop">
+                          <Link to="/ready-to-dispatch">
                             <AiFillGold />
                             SILVER
                           </Link>
@@ -438,7 +502,9 @@ const Navbar = () => {
                 <li className="nav-item">
                   <Link
                     className={
-                      currentRoute === "/customization" ? "nav-link active" : "nav-link"
+                      currentRoute === "/customization"
+                        ? "nav-link active"
+                        : "nav-link"
                     }
                     to="/customization"
                     onClick={handleNavClick}

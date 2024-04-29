@@ -188,10 +188,10 @@ const Home = () => {
           className="mySwiper"
           onSwiper={(swiper) => (firstbannerRef.current = swiper)}
         >
-          {hero?.map((image, i) => {
+          {hero?.map((image, index) => {
             return (
               <>
-                <SwiperSlide key={i}>
+                <SwiperSlide key={index}>
                   <Link
                     to={`/shop?tag_id=${
                       tagIds?.includes(image?.tag_id) ? tagIds : image?.tag_id

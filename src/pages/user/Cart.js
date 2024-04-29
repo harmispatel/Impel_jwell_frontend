@@ -470,8 +470,8 @@ const Cart = () => {
         : SubTotal() + SubCharge(),
     })
       .then((res) => {
-        setPayment_Link(res.data)
-        // window.location.href = res.data;
+        // setPayment_Link(res.data)
+        window.location.href = res.data;
       })
       .catch((err) => console.log(err));
   };
@@ -920,7 +920,7 @@ const Cart = () => {
                             </button>
                             <button
                               type="button"
-                              class="light-up-button w-100 rounded-2"
+                              className="light-up-button w-100 rounded-2"
                               onClick={() => navigate("/shop")}
                             >
                               Back to shop

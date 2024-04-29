@@ -66,9 +66,26 @@ const WomansJoin = async (data) => {
   return d;
 };
 
+const GetProductsAPI = async (data) => {
+  let d = await call({
+    path: "ready-to-dispatch",
+    method: "POST",
+    data,
+  });
+  return d;
+};
+
 const TestiMonials = async () => {
   let d = await call({
     path: "testimonials",
+    method: "GET",
+  });
+  return d;
+};
+
+const GetPages = async () => {
+  let d = await call({
+    path: "get-pages",
     method: "GET",
   });
   return d;
@@ -80,9 +97,11 @@ const exportObject = {
   category,
   TopSelling,
   RecentAdd,
+  GetProductsAPI,
   WomansJoin,
   CustomPages,
   Featured,
+  GetPages,
   SiteSetting,
   TestiMonials,
 };

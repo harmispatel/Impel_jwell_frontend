@@ -181,15 +181,15 @@ const WomansClub = () => {
         aria-controls="offcanvasExample"
       >
         Join our women's club
-        <span class="top"></span>
-        <span class="right"></span>
-        <span class="bottom"></span>
-        <span class="left"></span>
+        <span className="top"></span>
+        <span className="right"></span>
+        <span className="bottom"></span>
+        <span className="left"></span>
       </button>
       <div className="womans_club">
         <div
           className="offcanvas offcanvas-start"
-          tabindex="-1"
+          tabIndex="-1"
           data-bs-backdrop="false"
           data-bs-scroll="false"
           id="offcanvasExample"
@@ -259,8 +259,8 @@ const WomansClub = () => {
                                   placeholder="Enter mobile number"
                                   value={details.number}
                                   onChange={handleChange}
-                                  maxlength="10"
-                                  minlength="10"
+                                  maxLength="10"
+                                  minLength="10"
                                 />
                                 {errors.number && (
                                   <div className="invalid-feedback">
@@ -327,9 +327,9 @@ const WomansClub = () => {
                                       />
                                       <label
                                         className="cbx"
-                                        for="instagram"
+                                        htmlFor="instagram"
                                       ></label>
-                                      <label className="lbl" for="instagram">
+                                      <label className="lbl" htmlFor="instagram">
                                         Instagram
                                       </label>
                                     </div>
@@ -344,9 +344,9 @@ const WomansClub = () => {
                                       />
                                       <label
                                         className="cbx"
-                                        for="facebook"
+                                        htmlFor="facebook"
                                       ></label>
-                                      <label className="lbl" for="facebook">
+                                      <label className="lbl" htmlFor="facebook">
                                         Facebook
                                       </label>
                                     </div>
@@ -360,9 +360,9 @@ const WomansClub = () => {
                                       />
                                       <label
                                         className="cbx"
-                                        for="pinterest"
+                                        htmlFor="pinterest"
                                       ></label>
-                                      <label className="lbl" for="pinterest">
+                                      <label className="lbl" htmlFor="pinterest">
                                         Pinterest
                                       </label>
                                     </div>
@@ -378,9 +378,9 @@ const WomansClub = () => {
                                       />
                                       <label
                                         className="cbx"
-                                        for="family"
+                                        htmlFor="family"
                                       ></label>
-                                      <label className="lbl" for="family">
+                                      <label className="lbl" htmlFor="family">
                                         Friend or family
                                       </label>
                                     </div>
@@ -394,9 +394,9 @@ const WomansClub = () => {
                                       />
                                       <label
                                         className="cbx"
-                                        for="exibitions"
+                                        htmlFor="exibitions"
                                       ></label>
-                                      <label className="lbl" for="exibitions">
+                                      <label className="lbl" htmlFor="exibitions">
                                         Our Exibitions
                                       </label>
                                     </div>
@@ -410,9 +410,9 @@ const WomansClub = () => {
                                       />
                                       <label
                                         className="cbx"
-                                        for="campaign"
+                                        htmlFor="campaign"
                                       ></label>
-                                      <label className="lbl" for="campaign">
+                                      <label className="lbl" htmlFor="campaign">
                                         Our any campaign
                                       </label>
                                     </div>

@@ -32,7 +32,9 @@ import { useEffect } from "react";
 import CustomPage from "./components/CustomPage";
 import WomansClub from "./components/common/WomansClub";
 import Topseller from "./pages/shop/Topseller";
-import LatestDesign from "./pages/shop/LatestDesign"
+import LatestDesign from "./pages/shop/LatestDesign";
+import ReadytoDispatch from "./pages/shop/ReadytoDispatch";
+import ReadyDetails from "./pages/shop/ReadyDetails";
 
 function App() {
   const location = useLocation();
@@ -93,25 +95,15 @@ function App() {
                     <Route index element={<Home />} />
                     <Route path="shop" element={<Shop />} />
                     <Route
-                      path="customization"
-                      element={<CustomPage page_slug="customization" />}
+                      path="ready-to-dispatch"
+                      element={<ReadytoDispatch />}
                     />
                     <Route
-                      path="faq"
-                      element={<CustomPage page_slug="faq" />}
+                      path="ready-to-dispatch/:id"
+                      element={<ReadyDetails />}
                     />
-                    <Route
-                      path="about-us"
-                      element={<CustomPage page_slug="about-us" />}
-                    />
-                    <Route
-                      path="shopping-and-returns"
-                      element={<CustomPage page_slug="shopping-and-returns" />}
-                    />
-                    <Route
-                      path="contact-us"
-                      element={<CustomPage page_slug="contact-us" />}
-                    />
+
+                    <Route path=":id" element={<CustomPage />} />
 
                     <Route path="shopdetails/:id" element={<ShopDetails />} />
                     <Route path="categories" element={<Categories />} />
@@ -121,7 +113,6 @@ function App() {
                     />
                     <Route path="top-selling-designs" element={<Topseller />} />
                     <Route path="latest-designs" element={<LatestDesign />} />
-
 
                     {/* USER PROTECTED */}
                     <Route
