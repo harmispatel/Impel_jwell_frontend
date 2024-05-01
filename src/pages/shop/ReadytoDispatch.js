@@ -1,11 +1,13 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import profileService from "../../services/Home";
 import { Link } from "react-router-dom";
 import Loader from "../../components/common/Loader";
+import Select from "react-select";
 
 const ReadytoDispatch = () => {
   const [products, setProducts] = useState([]);
+  const [filters, setFilters] = useState([]);
+  const [itemGroups, setItemGroups] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
   const getProducts = () => {
@@ -46,9 +48,51 @@ const ReadytoDispatch = () => {
       });
   };
 
+  const getFilters = () => {
+    profileService
+      .GetProductsFilterAPI({
+        PageNo: 1,
+        PageSize: 100,
+        DeviceID: 0,
+        SortBy: "",
+        SearchText: "",
+        TranType: "",
+        CommaSeperate_ItemGroupID: "",
+        CommaSeperate_ItemID: "",
+        CommaSeperate_StyleID: "",
+        CommaSeperate_ProductID: "",
+        CommaSeperate_SubItemID: "",
+        CommaSeperate_AppItemCategoryID: "",
+        CommaSeperate_ItemSubID: "",
+        CommaSeperate_KarigarID: "",
+        CommaSeperate_BranchID: "",
+        CommaSeperate_Size: "",
+        CommaSeperate_CounterID: "",
+        MaxNetWt: 0,
+        MinNetWt: 0,
+        OnlyCartItem: false,
+        OnlyWishlistItem: false,
+        StockStatus: "",
+        DoNotShowInClientApp: 0,
+        HasTagImage: 0,
+      })
+      .then((res) => {
+        setFilters(res?.Filters);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleItemGroups = (selectedOption) => {
+    setItemGroups(selectedOption?.label);
+  };
+
   useEffect(() => {
     getProducts();
+    getFilters();
   }, []);
+
   return (
     <>
       <section className="ready-to-dispatch">
@@ -60,6 +104,21 @@ const ReadytoDispatch = () => {
               </div>
             ) : (
               <>
+                <div className="row mb-4">
+                  <div className="col-md-4">
+                    <Select
+                      placeholder="Shop by Filter"
+                      isClearable
+                      isSearchable={false}
+                      value={itemGroups}
+                      onChange={handleItemGroups}
+                      options={filters?.ItemGroups?.map((data) => ({
+                        label: data?.GroupName,
+                        value: data?.ItemGroupID,
+                      }))}
+                    />
+                  </div>
+                </div>
                 {products?.map((data) => {
                   return (
                     <div className="col-md-3 col-sm-4 col-xs-6">

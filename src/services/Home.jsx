@@ -75,6 +75,15 @@ const GetProductsAPI = async (data) => {
   return d;
 };
 
+const GetProductsFilterAPI = async (data) => {
+  let d = await call({
+    path: "ready-to-dispatch-filters",
+    method: "POST",
+    data,
+  });
+  return d;
+};
+
 const TestiMonials = async () => {
   let d = await call({
     path: "testimonials",
@@ -98,7 +107,7 @@ const exportObject = {
   TopSelling,
   RecentAdd,
   GetProductsAPI,
-  WomansJoin,
+  GetProductsFilterAPI,
   CustomPages,
   Featured,
   GetPages,
