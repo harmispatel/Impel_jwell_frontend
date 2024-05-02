@@ -918,9 +918,9 @@ input[type="file"] {
   text-decoration: none;
   color: #000;
   opacity: 0.6;
-  padding: 10px;
-  margin: 0 10px;
-  font-size: 14px;
+  padding: 7px;
+  margin: 0 6px;
+  font-size: 12px;
 }
 
 .footer_social_list li a {
