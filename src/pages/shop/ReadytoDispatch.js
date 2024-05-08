@@ -89,7 +89,9 @@ const ReadytoDispatch = () => {
   };
 
   useEffect(() => {
-    getProducts();
+    setTimeout(() => {
+      getProducts();
+    }, 500);
     getFilters();
   }, []);
 
