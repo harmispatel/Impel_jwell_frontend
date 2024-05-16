@@ -61,6 +61,7 @@ const Cart = () => {
     states: "",
     address_same_as_company: "",
   });
+  
   const [error, setError] = useState({
     nameErr: "",
     emailErr: "",

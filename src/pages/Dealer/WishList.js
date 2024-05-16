@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import emptycart from "../../assets/images/empty-cart.png";
 import { Link } from "react-router-dom";
-import loadinggif from "../../assets/video/impel-bird-unscreen.gif";
+// import loadinggif from "../../assets/video/impel-bird-unscreen.gif";
 import toast from "react-hot-toast";
 import { CgSpinner } from "react-icons/cg";
 import { FaLongArrowAltLeft } from "react-icons/fa";

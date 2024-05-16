@@ -896,6 +896,16 @@ input[type="file"] {
   padding: 0;
 }
 
+.footer_list ul li {
+  margin-bottom: 10px;
+}
+
+.footer_list ul,
+.footer_social_list ul,
+.footer_social_list ul li {
+  flex-wrap: wrap;
+}
+
 .footer_social_list ul {
   display: flex;
   justify-content: center;
@@ -1726,7 +1736,7 @@ input[type="file"] {
   cursor: pointer;
 }
 
-.lightbox-navigation{
+.lightbox-navigation {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -1765,7 +1775,7 @@ input[type="file"] {
   background-color: #db9662;
 }
 
-.lightbox-navigation .swiper-icon{
+.lightbox-navigation .swiper-icon {
   font-size: 30px;
 }
 
