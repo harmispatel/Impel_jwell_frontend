@@ -7,46 +7,12 @@ import Select from "react-select";
 const ReadytoDispatch = () => {
   const [products, setProducts] = useState([]);
   const [filters, setFilters] = useState([]);
-  const [itemGroups, setItemGroups] = useState("");
+  const [tagNoChange, setTagNoChange] = useState(null);
+  const [itemGroups, setItemGroups] = useState(null);
+  const [styles, setStyles] = useState(null);
+  const [sizes, setSizes] = useState(null);
+  const [tagNumber, setTagNumber] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-
-  const getProducts = () => {
-    profileService
-      .GetProductsAPI({
-        PageNo: 1,
-        PageSize: 100,
-        DeviceID: 0,
-        SortBy: "",
-        SearchText: "",
-        TranType: "",
-        CommaSeperate_ItemGroupID: "",
-        CommaSeperate_ItemID: "",
-        CommaSeperate_StyleID: "",
-        CommaSeperate_ProductID: "",
-        CommaSeperate_SubItemID: "",
-        CommaSeperate_AppItemCategoryID: "",
-        CommaSeperate_ItemSubID: "",
-        CommaSeperate_KarigarID: "",
-        CommaSeperate_BranchID: "",
-        CommaSeperate_Size: "",
-        CommaSeperate_CounterID: "",
-        MaxNetWt: 0,
-        MinNetWt: 0,
-        OnlyCartItem: false,
-        OnlyWishlistItem: false,
-        StockStatus: "",
-        DoNotShowInClientApp: 0,
-        HasTagImage: 0,
-      })
-      .then((res) => {
-        setProducts(res?.Tags);
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setIsLoading(false);
-      });
-  };
 
   const getFilters = () => {
     profileService
@@ -85,77 +51,233 @@ const ReadytoDispatch = () => {
   };
 
   const handleItemGroups = (selectedOption) => {
-    setItemGroups(selectedOption?.label);
+    setItemGroups(selectedOption);
+  };
+
+  const handleStylesTag = (selectedOption) => {
+    setStyles(selectedOption);
+  };
+
+  const handleSizeTag = (selectedOption) => {
+    setSizes(selectedOption);
   };
 
   useEffect(() => {
     setTimeout(() => {
-      getProducts();
-    }, 500);
-    getFilters();
+      getFilters();
+    }, 2000);
   }, []);
+
+  useEffect(() => {
+    if (tagNoChange || itemGroups || styles || sizes) {
+      setIsLoading(true);
+      profileService
+        .GetProductsAPI({
+          PageNo: 1,
+          PageSize: 100,
+          DeviceID: 0,
+          SortBy: "",
+          SearchText: tagNoChange || "",
+          TranType: "",
+          CommaSeperate_ItemGroupID: itemGroups?.value || "",
+          CommaSeperate_ItemID: "",
+          CommaSeperate_StyleID: styles?.value || "",
+          CommaSeperate_ProductID: "",
+          CommaSeperate_SubItemID: "",
+          CommaSeperate_AppItemCategoryID: "",
+          CommaSeperate_ItemSubID: "",
+          CommaSeperate_KarigarID: "",
+          CommaSeperate_BranchID: "",
+          CommaSeperate_Size: sizes?.label || "",
+          CommaSeperate_CounterID: "",
+          MaxNetWt: 0,
+          MinNetWt: 0,
+          OnlyCartItem: false,
+          OnlyWishlistItem: false,
+          StockStatus: "",
+          DoNotShowInClientApp: 0,
+          HasTagImage: 0,
+        })
+        .then((res) => {
+          setProducts(res?.Tags);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setIsLoading(false);
+        });
+    } else {
+      setIsLoading(true);
+      profileService
+        .GetProductsAPI({
+          PageNo: 1,
+          PageSize: 100,
+          DeviceID: 0,
+          SortBy: "",
+          SearchText: "",
+          TranType: "",
+          CommaSeperate_ItemGroupID: "",
+          CommaSeperate_ItemID: "",
+          CommaSeperate_StyleID: "",
+          CommaSeperate_ProductID: "",
+          CommaSeperate_SubItemID: "",
+          CommaSeperate_AppItemCategoryID: "",
+          CommaSeperate_ItemSubID: "",
+          CommaSeperate_KarigarID: "",
+          CommaSeperate_BranchID: "",
+          CommaSeperate_Size: "",
+          CommaSeperate_CounterID: "",
+          MaxNetWt: 0,
+          MinNetWt: 0,
+          OnlyCartItem: false,
+          OnlyWishlistItem: false,
+          StockStatus: "",
+          DoNotShowInClientApp: 0,
+          HasTagImage: 0,
+        })
+        .then((res) => {
+          setProducts(res?.Tags);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setIsLoading(false);
+        });
+    }
+  }, [itemGroups, styles, sizes, tagNoChange]);
 
   return (
     <>
       <section className="ready-to-dispatch">
         <div className="container">
-          <div className="row">
-            {isLoading ? (
-              <div className="animation-loading">
-                <Loader />
-              </div>
-            ) : (
-              <>
-                <div className="row mb-4">
-                  <div className="col-md-4">
-                    <Select
-                      placeholder="Shop by Filter"
-                      isClearable
-                      isSearchable={false}
-                      value={itemGroups}
-                      onChange={handleItemGroups}
-                      options={filters?.ItemGroups?.map((data) => ({
-                        label: data?.GroupName,
-                        value: data?.ItemGroupID,
-                      }))}
+          {isLoading ? (
+            <div className="animation-loading">
+              <Loader />
+            </div>
+          ) : (
+            <>
+              <div className="row">
+                <div className="col-md-6 mb-4">
+                  <div className="form-group d-flex align-items-center">
+                    <label htmlFor="price" className="form-label">
+                      Price:
+                    </label>
+                    <input type="number" className="form-control ms-2" />
+                    <span className="mx-3">To</span>
+                    <input type="number" className="form-control" />
+                  </div>
+                </div>
+                <div className="col-md-4 mb-4">
+                  <div className="form-group d-flex align-items-center">
+                    <label
+                      htmlFor="price"
+                      className="form-label"
+                      style={{ width: "70px" }}
+                    >
+                      Tag No:
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={tagNoChange}
+                      onChange={(e) => setTagNoChange(e.target.value)}
                     />
                   </div>
                 </div>
-                {products?.map((data) => {
-                  return (
-                    <div className="col-md-3 col-sm-4 col-xs-6">
-                      <div className="item-product text-center">
-                        <Link to={`/ready-to-dispatch/${data?.TagNo}`}>
-                          <div className="product-thumb">
-                            {data?.Images[0]?.ImageName ? (
-                              <>
-                                <img
-                                  src={`https://api.indianjewelcast.com/${data?.Images[0]?.ImageName}`}
-                                  alt={`https://api.indianjewelcast.com/${data?.Images[0]?.ImageName}`}
-                                  className="w-100"
-                                />
-                              </>
-                            ) : (
-                              <>
-                                <img
-                                  src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930"
-                                  alt=""
-                                  className="w-100"
-                                />
-                              </>
-                            )}
+
+                {/* Category Wise Filter */}
+                <div className="col-md-3">
+                  <Select
+                    placeholder="Select Category"
+                    isClearable
+                    isSearchable={false}
+                    value={itemGroups}
+                    onChange={handleItemGroups}
+                    options={filters?.ItemGroups?.map((data) => ({
+                      label: data?.GroupName,
+                      value: data?.ItemGroupID,
+                    }))}
+                  />
+                </div>
+                <div className="col-md-3">
+                  <Select
+                    placeholder="Select Style"
+                    isClearable
+                    isSearchable={false}
+                    value={styles}
+                    onChange={handleStylesTag}
+                    options={filters?.Styles?.map((data) => ({
+                      label: data?.StyleName,
+                      value: data?.StyleID,
+                    }))}
+                  />
+                </div>
+                <div className="col-md-3">
+                  <Select
+                    placeholder="Select Sizes"
+                    isClearable
+                    isSearchable={false}
+                    value={sizes}
+                    onChange={handleSizeTag}
+                    options={filters?.Size?.map((data) => ({
+                      label: data?.Size1,
+                      value: data?.RowNumber,
+                    }))}
+                  />
+                </div>
+              </div>
+              <div className="row mt-4">
+                {products?.length > 0 ? (
+                  <>
+                    {products?.map((data, index) => {
+                      return (
+                        <div className="col-md-3 col-sm-4 col-xs-6" key={index}>
+                          <div className="item-product text-center">
+                            <Link to={`/ready-to-dispatch/${data?.TagNo}`}>
+                              <div className="product-thumb">
+                                {data?.Images[0]?.ImageName ? (
+                                  <>
+                                    <img
+                                      src={`https://api.indianjewelcast.com/${data?.Images[0]?.ImageName}`}
+                                      alt={`https://api.indianjewelcast.com/${data?.Images[0]?.ImageName}`}
+                                      className="w-100"
+                                    />
+                                  </>
+                                ) : (
+                                  <>
+                                    <img
+                                      src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930"
+                                      alt=""
+                                      className="w-100"
+                                    />
+                                  </>
+                                )}
+                              </div>
+                              <div className="product-info">
+                                <label>
+                                  ₹{data?.MRP?.toLocaleString("en-US")}
+                                </label>
+                              </div>
+                            </Link>
                           </div>
-                          <div className="product-info">
-                            <label>₹{data?.MRP?.toLocaleString("en-US")}</label>
-                          </div>
-                        </Link>
+                        </div>
+                      );
+                    })}
+                  </>
+                ) : (
+                  <>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="not-products">
+                          <p>No products available.</p>
+                        </div>
                       </div>
                     </div>
-                  );
-                })}
-              </>
-            )}
-          </div>
+                  </>
+                )}
+              </div>
+            </>
+          )}
         </div>
       </section>
     </>

@@ -374,7 +374,7 @@ const Navbar = () => {
                   </Link>
                 </li>
 
-                <li className="nav-item">
+                {/* <li className="nav-item">
                   <div onClick={DispatchLink} ref={DispatchRef}>
                     <div
                       className={`dispatch-dropdown ${
@@ -388,12 +388,7 @@ const Navbar = () => {
                             GOLD
                           </Link>
                         </li>
-                        <li>
-                          <Link to="/ready-to-dispatch">
-                            <AiFillGold />
-                            SILVER
-                          </Link>
-                        </li>
+                        <li></li>
                       </ul>
                     </div>
 
@@ -407,9 +402,25 @@ const Navbar = () => {
                         cursor: "pointer",
                       }}
                     >
-                      Ready To Dispatch
+                      <Link to="/ready-to-dispatch">
+                        <AiFillGold />
+                        Ready To Dispatch
+                      </Link>
                     </span>
                   </div>
+                </li> */}
+
+                <li className="nav-item">
+                  <Link
+                    className={
+                      currentRoute === "/ready-to-dispatch" ? "nav-link active" : "nav-link"
+                    }
+                    aria-current="page"
+                    to="/ready-to-dispatch"
+                    onClick={handleNavClick}
+                  >
+                    Ready To Dispatch
+                  </Link>
                 </li>
 
                 <li className="nav-item">
