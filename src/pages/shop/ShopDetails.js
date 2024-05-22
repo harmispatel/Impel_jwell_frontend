@@ -21,6 +21,7 @@ import { CartSystem } from "../../context/CartContext";
 import { Accordion } from "react-bootstrap";
 import Loader from "../../components/common/Loader";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
+import profileService from "../../services/Home";
 
 const ShopDetails = () => {
   const location = useLocation();
@@ -37,6 +38,7 @@ const ShopDetails = () => {
   const Phone = localStorage.getItem("phone");
   const [relatedProduct, setRelatedProduct] = useState([]);
   const [img, setImg] = useState();
+  const [allPrices, setAllPrices] = useState([]);
   const [productImages, setProduuctImages] = useState([]);
   const [ogImages, setOgImages] = useState([]);
   const [productQuantity, setProductQuantity] = useState(1);
@@ -106,11 +108,23 @@ const ShopDetails = () => {
       });
   };
 
+  const SiteSetting = async () => {
+    await profileService
+      .SiteSetting()
+      .then((res) => {
+        setAllPrices(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   useEffect(() => {
     productData();
     Relatedproduct();
     GetUserCartList();
     GetUserWishList();
+    SiteSetting();
   }, []);
 
   const addToUserWishList = async (product) => {
@@ -240,7 +254,8 @@ const ShopDetails = () => {
     less_gems_stone: product?.less_gems_stone?.toFixed(2),
     less_cz_stone: product?.less_cz_stone?.toFixed(2),
     net_weight_18k: product?.net_weight_18k?.toFixed(2),
-    price_18k: product?.price_18k?.toFixed(2),
+    // price_18k: product?.price_18k?.toFixed(2),
+    // price_18k: allPrices?.gold_price_24k_1gm_mbo?.toFixed(2),
     cz_stone_price: product?.cz_stone_price?.toFixed(2),
     gemstone_price: product?.gemstone_price?.toFixed(2),
     making_charge: product?.making_charge?.toFixed(2),
@@ -512,7 +527,7 @@ const ShopDetails = () => {
                               <Accordion className="accordian">
                                 <Accordion.Item eventKey="3" className="my-2">
                                   <Accordion.Header onClick={toggleAccordion}>
-                                    Approximate -Estimate
+                                    Approximate - Estimate
                                   </Accordion.Header>
                                   <Accordion.Body className="p-0">
                                     <div>
@@ -706,7 +721,14 @@ const ShopDetails = () => {
                                                     <th>Metal value</th>
                                                     <td>
                                                       ₹
-                                                      {productdetail?.price_18k}
+                                                      {/* {productdetail?.price_18k} */}
+                                                      {(
+                                                        (allPrices?.gold_price_24k_1gm_mbo ||
+                                                          0) *
+                                                        0.76 *
+                                                        (productdetail?.net_weight_18k ||
+                                                          0)
+                                                      ).toFixed(2)}
                                                     </td>
                                                   </tr>
                                                   {/* <tr>

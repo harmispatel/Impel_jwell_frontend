@@ -29,10 +29,12 @@ const Cart = () => {
   const [Items, setItems] = useState([]);
   const [dealer_code, setDealer_Code] = useState("");
   const [code, setCode] = useState("");
+  const [gst, setGst] = useState("");
   const [isFormEmpty, setIsFormEmpty] = useState("");
   const [show, setShow] = useState(false);
   const [removingItemId, setRemovingItemId] = useState(null);
   const [spinner, setSpinner] = useState(false);
+  const [total, setTotal] = useState(0);
 
   // user profile functionlity
   const [showEdit, setShowEdit] = useState(false);
@@ -42,7 +44,7 @@ const Cart = () => {
   const [shipping_city, setShipping_city] = useState();
   const [isChecked, setIsChecked] = useState(false);
   const [valid, setValid] = useState("");
-  const [payment_link, setPayment_Link] = useState('')
+  const [payment_link, setPayment_Link] = useState("");
   const [message, setMessage] = useState(false);
   const [userData, setUserData] = useState({
     name: "",
@@ -61,7 +63,7 @@ const Cart = () => {
     states: "",
     address_same_as_company: "",
   });
-  
+
   const [error, setError] = useState({
     nameErr: "",
     emailErr: "",
@@ -193,6 +195,17 @@ const Cart = () => {
     }
   };
 
+  const SubGST = () => {
+    let subGst = 0;
+    Items.forEach((data) => {
+      const Pricekey = "total_price_" + data.gold_type;
+      const price = parseFloat(data[Pricekey]);
+      subGst += price;
+    });
+    const gstAmount = subGst * 0.03;
+    return gstAmount;
+  };
+
   const SubTotal = () => {
     let subTotal = 0;
     Items.forEach((data) => {
@@ -213,9 +226,10 @@ const Cart = () => {
       const totalCharge = czStoneCharge + gemstoneCharge + makingCharge;
       subCharge += totalCharge;
     });
-
     return subCharge;
   };
+
+  // console.log("SubTotal", SubTotal() + SubCharge());
 
   const goldColor = {
     yellow_gold: "Yellow Gold",
@@ -481,6 +495,14 @@ const Cart = () => {
     setDealer_Code(e.target.value);
   };
 
+  const calculateTotal = () => {
+    const subTotal = SubTotal();
+    const subCharge = SubCharge();
+    const newTotal = subTotal + subCharge;
+
+    setTotal(newTotal); // update total state
+  };
+
   const removeCoupon = () => {
     toast.success("Coupon has been removed");
     setDealer_Code("");
@@ -488,6 +510,8 @@ const Cart = () => {
     setShow(false);
     localStorage.removeItem("savedDiscount");
     localStorage.removeItem("message");
+    setCode({ discount_type: "", discount_value: 0 });
+    calculateTotal();
   };
 
   useEffect(() => {
@@ -559,7 +583,6 @@ const Cart = () => {
   };
 
   const Orderplacing = () => {
-
     setSpinner(true);
     const totalPrice = code.discount_value
       ? code.discount_type === "percentage"
@@ -575,7 +598,6 @@ const Cart = () => {
         setShowEdit(true);
         setSpinner(false);
       } else if (totalPrice < 200000) {
-        
         UserService.Placeorder({
           user_id: user_id,
           dealer_code: code?.dealer_code,
@@ -606,7 +628,6 @@ const Cart = () => {
           })
           .catch((error) => console.log(error));
       } else {
-        
         UserService.Placeorder({
           user_id: user_id,
           dealer_code: code?.dealer_code,
@@ -643,6 +664,10 @@ const Cart = () => {
       setSpinner(false);
     }
   };
+
+  useEffect(() => {
+    calculateTotal();
+  }, [Items, code]);
 
   const removeCouping = <Tooltip id="tooltip">Remove Coupon</Tooltip>;
 
@@ -804,19 +829,13 @@ const Cart = () => {
                       )}
                       <div className="card shadow-0 border">
                         <div className="card-body">
-                          {/* <div className="d-flex justify-content-between">
-                            <p className="mb-2">Metal value :</p>
-                            <p className="mb-2 fw-bold">
-                              ₹{SubTotal()?.toLocaleString("en-US")}
-                            </p>
-                          </div>
                           <div className="d-flex justify-content-between">
-                            <p className="mb-2">Charges :</p>
+                            <p className="mb-2">GST (3%)</p>
                             <p className="mb-2 fw-bold">
-                              ₹{SubCharge()?.toLocaleString("en-US")}
+                              ₹{SubGST()?.toLocaleString("en-US")}
                             </p>
                           </div>
-                          {show && (
+                          {/* {show && (
                             <div className="d-flex justify-content-between">
                               <p className="mb-2 text-success">
                                 Dealer discount ({code.dealer_code})
@@ -837,33 +856,39 @@ const Cart = () => {
                                   : `- ₹${code.discount_value}`}
                               </p>
                             </div>
-                          )}
+                          )} */}
                           <hr />
+
+                          {/* Total price :*/}
                           <div className="d-flex justify-content-between">
                             <p className="mb-2">Total price :</p>
                             <p className="mb-2 fw-bold">
-                              {code.discount_value ? (
+                              {code?.discount_value ? (
                                 <>
                                   ₹
-                                  {(code.discount_type === "percentage"
+                                  {(code?.discount_type === "percentage"
                                     ? SubTotal() +
-                                      SubCharge() -
-                                      (SubCharge() * code.discount_value) / 100
+                                      SubCharge() +
+                                      SubGST() -
+                                      (SubCharge() * code?.discount_value) / 100
                                     : SubTotal() +
-                                      SubCharge() -
-                                      code.discount_value
+                                      SubCharge() +
+                                      SubGST() -
+                                      code?.discount_value
                                   )?.toLocaleString("en-US")}
                                 </>
                               ) : (
                                 <>
                                   ₹
-                                  {(SubTotal() + SubCharge()).toLocaleString(
-                                    "en-US"
-                                  )}
+                                  {(
+                                    SubTotal() +
+                                    SubCharge() +
+                                    SubGST()
+                                  ).toLocaleString("en-US")}
                                 </>
                               )}
                             </p>
-                          </div> */}
+                          </div>
 
                           {message && (
                             <div className="message-box">

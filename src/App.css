@@ -2923,6 +2923,7 @@ input[type="file"] {
   padding: 10px;
   border: 1px solid #ccc;
   position: relative;
+  border-radius: 5px;
   animation: fadeInUp 0.5s ease-out;
 }
 
