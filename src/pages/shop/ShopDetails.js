@@ -32,7 +32,7 @@ const ShopDetails = () => {
   const { dispatch: addtocartDispatch } = useContext(CartSystem);
 
   const { id } = useParams();
-  const [product, setProduct] = useState();
+  const [product, setProduct] = useState([]);
   const data = { categoryId: product?.category_id?.id };
   const Dealer = localStorage.getItem("email");
   const Phone = localStorage.getItem("phone");
@@ -228,32 +228,32 @@ const ShopDetails = () => {
 
   const productdetail = {
     // details for 22k gold
-    gross_weight_22k: product?.gross_weight_22k?.toFixed(2),
+    gross_weight_22k: product?.gross_weight_22k?.toFixed(3),
     less_gems_stone: product?.less_gems_stone?.toFixed(2),
     less_cz_stone: product?.less_cz_stone?.toFixed(2),
-    net_weight_22k: product?.net_weight_22k?.toFixed(2),
-    price_22k: product?.price_22k?.toFixed(2),
+    net_weight_22k: product?.net_weight_22k?.toFixed(3),
+    // price_22k: product?.price_22k?.toFixed(2),
     cz_stone_price: product?.cz_stone_price?.toFixed(2),
     gemstone_price: product?.gemstone_price?.toFixed(2),
     making_charge: product?.making_charge?.toFixed(2),
     total_price_22k: product?.total_price_22k?.toLocaleString("en-US"),
 
     // details for 20k gold
-    gross_weight_20k: product?.gross_weight_20k?.toFixed(2),
+    gross_weight_20k: product?.gross_weight_20k?.toFixed(3),
     less_gems_stone: product?.less_gems_stone?.toFixed(2),
     less_cz_stone: product?.less_cz_stone?.toFixed(2),
-    net_weight_20k: product?.net_weight_20k?.toFixed(2),
-    price_20k: product?.price_20k?.toFixed(2),
+    net_weight_20k: product?.net_weight_20k?.toFixed(3),
+    // price_20k: product?.price_20k?.toFixed(2),
     cz_stone_price: product?.cz_stone_price?.toFixed(2),
     gemstone_price: product?.gemstone_price?.toFixed(2),
     making_charge: product?.making_charge?.toFixed(2),
     total_price_20k: product?.total_price_20k?.toLocaleString("en-US"),
 
-    // details for 18k gold
-    gross_weight_18k: product?.gross_weight_18k?.toFixed(2),
+    // details for 18k gold`
+    gross_weight_18k: product?.gross_weight_18k?.toFixed(3),
     less_gems_stone: product?.less_gems_stone?.toFixed(2),
     less_cz_stone: product?.less_cz_stone?.toFixed(2),
-    net_weight_18k: product?.net_weight_18k?.toFixed(2),
+    net_weight_18k: product?.net_weight_18k?.toFixed(3),
     // price_18k: product?.price_18k?.toFixed(2),
     // price_18k: allPrices?.gold_price_24k_1gm_mbo?.toFixed(2),
     cz_stone_price: product?.cz_stone_price?.toFixed(2),
@@ -262,11 +262,11 @@ const ShopDetails = () => {
     total_price_18k: product?.total_price_18k?.toLocaleString("en-US"),
 
     // details for 14k gold
-    gross_weight_14k: product?.gross_weight_14k?.toFixed(2),
+    gross_weight_14k: product?.gross_weight_14k?.toFixed(3),
     less_gems_stone: product?.less_gems_stone?.toFixed(2),
     less_cz_stone: product?.less_cz_stone?.toFixed(2),
-    net_weight_14k: product?.net_weight_14k?.toFixed(2),
-    price_14k: product?.price_14k?.toFixed(2),
+    net_weight_14k: product?.net_weight_14k?.toFixed(3),
+    // price_14k: product?.price_14k?.toFixed(2),
     cz_stone_price: product?.cz_stone_price?.toFixed(2),
     gemstone_price: product?.gemstone_price?.toFixed(2),
     making_charge: product?.making_charge?.toFixed(2),
@@ -277,6 +277,94 @@ const ShopDetails = () => {
     e.preventDefault();
     localStorage.setItem("redirectPath", location.pathname);
     navigate("/login");
+  };
+
+  const metal_value_22k = (
+    allPrices?.gold_price_24k_1gm_mbo *
+    0.76 *
+    productdetail?.net_weight_22k
+  ).toFixed(0);
+
+  const metal_value_20k = (
+    allPrices?.gold_price_24k_1gm_mbo *
+    0.76 *
+    productdetail?.net_weight_20k
+  ).toFixed(0);
+
+  const metal_value_18k = (
+    allPrices?.gold_price_24k_1gm_mbo *
+    0.76 *
+    productdetail?.net_weight_18k
+  ).toFixed(0);
+
+  const metal_value_14k = (
+    allPrices?.gold_price_24k_1gm_mbo *
+    0.76 *
+    productdetail?.net_weight_14k
+  ).toFixed(0);
+
+  const making_charge_22k = (
+    allPrices?.gold_price_24k_1gm_mbo &&
+    product?.percentage &&
+    productdetail?.gross_weight_22k
+      ? ((allPrices.gold_price_24k_1gm_mbo * product.percentage) / 100) *
+        productdetail.gross_weight_22k
+      : 0
+  ).toFixed(0);
+
+  const making_charge_20k = (
+    allPrices?.gold_price_24k_1gm_mbo &&
+    product?.percentage &&
+    productdetail?.gross_weight_20k
+      ? ((allPrices.gold_price_24k_1gm_mbo * product.percentage) / 100) *
+        productdetail.gross_weight_20k
+      : 0
+  ).toFixed(0);
+
+  const making_charge_18k = (
+    allPrices?.gold_price_24k_1gm_mbo &&
+    product?.percentage &&
+    productdetail?.gross_weight_18k
+      ? ((allPrices.gold_price_24k_1gm_mbo * product.percentage) / 100) *
+        productdetail.gross_weight_18k
+      : 0
+  ).toFixed(0);
+
+  const making_charge_14k = (
+    allPrices?.gold_price_24k_1gm_mbo &&
+    product?.percentage &&
+    productdetail?.gross_weight_14k
+      ? ((allPrices.gold_price_24k_1gm_mbo * product.percentage) / 100) *
+        productdetail.gross_weight_14k
+      : 0
+  ).toFixed(0);
+
+  const making_charge_discount_22k = () => {
+    const discountedMakingCharge =
+      making_charge_22k -
+      (making_charge_22k * product?.sales_wastage_discount) / 100;
+    return discountedMakingCharge;
+  };
+
+  const making_charge_discount_20k = () => {
+    const discountedMakingCharge =
+      making_charge_20k -
+      (making_charge_20k * product?.sales_wastage_discount) / 100;
+    return discountedMakingCharge;
+  };
+
+  const making_charge_discount_18k = () => {
+    const discountedMakingCharge =
+      making_charge_18k -
+      (making_charge_18k * product?.sales_wastage_discount) / 100;
+    return discountedMakingCharge;
+  };
+
+  const making_charge_discount_14k = () => {
+    const discountedMakingCharge =
+      making_charge_14k -
+      (making_charge_14k * product?.sales_wastage_discount) / 100;
+    return discountedMakingCharge;
   };
 
   return (
@@ -572,8 +660,10 @@ const ShopDetails = () => {
                                                   <tr>
                                                     <th>Metal value</th>
                                                     <td>
-                                                      ₹
-                                                      {productdetail?.price_22k}
+                                                      {metal_value_22k?.replace(
+                                                        /\B(?=(\d{3})+(?!\d))/g,
+                                                        ","
+                                                      )}
                                                     </td>
                                                   </tr>
                                                   {/* <tr>
@@ -592,18 +682,52 @@ const ShopDetails = () => {
                                                     <th>Making charge</th>
                                                     <td>
                                                       ₹
-                                                      {
-                                                        productdetail?.making_charge
-                                                      }
+                                                      {product?.sales_wastage >
+                                                        0 &&
+                                                      product?.sales_wastage_discount >
+                                                        0 ? (
+                                                        <>
+                                                          <del>
+                                                            {making_charge_22k.toLocaleString(
+                                                              "en-IN"
+                                                            )}
+                                                          </del>
+                                                          &nbsp; (
+                                                          {
+                                                            product?.sales_wastage_discount
+                                                          }
+                                                          % Off) &nbsp; ₹
+                                                          {making_charge_discount_22k()
+                                                            .toFixed()
+                                                            .replace(
+                                                              /\B(?=(\d{3})+(?!\d))/g,
+                                                              ","
+                                                            )}
+                                                        </>
+                                                      ) : (
+                                                        <>
+                                                          {making_charge_22k.toLocaleString(
+                                                            "en-IN"
+                                                          )}
+                                                        </>
+                                                      )}
                                                     </td>
                                                   </tr>
                                                   <tr>
                                                     <th>Total Amount</th>
                                                     <td>
                                                       ₹
-                                                      {
-                                                        productdetail?.total_price_22k
-                                                      }
+                                                      {(
+                                                        making_charge_discount_22k() +
+                                                        parseFloat(
+                                                          metal_value_22k
+                                                        )
+                                                      )
+                                                        .toFixed()
+                                                        .replace(
+                                                          /\B(?=(\d{3})+(?!\d))/g,
+                                                          ","
+                                                        )}
                                                       (Approx.)
                                                     </td>
                                                   </tr>
@@ -646,8 +770,10 @@ const ShopDetails = () => {
                                                   <tr>
                                                     <th>Metal value</th>
                                                     <td>
-                                                      ₹
-                                                      {productdetail?.price_20k}
+                                                      {metal_value_20k?.replace(
+                                                        /\B(?=(\d{3})+(?!\d))/g,
+                                                        ","
+                                                      )}
                                                     </td>
                                                   </tr>
                                                   {/* <tr>
@@ -666,18 +792,52 @@ const ShopDetails = () => {
                                                     <th>Making charge</th>
                                                     <td>
                                                       ₹
-                                                      {
-                                                        productdetail?.making_charge
-                                                      }
+                                                      {product?.sales_wastage >
+                                                        0 &&
+                                                      product?.sales_wastage_discount >
+                                                        0 ? (
+                                                        <>
+                                                          <del>
+                                                            {making_charge_20k.toLocaleString(
+                                                              "en-IN"
+                                                            )}
+                                                          </del>
+                                                          &nbsp; (
+                                                          {
+                                                            product?.sales_wastage_discount
+                                                          }
+                                                          % Off) &nbsp; ₹
+                                                          {making_charge_discount_20k()
+                                                            .toFixed()
+                                                            .replace(
+                                                              /\B(?=(\d{3})+(?!\d))/g,
+                                                              ","
+                                                            )}
+                                                        </>
+                                                      ) : (
+                                                        <>
+                                                          {making_charge_20k.toLocaleString(
+                                                            "en-IN"
+                                                          )}
+                                                        </>
+                                                      )}
                                                     </td>
                                                   </tr>
                                                   <tr>
                                                     <th>Total Amount</th>
                                                     <td>
                                                       ₹
-                                                      {
-                                                        productdetail?.total_price_20k
-                                                      }
+                                                      {(
+                                                        making_charge_discount_20k() +
+                                                        parseFloat(
+                                                          metal_value_20k
+                                                        )
+                                                      )
+                                                        .toFixed()
+                                                        .replace(
+                                                          /\B(?=(\d{3})+(?!\d))/g,
+                                                          ","
+                                                        )}
                                                       (Approx.)
                                                     </td>
                                                   </tr>
@@ -721,14 +881,10 @@ const ShopDetails = () => {
                                                     <th>Metal value</th>
                                                     <td>
                                                       ₹
-                                                      {/* {productdetail?.price_18k} */}
-                                                      {(
-                                                        (allPrices?.gold_price_24k_1gm_mbo ||
-                                                          0) *
-                                                        0.76 *
-                                                        (productdetail?.net_weight_18k ||
-                                                          0)
-                                                      ).toFixed(2)}
+                                                      {metal_value_18k?.replace(
+                                                        /\B(?=(\d{3})+(?!\d))/g,
+                                                        ","
+                                                      )}
                                                     </td>
                                                   </tr>
                                                   {/* <tr>
@@ -747,18 +903,53 @@ const ShopDetails = () => {
                                                     <th>Making charge</th>
                                                     <td>
                                                       ₹
-                                                      {
-                                                        productdetail?.making_charge
-                                                      }
+                                                      {product?.sales_wastage >
+                                                        0 &&
+                                                      product?.sales_wastage_discount >
+                                                        0 ? (
+                                                        <>
+                                                          <del>
+                                                            {making_charge_18k.toLocaleString(
+                                                              "en-IN"
+                                                            )}
+                                                          </del>
+                                                          &nbsp; (
+                                                          {
+                                                            product?.sales_wastage_discount
+                                                          }
+                                                          % Off) &nbsp; ₹
+                                                          {making_charge_discount_18k()
+                                                            .toFixed()
+                                                            .replace(
+                                                              /\B(?=(\d{3})+(?!\d))/g,
+                                                              ","
+                                                            )}
+                                                        </>
+                                                      ) : (
+                                                        <>
+                                                          {making_charge_18k.toLocaleString(
+                                                            "en-IN"
+                                                          )}
+                                                        </>
+                                                      )}
                                                     </td>
                                                   </tr>
+
                                                   <tr>
                                                     <th>Total Amount</th>
                                                     <td>
                                                       ₹
-                                                      {
-                                                        productdetail?.total_price_18k
-                                                      }
+                                                      {(
+                                                        making_charge_discount_18k() +
+                                                        parseFloat(
+                                                          metal_value_18k
+                                                        )
+                                                      )
+                                                        .toFixed()
+                                                        .replace(
+                                                          /\B(?=(\d{3})+(?!\d))/g,
+                                                          ","
+                                                        )}
                                                       (Approx.)
                                                     </td>
                                                   </tr>
@@ -801,8 +992,10 @@ const ShopDetails = () => {
                                                   <tr>
                                                     <th>Metal value</th>
                                                     <td>
-                                                      ₹
-                                                      {productdetail?.price_14k}
+                                                      {metal_value_14k?.replace(
+                                                        /\B(?=(\d{3})+(?!\d))/g,
+                                                        ","
+                                                      )}
                                                     </td>
                                                   </tr>
                                                   {/* <tr>
@@ -821,18 +1014,52 @@ const ShopDetails = () => {
                                                     <th>Making charge</th>
                                                     <td>
                                                       ₹
-                                                      {
-                                                        productdetail?.making_charge
-                                                      }
+                                                      {product?.sales_wastage >
+                                                        0 &&
+                                                      product?.sales_wastage_discount >
+                                                        0 ? (
+                                                        <>
+                                                          <del>
+                                                            {making_charge_14k.toLocaleString(
+                                                              "en-IN"
+                                                            )}
+                                                          </del>
+                                                          &nbsp; (
+                                                          {
+                                                            product?.sales_wastage_discount
+                                                          }
+                                                          % Off) &nbsp; ₹
+                                                          {making_charge_discount_14k()
+                                                            .toFixed()
+                                                            .replace(
+                                                              /\B(?=(\d{3})+(?!\d))/g,
+                                                              ","
+                                                            )}
+                                                        </>
+                                                      ) : (
+                                                        <>
+                                                          {making_charge_14k.toLocaleString(
+                                                            "en-IN"
+                                                          )}
+                                                        </>
+                                                      )}
                                                     </td>
                                                   </tr>
                                                   <tr>
                                                     <th>Total Amount</th>
                                                     <td>
                                                       ₹
-                                                      {
-                                                        productdetail?.total_price_14k
-                                                      }
+                                                      {(
+                                                        making_charge_discount_14k() +
+                                                        parseFloat(
+                                                          metal_value_14k
+                                                        )
+                                                      )
+                                                        .toFixed()
+                                                        .replace(
+                                                          /\B(?=(\d{3})+(?!\d))/g,
+                                                          ","
+                                                        )}
                                                       (Approx.)
                                                     </td>
                                                   </tr>
@@ -875,7 +1102,16 @@ const ShopDetails = () => {
                                           <tr>
                                             <th>Total Amount</th>
                                             <td>
-                                              ₹{productdetail?.total_price_18k}
+                                              ₹{" "}
+                                              {(
+                                                making_charge_discount_18k() +
+                                                parseFloat(metal_value_18k)
+                                              )
+                                                .toFixed()
+                                                .replace(
+                                                  /\B(?=(\d{3})+(?!\d))/g,
+                                                  ","
+                                                )}
                                               (Approx.)
                                             </td>
                                           </tr>
