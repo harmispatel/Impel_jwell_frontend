@@ -74,7 +74,7 @@ const Topseller = () => {
                                   <div className="product-info">
                                     <label>
                                       ₹
-                                      {data?.total_price_18k?.toLocaleString(
+                                      {data?.total_amount_18k?.toLocaleString(
                                         "en-US"
                                       )}
                                     </label>

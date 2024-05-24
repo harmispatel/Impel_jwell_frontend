@@ -198,7 +198,7 @@ const Cart = () => {
   const SubGST = () => {
     let subGst = 0;
     Items.forEach((data) => {
-      const Pricekey = "total_price_" + data.gold_type;
+      const Pricekey = "total_amount_" + data.gold_type;
       const price = parseFloat(data[Pricekey]);
       subGst += price;
     });
@@ -209,7 +209,7 @@ const Cart = () => {
   const SubTotal = () => {
     let subTotal = 0;
     Items.forEach((data) => {
-      const Pricekey = "metal_price_" + data.gold_type;
+      const Pricekey = "metal_value_" + data.gold_type;
       const price = parseFloat(data[Pricekey]);
       subTotal += price;
     });
@@ -221,15 +221,24 @@ const Cart = () => {
     Items.forEach((data) => {
       const czStoneCharge = parseFloat(data.cz_stone_charge) || 0;
       const gemstoneCharge = parseFloat(data.gemstone_charge) || 0;
-      const makingCharge = parseFloat(data.making_charge) || 0;
+      let finalmakingCharge = 0;
 
-      const totalCharge = czStoneCharge + gemstoneCharge + makingCharge;
+      let making_charge = data["making_charge_" + data.gold_type];
+
+      let making_charge_discount =
+        data["making_charge_discount_" + data.gold_type];
+
+      if (making_charge_discount > 0) {
+        finalmakingCharge = making_charge_discount;
+      } else {
+        finalmakingCharge = making_charge;
+      }
+
+      const totalCharge = czStoneCharge + gemstoneCharge + finalmakingCharge;
       subCharge += totalCharge;
     });
     return subCharge;
   };
-
-  // console.log("SubTotal", SubTotal() + SubCharge());
 
   const goldColor = {
     yellow_gold: "Yellow Gold",
@@ -665,6 +674,18 @@ const Cart = () => {
     }
   };
 
+  let overAllAmount = SubTotal() + SubCharge() + SubGST();
+
+  if (code?.discount_value) {
+    if (code?.discount_type === "percentage") {
+      overAllAmount =
+        overAllAmount - (SubCharge() * code?.discount_value) / 100;
+    } else {
+      overAllAmount = overAllAmount - code?.discount_value;
+    }
+  }
+  const advanceAmount = ((overAllAmount * 20) / 100).toFixed();
+
   useEffect(() => {
     calculateTotal();
   }, [Items, code]);
@@ -832,7 +853,7 @@ const Cart = () => {
                           <div className="d-flex justify-content-between">
                             <p className="mb-2">GST (3%)</p>
                             <p className="mb-2 fw-bold">
-                              ₹{SubGST()?.toLocaleString("en-US")}
+                              ₹{SubGST()?.toFixed()?.toLocaleString("en-US")}
                             </p>
                           </div>
                           {/* {show && (
@@ -867,25 +888,14 @@ const Cart = () => {
                                 <>
                                   ₹
                                   {(code?.discount_type === "percentage"
-                                    ? SubTotal() +
-                                      SubCharge() +
-                                      SubGST() -
-                                      (SubCharge() * code?.discount_value) / 100
-                                    : SubTotal() +
-                                      SubCharge() +
-                                      SubGST() -
-                                      code?.discount_value
-                                  )?.toLocaleString("en-US")}
+                                    ? overAllAmount
+                                    : overAllAmount
+                                  )
+                                    ?.toFixed()
+                                    .toLocaleString("en-US")}
                                 </>
                               ) : (
-                                <>
-                                  ₹
-                                  {(
-                                    SubTotal() +
-                                    SubCharge() +
-                                    SubGST()
-                                  ).toLocaleString("en-US")}
-                                </>
+                                <>₹{overAllAmount?.toFixed()}</>
                               )}
                             </p>
                           </div>
@@ -926,7 +936,8 @@ const Cart = () => {
                           <div className="pt-2">
                             <button
                               className="btn btn-success w-100 shadow-0 mb-2"
-                              disabled={spinner}
+                              // disabled={spinner}
+                              disabled
                               onClick={(e) => {
                                 Orderplacing(e);
                                 handleProfileData(profileData);
@@ -942,7 +953,7 @@ const Cart = () => {
                                   className="animate_spin me-2"
                                 />
                               )}
-                              Proceed to Payment
+                              Proceed to Payment (₹{advanceAmount})
                             </button>
                             <button
                               type="button"

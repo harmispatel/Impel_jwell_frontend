@@ -186,7 +186,7 @@ const CategoriesItems = () => {
 
                                     <label>
                                       ₹
-                                      {data?.total_price_18k?.toLocaleString("en-US")}
+                                      {data?.total_amount_18k?.toLocaleString("en-US")}
                                     </label>
                                   </div>
                                 </Link>
