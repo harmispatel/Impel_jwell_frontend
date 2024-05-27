@@ -14,9 +14,8 @@ import { CartSystem } from "../../context/CartContext";
 import { ProfileSystem } from "../../context/ProfileContext";
 import Loader from "../../components/common/Loader";
 
-const Cart = () => {
+const Cart = ({ active }) => {
   const navigate = useNavigate();
-  const location = useLocation();
   const { dispatch: profilename, state: namestate } = useContext(ProfileSystem);
   const { dispatch: removefromcartDispatch } = useContext(CartSystem);
   const { dispatch: resetcartcount } = useContext(CartSystem);
@@ -204,6 +203,16 @@ const Cart = () => {
     });
     const gstAmount = subGst * 0.03;
     return gstAmount;
+  };
+
+  const SubAmount = () => {
+    let subTotal = 0;
+    Items.forEach((data) => {
+      const Pricekey = "total_amount_" + data.gold_type;
+      const price = parseFloat(data[Pricekey]);
+      subTotal += price;
+    });
+    return subTotal;
   };
 
   const SubTotal = () => {
@@ -484,21 +493,21 @@ const Cart = () => {
       });
   };
 
-  const handlePayment = () => {
-    UserService.Payment({
-      user_id: user_id,
-      total: code?.discount_value
-        ? code.discount_type === "percentage"
-          ? SubTotal() + SubCharge() - (SubCharge() * code.discount_value) / 100
-          : SubTotal() + SubCharge() - code.discount_value
-        : SubTotal() + SubCharge(),
-    })
-      .then((res) => {
-        // setPayment_Link(res.data)
-        window.location.href = res.data;
-      })
-      .catch((err) => console.log(err));
-  };
+  // const handlePayment = () => {
+  //   UserService.Payment({
+  //     user_id: user_id,
+  //     total: code?.discount_value
+  //       ? code.discount_type === "percentage"
+  //         ? SubTotal() + SubCharge() - (SubCharge() * code.discount_value) / 100
+  //         : SubTotal() + SubCharge() - code.discount_value
+  //       : SubTotal() + SubCharge(),
+  //   })
+  //     .then((res) => {
+  //       // setPayment_Link(res.data)
+  //       window.location.href = res.data;
+  //     })
+  //     .catch((err) => console.log(err));
+  // };
 
   const handleDealercode = (e) => {
     setDealer_Code(e.target.value);
@@ -591,22 +600,19 @@ const Cart = () => {
       });
   };
 
+  // Orderplacing Function Here
+
   const Orderplacing = () => {
     setSpinner(true);
-    const totalPrice = code.discount_value
-      ? code.discount_type === "percentage"
-        ? SubTotal() + SubCharge() - (SubCharge() * code.discount_value) / 100
-        : SubTotal() + SubCharge() - code.discount_value
-      : SubTotal() + SubCharge();
 
     if (Verification == 2) {
-      if (totalPrice >= 200000 && !userData?.pan_no) {
+      if (overAllAmount >= 200000 && !userData?.pan_no) {
         setValid(
           "Pancard is required for your total amount is more than 2 lakh or above"
         );
         setShowEdit(true);
         setSpinner(false);
-      } else if (totalPrice < 200000) {
+      } else if (overAllAmount < 200000) {
         UserService.Placeorder({
           user_id: user_id,
           dealer_code: code?.dealer_code,
@@ -692,6 +698,89 @@ const Cart = () => {
 
   const removeCouping = <Tooltip id="tooltip">Remove Coupon</Tooltip>;
 
+  // Advance Payment Click Function Here advanceAmount
+
+  const handlePhonepeClick = () => {
+    if (Verification == 2) {
+      if (overAllAmount >= 200000 && !userData?.pan_no) {
+        setValid(
+          "Pancard is required for your total amount is more than 2 lakh or above"
+        );
+        setShowEdit(true);
+        setSpinner(false);
+      } else if (overAllAmount < 200000) {
+        UserService.PayByPhonepeAPI({
+          user_id: user_id,
+          total_amount: advanceAmount,
+        })
+          .then((res) => {
+            if (res?.success === false) {
+              setSpinner(false);
+              toast.error(res?.message);
+            } else {
+              setSpinner(false);
+              window.location.href =
+                res?.data?.instrumentResponse?.redirectInfo?.url;
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+            setSpinner(false);
+          });
+      } else {
+        UserService.PayByPhonepeAPI({
+          user_id: user_id,
+          total_amount: advanceAmount,
+        })
+          .then((res) => {
+            if (res?.success === false) {
+              setSpinner(false);
+              toast.error(res?.message);
+            } else {
+              setSpinner(false);
+              window.location.href =
+                res?.data?.instrumentResponse?.redirectInfo?.url;
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+            setSpinner(false);
+          });
+      }
+    } else {
+      setShowEdit(true);
+      setSpinner(false);
+    }
+  };
+
+  useEffect(() => {
+    if (active) {
+      UserService.Placeorder({
+        user_id: user_id,
+        dealer_code: code?.dealer_code,
+        dealer_discount_type: code?.discount_type,
+        dealer_discount_value: code?.discount_value,
+        cart_items: Items?.map((item) => item?.id),
+        sub_total: SubTotal(),
+        charges: SubCharge(),
+        total: overAllAmount,
+      })
+        .then((res) => {
+          if (res.status === true) {
+            localStorage.removeItem("savedDiscount");
+            localStorage.removeItem("cartItems");
+            localStorage.removeItem("message");
+            toast.success(res.message);
+            setTimeout(() => {
+              navigate(`/order-details/${res.data}`);
+            }, 1000);
+            resetcartcount({ type: "RESET_CART" });
+          }
+        })
+        .catch((error) => console.log(error));
+    }
+  }, []);
+
   return (
     <>
       <Helmet>
@@ -761,6 +850,24 @@ const Cart = () => {
                                             {data.gold_type}
                                           </b>
                                         </span>
+                                      </div>
+
+                                      <div className="mt-3">
+                                        {data.gold_type == "22k" && (
+                                          <h6>₹{data?.total_amount_22k}</h6>
+                                        )}
+
+                                        {data.gold_type == "20k" && (
+                                          <h6>₹{data?.total_amount_20k}</h6>
+                                        )}
+
+                                        {data.gold_type == "18k" && (
+                                          <h6>₹{data?.total_amount_18k}</h6>
+                                        )}
+
+                                        {data.gold_type == "14k" && (
+                                          <h6>₹{data?.total_amount_14k}</h6>
+                                        )}
                                       </div>
                                     </div>
 
@@ -850,6 +957,12 @@ const Cart = () => {
                       )}
                       <div className="card shadow-0 border">
                         <div className="card-body">
+                          {/* Sub Total :*/}
+                          <div className="d-flex justify-content-between">
+                            <p className="mb-2">Sub total :</p>
+                            <p className="mb-2 fw-bold">₹{SubAmount()}</p>
+                          </div>
+                          <hr />
                           <div className="d-flex justify-content-between">
                             <p className="mb-2">GST (3%)</p>
                             <p className="mb-2 fw-bold">
@@ -936,10 +1049,9 @@ const Cart = () => {
                           <div className="pt-2">
                             <button
                               className="btn btn-success w-100 shadow-0 mb-2"
-                              // disabled={spinner}
-                              disabled
+                              disabled={spinner}
                               onClick={(e) => {
-                                Orderplacing(e);
+                                handlePhonepeClick();
                                 handleProfileData(profileData);
                               }}
                               // onClick={() => {
@@ -953,7 +1065,7 @@ const Cart = () => {
                                   className="animate_spin me-2"
                                 />
                               )}
-                              Proceed to Payment (₹{advanceAmount})
+                              Minimum Advance Payable Amount (₹{advanceAmount})
                             </button>
                             <button
                               type="button"

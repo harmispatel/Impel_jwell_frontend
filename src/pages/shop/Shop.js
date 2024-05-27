@@ -547,18 +547,17 @@ const Shop = () => {
           <div className="shopping_data">
             <div className="row">
               <div className="col-md-9 col-7">
-                <div className="search_bar">
-                  <input
-                    className="form-control"
-                    placeholder="Search by design code"
-                    onChange={(e) => searchbar(e)}
-                    type="search"
-                    isClearable={true}
-                  />
-                  {searchInput && searchInput.length >= 1 ? null : (
-                    <BsSearch className="search-icon cursor-pointer" />
-                  )}
-                </div>
+                <Select
+                  placeholder="Shop by category"
+                  isClearable={true}
+                  isSearchable={false}
+                  value={selectedCategory}
+                  options={categoryData.map((data) => ({
+                    value: data?.id,
+                    label: data?.name,
+                  }))}
+                  onChange={handleSelectCategory}
+                />
               </div>
               <div className="col-md-3 col-5">
                 <Select
@@ -574,17 +573,18 @@ const Shop = () => {
 
             <div className="row">
               <div className="col-md-3 col-12 mt-2 mt-md-2">
-                <Select
-                  placeholder="Shop by category"
-                  isClearable={true}
-                  isSearchable={false}
-                  value={selectedCategory}
-                  options={categoryData.map((data) => ({
-                    value: data?.id,
-                    label: data?.name,
-                  }))}
-                  onChange={handleSelectCategory}
-                />
+                <div className="search_bar">
+                  <input
+                    className="form-control"
+                    placeholder="Search by design code"
+                    onChange={(e) => searchbar(e)}
+                    type="search"
+                    isClearable={true}
+                  />
+                  {searchInput && searchInput.length >= 1 ? null : (
+                    <BsSearch className="search-icon cursor-pointer" />
+                  )}
+                </div>
               </div>
               <div className="col-md-3 col-6 mt-2 mt-md-2">
                 <Select

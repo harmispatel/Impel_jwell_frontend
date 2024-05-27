@@ -28,13 +28,14 @@ import Resetpassword from "./pages/auth/Resetpassword";
 import CartProvider from "./context/CartContext";
 import WishlistProvider from "./context/WishListContext";
 import ProfileProvider from "./context/ProfileContext";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import CustomPage from "./components/CustomPage";
 import WomansClub from "./components/common/WomansClub";
 import Topseller from "./pages/shop/Topseller";
 import LatestDesign from "./pages/shop/LatestDesign";
 import ReadytoDispatch from "./pages/shop/ReadytoDispatch";
 import ReadyDetails from "./pages/shop/ReadyDetails";
+import CommonOrderPlace from "./components/common/CommonOrderPlace";
 
 function App() {
   const location = useLocation();
@@ -42,6 +43,8 @@ function App() {
   const userType = localStorage.getItem("user_type");
   const popupshow = localStorage.getItem("user_type");
   const helmetContext = {};
+
+  const [active, setActive] = useState(false);
 
   // const shouldShowPopup =
   //   !["/login", "/Dealer_login", "/forget-password"].some((path) =>
@@ -74,6 +77,12 @@ function App() {
       return <Layout />;
     }
   }
+
+  useEffect(() => {
+    if (location.pathname == "/processing-order") {
+      setActive(true);
+    }
+  }, [location]);
 
   return (
     <>
@@ -127,7 +136,7 @@ function App() {
                       path="cart"
                       element={
                         <ProtectedRoute>
-                          <Cart />
+                          <Cart active={active} />
                         </ProtectedRoute>
                       }
                     />
@@ -140,6 +149,10 @@ function App() {
                       }
                     />
                     <Route path="my_orders" element={<MyOrders />} />
+                    <Route
+                      path="processing-order"
+                      element={<CommonOrderPlace />}
+                    />
                     <Route
                       path="order-details/:id"
                       element={<OrderDetails />}

@@ -12,7 +12,7 @@ import { FaLongArrowAltLeft } from "react-icons/fa";
 import { FaCartShopping } from "react-icons/fa6";
 import { AiFillDelete } from "react-icons/ai";
 import { CartSystem } from "../../context/CartContext";
-import Loader from "../../components/common/Loader"
+import Loader from "../../components/common/Loader";
 
 const WishList = () => {
   const phone = localStorage.getItem("phone");
@@ -150,11 +150,16 @@ const WishList = () => {
                           return (
                             <div className="col-md-6 col-lg-3">
                               <div className="card">
-                                <img
-                                  className=""
-                                  src={product?.image}
-                                  alt={product?.name}
-                                />
+                                <Link
+                                  to={`/shopdetails/${product?.id}`}
+                                  className="product_data"
+                                >
+                                  <img
+                                    className=""
+                                    src={product?.image}
+                                    alt={product?.name}
+                                  />
+                                </Link>
                                 <div className="card-body text-center">
                                   <div className="cvp">
                                     <h5 className="card-title fw-bolder">
@@ -167,6 +172,24 @@ const WishList = () => {
                                     </h5>
                                     <p>{goldColor[product.gold_color]}</p>
                                     <p>{product.gold_type}</p>
+                                    <div className="mt-3">
+                                      {product.gold_type == "22k" && (
+                                        <h6>₹{product?.total_amount_22k}</h6>
+                                      )}
+
+                                      {product.gold_type == "20k" && (
+                                        <h6>₹{product?.total_amount_20k}</h6>
+                                      )}
+
+                                      {product.gold_type == "18k" && (
+                                        <h6>₹{product?.total_amount_18k}</h6>
+                                      )}
+
+                                      {product.gold_type == "14k" && (
+                                        <h6>₹{product?.total_amount_14k}</h6>
+                                      )}
+                                    </div>
+
                                     <div className="wishlist_item_btn">
                                       <button
                                         className="btn btn-danger remove"

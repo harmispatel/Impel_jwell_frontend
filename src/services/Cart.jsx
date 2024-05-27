@@ -90,6 +90,16 @@ const UserOrders = async (data) => {
   return d;
 };
 
+const PayByPhonepeAPI = async (data) => {
+  let d = await call({
+    path: "phonepe/payment/getLink",
+    method: "POST",
+    enctype: "multipart/form-data",
+    data,
+  });
+  return d;
+};
+
 const exportObject = {
   AddtoCart,
   RemovetoCart,
@@ -98,6 +108,7 @@ const exportObject = {
   DealerCode,
   Updatecart,
   Placeorder,
+  PayByPhonepeAPI,
   UserOrders,
   Orderdetails,
 };
