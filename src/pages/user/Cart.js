@@ -766,7 +766,7 @@ const Cart = ({ active }) => {
         charges: SubCharge(),
         gst_amount: SubGST().toFixed(),
         total: overAllAmount.toFixed(),
-        transaction_id: "MGF7750590068188103",
+        transaction_id: location.search ? location.search : "",
       })
         .then((res) => {
           if (res.status === true) {
