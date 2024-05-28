@@ -8,7 +8,6 @@ const CommonOrderPlace = () => {
 
   useEffect(() => {
     if (location.pathname == "/processing-order") {
-      console.log(location.pathname);
     }
   }, [location]);
 

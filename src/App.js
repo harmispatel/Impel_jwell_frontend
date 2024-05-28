@@ -78,12 +78,6 @@ function App() {
     }
   }
 
-  useEffect(() => {
-    if (location.pathname == "/processing-order") {
-      setActive(true);
-    }
-  }, [location]);
-
   return (
     <>
       <WishlistProvider>
@@ -149,10 +143,11 @@ function App() {
                       }
                     />
                     <Route path="my_orders" element={<MyOrders />} />
-                    <Route
+                    {/* <Route
                       path="processing-order"
                       element={<CommonOrderPlace />}
-                    />
+                    /> */}
+                    <Route path="/processing-order" element={<Cart />} />
                     <Route
                       path="order-details/:id"
                       element={<OrderDetails />}
