@@ -755,7 +755,10 @@ const Cart = ({ active }) => {
   };
 
   useEffect(() => {
+    console.log("location.search", location.search);
     if (location.pathname == "/processing-order") {
+      const queryParams = new URLSearchParams(location.search);
+      const transaction_id = queryParams.get("transaction_id") || "";
       UserService.Placeorder({
         user_id: user_id,
         dealer_code: code?.dealer_code,
@@ -766,7 +769,7 @@ const Cart = ({ active }) => {
         charges: SubCharge(),
         gst_amount: SubGST().toFixed(),
         total: overAllAmount.toFixed(),
-        transaction_id: location.search ? location.search : "",
+        transaction_id: transaction_id ? transaction_id : "",
       })
         .then((res) => {
           if (res.status === true) {
@@ -784,6 +787,14 @@ const Cart = ({ active }) => {
         .catch((error) => console.log(error));
     }
   }, [location, Items]);
+
+  // const queryParams = new URLSearchParams(location.search);
+  // const transaction_id = queryParams.get("transaction_id") || "";
+
+  // console.log("location", transaction_id);
+
+  const numberFormat = (value) =>
+    new Intl.NumberFormat("en-IN")?.format(Math?.round(value));
 
   return (
     <>
@@ -865,19 +876,39 @@ const Cart = ({ active }) => {
 
                                           <div className="mt-3">
                                             {data.gold_type == "22k" && (
-                                              <h6>₹{data?.total_amount_22k}</h6>
+                                              <h6>
+                                                ₹
+                                                {numberFormat(
+                                                  data?.total_amount_22k
+                                                )}
+                                              </h6>
                                             )}
 
                                             {data.gold_type == "20k" && (
-                                              <h6>₹{data?.total_amount_20k}</h6>
+                                              <h6>
+                                                ₹
+                                                {numberFormat(
+                                                  data?.total_amount_20k
+                                                )}
+                                              </h6>
                                             )}
 
                                             {data.gold_type == "18k" && (
-                                              <h6>₹{data?.total_amount_18k}</h6>
+                                              <h6>
+                                                ₹
+                                                {numberFormat(
+                                                  data?.total_amount_18k
+                                                )}
+                                              </h6>
                                             )}
 
                                             {data.gold_type == "14k" && (
-                                              <h6>₹{data?.total_amount_14k}</h6>
+                                              <h6>
+                                                ₹
+                                                {numberFormat(
+                                                  data?.total_amount_14k
+                                                )}
+                                              </h6>
                                             )}
                                           </div>
                                         </div>
@@ -971,14 +1002,15 @@ const Cart = ({ active }) => {
                               {/* Sub Total :*/}
                               <div className="d-flex justify-content-between">
                                 <p className="mb-2">Sub total :</p>
-                                <p className="mb-2 fw-bold">₹{SubAmount()}</p>
+                                <p className="mb-2 fw-bold">
+                                  ₹{numberFormat(SubAmount())}
+                                </p>
                               </div>
                               <hr />
                               <div className="d-flex justify-content-between">
                                 <p className="mb-2">GST (3%)</p>
                                 <p className="mb-2 fw-bold">
-                                  ₹
-                                  {SubGST()?.toFixed()?.toLocaleString("en-US")}
+                                  ₹{numberFormat(SubGST()?.toFixed())}
                                 </p>
                               </div>
                               {/* {show && (
@@ -1012,15 +1044,12 @@ const Cart = ({ active }) => {
                                   {code?.discount_value ? (
                                     <>
                                       ₹
-                                      {(code?.discount_type === "percentage"
-                                        ? overAllAmount
-                                        : overAllAmount
-                                      )
-                                        ?.toFixed()
-                                        .toLocaleString("en-US")}
+                                      {code?.discount_type === "percentage"
+                                        ? numberFormat(overAllAmount)
+                                        : numberFormat(overAllAmount)}
                                     </>
                                   ) : (
-                                    <>₹{overAllAmount?.toFixed()}</>
+                                    <>₹{numberFormat(overAllAmount)}</>
                                   )}
                                 </p>
                               </div>
@@ -1049,9 +1078,9 @@ const Cart = ({ active }) => {
                                     discount&nbsp;
                                     <b>
                                       {code.discount_type === "percentage" ? (
-                                        <>(-{code.discount_value}%)</>
+                                        <>({code.discount_value}%)</>
                                       ) : (
-                                        <>(-{code.discount_value}₹)</>
+                                        <>({code.discount_value}₹)</>
                                       )}
                                     </b>
                                     &nbsp;off on making charges.
@@ -1079,7 +1108,7 @@ const Cart = ({ active }) => {
                                     />
                                   )}
                                   Minimum Advance Payable Amount (₹
-                                  {advanceAmount})
+                                  {numberFormat(advanceAmount)})
                                 </button>
                                 <button
                                   type="button"

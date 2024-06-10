@@ -234,7 +234,6 @@ const ShopDetails = () => {
     net_weight_22k: product?.net_weight_22k?.toFixed(3),
     cz_stone_price: product?.cz_stone_price?.toFixed(2),
     gemstone_price: product?.gemstone_price?.toFixed(2),
-    
 
     // details for 20k gold
     gross_weight_20k: product?.gross_weight_20k?.toFixed(3),
@@ -266,6 +265,9 @@ const ShopDetails = () => {
     localStorage.setItem("redirectPath", location.pathname);
     navigate("/login");
   };
+
+  const numberFormat = (value) =>
+    new Intl.NumberFormat("en-IN")?.format(Math?.round(value));
 
   return (
     <>
@@ -560,7 +562,10 @@ const ShopDetails = () => {
                                                   <tr>
                                                     <th>Metal value</th>
                                                     <td>
-                                                      {product?.metal_value_22k}
+                                                      ₹
+                                                      {numberFormat(
+                                                        product?.metal_value_22k
+                                                      )}
                                                     </td>
                                                   </tr>
                                                   {/* <tr>
@@ -584,8 +589,8 @@ const ShopDetails = () => {
                                                       0 ? (
                                                         <>
                                                           <del>
-                                                            {product?.making_charge_22k?.toLocaleString(
-                                                              "en-IN"
+                                                            {numberFormat(
+                                                              product?.making_charge_22k
                                                             )}
                                                           </del>
                                                           &nbsp; (
@@ -593,14 +598,14 @@ const ShopDetails = () => {
                                                             product?.sales_westage_discount
                                                           }
                                                           % Off) &nbsp; ₹
-                                                          {
+                                                          {numberFormat(
                                                             product?.making_charge_discount_22k
-                                                          }
+                                                          )}
                                                         </>
                                                       ) : (
                                                         <>
-                                                          {product?.making_charge_22k.toLocaleString(
-                                                            "en-IN"
+                                                          {numberFormat(
+                                                            product?.making_charge_22k
                                                           )}
                                                         </>
                                                       )}
@@ -609,10 +614,10 @@ const ShopDetails = () => {
                                                   <tr>
                                                     <th>Total Amount</th>
                                                     <td>
-                                                      ₹{" "}
-                                                      {
+                                                      ₹
+                                                      {numberFormat(
                                                         product?.total_amount_22k
-                                                      }
+                                                      )}
                                                       (Approx.)
                                                     </td>
                                                   </tr>
@@ -655,7 +660,10 @@ const ShopDetails = () => {
                                                   <tr>
                                                     <th>Metal value</th>
                                                     <td>
-                                                      {product?.metal_value_20k}
+                                                      ₹
+                                                      {numberFormat(
+                                                        product?.metal_value_20k
+                                                      )}
                                                     </td>
                                                   </tr>
                                                   {/* <tr>
@@ -678,8 +686,8 @@ const ShopDetails = () => {
                                                       0 ? (
                                                         <>
                                                           <del>
-                                                            {product?.making_charge_20k?.toLocaleString(
-                                                              "en-IN"
+                                                            {numberFormat(
+                                                              product?.making_charge_20k
                                                             )}
                                                           </del>
                                                           &nbsp; (
@@ -687,14 +695,14 @@ const ShopDetails = () => {
                                                             product?.sales_westage_discount
                                                           }
                                                           % Off) &nbsp; ₹
-                                                          {
+                                                          {numberFormat(
                                                             product?.making_charge_discount_20k
-                                                          }
+                                                          )}
                                                         </>
                                                       ) : (
                                                         <>
-                                                          {product?.making_charge_20k.toLocaleString(
-                                                            "en-IN"
+                                                          {numberFormat(
+                                                            product?.making_charge_20k
                                                           )}
                                                         </>
                                                       )}
@@ -703,10 +711,10 @@ const ShopDetails = () => {
                                                   <tr>
                                                     <th>Total Amount</th>
                                                     <td>
-                                                      ₹{" "}
-                                                      {
+                                                      ₹
+                                                      {numberFormat(
                                                         product?.total_amount_20k
-                                                      }
+                                                      )}
                                                       (Approx.)
                                                     </td>
                                                   </tr>
@@ -750,7 +758,9 @@ const ShopDetails = () => {
                                                     <th>Metal value</th>
                                                     <td>
                                                       ₹
-                                                      {product?.metal_value_18k}
+                                                      {numberFormat(
+                                                        product?.metal_value_18k
+                                                      )}
                                                     </td>
                                                   </tr>
                                                   {/* <tr>
@@ -773,8 +783,8 @@ const ShopDetails = () => {
                                                       0 ? (
                                                         <>
                                                           <del>
-                                                            {product?.making_charge_18k?.toLocaleString(
-                                                              "en-IN"
+                                                            {numberFormat(
+                                                              product?.making_charge_18k
                                                             )}
                                                           </del>
                                                           &nbsp; (
@@ -782,14 +792,14 @@ const ShopDetails = () => {
                                                             product?.sales_westage_discount
                                                           }
                                                           % Off) &nbsp; ₹
-                                                          {
+                                                          {numberFormat(
                                                             product?.making_charge_discount_18k
-                                                          }
+                                                          )}
                                                         </>
                                                       ) : (
                                                         <>
-                                                          {product?.making_charge_18k.toLocaleString(
-                                                            "en-IN"
+                                                          {numberFormat(
+                                                            product?.making_charge_18k
                                                           )}
                                                         </>
                                                       )}
@@ -799,10 +809,10 @@ const ShopDetails = () => {
                                                   <tr>
                                                     <th>Total Amount</th>
                                                     <td>
-                                                      ₹{" "}
-                                                      {
+                                                      ₹
+                                                      {numberFormat(
                                                         product?.total_amount_18k
-                                                      }
+                                                      )}
                                                       (Approx.)
                                                     </td>
                                                   </tr>
@@ -845,7 +855,9 @@ const ShopDetails = () => {
                                                   <tr>
                                                     <th>Metal value</th>
                                                     <td>
-                                                      {product?.metal_value_14k}
+                                                      {numberFormat(
+                                                        product?.metal_value_14k
+                                                      )}
                                                     </td>
                                                   </tr>
                                                   {/* <tr>
@@ -868,23 +880,23 @@ const ShopDetails = () => {
                                                       0 ? (
                                                         <>
                                                           <del>
-                                                            {product?.making_charge_14k?.toLocaleString(
-                                                              "en-IN"
+                                                            {numberFormat(
+                                                              product?.making_charge_14k
                                                             )}
                                                           </del>
                                                           &nbsp; (
-                                                          {
+                                                          {numberFormat(
                                                             product?.sales_westage_discount
-                                                          }
+                                                          )}
                                                           % Off) &nbsp; ₹
-                                                          {
+                                                          {numberFormat(
                                                             product?.making_charge_discount_14k
-                                                          }
+                                                          )}
                                                         </>
                                                       ) : (
                                                         <>
-                                                          {product?.making_charge_14k.toLocaleString(
-                                                            "en-IN"
+                                                          {numberFormat(
+                                                            product?.making_charge_14k
                                                           )}
                                                         </>
                                                       )}
@@ -893,10 +905,10 @@ const ShopDetails = () => {
                                                   <tr>
                                                     <th>Total Amount</th>
                                                     <td>
-                                                      ₹{" "}
-                                                      {
+                                                      ₹
+                                                      {numberFormat(
                                                         product?.total_amount_14k
-                                                      }
+                                                      )}
                                                       (Approx.)
                                                     </td>
                                                   </tr>
@@ -921,7 +933,10 @@ const ShopDetails = () => {
                                           <tr>
                                             <th>Total Amount</th>
                                             <td>
-                                              ₹ {product?.total_amount_22k}
+                                              ₹{" "}
+                                              {numberFormat(
+                                                product?.total_amount_22k
+                                              )}
                                               (Approx.)
                                             </td>
                                           </tr>
@@ -930,7 +945,10 @@ const ShopDetails = () => {
                                           <tr>
                                             <th>Total Amount</th>
                                             <td>
-                                              ₹ {product?.total_amount_20k}
+                                              ₹{" "}
+                                              {numberFormat(
+                                                product?.total_amount_20k
+                                              )}
                                               (Approx.)
                                             </td>
                                           </tr>
@@ -939,7 +957,10 @@ const ShopDetails = () => {
                                           <tr>
                                             <th>Total Amount</th>
                                             <td>
-                                              ₹ {product?.total_amount_18k}
+                                              ₹{" "}
+                                              {numberFormat(
+                                                product?.total_amount_18k
+                                              )}
                                               (Approx.)
                                             </td>
                                           </tr>
@@ -948,7 +969,10 @@ const ShopDetails = () => {
                                           <tr>
                                             <th>Total Amount</th>
                                             <td>
-                                              ₹ {product?.total_amount_14k}
+                                              ₹{" "}
+                                              {numberFormat(
+                                                product?.total_amount_14k
+                                              )}
                                               (Approx.)
                                             </td>
                                           </tr>

@@ -279,7 +279,7 @@ const Orders = () => {
                                           <span>{datas?.gold_color}</span>
                                         </td>
                                         <td>
-                                          <span> {datas?.net_weight} g.</span>
+                                          <span> {datas?.net_weight} g. (Approx.)</span>
                                         </td>
                                         {/* <td>
                                         <span>

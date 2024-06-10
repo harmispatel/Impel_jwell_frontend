@@ -146,6 +146,10 @@ const ReadytoDispatch = () => {
     }
   }, [itemGroups, styles, sizes, tagNoChange]);
 
+
+  const numberFormat = (value) =>
+    new Intl.NumberFormat("en-IN")?.format(Math?.round(value));
+
   return (
     <>
       <section className="ready-to-dispatch">
@@ -255,7 +259,7 @@ const ReadytoDispatch = () => {
                               </div>
                               <div className="product-info">
                                 <label>
-                                  ₹{data?.MRP?.toLocaleString("en-US")}
+                                  ₹{numberFormat(data?.MRP)}
                                 </label>
                               </div>
                             </Link>

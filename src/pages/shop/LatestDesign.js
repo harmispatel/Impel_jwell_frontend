@@ -26,6 +26,9 @@ const LatestDesign = () => {
     LatestDesigns();
   }, []);
 
+  const numberFormat = (value) =>
+    new Intl.NumberFormat("en-IN")?.format(Math?.round(value));
+
   return (
     <>
       <Helmet>
@@ -74,9 +77,7 @@ const LatestDesign = () => {
                                   <div className="product-info">
                                     <label>
                                       ₹
-                                      {data?.total_amount_18k?.toLocaleString(
-                                        "en-US"
-                                      )}
+                                      {numberFormat(data?.total_amount_18k)}
                                     </label>
                                   </div>
                                 </Link>

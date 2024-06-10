@@ -115,6 +115,10 @@ const CategoriesItems = () => {
     }
   };
 
+
+  const numberFormat = (value) =>
+    new Intl.NumberFormat("en-IN")?.format(Math?.round(value));
+
   return (
     <section className="categories">
       <div className="container">
@@ -186,7 +190,7 @@ const CategoriesItems = () => {
 
                                     <label>
                                       ₹
-                                      {data?.total_amount_18k?.toLocaleString("en-US")}
+                                      {numberFormat(data?.total_amount_18k)}
                                     </label>
                                   </div>
                                 </Link>

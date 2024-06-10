@@ -103,6 +103,7 @@ const Shop = () => {
   const handleSelectChange = (selectedSort) => {
     setIsLoading(true);
     const queryParams = new URLSearchParams(location.search);
+    console.log("queryParams",location.search)
 
     if (selectedSort) {
       queryParams.set("sort_by", selectedSort.value);
@@ -537,6 +538,10 @@ const Shop = () => {
     <Tooltip id="tooltip">Login to add wishlist products</Tooltip>
   );
 
+
+  const numberFormat = (value) =>
+    new Intl.NumberFormat("en-IN")?.format(Math?.round(value));
+
   return (
     <>
       <Helmet>
@@ -698,9 +703,7 @@ const Shop = () => {
 
                                         <label>
                                           ₹
-                                          {data?.total_amount_18k?.toLocaleString(
-                                            "en-US"
-                                          )}
+                                          {numberFormat(data?.total_amount_18k)}
                                         </label>
                                       </div>
                                     </Link>

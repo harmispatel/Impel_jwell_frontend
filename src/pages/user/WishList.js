@@ -125,6 +125,9 @@ const WishList = () => {
     white_gold: "White Gold",
   };
 
+  const numberFormat = (value) =>
+    new Intl.NumberFormat("en-IN")?.format(Math?.round(value));
+
   return (
     <>
       <Helmet>
@@ -174,19 +177,39 @@ const WishList = () => {
                                     <p>{product.gold_type}</p>
                                     <div className="mt-3">
                                       {product.gold_type == "22k" && (
-                                        <h6>₹{product?.total_amount_22k}</h6>
+                                        <h6>
+                                        ₹{numberFormat(
+                                          product?.total_amount_22k
+                                        )}
+                                      </h6>
                                       )}
 
                                       {product.gold_type == "20k" && (
-                                        <h6>₹{product?.total_amount_20k}</h6>
+                                        <h6>
+                                        ₹{numberFormat(
+                                          product?.total_amount_20k
+                                        )}
+                                      </h6>
                                       )}
 
-                                      {product.gold_type == "18k" && (
+                                      {/* {product.gold_type == "18k" && (
                                         <h6>₹{product?.total_amount_18k}</h6>
+                                      )} */}
+
+                                      {product.gold_type == "18k" && (
+                                        <h6>
+                                          ₹{numberFormat(
+                                            product?.total_amount_18k
+                                          )}
+                                        </h6>
                                       )}
 
                                       {product.gold_type == "14k" && (
-                                        <h6>₹{product?.total_amount_14k}</h6>
+                                       <h6>
+                                       ₹{numberFormat(
+                                         product?.total_amount_14k
+                                       )}
+                                     </h6>
                                       )}
                                     </div>
 
