@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
-import loadinggif from "../../assets/video/impel-bird-unscreen.gif";
 import profileService from "../../services/Auth";
 import { ProfileSystem } from "../../context/ProfileContext";
 import Loader from "../../components/common/Loader"

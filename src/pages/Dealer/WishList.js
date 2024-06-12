@@ -8,7 +8,7 @@ import { FaLongArrowAltLeft } from "react-icons/fa";
 import DealerWishlist from "../../services/Dealer/Collection";
 import { Helmet } from "react-helmet-async";
 import { AiFillDelete } from "react-icons/ai";
-import Loader from "../../components/common/Loader"
+import Loader from "../../components/common/Loader";
 
 const DealerWishList = () => {
   const DealerEmail = localStorage.getItem("email");
@@ -51,7 +51,6 @@ const DealerWishList = () => {
   useEffect(() => {
     collectionCheck();
   }, []);
-  
 
   return (
     <>
@@ -63,7 +62,7 @@ const DealerWishList = () => {
           {isLoading ? (
             <div className="h-100 d-flex justify-content-center">
               <div className="animation-loading">
-                <Loader/>
+                <Loader />
               </div>
             </div>
           ) : (
@@ -120,39 +119,37 @@ const DealerWishList = () => {
                   </div>
                 </>
               ) : (
-                <div className="container">
-                  <div className="row justify-content-center">
-                    <div className="col-lg-8">
-                      <div className="card border shadow-sm p-4">
-                        <div className="text-center mb-4">
-                          <h2 className="card-title mb-0">My Selections</h2>
-                        </div>
-                        <div className="text-center my-4">
-                          <img
-                            src={emptycart}
-                            alt="Empty Cart Illustration"
-                            className="img-fluid mb-3"
-                            style={{ maxWidth: "200px" }}
-                          />
-                          <h5 className="text-muted mb-3">
-                            Oops! Your Selections is empty.
-                          </h5>
-                          <p className="text-muted">
-                            Explore our collection and add your favourite
-                            products in your Selections
-                          </p>
-                        </div>
+                <div className="row justify-content-center">
+                  <div className="col-lg-8">
+                    <div className="card border shadow-sm p-4">
+                      <div className="text-center mb-4">
+                        <h2 className="card-title mb-0">My Selections</h2>
+                      </div>
+                      <div className="text-center my-4">
+                        <img
+                          src={emptycart}
+                          alt="Empty Cart Illustration"
+                          className="img-fluid mb-3"
+                          style={{ maxWidth: "200px" }}
+                        />
+                        <h5 className="text-muted mb-3">
+                          Oops! Your Selections is empty.
+                        </h5>
+                        <p className="text-muted">
+                          Explore our collection and add your favourite products
+                          in your Selections
+                        </p>
+                      </div>
 
-                        <div className="text-center">
-                          <Link
-                            to="/shop"
-                            className="view_all_btn px-4 py-2"
-                            style={{ borderRadius: "8px" }}
-                          >
-                            <FaLongArrowAltLeft className="mr-2" /> &nbsp;Back
-                            to Shop
-                          </Link>
-                        </div>
+                      <div className="text-center">
+                        <Link
+                          to="/shop"
+                          className="view_all_btn px-4 py-2"
+                          style={{ borderRadius: "8px" }}
+                        >
+                          <FaLongArrowAltLeft className="mr-2" /> &nbsp;Back to
+                          Shop
+                        </Link>
                       </div>
                     </div>
                   </div>
