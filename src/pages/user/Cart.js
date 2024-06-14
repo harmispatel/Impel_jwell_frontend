@@ -755,7 +755,6 @@ const Cart = ({ active }) => {
   };
 
   useEffect(() => {
-    console.log("location.search", location.search);
     if (location.pathname == "/processing-order") {
       const queryParams = new URLSearchParams(location.search);
       const transaction_id = queryParams.get("transaction_id") || "";
