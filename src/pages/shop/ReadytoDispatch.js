@@ -85,7 +85,7 @@ const ReadytoDispatch = () => {
     profileService
       .GetProductsAPI({
         PageNo: 1,
-        PageSize: 100,
+        PageSize: 300,
         DeviceID: 0,
         SortBy: "",
         SearchText: tagNoChange || "",

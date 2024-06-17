@@ -990,7 +990,7 @@ const ShopDetails = () => {
                                 <>
                                   {cartItems &&
                                   cartItems?.find(
-                                    (item) => item.design_id === product?.id
+                                    (item) => item?.design_id === product?.id
                                   ) ? (
                                     <>
                                       <Link
