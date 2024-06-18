@@ -11,7 +11,7 @@ import { FaBars, FaStar, FaUser, FaUserAlt } from "react-icons/fa";
 import { BsHandbag, BsHeart } from "react-icons/bs";
 import { FaCartShopping } from "react-icons/fa6";
 import { IoLogOut } from "react-icons/io5";
-import { AiFillGold } from "react-icons/ai";
+import { HiMiniShoppingBag } from "react-icons/hi2";
 
 import Logo from "../assets/images/logo.png";
 import NOimage from "../assets/images/user-demo-image.png";
@@ -25,12 +25,18 @@ import { WishlistSystem } from "../context/WishListContext";
 import { CartSystem } from "../context/CartContext";
 import { ProfileSystem } from "../context/ProfileContext";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import { ReadyDesignCartSystem } from "../context/ReadyDesignCartContext";
 import axios from "axios";
+
+const api = process.env.REACT_APP_READY_API_KEY;
 
 const Navbar = () => {
   const navbarRef = useRef(null);
   const { cartItems } = useContext(CartSystem);
   const { state: cartstate } = useContext(CartSystem);
+
+  const { readyCartItems } = useContext(ReadyDesignCartSystem);
+  const { state: readycartstate } = useContext(ReadyDesignCartSystem);
 
   const { wishlistItems } = useContext(WishlistSystem);
   const { state: wishliststate } = useContext(WishlistSystem);
@@ -56,6 +62,8 @@ const Navbar = () => {
 
   const [userCartCounts, setUsererCartCounts] = useState();
   const [wishlistCount, setWishlistCount] = useState();
+
+  const [cartItemsQu, setCartItemsQu] = useState([]);
 
   const [dealerData, setDealerData] = useState([]);
 
@@ -106,6 +114,19 @@ const Navbar = () => {
     UserService.CartList({ phone: Phone })
       .then((res) => {
         setUsererCartCounts(res.data.total_quantity);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const GetUserCartList = async () => {
+    axios
+      .post(api + "ready/cart-list", {
+        phone: Phone,
+      })
+      .then((res) => {
+        setCartItemsQu(res.data.data.total_qty);
       })
       .catch((err) => {
         console.log(err);
@@ -199,6 +220,10 @@ const Navbar = () => {
 
   //   fetchData();
   // }, []);
+
+  useLayoutEffect(() => {
+    GetUserCartList();
+  }, [readyCartItems]);
 
   useLayoutEffect(() => {
     UserCartItems();
@@ -333,6 +358,7 @@ const Navbar = () => {
 
   const wishlistTip = <Tooltip id="tooltip">wishlist</Tooltip>;
   const cartTip = <Tooltip id="tooltip">cart</Tooltip>;
+  const readyCartTip = <Tooltip id="tooltip">Ready design cart</Tooltip>;
 
   return (
     <header
@@ -413,7 +439,9 @@ const Navbar = () => {
                 <li className="nav-item">
                   <Link
                     className={
-                      currentRoute === "/ready-to-dispatch" ? "nav-link active" : "nav-link"
+                      currentRoute === "/ready-to-dispatch"
+                        ? "nav-link active"
+                        : "nav-link"
                     }
                     aria-current="page"
                     to="/ready-to-dispatch"
@@ -653,6 +681,25 @@ const Navbar = () => {
                               {cartstate.cartItems > 0 && (
                                 <div className="cart_count">
                                   {cartstate.cartItems}
+                                </div>
+                              )}
+                            </Link>
+                          </OverlayTrigger>
+                        )}
+                      </li>
+                      <li>
+                        {Phone && (
+                          <OverlayTrigger
+                            placement="bottom"
+                            overlay={readyCartTip}
+                          >
+                            <Link className="icon" to="/ready-design-cart">
+                              <HiMiniShoppingBag
+                                style={{ fontSize: "23px", color: "black" }}
+                              />
+                              {readycartstate.readyCartItems > 0 && (
+                                <div className="cart_count">
+                                  {readycartstate.readyCartItems}
                                 </div>
                               )}
                             </Link>

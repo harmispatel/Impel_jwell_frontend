@@ -36,6 +36,8 @@ import LatestDesign from "./pages/shop/LatestDesign";
 import ReadytoDispatch from "./pages/shop/ReadytoDispatch";
 import ReadyDetails from "./pages/shop/ReadyDetails";
 import CommonOrderPlace from "./components/common/CommonOrderPlace";
+import ReadyDesignCart from "./pages/user/ReadyDesignCart";
+import ReadyDesignCartProvider from "./context/ReadyDesignCartContext";
 
 function App() {
   const location = useLocation();
@@ -83,111 +85,126 @@ function App() {
       <WishlistProvider>
         <ProfileProvider>
           <CartProvider>
-            <ScrollToTop />
-            {!location.pathname.startsWith("/login") &&
-              !location.pathname.startsWith("/forget-password") &&
-              !location.pathname.startsWith("/reset-password") &&
-              !location.pathname.startsWith("/Dealer_login") && <WomansClub />}
+            <ReadyDesignCartProvider>
+              <ScrollToTop />
+              {!location.pathname.startsWith("/login") &&
+                !location.pathname.startsWith("/forget-password") &&
+                !location.pathname.startsWith("/reset-password") &&
+                !location.pathname.startsWith("/Dealer_login") && (
+                  <WomansClub />
+                )}
 
-            <HelmetProvider context={helmetContext}>
-              {/* {shouldShowPopup && popupshow == null ? <Popup /> : <></>} */}
-              <Routes>
-                <>
-                  <Route path="/" element={renderLayout()}>
-                    {/* COMMON COMPONENT */}
-                    <Route index element={<Home />} />
-                    <Route path="shop" element={<Shop />} />
-                    <Route
-                      path="ready-to-dispatch"
-                      element={<ReadytoDispatch />}
-                    />
-                    <Route
-                      path="ready-to-dispatch/:id"
-                      element={<ReadyDetails />}
-                    />
+              <HelmetProvider context={helmetContext}>
+                {/* {shouldShowPopup && popupshow == null ? <Popup /> : <></>} */}
+                <Routes>
+                  <>
+                    <Route path="/" element={renderLayout()}>
+                      {/* COMMON COMPONENT */}
+                      <Route index element={<Home />} />
+                      <Route path="shop" element={<Shop />} />
+                      <Route
+                        path="ready-to-dispatch"
+                        element={<ReadytoDispatch />}
+                      />
+                      <Route
+                        path="ready-to-dispatch/:id"
+                        element={<ReadyDetails />}
+                      />
 
-                    <Route path=":id" element={<CustomPage />} />
+                      <Route path=":id" element={<CustomPage />} />
 
-                    <Route path="shopdetails/:id" element={<ShopDetails />} />
-                    <Route path="categories" element={<Categories />} />
-                    <Route
-                      path="categories/:id"
-                      element={<CategoriesItems />}
-                    />
-                    <Route path="top-selling-designs" element={<Topseller />} />
-                    <Route path="latest-designs" element={<LatestDesign />} />
+                      <Route path="shopdetails/:id" element={<ShopDetails />} />
+                      <Route path="categories" element={<Categories />} />
+                      <Route
+                        path="categories/:id"
+                        element={<CategoriesItems />}
+                      />
+                      <Route
+                        path="top-selling-designs"
+                        element={<Topseller />}
+                      />
+                      <Route path="latest-designs" element={<LatestDesign />} />
 
-                    {/* USER PROTECTED */}
-                    <Route
-                      path="wishlist"
-                      element={
-                        <ProtectedRoute>
-                          <WishList />
-                        </ProtectedRoute>
-                      }
-                    />
-                    <Route
-                      path="cart"
-                      element={
-                        <ProtectedRoute>
-                          <Cart active={active} />
-                        </ProtectedRoute>
-                      }
-                    />
-                    <Route
-                      path="profile"
-                      element={
-                        <ProtectedRoute>
-                          <Profile />
-                        </ProtectedRoute>
-                      }
-                    />
-                    <Route path="my_orders" element={<MyOrders />} />
-                    {/* <Route
+                      {/* USER PROTECTED */}
+                      <Route
+                        path="wishlist"
+                        element={
+                          <ProtectedRoute>
+                            <WishList />
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path="cart"
+                        element={
+                          <ProtectedRoute>
+                            <Cart active={active} />
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path="ready-design-cart"
+                        element={
+                          <ProtectedRoute>
+                            <ReadyDesignCart active={active} />
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path="profile"
+                        element={
+                          <ProtectedRoute>
+                            <Profile />
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route path="my_orders" element={<MyOrders />} />
+                      {/* <Route
                       path="processing-order"
                       element={<CommonOrderPlace />}
                     /> */}
-                    <Route path="/processing-order" element={<Cart />} />
-                    <Route
-                      path="order-details/:id"
-                      element={<OrderDetails />}
-                    />
+                      <Route path="/processing-order" element={<Cart />} />
+                      <Route
+                        path="order-details/:id"
+                        element={<OrderDetails />}
+                      />
 
-                    {/* DEALER PROTECTED */}
-                    <Route
-                      path="dealer_wishlist"
-                      element={
-                        <DealerProtectedRoute>
-                          <DealerWishList />
-                        </DealerProtectedRoute>
-                      }
-                    />
-                    <Route
-                      path="dealer_profile"
-                      element={
-                        <DealerProtectedRoute>
-                          <DealerProfile />
-                        </DealerProtectedRoute>
-                      }
-                    />
+                      {/* DEALER PROTECTED */}
+                      <Route
+                        path="dealer_wishlist"
+                        element={
+                          <DealerProtectedRoute>
+                            <DealerWishList />
+                          </DealerProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path="dealer_profile"
+                        element={
+                          <DealerProtectedRoute>
+                            <DealerProfile />
+                          </DealerProtectedRoute>
+                        }
+                      />
 
-                    {/* AUTH */}
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/Dealer_login" element={<DealerLogin />} />
-                    <Route
-                      path="/forget-password"
-                      element={<ForgetPassword />}
-                    />
-                    <Route
-                      path="/reset-password/:token"
-                      element={<Resetpassword />}
-                    />
-                  </Route>
-                </>
+                      {/* AUTH */}
+                      <Route path="/login" element={<Login />} />
+                      <Route path="/Dealer_login" element={<DealerLogin />} />
+                      <Route
+                        path="/forget-password"
+                        element={<ForgetPassword />}
+                      />
+                      <Route
+                        path="/reset-password/:token"
+                        element={<Resetpassword />}
+                      />
+                    </Route>
+                  </>
 
-                <Route path="*" element={<Errorpage />} />
-              </Routes>
-            </HelmetProvider>
+                  <Route path="*" element={<Errorpage />} />
+                </Routes>
+              </HelmetProvider>
+            </ReadyDesignCartProvider>
           </CartProvider>
         </ProfileProvider>
       </WishlistProvider>

@@ -1,17 +1,23 @@
-import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import BreadCrumb from "../../components/common/BreadCrumb";
 import Loader from "../../components/common/Loader";
 import axios from "axios";
 import { BsCartDash, BsHandbagFill } from "react-icons/bs";
 import toast from "react-hot-toast";
 import { CgSpinner } from "react-icons/cg";
+import { ReadyDesignCartSystem } from "../../context/ReadyDesignCartContext";
 
 const api = process.env.REACT_APP_READY_API_KEY;
 
 const ReadyDetails = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
   const phone = localStorage.getItem("phone");
   const { id } = useParams();
+
+  const { dispatch: addtocartDispatch } = useContext(ReadyDesignCartSystem);
+
   const [isLoading, setIsLoading] = useState(true);
   const [details, setDetails] = useState("");
   const [cartItems, setCartItems] = useState([]);
@@ -36,21 +42,22 @@ const ReadyDetails = () => {
 
   const GetUserCartList = async () => {
     axios
-      .post("http://192.168.1.177/admin_impel/api/ready/cart-list", {
+      .post(api + "ready/cart-list", {
         phone: phone,
       })
       .then((res) => {
-        setCartItems(res.data.carts);
+        setCartItems(res?.data?.data?.carts);
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (product) => {
+    const payload = { id: product?.TagNo };
     setSpinner(true);
     axios
-      .post("http://192.168.1.177/admin_impel/api/ready/cart-store", {
+      .post(api + "ready/cart-store", {
         phone: phone,
         tag_no: details?.TagNo,
         group_name: details?.GroupName,
@@ -60,11 +67,16 @@ const ReadyDetails = () => {
         gross_weight: details?.GrossWt,
         net_weight: details?.NetWt,
         quantity: 1,
+        barcode: details?.Barcode,
       })
       .then((res) => {
-        if (res.status === true) {
-          toast.success(res.message);
+        if (res?.data?.status === true) {
+          toast.success(res?.data?.message);
           GetUserCartList();
+          addtocartDispatch({
+            type: "ADD_TO_CART",
+            payload,
+          });
         }
       })
       .catch((err) => {
@@ -77,6 +89,12 @@ const ReadyDetails = () => {
 
   const numberFormat = (value) =>
     new Intl.NumberFormat("en-IN")?.format(Math?.round(value));
+
+  const UserLogin = (e) => {
+    e.preventDefault();
+    localStorage.setItem("redirectPath", location.pathname);
+    navigate("/login");
+  };
 
   return (
     <>
@@ -104,6 +122,11 @@ const ReadyDetails = () => {
                           <div id="imageMagnifyer">
                             <img
                               src={`https://api.indianjewelcast.com/TagImage/${details?.Barcode}.jpg`}
+                              onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.src =
+                                  "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg";
+                              }}
                               alt=""
                               className="w-100"
                             />
@@ -140,64 +163,66 @@ const ReadyDetails = () => {
                             {/* Price : <strong>₹1000</strong> */}
                           </h5>
                         </div>
-                        {/* <div className="button d-flex pt-2">
-                          <div className="add_cart align-items-center d-flex">
-                            <>
-                              <div>
-                                <button
-                                  className="btn btn-outline-dark"
-                                  onClick={() => handleAddToCart()}
-                                >
-                                  <BsHandbagFill
-                                    style={{
-                                      fontSize: "26px",
-                                      cursor: "pointer",
-                                    }}
-                                  />
-                                </button>
-                              </div>
-                            </>
-                          </div>
-                        </div> */}
                         <>
-                          {cartItems &&
-                          cartItems?.find(
-                            (item) => item?.tag_no === details?.TagNo
-                          ) ? (
+                          {phone ? (
                             <>
-                              <Link className="btn btn-outline-dark" to="/cart">
-                                <BsCartDash
-                                  style={{
-                                    fontSize: "26px",
-                                    cursor: "pointer",
-                                  }}
-                                />
-                              </Link>
-                            </>
-                          ) : (
-                            <>
-                              <div>
-                                <button
-                                  className="btn btn-outline-dark"
-                                  onClick={() => handleAddToCart()}
-                                  disabled={spinner}
-                                >
-                                  {spinner && (
-                                    <CgSpinner
-                                      size={20}
-                                      className="animate_spin"
-                                    />
-                                  )}
-                                  {!spinner && (
-                                    <BsHandbagFill
+                              {cartItems &&
+                              cartItems?.find(
+                                (item) => item?.tag_no === details?.TagNo
+                              ) ? (
+                                <>
+                                  <Link
+                                    className="btn btn-outline-dark"
+                                    to="/ready-design-cart"
+                                  >
+                                    <BsCartDash
                                       style={{
                                         fontSize: "26px",
                                         cursor: "pointer",
                                       }}
                                     />
-                                  )}
-                                </button>
-                              </div>
+                                  </Link>
+                                </>
+                              ) : (
+                                <>
+                                  <div>
+                                    <button
+                                      className="btn btn-outline-dark"
+                                      onClick={() => handleAddToCart(details)}
+                                      disabled={spinner}
+                                    >
+                                      {spinner && (
+                                        <CgSpinner
+                                          size={20}
+                                          className="animate_spin"
+                                        />
+                                      )}
+                                      {!spinner && (
+                                        <BsHandbagFill
+                                          style={{
+                                            fontSize: "26px",
+                                            cursor: "pointer",
+                                          }}
+                                        />
+                                      )}
+                                    </button>
+                                  </div>
+                                </>
+                              )}
+                            </>
+                          ) : (
+                            <>
+                              <button
+                                className="btn btn-outline-dark"
+                                onClick={(e) => UserLogin(e)}
+                              >
+                                <BsHandbagFill
+                                  style={{
+                                    fontSize: "26px",
+                                    cursor: "pointer",
+                                  }}
+                                />
+                              </button>
                             </>
                           )}
                         </>
