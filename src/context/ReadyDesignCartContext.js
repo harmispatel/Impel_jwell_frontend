@@ -1,5 +1,6 @@
 import React, { createContext, useEffect, useReducer } from "react";
 import axios from "axios";
+const api = process.env.REACT_APP_READY_API_KEY;
 
 export const ReadyDesignCartSystem = createContext();
 
@@ -71,10 +72,7 @@ const ReadyDesignCartProvider = ({ children }) => {
   const fetchCartData = async () => {
     try {
       if (Phone) {
-        const res = await axios.post(
-          "http://192.168.1.177/admin_impel/api/ready/cart-list",
-          { phone: Phone }
-        );
+        const res = await axios.post(api + "ready/cart-list", { phone: Phone });
         const cartData = res?.data?.data?.carts || [];
         dispatch({ type: "SET_CART", payload: { cart: cartData } });
       }

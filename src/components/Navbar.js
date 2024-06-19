@@ -729,6 +729,12 @@ const Navbar = () => {
                                 </Link>
                               </li>
                               <li>
+                                <Link to="my-ready-orders">
+                                  <FaCartShopping />
+                                  My Ready Orders
+                                </Link>
+                              </li>
+                              <li>
                                 <Link to="/" onClick={handleLogout}>
                                   <IoLogOut />
                                   Logout

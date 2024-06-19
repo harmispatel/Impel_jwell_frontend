@@ -13,6 +13,7 @@ import { Helmet } from "react-helmet-async";
 import { CartSystem } from "../../context/CartContext";
 import { ProfileSystem } from "../../context/ProfileContext";
 import Loader from "../../components/common/Loader";
+import ProfileModal from "./ProfileModal";
 
 const Cart = ({ active }) => {
   const navigate = useNavigate();
@@ -787,11 +788,6 @@ const Cart = ({ active }) => {
     }
   }, [location, Items]);
 
-  // const queryParams = new URLSearchParams(location.search);
-  // const transaction_id = queryParams.get("transaction_id") || "";
-
-  // console.log("location", transaction_id);
-
   const numberFormat = (value) =>
     new Intl.NumberFormat("en-IN")?.format(Math?.round(value));
 
@@ -808,149 +804,150 @@ const Cart = ({ active }) => {
       ) : (
         <>
           <section className="cart">
-            <div className="container">
-              {isLoading ? (
-                <>
-                  <div className="animation-loading">
-                    <Loader />
-                  </div>
-                </>
-              ) : (
-                <>
-                  {Items?.length ? (
-                    <>
-                      <div className="row">
-                        <div className="col-md-9">
-                          <div className="card border shadow-0">
-                            <div className="m-4">
-                              <h4 className="card-title mb-4">
-                                Your shopping cart
-                              </h4>
-                              <div className="row gy-3">
-                                <>
-                                  <div className="col-md-12">
-                                    <hr className="mt-0" />
-                                  </div>
-                                  {Items?.map((data, index) => {
-                                    const Pricekey =
-                                      "metal_price_" + data.gold_type;
-                                    const price = parseFloat(data[Pricekey]);
+            <div>
+              <div className="container">
+                {isLoading ? (
+                  <>
+                    <div className="animation-loading">
+                      <Loader />
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    {Items?.length ? (
+                      <>
+                        <div className="row">
+                          <div className="col-md-9">
+                            <div className="card border shadow-0">
+                              <div className="m-4">
+                                <h4 className="card-title mb-4">
+                                  Your shopping cart
+                                </h4>
+                                <div className="row gy-3">
+                                  <>
+                                    <div className="col-md-12">
+                                      <hr className="mt-0" />
+                                    </div>
+                                    {Items?.map((data, index) => {
+                                      const Pricekey =
+                                        "metal_price_" + data.gold_type;
+                                      const price = parseFloat(data[Pricekey]);
 
-                                    return (
-                                      <>
-                                        <div className="col-md-3" key={index}>
-                                          <div className="d-flex">
-                                            <Link
-                                              to={`/shopdetails/${data.design_id}`}
-                                              className="nav-link"
-                                            >
-                                              <img
-                                                src={data.image}
-                                                className="border rounded me-3 w-100 p-2"
-                                                alt=""
-                                              />
-                                            </Link>
-                                          </div>
-                                        </div>
-                                        <div className="col-md-4">
-                                          <div className="cart_product_name">
-                                            <Link
-                                              to={`/shopdetails/${data.design_id}`}
-                                              className="nav-link"
-                                            >
-                                              {data?.design_name}
-                                            </Link>
-                                          </div>
-
-                                          <div className="mt-md-2">
-                                            <span>
-                                              Gold Color : &nbsp;
-                                              <b>
-                                                {goldColor[data.gold_color]}{" "}
-                                                &nbsp;
-                                                {data.gold_type}
-                                              </b>
-                                            </span>
-                                          </div>
-
-                                          <div className="mt-3">
-                                            {data.gold_type == "22k" && (
-                                              <h6>
-                                                ₹
-                                                {numberFormat(
-                                                  data?.total_amount_22k
-                                                )}
-                                              </h6>
-                                            )}
-
-                                            {data.gold_type == "20k" && (
-                                              <h6>
-                                                ₹
-                                                {numberFormat(
-                                                  data?.total_amount_20k
-                                                )}
-                                              </h6>
-                                            )}
-
-                                            {data.gold_type == "18k" && (
-                                              <h6>
-                                                ₹
-                                                {numberFormat(
-                                                  data?.total_amount_18k
-                                                )}
-                                              </h6>
-                                            )}
-
-                                            {data.gold_type == "14k" && (
-                                              <h6>
-                                                ₹
-                                                {numberFormat(
-                                                  data?.total_amount_14k
-                                                )}
-                                              </h6>
-                                            )}
-                                          </div>
-                                        </div>
-
-                                        <div className="col-md-5">
-                                          <div className="text-md-end">
-                                            <Link
-                                              to="#"
-                                              className="btn btn-light border text-danger icon-hover-danger text-end"
-                                              onClick={() => Remove(data.id)}
-                                            >
-                                              {removingItemId === data.id && (
-                                                <CgSpinner
-                                                  size={20}
-                                                  className="animate_spin"
+                                      return (
+                                        <>
+                                          <div className="col-md-3" key={index}>
+                                            <div className="d-flex">
+                                              <Link
+                                                to={`/shopdetails/${data.design_id}`}
+                                                className="nav-link"
+                                              >
+                                                <img
+                                                  src={data.image}
+                                                  className="border rounded me-3 w-100 p-2"
+                                                  alt=""
                                                 />
-                                              )}
-                                              {removingItemId === data.id ? (
-                                                ""
-                                              ) : (
-                                                <MdDelete />
-                                              )}
-                                            </Link>
+                                              </Link>
+                                            </div>
                                           </div>
-                                        </div>
-                                        <div className="col-md-12">
-                                          <hr className="mt-0" />
-                                        </div>
-                                      </>
-                                    );
-                                  })}
-                                </>
+                                          <div className="col-md-4">
+                                            <div className="cart_product_name">
+                                              <Link
+                                                to={`/shopdetails/${data.design_id}`}
+                                                className="nav-link"
+                                              >
+                                                {data?.design_name}
+                                              </Link>
+                                            </div>
+
+                                            <div className="mt-md-2">
+                                              <span>
+                                                Gold Color : &nbsp;
+                                                <b>
+                                                  {goldColor[data.gold_color]}{" "}
+                                                  &nbsp;
+                                                  {data.gold_type}
+                                                </b>
+                                              </span>
+                                            </div>
+
+                                            <div className="mt-3">
+                                              {data.gold_type == "22k" && (
+                                                <h6>
+                                                  ₹
+                                                  {numberFormat(
+                                                    data?.total_amount_22k
+                                                  )}
+                                                </h6>
+                                              )}
+
+                                              {data.gold_type == "20k" && (
+                                                <h6>
+                                                  ₹
+                                                  {numberFormat(
+                                                    data?.total_amount_20k
+                                                  )}
+                                                </h6>
+                                              )}
+
+                                              {data.gold_type == "18k" && (
+                                                <h6>
+                                                  ₹
+                                                  {numberFormat(
+                                                    data?.total_amount_18k
+                                                  )}
+                                                </h6>
+                                              )}
+
+                                              {data.gold_type == "14k" && (
+                                                <h6>
+                                                  ₹
+                                                  {numberFormat(
+                                                    data?.total_amount_14k
+                                                  )}
+                                                </h6>
+                                              )}
+                                            </div>
+                                          </div>
+
+                                          <div className="col-md-5">
+                                            <div className="text-md-end">
+                                              <Link
+                                                to="#"
+                                                className="btn btn-light border text-danger icon-hover-danger text-end"
+                                                onClick={() => Remove(data.id)}
+                                              >
+                                                {removingItemId === data.id && (
+                                                  <CgSpinner
+                                                    size={20}
+                                                    className="animate_spin"
+                                                  />
+                                                )}
+                                                {removingItemId === data.id ? (
+                                                  ""
+                                                ) : (
+                                                  <MdDelete />
+                                                )}
+                                              </Link>
+                                            </div>
+                                          </div>
+                                          <div className="col-md-12">
+                                            <hr className="mt-0" />
+                                          </div>
+                                        </>
+                                      );
+                                    })}
+                                  </>
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
 
-                        <div className="col-lg-3 mt-3 mt-md-0">
-                          {!show && (
-                            <div className="card mb-3 border shadow-0">
-                              <div className="card-body">
-                                <form>
-                                  {/* <div className="form-group">
+                          <div className="col-lg-3 mt-3 mt-md-0">
+                            {!show && (
+                              <div className="card mb-3 border shadow-0">
+                                <div className="card-body">
+                                  <form>
+                                    {/* <div className="form-group">
                               <label className="form-label">Have coupon?</label>
                               <div className="input-group">
                                 <input
@@ -964,55 +961,55 @@ const Cart = ({ active }) => {
                                 </button>
                               </div>
                             </div> */}
-                                  <div className="form-group">
-                                    <label className="form-label">
-                                      Have a Dealer coupon?
-                                    </label>
-                                    <div className="input-group">
-                                      <input
-                                        type="text"
-                                        name="dealer_code"
-                                        className="form-control border"
-                                        placeholder="Dealer coupon code"
-                                        value={dealer_code}
-                                        onChange={(e) => handleDealercode(e)}
-                                      />
-                                      <button
-                                        className="btn btn-light border"
-                                        onClick={(e) => Applycoupen(e)}
-                                      >
-                                        Apply
-                                      </button>
+                                    <div className="form-group">
+                                      <label className="form-label">
+                                        Have a Dealer coupon?
+                                      </label>
+                                      <div className="input-group">
+                                        <input
+                                          type="text"
+                                          name="dealer_code"
+                                          className="form-control border"
+                                          placeholder="Dealer coupon code"
+                                          value={dealer_code}
+                                          onChange={(e) => handleDealercode(e)}
+                                        />
+                                        <button
+                                          className="btn btn-light border"
+                                          onClick={(e) => Applycoupen(e)}
+                                        >
+                                          Apply
+                                        </button>
+                                      </div>
+                                      {isFormEmpty ? (
+                                        <span className="text-danger">
+                                          {isFormEmpty}
+                                        </span>
+                                      ) : (
+                                        <></>
+                                      )}
                                     </div>
-                                    {isFormEmpty ? (
-                                      <span className="text-danger">
-                                        {isFormEmpty}
-                                      </span>
-                                    ) : (
-                                      <></>
-                                    )}
-                                  </div>
-                                </form>
+                                  </form>
+                                </div>
                               </div>
-                            </div>
-                          )}
-                          <div className="card shadow-0 border">
-                            <div className="card-body">
-                              {/* Sub Total :*/}
-                              <div className="d-flex justify-content-between">
-                                <p className="mb-2">Sub total :</p>
-                                <p className="mb-2 fw-bold">
-                                  ₹{numberFormat(SubAmount())}
-                                </p>
-                              </div>
-                              <hr />
-                              <div className="d-flex justify-content-between">
-                                <p className="mb-2">GST (3%)</p>
-                                <p className="mb-2 fw-bold">
-                                  ₹{numberFormat(SubGST()?.toFixed())}
-                                </p>
-                              </div>
-                              {/* {show && (
+                            )}
+                            <div className="card shadow-0 border">
+                              <div className="card-body">
+                                {/* Sub Total :*/}
+                                <div className="d-flex justify-content-between">
+                                  <p className="mb-2">Sub total :</p>
+                                  <p className="mb-2 fw-bold">
+                                    ₹{numberFormat(SubAmount())}
+                                  </p>
+                                </div>
+                                <hr />
+                                <div className="d-flex justify-content-between">
+                                  <p className="mb-2">GST (3%)</p>
+                                  <p className="mb-2 fw-bold">
+                                    ₹{numberFormat(SubGST()?.toFixed())}
+                                  </p>
+                                </div>
+                                {/* {show && (
                             <div className="d-flex justify-content-between">
                               <p className="mb-2 text-success">
                                 Dealer discount ({code.dealer_code})
@@ -1034,476 +1031,493 @@ const Cart = ({ active }) => {
                               </p>
                             </div>
                           )} */}
-                              <hr />
+                                <hr />
 
-                              {/* Total price :*/}
-                              <div className="d-flex justify-content-between">
-                                <p className="mb-2">Total price :</p>
-                                <p className="mb-2 fw-bold">
-                                  {code?.discount_value ? (
-                                    <>
-                                      ₹
-                                      {code?.discount_type === "percentage"
-                                        ? numberFormat(overAllAmount)
-                                        : numberFormat(overAllAmount)}
-                                    </>
-                                  ) : (
-                                    <>₹{numberFormat(overAllAmount)}</>
-                                  )}
+                                {/* Total price :*/}
+                                <div className="d-flex justify-content-between">
+                                  <p className="mb-2">Total price :</p>
+                                  <p className="mb-2 fw-bold">
+                                    {code?.discount_value ? (
+                                      <>
+                                        ₹
+                                        {code?.discount_type === "percentage"
+                                          ? numberFormat(overAllAmount)
+                                          : numberFormat(overAllAmount)}
+                                      </>
+                                    ) : (
+                                      <>₹{numberFormat(overAllAmount)}</>
+                                    )}
+                                  </p>
+                                </div>
+
+                                {message && (
+                                  <div className="message-box">
+                                    <div className="text-end">
+                                      <OverlayTrigger
+                                        placement="top"
+                                        overlay={removeCouping}
+                                      >
+                                        <Link className="icon" to="#">
+                                          <IoIosCloseCircleOutline
+                                            onClick={removeCoupon}
+                                            style={{
+                                              color: "#ff0000",
+                                              fontSize: "25px",
+                                              cursor: "pointer",
+                                            }}
+                                          />
+                                        </Link>
+                                      </OverlayTrigger>
+                                    </div>
+                                    <span>
+                                      You are now eligible for a base
+                                      discount&nbsp;
+                                      <b>
+                                        {code.discount_type === "percentage" ? (
+                                          <>({code.discount_value}%)</>
+                                        ) : (
+                                          <>({code.discount_value}₹)</>
+                                        )}
+                                      </b>
+                                      &nbsp;off on making charges.
+                                    </span>
+                                  </div>
+                                )}
+
+                                <div className="pt-2">
+                                  <button
+                                    className="btn btn-success w-100 shadow-0 mb-2"
+                                    disabled={spinner}
+                                    onClick={(e) => {
+                                      handlePhonepeClick();
+                                      handleProfileData(profileData);
+                                    }}
+                                    // onClick={() => {
+                                    //   handlePayment();
+                                    //   handleProfileData(profileData);
+                                    // }}
+                                  >
+                                    {spinner && (
+                                      <CgSpinner
+                                        size={20}
+                                        className="animate_spin me-2"
+                                      />
+                                    )}
+                                    Minimum Advance Payable Amount (₹
+                                    {numberFormat(advanceAmount)})
+                                  </button>
+                                  <button
+                                    type="button"
+                                    className="light-up-button w-100 rounded-2"
+                                    onClick={() => navigate("/shop")}
+                                  >
+                                    Back to shop
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="row justify-content-center">
+                          <div className="col-lg-8">
+                            <div className="card border shadow-sm p-4">
+                              <div className="text-center mb-4">
+                                <h2 className="card-title mb-0">
+                                  Your Shopping Cart
+                                </h2>
+                              </div>
+
+                              <div className="text-center my-4">
+                                <img
+                                  src={emptycart}
+                                  alt="Empty Cart Illustration"
+                                  className="img-fluid mb-3"
+                                  style={{ maxWidth: "200px" }}
+                                />
+                                <h5 className="text-muted mb-3">
+                                  Oops! Your cart is empty.
+                                </h5>
+                                <p className="text-muted">
+                                  Explore our collection and add items to your
+                                  cart.
                                 </p>
                               </div>
 
-                              {message && (
-                                <div className="message-box">
-                                  <div className="text-end">
-                                    <OverlayTrigger
-                                      placement="top"
-                                      overlay={removeCouping}
-                                    >
-                                      <Link className="icon" to="#">
-                                        <IoIosCloseCircleOutline
-                                          onClick={removeCoupon}
-                                          style={{
-                                            color: "#ff0000",
-                                            fontSize: "25px",
-                                            cursor: "pointer",
-                                          }}
-                                        />
-                                      </Link>
-                                    </OverlayTrigger>
-                                  </div>
-                                  <span>
-                                    You are now eligible for a base
-                                    discount&nbsp;
-                                    <b>
-                                      {code.discount_type === "percentage" ? (
-                                        <>({code.discount_value}%)</>
-                                      ) : (
-                                        <>({code.discount_value}₹)</>
-                                      )}
-                                    </b>
-                                    &nbsp;off on making charges.
-                                  </span>
-                                </div>
-                              )}
-
-                              <div className="pt-2">
-                                <button
-                                  className="btn btn-success w-100 shadow-0 mb-2"
-                                  disabled={spinner}
-                                  onClick={(e) => {
-                                    handlePhonepeClick();
-                                    handleProfileData(profileData);
-                                  }}
-                                  // onClick={() => {
-                                  //   handlePayment();
-                                  //   handleProfileData(profileData);
-                                  // }}
+                              <div className="text-center">
+                                <Link
+                                  to="/shop"
+                                  className="view_all_btn px-4 py-2"
+                                  style={{ borderRadius: "8px" }}
                                 >
-                                  {spinner && (
-                                    <CgSpinner
-                                      size={20}
-                                      className="animate_spin me-2"
-                                    />
-                                  )}
-                                  Minimum Advance Payable Amount (₹
-                                  {numberFormat(advanceAmount)})
-                                </button>
-                                <button
-                                  type="button"
-                                  className="light-up-button w-100 rounded-2"
-                                  onClick={() => navigate("/shop")}
-                                >
-                                  Back to shop
-                                </button>
+                                  <FaLongArrowAltLeft className="mr-2" />{" "}
+                                  &nbsp;Back to Shop
+                                </Link>
                               </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div className="row justify-content-center">
-                        <div className="col-lg-8">
-                          <div className="card border shadow-sm p-4">
-                            <div className="text-center mb-4">
-                              <h2 className="card-title mb-0">
-                                Your Shopping Cart
-                              </h2>
-                            </div>
+                      </>
+                    )}
+                  </>
+                )}
 
-                            <div className="text-center my-4">
-                              <img
-                                src={emptycart}
-                                alt="Empty Cart Illustration"
-                                className="img-fluid mb-3"
-                                style={{ maxWidth: "200px" }}
-                              />
-                              <h5 className="text-muted mb-3">
-                                Oops! Your cart is empty.
-                              </h5>
-                              <p className="text-muted">
-                                Explore our collection and add items to your
-                                cart.
-                              </p>
-                            </div>
+                <Modal
+                  className="form_intent profile_model"
+                  centered
+                  show={showEdit}
+                >
+                  <Modal.Header>
+                    <Modal.Title>Edit Profile</Modal.Title>
+                  </Modal.Header>
 
-                            <div className="text-center">
-                              <Link
-                                to="/shop"
-                                className="view_all_btn px-4 py-2"
-                                style={{ borderRadius: "8px" }}
-                              >
-                                <FaLongArrowAltLeft className="mr-2" />{" "}
-                                &nbsp;Back to Shop
-                              </Link>
-                            </div>
-                          </div>
+                  <Modal.Body>
+                    <Form
+                      onSubmit={(e) => handleUpdateProfile(e, selectedData)}
+                    >
+                      <div className="row edit-user-form">
+                        <div className="col-md-6">
+                          <Form.Group
+                            as={Col}
+                            className="mb-2"
+                            controlId="formGridState"
+                          >
+                            <Form.Label>
+                              Name
+                              <span className="text-danger">
+                                <b>*</b>
+                              </span>
+                            </Form.Label>
+                            <Form.Control
+                              name="name"
+                              defaultValue={selectedData.name}
+                              onChange={(e) => handleChange(e)}
+                              placeholder="Enter Your Name"
+                            />
+                            {error.nameErr && (
+                              <span className="text-danger">
+                                {error.nameErr}
+                              </span>
+                            )}
+                          </Form.Group>
+                        </div>
+                        <div className="col-md-6">
+                          <Form.Group
+                            as={Col}
+                            className="mb-2"
+                            controlId="formGridState"
+                          >
+                            <Form.Label>
+                              Email<span className="text-danger">*</span>
+                            </Form.Label>
+                            <Form.Control
+                              name="email"
+                              defaultValue={selectedData.email}
+                              onChange={(e) => handleChange(e)}
+                              placeholder="Enter Your Email"
+                            />
+                            <span className="text-danger">
+                              {error.emailErr}
+                            </span>
+                          </Form.Group>
+                        </div>
+                        <div className="col-md-6">
+                          <Form.Group
+                            as={Col}
+                            className="mb-2"
+                            controlId="formGridState"
+                          >
+                            <Form.Label>Phone</Form.Label>
+                            <Form.Control
+                              defaultValue={profileData?.phone?.replace(
+                                "+91",
+                                ""
+                              )}
+                              disabled
+                            />
+                          </Form.Group>
+                        </div>
+
+                        <div className="col-md-6 mb-3">
+                          <Form.Group
+                            className="mb-2"
+                            controlId="formGridAddress1"
+                          >
+                            <Form.Label>
+                              Pan-card
+                              {valid ? (
+                                <span className="text-danger">*</span>
+                              ) : (
+                                ""
+                              )}
+                            </Form.Label>
+                            <Form.Control
+                              name="pan_no"
+                              defaultValue={selectedData.pan_no}
+                              onChange={(e) => handleChange(e)}
+                              placeholder="Enter Your Pancard number"
+                            />
+                            {valid && (
+                              <span className="text-danger">{valid}</span>
+                            )}
+                          </Form.Group>
+                        </div>
+
+                        <div className="col-md-12">
+                          <hr className="mt-0" />
+                        </div>
+                        <div className="col-md-6">
+                          <Form.Group
+                            as={Col}
+                            className="mb-2"
+                            controlId="formGridZip"
+                          >
+                            <Form.Label>
+                              Billing Address
+                              <span className="text-danger">*</span>
+                            </Form.Label>
+                            <textarea
+                              name="address"
+                              className="form-control"
+                              defaultValue={selectedData.address}
+                              rows={4}
+                              style={{ resize: "none", height: "auto" }}
+                              onChange={(e) => {
+                                handleChange(e);
+                              }}
+                              placeholder="Enter Your Address"
+                            />
+                            {error.addressErr && (
+                              <span className="text-danger">
+                                {error.addressErr}
+                              </span>
+                            )}
+                          </Form.Group>
+                        </div>
+                        <div className="col-md-6">
+                          <Form.Group
+                            className="mb-2"
+                            controlId="formGridAddress1"
+                          >
+                            <Form.Label>
+                              State<span className="text-danger">*</span>
+                            </Form.Label>
+                            <select
+                              className="form-control"
+                              name="state"
+                              onChange={(e) => {
+                                handleChange(e);
+                                fetchCity(e.target.value);
+                              }}
+                              value={userData.state}
+                            >
+                              <option value="">--state select--</option>
+                              {profileData?.states?.map((userstate, index) => (
+                                <option key={index} value={userstate.id}>
+                                  {userstate.name}
+                                </option>
+                              ))}
+                            </select>
+                            <span className="text-danger">
+                              {error.stateErr}
+                            </span>
+                          </Form.Group>
+                        </div>
+                        <div className="col-md-6">
+                          <Form.Group
+                            className="mb-2"
+                            controlId="formGridAddress1"
+                          >
+                            <Form.Label>
+                              City<span className="text-danger">*</span>
+                            </Form.Label>
+                            <select
+                              className="form-control"
+                              name="city"
+                              onChange={(e) => {
+                                handleChange(e);
+                              }}
+                              value={userData.city}
+                            >
+                              <option value="">--city select--</option>
+                              {city?.map((usercity, index) => (
+                                <option key={index} value={usercity?.id}>
+                                  {usercity?.name}
+                                </option>
+                              ))}
+                            </select>
+                            <span className="text-danger">{error.cityErr}</span>
+                          </Form.Group>
+                        </div>
+                        <div className="col-md-6 mb-3">
+                          <Form.Group
+                            className="mb-2"
+                            controlId="formGridAddress1"
+                          >
+                            <Form.Label>
+                              Pincode<span className="text-danger">*</span>
+                            </Form.Label>
+                            <Form.Control
+                              name="pincode"
+                              defaultValue={selectedData.pincode}
+                              onChange={(e) => handleChange(e)}
+                              placeholder="Enter Your Pincode"
+                              maxLength={6}
+                            />
+                            <span className="text-danger">
+                              {error.pincodeErr}
+                            </span>
+                          </Form.Group>
+                        </div>
+                        <div className="address-checkbox-btn">
+                          <input
+                            type="checkbox"
+                            id="checkbox"
+                            name="address_same_as_company"
+                            className="address-checkbox"
+                            checked={isChecked}
+                            onChange={handleCheckboxChange}
+                            style={{ cursor: "pointer" }}
+                          />
+                          <label
+                            htmlFor="checkbox"
+                            className="ms-1 address-check-text"
+                            style={{ cursor: "pointer" }}
+                          >
+                            Shipping Address is as same above then check this
+                            box
+                          </label>
+                        </div>
+                        <div className="col-md-12">
+                          <hr className="mt-3" />
+                        </div>
+                        <div className="col-md-6">
+                          <Form.Group
+                            as={Col}
+                            className="mb-2"
+                            controlId="formGridZip"
+                          >
+                            <Form.Label>
+                              Shipping Address
+                              <span className="text-danger">*</span>
+                            </Form.Label>
+                            <textarea
+                              name="shipping_address"
+                              className="form-control"
+                              value={userData.shipping_address}
+                              rows={4}
+                              style={{ resize: "none", height: "auto" }}
+                              onChange={(e) => {
+                                handleChange(e);
+                              }}
+                              placeholder="Enter Your Address"
+                            />
+                            <span className="text-danger">
+                              {error.shipping_address_err}
+                            </span>
+                          </Form.Group>
+                        </div>
+                        <div className="col-md-6">
+                          <Form.Group
+                            className="mb-2"
+                            controlId="formGridAddress1"
+                          >
+                            <Form.Label>
+                              Shipping State
+                              <span className="text-danger">*</span>
+                            </Form.Label>
+                            <select
+                              className="form-control"
+                              name="shipping_state"
+                              onChange={(e) => {
+                                handleChange(e);
+                                fetchShippingCity(e.target.value);
+                              }}
+                              value={userData.shipping_state}
+                            >
+                              <option value="">
+                                --shipping state select--
+                              </option>
+                              {profileData?.states?.map((userstate, index) => (
+                                <option key={index} value={userstate.id}>
+                                  {userstate.name}
+                                </option>
+                              ))}
+                            </select>
+                            <span className="text-danger">
+                              {error.shipping_state_err}
+                            </span>
+                          </Form.Group>
+                        </div>
+                        <div className="col-md-6">
+                          <Form.Group
+                            className="mb-2"
+                            controlId="formGridAddress1"
+                          >
+                            <Form.Label>
+                              Shipping City
+                              <span className="text-danger">*</span>
+                            </Form.Label>
+                            <select
+                              className="form-control"
+                              name="shipping_city"
+                              onChange={(e) => {
+                                handleChange(e);
+                              }}
+                              value={userData.shipping_city}
+                            >
+                              <option value="">--shipping City select--</option>
+                              {shipping_city?.map((usercity, index) => (
+                                <option key={index} value={usercity?.id}>
+                                  {usercity?.name}
+                                </option>
+                              ))}
+                            </select>
+                            <span className="text-danger">
+                              {error.shipping_city_err}
+                            </span>
+                          </Form.Group>
+                        </div>
+                        <div className="col-md-6 mb-3">
+                          <Form.Group
+                            className="mb-2"
+                            controlId="formGridAddress1"
+                          >
+                            <Form.Label>
+                              Shipping Pincode
+                              <span className="text-danger">*</span>
+                            </Form.Label>
+                            <Form.Control
+                              name="shipping_pincode"
+                              value={userData.shipping_pincode}
+                              onChange={(e) => handleChange(e)}
+                              placeholder="Enter Your Pincode"
+                              maxLength={6}
+                            />
+                            <span className="text-danger">
+                              {error.shipping_pincode_err}
+                            </span>
+                          </Form.Group>
                         </div>
                       </div>
-                    </>
-                  )}
-                </>
-              )}
 
-              <Modal
-                className="form_intent profile_model"
-                centered
-                show={showEdit}
-              >
-                <Modal.Header>
-                  <Modal.Title>Edit Profile</Modal.Title>
-                </Modal.Header>
-
-                <Modal.Body>
-                  <Form onSubmit={(e) => handleUpdateProfile(e, selectedData)}>
-                    <div className="row edit-user-form">
-                      <div className="col-md-6">
-                        <Form.Group
-                          as={Col}
-                          className="mb-2"
-                          controlId="formGridState"
-                        >
-                          <Form.Label>
-                            Name
-                            <span className="text-danger">
-                              <b>*</b>
-                            </span>
-                          </Form.Label>
-                          <Form.Control
-                            name="name"
-                            defaultValue={selectedData.name}
-                            onChange={(e) => handleChange(e)}
-                            placeholder="Enter Your Name"
-                          />
-                          {error.nameErr && (
-                            <span className="text-danger">{error.nameErr}</span>
+                      <div className="text-center">
+                        <button className="update_order_btn">
+                          {spinner && (
+                            <CgSpinner
+                              size={20}
+                              className="animate_spin mx-3"
+                            />
                           )}
-                        </Form.Group>
+                          {spinner ? "" : "Update"}
+                        </button>
                       </div>
-                      <div className="col-md-6">
-                        <Form.Group
-                          as={Col}
-                          className="mb-2"
-                          controlId="formGridState"
-                        >
-                          <Form.Label>
-                            Email<span className="text-danger">*</span>
-                          </Form.Label>
-                          <Form.Control
-                            name="email"
-                            defaultValue={selectedData.email}
-                            onChange={(e) => handleChange(e)}
-                            placeholder="Enter Your Email"
-                          />
-                          <span className="text-danger">{error.emailErr}</span>
-                        </Form.Group>
-                      </div>
-                      <div className="col-md-6">
-                        <Form.Group
-                          as={Col}
-                          className="mb-2"
-                          controlId="formGridState"
-                        >
-                          <Form.Label>Phone</Form.Label>
-                          <Form.Control
-                            defaultValue={profileData?.phone?.replace(
-                              "+91",
-                              ""
-                            )}
-                            disabled
-                          />
-                        </Form.Group>
-                      </div>
-
-                      <div className="col-md-6 mb-3">
-                        <Form.Group
-                          className="mb-2"
-                          controlId="formGridAddress1"
-                        >
-                          <Form.Label>
-                            Pan-card
-                            {valid ? (
-                              <span className="text-danger">*</span>
-                            ) : (
-                              ""
-                            )}
-                          </Form.Label>
-                          <Form.Control
-                            name="pan_no"
-                            defaultValue={selectedData.pan_no}
-                            onChange={(e) => handleChange(e)}
-                            placeholder="Enter Your Pancard number"
-                          />
-                          {valid && (
-                            <span className="text-danger">{valid}</span>
-                          )}
-                        </Form.Group>
-                      </div>
-
-                      <div className="col-md-12">
-                        <hr className="mt-0" />
-                      </div>
-                      <div className="col-md-6">
-                        <Form.Group
-                          as={Col}
-                          className="mb-2"
-                          controlId="formGridZip"
-                        >
-                          <Form.Label>
-                            Billing Address
-                            <span className="text-danger">*</span>
-                          </Form.Label>
-                          <textarea
-                            name="address"
-                            className="form-control"
-                            defaultValue={selectedData.address}
-                            rows={4}
-                            style={{ resize: "none", height: "auto" }}
-                            onChange={(e) => {
-                              handleChange(e);
-                            }}
-                            placeholder="Enter Your Address"
-                          />
-                          {error.addressErr && (
-                            <span className="text-danger">
-                              {error.addressErr}
-                            </span>
-                          )}
-                        </Form.Group>
-                      </div>
-                      <div className="col-md-6">
-                        <Form.Group
-                          className="mb-2"
-                          controlId="formGridAddress1"
-                        >
-                          <Form.Label>
-                            State<span className="text-danger">*</span>
-                          </Form.Label>
-                          <select
-                            className="form-control"
-                            name="state"
-                            onChange={(e) => {
-                              handleChange(e);
-                              fetchCity(e.target.value);
-                            }}
-                            value={userData.state}
-                          >
-                            <option value="">--state select--</option>
-                            {profileData?.states?.map((userstate, index) => (
-                              <option key={index} value={userstate.id}>
-                                {userstate.name}
-                              </option>
-                            ))}
-                          </select>
-                          <span className="text-danger">{error.stateErr}</span>
-                        </Form.Group>
-                      </div>
-                      <div className="col-md-6">
-                        <Form.Group
-                          className="mb-2"
-                          controlId="formGridAddress1"
-                        >
-                          <Form.Label>
-                            City<span className="text-danger">*</span>
-                          </Form.Label>
-                          <select
-                            className="form-control"
-                            name="city"
-                            onChange={(e) => {
-                              handleChange(e);
-                            }}
-                            value={userData.city}
-                          >
-                            <option value="">--city select--</option>
-                            {city?.map((usercity, index) => (
-                              <option key={index} value={usercity?.id}>
-                                {usercity?.name}
-                              </option>
-                            ))}
-                          </select>
-                          <span className="text-danger">{error.cityErr}</span>
-                        </Form.Group>
-                      </div>
-                      <div className="col-md-6 mb-3">
-                        <Form.Group
-                          className="mb-2"
-                          controlId="formGridAddress1"
-                        >
-                          <Form.Label>
-                            Pincode<span className="text-danger">*</span>
-                          </Form.Label>
-                          <Form.Control
-                            name="pincode"
-                            defaultValue={selectedData.pincode}
-                            onChange={(e) => handleChange(e)}
-                            placeholder="Enter Your Pincode"
-                            maxLength={6}
-                          />
-                          <span className="text-danger">
-                            {error.pincodeErr}
-                          </span>
-                        </Form.Group>
-                      </div>
-                      <div className="address-checkbox-btn">
-                        <input
-                          type="checkbox"
-                          id="checkbox"
-                          name="address_same_as_company"
-                          className="address-checkbox"
-                          checked={isChecked}
-                          onChange={handleCheckboxChange}
-                          style={{ cursor: "pointer" }}
-                        />
-                        <label
-                          htmlFor="checkbox"
-                          className="ms-1 address-check-text"
-                          style={{ cursor: "pointer" }}
-                        >
-                          Shipping Address is as same above then check this box
-                        </label>
-                      </div>
-                      <div className="col-md-12">
-                        <hr className="mt-3" />
-                      </div>
-                      <div className="col-md-6">
-                        <Form.Group
-                          as={Col}
-                          className="mb-2"
-                          controlId="formGridZip"
-                        >
-                          <Form.Label>
-                            Shipping Address
-                            <span className="text-danger">*</span>
-                          </Form.Label>
-                          <textarea
-                            name="shipping_address"
-                            className="form-control"
-                            value={userData.shipping_address}
-                            rows={4}
-                            style={{ resize: "none", height: "auto" }}
-                            onChange={(e) => {
-                              handleChange(e);
-                            }}
-                            placeholder="Enter Your Address"
-                          />
-                          <span className="text-danger">
-                            {error.shipping_address_err}
-                          </span>
-                        </Form.Group>
-                      </div>
-                      <div className="col-md-6">
-                        <Form.Group
-                          className="mb-2"
-                          controlId="formGridAddress1"
-                        >
-                          <Form.Label>
-                            Shipping State<span className="text-danger">*</span>
-                          </Form.Label>
-                          <select
-                            className="form-control"
-                            name="shipping_state"
-                            onChange={(e) => {
-                              handleChange(e);
-                              fetchShippingCity(e.target.value);
-                            }}
-                            value={userData.shipping_state}
-                          >
-                            <option value="">--shipping state select--</option>
-                            {profileData?.states?.map((userstate, index) => (
-                              <option key={index} value={userstate.id}>
-                                {userstate.name}
-                              </option>
-                            ))}
-                          </select>
-                          <span className="text-danger">
-                            {error.shipping_state_err}
-                          </span>
-                        </Form.Group>
-                      </div>
-                      <div className="col-md-6">
-                        <Form.Group
-                          className="mb-2"
-                          controlId="formGridAddress1"
-                        >
-                          <Form.Label>
-                            Shipping City<span className="text-danger">*</span>
-                          </Form.Label>
-                          <select
-                            className="form-control"
-                            name="shipping_city"
-                            onChange={(e) => {
-                              handleChange(e);
-                            }}
-                            value={userData.shipping_city}
-                          >
-                            <option value="">--shipping City select--</option>
-                            {shipping_city?.map((usercity, index) => (
-                              <option key={index} value={usercity?.id}>
-                                {usercity?.name}
-                              </option>
-                            ))}
-                          </select>
-                          <span className="text-danger">
-                            {error.shipping_city_err}
-                          </span>
-                        </Form.Group>
-                      </div>
-                      <div className="col-md-6 mb-3">
-                        <Form.Group
-                          className="mb-2"
-                          controlId="formGridAddress1"
-                        >
-                          <Form.Label>
-                            Shipping Pincode
-                            <span className="text-danger">*</span>
-                          </Form.Label>
-                          <Form.Control
-                            name="shipping_pincode"
-                            value={userData.shipping_pincode}
-                            onChange={(e) => handleChange(e)}
-                            placeholder="Enter Your Pincode"
-                            maxLength={6}
-                          />
-                          <span className="text-danger">
-                            {error.shipping_pincode_err}
-                          </span>
-                        </Form.Group>
-                      </div>
-                    </div>
-
-                    <div className="text-center">
-                      <button className="update_order_btn">
-                        {spinner && (
-                          <CgSpinner size={20} className="animate_spin mx-3" />
-                        )}
-                        {spinner ? "" : "Update"}
-                      </button>
-                    </div>
-                  </Form>
-                </Modal.Body>
-              </Modal>
+                    </Form>
+                  </Modal.Body>
+                </Modal>
+              </div>
             </div>
           </section>
         </>

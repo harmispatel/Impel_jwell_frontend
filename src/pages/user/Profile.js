@@ -1,20 +1,19 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Button, Col, Form, Modal } from "react-bootstrap";
+import { Col, Form, Modal } from "react-bootstrap";
 import toast from "react-hot-toast";
-import loadinggif from "../../assets/video/impel-bird-unscreen.gif";
 import profileService from "../../services/Auth";
 import { Helmet } from "react-helmet-async";
 import { FaPencilAlt } from "react-icons/fa";
 import { CgSpinner } from "react-icons/cg";
 import { ProfileSystem } from "../../context/ProfileContext";
-import Loader from "../../components/common/Loader"
+import Loader from "../../components/common/Loader";
+import ProfileModal from "./ProfileModal";
 
 const Profile = () => {
   const { dispatch: profilename, state: namestate } = useContext(ProfileSystem);
   const { dispatch: image, state: imagestate } = useContext(ProfileSystem);
   const phone = localStorage.getItem("phone");
   const [showEdit, setShowEdit] = useState(false);
-  const [show, setShow] = useState(false);
   const [selectedData, setSelectedData] = useState([]);
   const [profileData, setProfileData] = useState([]);
   const [city, setcity] = useState();
@@ -56,7 +55,6 @@ const Profile = () => {
   });
 
   const handleClose = () => {
-    setShow(false);
     setShowEdit(false);
   };
 
@@ -141,16 +139,16 @@ const Profile = () => {
     await profileService
       .getProfile({ phone: phone })
       .then((res) => {
-        const statename = res.data.state.name;
-        const cityname = res.data.city.name;
-        const shippingstatename = res.data.shipping_state.name;
-        const shippingcityname = res.data.shipping_city.name;
+        const stateName = res.data.state.name;
+        const cityName = res.data.city.name;
+        const shippingStateName = res.data.shipping_state.name;
+        const shippingCityName = res.data.shipping_city.name;
         setProfileData({
           ...res.data,
-          state_name: statename,
-          city_name: cityname,
-          shipping_state_name: shippingstatename,
-          shipping_city_name: shippingcityname,
+          state_name: stateName,
+          city_name: cityName,
+          shipping_state_name: shippingStateName,
+          shipping_city_name: shippingCityName,
           state: res.data.state.id,
           city: res.data.city.id,
           shipping_state: res.data.shipping_state.id,
@@ -158,10 +156,10 @@ const Profile = () => {
         });
         setUserData({
           ...res.data,
-          state_name: statename,
-          city_name: cityname,
-          shipping_state_name: shippingstatename,
-          shipping_city_name: shippingcityname,
+          state_name: stateName,
+          city_name: cityName,
+          shipping_state_name: shippingStateName,
+          shipping_city_name: shippingCityName,
           state: res.data.state.id,
           city: res.data.city.id,
           shipping_state: res.data.shipping_state.id,
@@ -426,169 +424,172 @@ const Profile = () => {
         <title>Impel Store - Profile</title>
       </Helmet>
       <section className="profile user_profile_view">
-        <div className="container">
-          <div className="row">
-            {isLoading ? (
-              <div className="animation-loading">
-                <Loader />
-              </div>
-            ) : (
-              <>
-                <div className="text-end mb-3">
-                  <button
-                    onClick={() => handleEdit(profileData)}
-                    className="edit_profile_btn primary"
-                  >
-                    <FaPencilAlt />
-                  </button>
+        <div>
+          <div className="container">
+            <div className="row">
+              {isLoading ? (
+                <div className="animation-loading">
+                  <Loader />
                 </div>
-                <div className="col-xl-3">
-                  <div className="card mb-4 mb-xl-0">
-                    <div>
-                      <div className="card-header text-center">
-                        <b>Profile Image</b>
-                      </div>
-                      <div className="upload-btn">
-                        <div className="button-wrap py-3"></div>
-                      </div>
-                      <>
-                        {profileData?.profile && (
-                          <>
-                            <div className="imagesss pb-4">
-                              <div className="">
-                                <form
-                                  id="user-profile-form"
-                                  method="POST"
-                                  encType="multipart/form-data"
-                                >
-                                  <input
-                                    type="hidden"
-                                    name="user_id"
-                                    value={profileData?.id}
-                                  />
-                                  <input
-                                    id="upload"
-                                    name="user_image"
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={handleImageChange}
-                                    style={{ display: "none" }}
-                                  />
-
-                                  <label
-                                    htmlFor="upload"
-                                    style={{
-                                      cursor: "pointer",
-                                    }}
+              ) : (
+                <>
+                  <div className="text-end mb-3">
+                    <button
+                      onClick={() => handleEdit(profileData)}
+                      className="edit_profile_btn primary"
+                    >
+                      <FaPencilAlt />
+                    </button>
+                  </div>
+                  <div className="col-xl-3">
+                    <div className="card mb-4 mb-xl-0">
+                      <div>
+                        <div className="card-header text-center">
+                          <b>Profile Image</b>
+                        </div>
+                        <div className="upload-btn">
+                          <div className="button-wrap py-3"></div>
+                        </div>
+                        <>
+                          {profileData?.profile && (
+                            <>
+                              <div className="imagesss pb-4">
+                                <div className="">
+                                  <form
+                                    id="user-profile-form"
+                                    method="POST"
+                                    encType="multipart/form-data"
                                   >
-                                    <img
-                                      src={profileData?.profile}
-                                      alt="Uploaded"
-                                      style={{
-                                        width: "200px",
-                                        height: "200px",
-                                        borderRadius: "50%",
-                                        border: "1px solid #ccc",
-                                        padding: "2px",
-                                      }}
+                                    <input
+                                      type="hidden"
+                                      name="user_id"
+                                      value={profileData?.id}
                                     />
-                                  </label>
-                                </form>
+                                    <input
+                                      id="upload"
+                                      name="user_image"
+                                      type="file"
+                                      accept="image/*"
+                                      onChange={handleImageChange}
+                                      style={{ display: "none" }}
+                                    />
+
+                                    <label
+                                      htmlFor="upload"
+                                      style={{
+                                        cursor: "pointer",
+                                      }}
+                                    >
+                                      <img
+                                        src={profileData?.profile}
+                                        alt="Uploaded"
+                                        style={{
+                                          width: "200px",
+                                          height: "200px",
+                                          borderRadius: "50%",
+                                          border: "1px solid #ccc",
+                                          padding: "2px",
+                                        }}
+                                      />
+                                    </label>
+                                  </form>
+                                </div>
                               </div>
-                            </div>
-                          </>
-                        )}
-                      </>
+                            </>
+                          )}
+                        </>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="col-xl-5">
-                  <div className="card mb-4">
-                    <div className="card-header text-center">
-                      <span>
-                        <b>Account Details</b>
-                      </span>
-                    </div>
-                    <div className="card-body">
-                      <table className="table">
-                        <tbody>
-                          <tr>
-                            <th scope="col">Full Name : </th>
-                            <td>{profileData.name}</td>
-                          </tr>
-                          <tr>
-                            <th scope="col">Email : </th>
-                            <td>{profileData.email}</td>
-                          </tr>
-                          <tr>
-                            <th scope="col">Phone : </th>
-                            <td>{profileData?.phone?.replace("+91", "")}</td>
-                          </tr>
-                          <tr>
-                            <th scope="col">Billing Address : </th>
-                            <td>{profileData.address}</td>
-                          </tr>
-                          <tr>
-                            <th scope="col">City : </th>
-                            <td>{profileData.city_name}</td>
-                          </tr>
-                          <tr>
-                            <th scope="col">State : </th>
-                            <td>{profileData.state_name}</td>
-                          </tr>
-                          <tr>
-                            <th scope="col">Pincode : </th>
-                            <td>{profileData.pincode}</td>
-                          </tr>
-                          <tr>
-                            <th scope="col">Pancard : </th>
-                            {profileData.pan_no?.length > 0 ? (
-                              <td>{profileData.pan_no}</td>
-                            ) : (
-                              <td>
-                                <b>-</b>
-                              </td>
-                            )}
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-xl-4">
-                  <div className="card mb-4">
-                    <div className="card-header text-center">
-                      <span>
-                        <b>Shipping Address</b>
-                      </span>
-                    </div>
-                    <div className="card-body">
-                      <table className="table">
-                        <tbody>
-                          <tr>
-                            <th scope="col">Shipping Address : </th>
-                            <td>{profileData.shipping_address}</td>
-                          </tr>
-                          <tr>
-                            <th scope="col">City : </th>
-                            <td>{profileData.shipping_city_name}</td>
-                          </tr>
-                          <tr>
-                            <th scope="col">State : </th>
-                            <td>{profileData.shipping_state_name}</td>
-                          </tr>
-                          <tr>
-                            <th scope="col">Pincode : </th>
-                            <td>{profileData.shipping_pincode}</td>
-                          </tr>
-                        </tbody>
-                      </table>
+                  <div className="col-xl-5">
+                    <div className="card mb-4">
+                      <div className="card-header text-center">
+                        <span>
+                          <b>Account Details</b>
+                        </span>
+                      </div>
+                      <div className="card-body">
+                        <table className="table">
+                          <tbody>
+                            <tr>
+                              <th scope="col">Full Name : </th>
+                              <td>{profileData.name}</td>
+                            </tr>
+                            <tr>
+                              <th scope="col">Email : </th>
+                              <td>{profileData.email}</td>
+                            </tr>
+                            <tr>
+                              <th scope="col">Phone : </th>
+                              <td>{profileData?.phone?.replace("+91", "")}</td>
+                            </tr>
+                            <tr>
+                              <th scope="col">Billing Address : </th>
+                              <td>{profileData.address}</td>
+                            </tr>
+                            <tr>
+                              <th scope="col">City : </th>
+                              <td>{profileData.city_name}</td>
+                            </tr>
+                            <tr>
+                              <th scope="col">State : </th>
+                              <td>{profileData.state_name}</td>
+                            </tr>
+                            <tr>
+                              <th scope="col">Pincode : </th>
+                              <td>{profileData.pincode}</td>
+                            </tr>
+                            <tr>
+                              <th scope="col">Pancard : </th>
+                              {profileData.pan_no?.length > 0 ? (
+                                <td>{profileData.pan_no}</td>
+                              ) : (
+                                <td>
+                                  <b>-</b>
+                                </td>
+                              )}
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </>
-            )}
+                  <div className="col-xl-4">
+                    <div className="card mb-4">
+                      <div className="card-header text-center">
+                        <span>
+                          <b>Shipping Address</b>
+                        </span>
+                      </div>
+                      <div className="card-body">
+                        <table className="table">
+                          <tbody>
+                            <tr>
+                              <th scope="col">Shipping Address : </th>
+                              <td>{profileData.shipping_address}</td>
+                            </tr>
+                            <tr>
+                              <th scope="col">City : </th>
+                              <td>{profileData.shipping_city_name}</td>
+                            </tr>
+                            <tr>
+                              <th scope="col">State : </th>
+                              <td>{profileData.shipping_state_name}</td>
+                            </tr>
+                            <tr>
+                              <th scope="col">Pincode : </th>
+                              <td>{profileData.shipping_pincode}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
+          {/* <ProfileModal showEdit={showEdit} setShowEdit={setShowEdit}/> */}
         </div>
 
         <Modal
@@ -672,7 +673,7 @@ const Profile = () => {
                   </Form.Group>
                 </div>
                 <div className="col-md-12">
-                  <hr className="mt-0"/>
+                  <hr className="mt-0" />
                 </div>
                 <div className="col-md-6">
                   <Form.Group as={Col} className="mb-2" controlId="formGridZip">

@@ -9,10 +9,28 @@ import axios from "axios";
 import { CgSpinner } from "react-icons/cg";
 import toast from "react-hot-toast";
 import { ReadyDesignCartSystem } from "../../context/ReadyDesignCartContext";
+import UserService from "../../services/Cart";
+import Select from "react-select";
 
 const api = process.env.REACT_APP_READY_API_KEY;
 
+const options = [
+  {
+    id: 1,
+    name: "Cash on delivery",
+  },
+  {
+    id: 2,
+    name: "PhonePay",
+  },
+];
+
+const defaultOption = options.find(
+  (option) => option.name === "Cash on delivery"
+);
+
 const ReadyDesignCart = () => {
+  const user_id = localStorage.getItem("user_id");
   const location = useLocation();
   const navigate = useNavigate();
   const phone = localStorage.getItem("phone");
@@ -23,6 +41,17 @@ const ReadyDesignCart = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [Items, setItems] = useState([]);
   const [removingItemId, setRemovingItemId] = useState(null);
+
+  const [selectPaymentMethod, setSelectPaymentMethod] = useState({
+    value: defaultOption.id,
+    label: defaultOption.name,
+  });
+
+  const { dispatch: resetcartcount } = useContext(ReadyDesignCartSystem);
+
+  const handleSelectPayment = (selectedOption) => {
+    setSelectPaymentMethod(selectedOption?.label);
+  };
 
   const GetUserCartList = async () => {
     axios
@@ -91,6 +120,76 @@ const ReadyDesignCart = () => {
     const gstAmount = subGst * 0.03;
     return gstAmount;
   };
+
+  const handlePhonepeClick = () => {
+    UserService.PayByPhonepeAPI({
+      user_id: user_id,
+      total_amount: (SubAmount() + SubGST()).toFixed(),
+    })
+      .then((res) => {
+        if (res?.success === false) {
+          toast.error(res?.message);
+        } else {
+          window.location.href =
+            res?.data?.instrumentResponse?.redirectInfo?.url;
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleCashClick = () => {
+    axios
+      .post(api + "ready/purchase-order", {
+        user_id: user_id,
+        payment_method: "cash",
+        cart_items: Items?.map((item) => item?.id),
+        sub_total: SubAmount(),
+        gst_amount: SubGST().toFixed(),
+        total: (SubAmount() + SubGST()).toFixed(),
+      })
+      .then((res) => {
+        navigate(`/ready-order-details/${res?.data?.data}`);
+        resetcartcount({ type: "RESET_CART" });
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    if (location.pathname == "/processing-order") {
+      const queryParams = new URLSearchParams(location.search);
+      const transaction_id = queryParams.get("transaction_id") || "";
+      axios
+        .post("https://192.168.1.177/admin_impel/api/ready/purchase-order", {
+          user_id: user_id,
+          payment_method:
+            selectPaymentMethod?.label === "Cash on delivery"
+              ? "cash"
+              : "phonepe",
+          cart_items: Items?.map((item) => item?.id),
+          sub_total: SubAmount(),
+          gst_amount: SubGST().toFixed(),
+          total: (SubAmount() + SubGST()).toFixed(),
+          transaction_id: transaction_id ? transaction_id : "",
+        })
+        .then((res) => {
+          if (res.status === true) {
+            toast.success(res.message);
+            setTimeout(() => {
+              navigate(`/order-details/${res.data}`);
+            }, 1000);
+            resetcartcount({ type: "RESET_CART" });
+            // console.log("Hello", res);
+          }
+        })
+        .catch((error) => console.log(error));
+    }
+  }, [location, Items]);
 
   return (
     <>
@@ -231,10 +330,45 @@ const ReadyDesignCart = () => {
                                   ₹{numberFormat(SubAmount() + SubGST())}
                                 </p>
                               </div>
+                              <hr />
+                              <div className="mt-2">
+                                <label htmlFor="Payment Method">
+                                  Payment Method :
+                                </label>
+                                <Select
+                                  isSearchable={false}
+                                  className="mt-1"
+                                  value={selectPaymentMethod}
+                                  onChange={handleSelectPayment}
+                                  options={options?.map((data) => ({
+                                    label: data?.name,
+                                    value: data?.id,
+                                  }))}
+                                />
+                              </div>
+
                               <div className="pt-2">
-                                <button className="btn btn-success w-100 shadow-0 mb-2">
-                                  Proceed to pay
-                                </button>
+                                {selectPaymentMethod?.label ===
+                                "Cash on delivery" ? (
+                                  <button
+                                    className="btn btn-success w-100 shadow-0 mb-2"
+                                    onClick={(e) => {
+                                      handleCashClick();
+                                    }}
+                                  >
+                                    Proceed to pay
+                                  </button>
+                                ) : (
+                                  <button
+                                    className="btn btn-success w-100 shadow-0 mb-2"
+                                    onClick={(e) => {
+                                      handlePhonepeClick();
+                                    }}
+                                  >
+                                    Proceed to pay
+                                  </button>
+                                )}
+
                                 <button
                                   type="button"
                                   className="light-up-button w-100 rounded-2"

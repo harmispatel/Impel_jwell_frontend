@@ -67,7 +67,8 @@ const ReadyDetails = () => {
         gross_weight: details?.GrossWt,
         net_weight: details?.NetWt,
         quantity: 1,
-        barcode: details?.Barcode,
+        barcode: details?.Barcode
+        // design_id: 145,
       })
       .then((res) => {
         if (res?.data?.status === true) {

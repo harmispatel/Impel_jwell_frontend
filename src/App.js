@@ -38,6 +38,8 @@ import ReadyDetails from "./pages/shop/ReadyDetails";
 import CommonOrderPlace from "./components/common/CommonOrderPlace";
 import ReadyDesignCart from "./pages/user/ReadyDesignCart";
 import ReadyDesignCartProvider from "./context/ReadyDesignCartContext";
+import MyReadyOrders from "./pages/user/MyReadyOrders";
+import ReadyOrderDetails from "./pages/user/ReadyOrderDetails";
 
 function App() {
   const location = useLocation();
@@ -159,6 +161,11 @@ function App() {
                         }
                       />
                       <Route path="my_orders" element={<MyOrders />} />
+                      <Route
+                        path="my-ready-orders"
+                        element={<MyReadyOrders />}
+                      />
+
                       {/* <Route
                       path="processing-order"
                       element={<CommonOrderPlace />}
@@ -167,6 +174,10 @@ function App() {
                       <Route
                         path="order-details/:id"
                         element={<OrderDetails />}
+                      />
+                      <Route
+                        path="ready-order-details/:id"
+                        element={<ReadyOrderDetails />}
                       />
 
                       {/* DEALER PROTECTED */}
