@@ -10,31 +10,19 @@ import { CgSpinner } from "react-icons/cg";
 import toast from "react-hot-toast";
 import { ReadyDesignCartSystem } from "../../context/ReadyDesignCartContext";
 import UserService from "../../services/Cart";
-import Select from "react-select";
+import Dropdown from "react-dropdown";
+import "react-dropdown/style.css";
 
 const api = process.env.REACT_APP_READY_API_KEY;
 
-const options = [
-  {
-    id: 1,
-    name: "Cash on delivery",
-  },
-  {
-    id: 2,
-    name: "PhonePay",
-  },
-];
-
-const defaultOption = options.find(
-  (option) => option.name === "Cash on delivery"
-);
+const options = ["Cash on delivery", "PhonePay"];
 
 const ReadyDesignCart = () => {
   const user_id = localStorage.getItem("user_id");
   const location = useLocation();
   const navigate = useNavigate();
   const phone = localStorage.getItem("phone");
-  const { dispatch: removefromcartDispatch } = useContext(
+  const { dispatch: removeFromCartDispatch } = useContext(
     ReadyDesignCartSystem
   );
 
@@ -42,15 +30,13 @@ const ReadyDesignCart = () => {
   const [Items, setItems] = useState([]);
   const [removingItemId, setRemovingItemId] = useState(null);
 
-  const [selectPaymentMethod, setSelectPaymentMethod] = useState({
-    value: defaultOption.id,
-    label: defaultOption.name,
-  });
+  const [selectPaymentMethod, setSelectPaymentMethod] =
+    useState("Cash on delivery");
 
   const { dispatch: resetcartcount } = useContext(ReadyDesignCartSystem);
 
   const handleSelectPayment = (selectedOption) => {
-    setSelectPaymentMethod(selectedOption?.label);
+    setSelectPaymentMethod(selectedOption?.value);
   };
 
   const GetUserCartList = async () => {
@@ -79,7 +65,7 @@ const ReadyDesignCart = () => {
         if (res?.data?.status === true) {
           GetUserCartList();
           toast.success(res?.data?.message);
-          removefromcartDispatch({
+          removeFromCartDispatch({
             type: "REMOVE_FROM_CART",
             payload,
           });
@@ -95,7 +81,7 @@ const ReadyDesignCart = () => {
 
   useEffect(() => {
     GetUserCartList();
-  }, []);
+  }, [selectPaymentMethod]);
 
   const numberFormat = (value) =>
     new Intl.NumberFormat("en-IN")?.format(Math?.round(value));
@@ -152,6 +138,7 @@ const ReadyDesignCart = () => {
       .then((res) => {
         navigate(`/ready-order-details/${res?.data?.data}`);
         resetcartcount({ type: "RESET_CART" });
+        toast.success(res.data.message);
         setIsLoading(false);
       })
       .catch((err) => {
@@ -165,12 +152,9 @@ const ReadyDesignCart = () => {
       const queryParams = new URLSearchParams(location.search);
       const transaction_id = queryParams.get("transaction_id") || "";
       axios
-        .post("https://192.168.1.177/admin_impel/api/ready/purchase-order", {
+        .post(api + "ready/purchase-order", {
           user_id: user_id,
-          payment_method:
-            selectPaymentMethod?.label === "Cash on delivery"
-              ? "cash"
-              : "phonepe",
+          payment_method: "phonepe",
           cart_items: Items?.map((item) => item?.id),
           sub_total: SubAmount(),
           gst_amount: SubGST().toFixed(),
@@ -178,14 +162,10 @@ const ReadyDesignCart = () => {
           transaction_id: transaction_id ? transaction_id : "",
         })
         .then((res) => {
-          if (res.status === true) {
-            toast.success(res.message);
-            setTimeout(() => {
-              navigate(`/order-details/${res.data}`);
-            }, 1000);
-            resetcartcount({ type: "RESET_CART" });
-            // console.log("Hello", res);
-          }
+          navigate(`/ready-order-details/${res?.data?.data}`);
+          resetcartcount({ type: "RESET_CART" });
+          toast.success(res.data.message);
+          setIsLoading(false);
         })
         .catch((error) => console.log(error));
     }
@@ -335,21 +315,17 @@ const ReadyDesignCart = () => {
                                 <label htmlFor="Payment Method">
                                   Payment Method :
                                 </label>
-                                <Select
-                                  isSearchable={false}
-                                  className="mt-1"
+                                <Dropdown
+                                  options={options}
+                                  placeholder="Select.."
                                   value={selectPaymentMethod}
                                   onChange={handleSelectPayment}
-                                  options={options?.map((data) => ({
-                                    label: data?.name,
-                                    value: data?.id,
-                                  }))}
+                                  className="mt-1 w-100"
                                 />
                               </div>
 
                               <div className="pt-2">
-                                {selectPaymentMethod?.label ===
-                                "Cash on delivery" ? (
+                                {selectPaymentMethod === "Cash on delivery" ? (
                                   <button
                                     className="btn btn-success w-100 shadow-0 mb-2"
                                     onClick={(e) => {

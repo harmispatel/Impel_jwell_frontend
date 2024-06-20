@@ -51,7 +51,7 @@ function App() {
   const [active, setActive] = useState(false);
 
   // const shouldShowPopup =
-  //   !["/login", "/Dealer_login", "/forget-password"].some((path) =>
+  //   !["/login", "/dealer-login", "/forget-password"].some((path) =>
   //     location.pathname.startsWith(path)
   //   ) && !location.pathname.startsWith("/reset-password/");
 
@@ -62,9 +62,9 @@ function App() {
       navigate("/");
     }
 
-    if (userType == 2 && location.pathname === "/Dealer_login") {
+    if (userType == 2 && location.pathname === "/dealer-login") {
       navigate("/");
-    } else if (userType == 1 && location.pathname === "/Dealer_login") {
+    } else if (userType == 1 && location.pathname === "/dealer-login") {
       navigate("/");
     }
   }, [userType, location.pathname, navigate]);
@@ -74,7 +74,7 @@ function App() {
       location.pathname.startsWith("/login") ||
       location.pathname.startsWith("/forget-password") ||
       location.pathname.startsWith("/reset-password") ||
-      location.pathname.startsWith("/Dealer_login")
+      location.pathname.startsWith("/dealer-login")
     ) {
       return null;
     } else {
@@ -92,7 +92,7 @@ function App() {
               {!location.pathname.startsWith("/login") &&
                 !location.pathname.startsWith("/forget-password") &&
                 !location.pathname.startsWith("/reset-password") &&
-                !location.pathname.startsWith("/Dealer_login") && (
+                !location.pathname.startsWith("/dealer-login") && (
                   <WomansClub />
                 )}
 
@@ -160,7 +160,7 @@ function App() {
                           </ProtectedRoute>
                         }
                       />
-                      <Route path="my_orders" element={<MyOrders />} />
+                      <Route path="my-orders" element={<MyOrders />} />
                       <Route
                         path="my-ready-orders"
                         element={<MyReadyOrders />}
@@ -182,7 +182,7 @@ function App() {
 
                       {/* DEALER PROTECTED */}
                       <Route
-                        path="dealer_wishlist"
+                        path="dealer-wishlist"
                         element={
                           <DealerProtectedRoute>
                             <DealerWishList />
@@ -190,7 +190,7 @@ function App() {
                         }
                       />
                       <Route
-                        path="dealer_profile"
+                        path="dealer-profile"
                         element={
                           <DealerProtectedRoute>
                             <DealerProfile />
@@ -200,7 +200,7 @@ function App() {
 
                       {/* AUTH */}
                       <Route path="/login" element={<Login />} />
-                      <Route path="/Dealer_login" element={<DealerLogin />} />
+                      <Route path="/dealer-login" element={<DealerLogin />} />
                       <Route
                         path="/forget-password"
                         element={<ForgetPassword />}

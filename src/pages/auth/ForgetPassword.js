@@ -121,7 +121,7 @@ const ForgetPassword = () => {
                     </button>
                     <p>
                       <Link
-                        to="/Dealer_login"
+                        to="/dealer-login"
                         className="text-decoration-none text-success"
                       >
                         Back to dealer login

@@ -254,7 +254,7 @@ const Navbar = () => {
       localStorage.removeItem("user_id");
       localStorage.removeItem("total_quantity");
       setIsLoggedOut(true);
-      navigate("/Dealer_login");
+      navigate("/dealer-login");
     } else {
       localStorage.removeItem("_grecaptcha");
       localStorage.removeItem("phone");
@@ -574,17 +574,17 @@ const Navbar = () => {
                           >
                             <ul>
                               <li>
-                                <Link to="/dealer_profile">
+                                <Link to="/dealer-profile">
                                   <FaUser /> My Profile
                                 </Link>
                               </li>
                               <li>
-                                <Link to="/my_orders">
+                                <Link to="/my-orders">
                                   <FaCartShopping /> My Orders
                                 </Link>
                               </li>
                               <li>
-                                <Link to="/dealer_wishlist">
+                                <Link to="/dealer-wishlist">
                                   <FaStar /> My Selections
                                 </Link>
                               </li>
@@ -723,7 +723,7 @@ const Navbar = () => {
                                 </Link>
                               </li>
                               <li>
-                                <Link to="/my_orders">
+                                <Link to="/my-orders">
                                   <FaCartShopping />
                                   My Orders
                                 </Link>

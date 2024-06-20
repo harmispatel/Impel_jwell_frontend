@@ -81,7 +81,7 @@ const Resetpassword = () => {
               confirmPassword: "",
             });
             setTimeout(() => {
-              navigate("/Dealer_login");
+              navigate("/dealer-login");
             }, 1200);
           }
         })

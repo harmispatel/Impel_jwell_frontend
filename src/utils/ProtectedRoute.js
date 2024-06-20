@@ -10,7 +10,7 @@ const ProtectedRoute = (props) => {
   const userType = localStorage.getItem("user_type");
 
   useEffect(() => {
-    if (userType == 2 && location.pathname === "/Dealer_login") {
+    if (userType == 2 && location.pathname === "/dealer-login") {
       navigate("/");
     }
   }, [userType, location.pathname]);

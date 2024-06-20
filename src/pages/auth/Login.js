@@ -244,7 +244,7 @@ const Login = () => {
                       </form>
                       <div className="col-md-12 text-end">
                         <Link
-                          to="/Dealer_login"
+                          to="/dealer-login"
                           className="text-decoration-none text-success"
                           style={{ fontWeight: "700", fontSize: "18px" }}
                         >

@@ -42,7 +42,7 @@ const Orders = () => {
       <Helmet>
         <title>Impel Store - Order Details</title>
       </Helmet>
-      <section className="my_orders">
+      <section className="my-orders">
         {isLoading ? (
           <div className="animation-loading">
             <Loader/>
@@ -73,7 +73,7 @@ const Orders = () => {
                           firstName="Home"
                           firstUrl="/"
                           secondName="My Orders"
-                          secondUrl="/my_orders"
+                          secondUrl="/my-orders"
                           thirdName="Order Details"
                         />
                       </div>

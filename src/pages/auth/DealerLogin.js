@@ -83,7 +83,7 @@ const DealerLogin = () => {
           localStorage.removeItem("showPopup");
           navigate("/");
         } else {
-          navigate("/Dealer_login");
+          navigate("/dealer-login");
           toast.error(response?.data?.message);
         }
       })

@@ -524,7 +524,7 @@ const Shop = () => {
   const DealerLogin = (e) => {
     e.preventDefault();
     localStorage.setItem("redirectPath", location.pathname);
-    navigate("/Dealer_login");
+    navigate("/dealer-login");
   };
 
   useEffect(() => {
