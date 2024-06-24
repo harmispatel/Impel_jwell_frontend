@@ -786,7 +786,7 @@ const Cart = ({ active }) => {
         })
         .catch((error) => console.log(error));
     }
-  }, [location, Items]);
+  }, [location.pathname, location.search, Items]);
 
   const numberFormat = (value) =>
     new Intl.NumberFormat("en-IN")?.format(Math?.round(value));

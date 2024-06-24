@@ -149,28 +149,38 @@ const ReadyDesignCart = () => {
   };
 
   useEffect(() => {
-    if (location.pathname == "/ready-processing-order") {
+    if (location.pathname === "/ready-processing-order") {
       const queryParams = new URLSearchParams(location.search);
       const transaction_id = queryParams.get("transaction_id") || "";
-      axios
-        .post(api + "ready/purchase-order", {
-          user_id: user_id,
-          payment_method: "online",
-          cart_items: Items?.map((item) => item?.id),
-          sub_total: SubAmount(),
-          gst_amount: SubGST().toFixed(),
-          total: (SubAmount() + SubGST()).toFixed(),
-          transaction_id: transaction_id ? transaction_id : "",
-        })
-        .then((res) => {
-          navigate(`/ready-order-details/${res?.data?.data}`);
-          resetcartcount({ type: "RESET_CART" });
-          toast.success(res.data.message);
-          setIsLoading(false);
-        })
-        .catch((error) => console.log(error));
+
+      // Ensure Items is not empty before making the API call
+      if (Items.length > 0) {
+        axios
+          .post(api + "ready/purchase-order", {
+            user_id: user_id,
+            payment_method: "online",
+            cart_items: Items.map((item) => item.id),
+            sub_total: SubAmount(),
+            gst_amount: SubGST().toFixed(),
+            total: (SubAmount() + SubGST()).toFixed(),
+            transaction_id: transaction_id ? transaction_id : "",
+          })
+          .then((res) => {
+            resetcartcount({ type: "RESET_CART" });
+            toast.success(res.data.message);
+
+            setTimeout(() => {
+              navigate(`/ready-order-details/${res.data.data}`);
+            }, 1000);
+            setIsLoading(false);
+          })
+          .catch((error) => {
+            console.log(error);
+            setIsLoading(false);
+          });
+      }
     }
-  }, [location, Items]);
+  }, [location.pathname, location.search, Items]); // Ensure Items is included in dependency array
 
   return (
     <>
@@ -178,7 +188,7 @@ const ReadyDesignCart = () => {
         <title>Impel Store - Ready products cart</title>
       </Helmet>
 
-      {location.pathname == "/processing-order" ? (
+      {location.pathname === "/ready-processing-order" ? (
         <div className="animation-loading">
           <Loader />
         </div>

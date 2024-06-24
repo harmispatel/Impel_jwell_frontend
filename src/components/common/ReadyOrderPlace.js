@@ -3,11 +3,11 @@ import Loading from "./Loader";
 import "./Loader.css";
 import { useLocation } from "react-router-dom";
 
-const CommonOrderPlace = () => {
+const ReadyOrderPlace = () => {
   const location = useLocation();
 
   useEffect(() => {
-    if (location.pathname == "/processing-order") {
+    if (location.pathname == "/ready-processing-order") {
     }
   }, [location]);
 
@@ -18,4 +18,4 @@ const CommonOrderPlace = () => {
   );
 };
 
-export default CommonOrderPlace;
+export default ReadyOrderPlace;

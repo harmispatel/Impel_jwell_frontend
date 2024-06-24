@@ -25,6 +25,7 @@ const ReadyOrderDetails = () => {
       })
       .then((res) => {
         setItems(res.data.data);
+        console.log("res.data",res.data.data)
         setProduct(res.data?.data?.order_items);
         setStatus(res.data.data.order_status);
         setIsLoading(false);
