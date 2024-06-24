@@ -7,15 +7,18 @@ const CommonOrderPlace = () => {
   const location = useLocation();
 
   useEffect(() => {
-    if (location.pathname == "/processing-order") {
+    if (
+      location.pathname == "/processing-order" ||
+      location.pathname == "/ready-processing-order"
+    ) {
     }
   }, [location]);
 
   return (
     <>
-      <Loading />
+      {location.pathname === "/processing-order" && <Loading />}{" "}
+      {location.pathname === "/ready-processing-order" && <Loading />}
     </>
   );
 };
-
 export default CommonOrderPlace;

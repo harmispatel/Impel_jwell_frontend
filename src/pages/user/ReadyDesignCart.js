@@ -111,6 +111,7 @@ const ReadyDesignCart = () => {
     UserService.PayByPhonepeAPI({
       user_id: user_id,
       total_amount: (SubAmount() + SubGST()).toFixed(),
+      ready_order: 1,
     })
       .then((res) => {
         if (res?.success === false) {
@@ -148,13 +149,13 @@ const ReadyDesignCart = () => {
   };
 
   useEffect(() => {
-    if (location.pathname == "/processing-order") {
+    if (location.pathname == "/ready-processing-order") {
       const queryParams = new URLSearchParams(location.search);
       const transaction_id = queryParams.get("transaction_id") || "";
       axios
         .post(api + "ready/purchase-order", {
           user_id: user_id,
-          payment_method: "phonepe",
+          payment_method: "online",
           cart_items: Items?.map((item) => item?.id),
           sub_total: SubAmount(),
           gst_amount: SubGST().toFixed(),

@@ -171,6 +171,7 @@ function App() {
                       element={<CommonOrderPlace />}
                     /> */}
                       <Route path="/processing-order" element={<Cart />} />
+                      <Route path="/ready-processing-order" element={<ReadyDesignCart />} />
                       <Route
                         path="order-details/:id"
                         element={<OrderDetails />}
