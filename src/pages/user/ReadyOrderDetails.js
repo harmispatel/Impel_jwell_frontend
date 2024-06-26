@@ -25,7 +25,6 @@ const ReadyOrderDetails = () => {
       })
       .then((res) => {
         setItems(res.data.data);
-        console.log("res.data",res.data.data)
         setProduct(res.data?.data?.order_items);
         setStatus(res.data.data.order_status);
         setIsLoading(false);
@@ -135,6 +134,10 @@ const ReadyOrderDetails = () => {
                                 <tr>
                                   <th scope="col">Order Time :</th>
                                   <td>{Items?.order_time}</td>
+                                </tr>
+                                <tr>
+                                  <th scope="col">Payment Method :</th>
+                                  <td>{Items?.payment_method}</td>
                                 </tr>
                               </tbody>
                             </table>

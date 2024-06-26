@@ -12,6 +12,9 @@ import { ReadyDesignCartSystem } from "../../context/ReadyDesignCartContext";
 import UserService from "../../services/Cart";
 import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
+import { Col, Form, Modal } from "react-bootstrap";
+import profileService from "../../services/Auth";
+import { ProfileSystem } from "../../context/ProfileContext";
 
 const api = process.env.REACT_APP_READY_API_KEY;
 
@@ -19,6 +22,8 @@ const options = ["Cash on delivery", "PhonePay"];
 
 const ReadyDesignCart = () => {
   const user_id = localStorage.getItem("user_id");
+  const Verification = localStorage.getItem("verification");
+
   const location = useLocation();
   const navigate = useNavigate();
   const phone = localStorage.getItem("phone");
@@ -34,6 +39,8 @@ const ReadyDesignCart = () => {
     useState("Cash on delivery");
 
   const { dispatch: resetcartcount } = useContext(ReadyDesignCartSystem);
+
+  const { dispatch: profilename, state: namestate } = useContext(ProfileSystem);
 
   const handleSelectPayment = (selectedOption) => {
     setSelectPaymentMethod(selectedOption?.value);
@@ -108,44 +115,109 @@ const ReadyDesignCart = () => {
   };
 
   const handlePhonepeClick = () => {
-    UserService.PayByPhonepeAPI({
-      user_id: user_id,
-      total_amount: (SubAmount() + SubGST()).toFixed(),
-      ready_order: 1,
-    })
-      .then((res) => {
-        if (res?.success === false) {
-          toast.error(res?.message);
-        } else {
-          window.location.href =
-            res?.data?.instrumentResponse?.redirectInfo?.url;
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (Verification == 2) {
+      if (SubAmount() + SubGST() >= 200000 && !userData?.pan_no) {
+        setValid(
+          "Pancard is required for your total amount is more than 2 lakh or above"
+        );
+        setShowEdit(true);
+        setSpinner(false);
+      } else if (SubAmount() + SubGST() < 200000) {
+        UserService.PayByPhonepeAPI({
+          user_id: user_id,
+          total_amount: (SubAmount() + SubGST()).toFixed(),
+          ready_order: 1,
+        })
+          .then((res) => {
+            if (res?.success === false) {
+              toast.error(res?.message);
+            } else {
+              window.location.href =
+                res?.data?.instrumentResponse?.redirectInfo?.url;
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
+        UserService.PayByPhonepeAPI({
+          user_id: user_id,
+          total_amount: (SubAmount() + SubGST()).toFixed(),
+          ready_order: 1,
+        })
+          .then((res) => {
+            if (res?.success === false) {
+              toast.error(res?.message);
+            } else {
+              window.location.href =
+                res?.data?.instrumentResponse?.redirectInfo?.url;
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    } else {
+      setShowEdit(true);
+      setSpinner(false);
+    }
   };
 
+  const data = Items?.map((item) => item?.id);
+
   const handleCashClick = () => {
-    axios
-      .post(api + "ready/purchase-order", {
-        user_id: user_id,
-        payment_method: "cash",
-        cart_items: Items?.map((item) => item?.id),
-        sub_total: SubAmount(),
-        gst_amount: SubGST().toFixed(),
-        total: (SubAmount() + SubGST()).toFixed(),
-      })
-      .then((res) => {
-        navigate(`/ready-order-details/${res?.data?.data}`);
-        resetcartcount({ type: "RESET_CART" });
-        toast.success(res.data.message);
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setIsLoading(false);
-      });
+    if (Verification == 2) {
+      if (SubAmount() + SubGST() >= 200000 && !userData?.pan_no) {
+        setValid(
+          "Pancard is required for your total amount is more than 2 lakh or above"
+        );
+        setShowEdit(true);
+        setSpinner(false);
+      } else if (SubAmount() + SubGST() < 200000) {
+        axios
+          .post(api + "ready/purchase-order", {
+            user_id: user_id,
+            payment_method: "cash",
+            cart_items: Items?.map((item) => item?.id),
+            sub_total: SubAmount(),
+            gst_amount: SubGST().toFixed(),
+            total: (SubAmount() + SubGST())?.toFixed(),
+          })
+          .then((res) => {
+            navigate(`/ready-order-details/${res?.data?.data}`);
+            resetcartcount({ type: "RESET_CART" });
+            toast.success(res.data.message);
+            setIsLoading(false);
+          })
+          .catch((err) => {
+            console.log(err);
+            setIsLoading(false);
+          });
+      } else {
+        axios
+          .post(api + "ready/purchase-order", {
+            user_id: user_id,
+            payment_method: "cash",
+            cart_items: Items?.map((item) => item?.id),
+            sub_total: SubAmount(),
+            gst_amount: SubGST().toFixed(),
+            total: (SubAmount() + SubGST())?.toFixed(),
+          })
+          .then((res) => {
+            navigate(`/ready-order-details/${res?.data?.data}`);
+            resetcartcount({ type: "RESET_CART" });
+            toast.success(res.data.message);
+            setIsLoading(false);
+          })
+          .catch((err) => {
+            console.log(err);
+            setIsLoading(false);
+          });
+      }
+    } else {
+      setShowEdit(true);
+      setSpinner(false);
+    }
   };
 
   useEffect(() => {
@@ -158,7 +230,7 @@ const ReadyDesignCart = () => {
         axios
           .post(api + "ready/purchase-order", {
             user_id: user_id,
-            payment_method: "online",
+            payment_method: "phonepe",
             cart_items: Items.map((item) => item.id),
             sub_total: SubAmount(),
             gst_amount: SubGST().toFixed(),
@@ -180,7 +252,390 @@ const ReadyDesignCart = () => {
           });
       }
     }
-  }, [location.pathname, location.search, Items]); // Ensure Items is included in dependency array
+  }, [location.pathname, location.search, Items]);
+
+  // user profile functionlity
+  const [spinner, setSpinner] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
+  const [profileData, setProfileData] = useState([]);
+  const [selectedData, setSelectedData] = useState([]);
+  const [city, setcity] = useState();
+  const [shipping_city, setShipping_city] = useState();
+  const [isChecked, setIsChecked] = useState(false);
+  const [valid, setValid] = useState("");
+  const [payment_link, setPayment_Link] = useState("");
+  const [message, setMessage] = useState(false);
+  const [userData, setUserData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    address: "",
+    pincode: "",
+    shipping_address: "",
+    shipping_pincode: "",
+    shipping_state: "",
+    shipping_city: "",
+    gst_no: "",
+    pan_no: "",
+    state: "",
+    city: "",
+    states: "",
+    address_same_as_company: "",
+  });
+
+  const [error, setError] = useState({
+    nameErr: "",
+    emailErr: "",
+    addressErr: "",
+    pincodeErr: "",
+    stateErr: "",
+    cityErr: "",
+    pancardErr: "",
+    gstErr: "",
+    shipping_address_err: "",
+    shipping_pincode_err: "",
+    shipping_state_err: "",
+    shipping_city_err: "",
+  });
+
+  const fetchCity = async (stateId) => {
+    await profileService
+      .getCity({ state_id: stateId })
+      .then((res) => {
+        setcity(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const fetchShippingCity = async (cityId) => {
+    await profileService
+      .getCity({ state_id: cityId })
+      .then((res) => {
+        setShipping_city(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const getProfile = async () => {
+    await profileService
+      .getProfile({ phone: phone })
+      .then((res) => {
+        const Billing_shipping_state = res.data.state.name;
+        const Billing_shipping_city = res.data.city.name;
+        const shipping_state_name = res.data.shipping_state.name;
+        const shipping_city_name = res.data.shipping_city.name;
+        setProfileData({
+          ...res.data,
+          state_name: Billing_shipping_state,
+          city_name: Billing_shipping_city,
+          shipping_state_name: shipping_state_name,
+          shipping_city_name: shipping_city_name,
+          state: res.data.state.id,
+          city: res.data.city.id,
+          shipping_state: res.data.shipping_state.id,
+          shipping_city: res.data.shipping_city.id,
+        });
+        setUserData({
+          ...res.data,
+          state_name: Billing_shipping_state,
+          city_name: Billing_shipping_city,
+          shipping_state_name: shipping_state_name,
+          shipping_city_name: shipping_city_name,
+          state: res.data.state.id,
+          city: res.data.city.id,
+          shipping_state: res.data.shipping_state.id,
+          shipping_city: res.data.shipping_city.id,
+        });
+        res.data.state.id && fetchCity(res.data.state.id);
+        res.data.shipping_state.id &&
+          fetchShippingCity(res.data.shipping_state.id);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    getProfile();
+  }, []);
+
+  const isValidPan = (panNumber) => {
+    const panRegex = /[A-Z]{5}[0-9]{4}[A-Z]{1}/;
+
+    return panRegex.test(panNumber);
+  };
+
+  const isPriceAboveLimit = SubAmount() + SubGST() >= 200000;
+
+  const pincodeRegex = /^\d{6}$/;
+
+  const FormValidation = () => {
+    let isValid = true;
+    const validationErrors = { ...error };
+    if (!userData.name.trim()) {
+      validationErrors.nameErr = "Name is required";
+      isValid = false;
+    } else {
+      validationErrors.nameErr = "";
+    }
+
+    if (!userData.email.trim()) {
+      validationErrors.emailErr = "Email is required";
+      isValid = false;
+    } else if (
+      !/^[a-zA-Z\d\.-]+@[a-zA-Z\d\.-]+\.[a-zA-Z]{2,}$/i.test(userData.email)
+    ) {
+      validationErrors.emailErr = "Invalid email address";
+      isValid = false;
+    } else if (userData.email.indexOf("@") === -1) {
+      validationErrors.emailErr = "Email address must contain @ symbol";
+      isValid = false;
+    } else {
+      validationErrors.emailErr = "";
+    }
+
+    if (isPriceAboveLimit && !userData.pan_no) {
+      setValid(
+        "Pancard is required for your total amount is more than 2 lakh or above"
+      );
+      isValid = false;
+    } else if (isPriceAboveLimit && !isValidPan(userData.pan_no)) {
+      setValid("Invalid pan-card Format");
+      isValid = false;
+    } else {
+      setValid("");
+    }
+
+    if (!userData.address.trim()) {
+      validationErrors.addressErr = "Address is required";
+      isValid = false;
+    } else {
+      validationErrors.addressErr = "";
+    }
+    if (!userData.pincode.trim()) {
+      validationErrors.pincodeErr = "Pincode is required";
+      isValid = false;
+    } else if (!pincodeRegex.test(userData.pincode.trim())) {
+      validationErrors.pincodeErr = "Pincode must be a 6-digit number";
+      isValid = false;
+    } else {
+      validationErrors.pincodeErr = "";
+    }
+
+    if (userData.state == "" || userData.state == undefined) {
+      validationErrors.stateErr = "State must be select";
+      isValid = false;
+    } else {
+      validationErrors.stateErr = "";
+    }
+    if (userData.city == "" || userData.city == undefined) {
+      validationErrors.cityErr = "City must be select";
+      isValid = false;
+    } else {
+      validationErrors.cityErr = "";
+    }
+
+    if (!isChecked) {
+      if (!isChecked && !userData.shipping_address.trim()) {
+        validationErrors.shipping_address_err = "Shipping Address is required";
+        isValid = false;
+      } else {
+        validationErrors.shipping_address_err = "";
+      }
+
+      if (!userData.shipping_pincode.trim()) {
+        validationErrors.shipping_pincode_err = "Shipping Pincode is required";
+        isValid = false;
+      } else if (!pincodeRegex.test(userData.shipping_pincode.trim())) {
+        validationErrors.shipping_pincode_err =
+          "Shipping Pincode must be a 6-digit number";
+        isValid = false;
+      } else {
+        validationErrors.shipping_pincode_err = "";
+      }
+
+      if (
+        userData.shipping_state == "" ||
+        userData.shipping_state == undefined
+      ) {
+        validationErrors.shipping_state_err = "shipping state must be select";
+        isValid = false;
+      } else {
+        validationErrors.shipping_state_err = "";
+      }
+      if (userData.shipping_city == "" || userData.shipping_city == undefined) {
+        validationErrors.shipping_city_err = "shipping city must be select";
+        isValid = false;
+      } else {
+        validationErrors.shipping_city_err = "";
+      }
+    } else {
+      validationErrors.shipping_address_err = "";
+      validationErrors.shipping_pincode_err = "";
+      validationErrors.shipping_state_err = "";
+      validationErrors.shipping_city_err = "";
+    }
+    setError(validationErrors);
+    return isValid;
+  };
+
+  const handleProfileData = async (data) => {
+    setSelectedData(data);
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    if (name === "pan_no" && value.length > 10) {
+      e.target.value = value.slice(0, 10);
+    }
+
+    if (name === "state") {
+      setUserData({
+        ...userData,
+        state: value,
+        city: "",
+      });
+    } else if (name === "shipping_state") {
+      setUserData({
+        ...userData,
+        shipping_state: value,
+        shipping_city: "",
+      });
+    } else {
+      setUserData({
+        ...userData,
+        [name]: value,
+      });
+    }
+  };
+
+  const handleCheckboxChange = (event) => {
+    setIsChecked(event.target.checked);
+
+    if (event.target.checked) {
+      setUserData({
+        ...userData,
+        shipping_address: userData.address,
+        shipping_pincode: userData.pincode,
+        shipping_state: userData.state,
+        shipping_city: userData.city,
+      });
+    } else {
+      setUserData({
+        ...userData,
+        shipping_address: "",
+        shipping_pincode: "",
+        shipping_state: "",
+        shipping_city: "",
+      });
+    }
+  };
+
+  const handleUpdateProfile = async (e) => {
+    e.preventDefault();
+    const isFormValid = FormValidation();
+    if (isFormValid) {
+      setSpinner(true);
+      const formData = new FormData();
+      formData.append("id", selectedData.id);
+      formData.append("name", userData.name ? userData.name : "");
+      formData.append("email", userData.email ? userData.email : "");
+      formData.append("phone", userData.phone ? userData.phone : "");
+      formData.append("pan_no", userData.pan_no ? userData.pan_no : "");
+      formData.append("gst_no", userData.gst_no ? userData.gst_no : "");
+
+      // company address update
+      formData.append("address", userData.address ? userData.address : "");
+      formData.append("pincode", userData.pincode ? userData.pincode : "");
+      formData.append("state", userData.state ? userData.state : "");
+      formData.append("city", userData.city ? userData.city : "");
+
+      // checkbox update
+      formData.append("address_same_as_company", isChecked ? "1" : "0");
+
+      // shipping address update
+      formData.append(
+        "shipping_address",
+        isChecked ? userData.address : userData.shipping_address
+      );
+      formData.append(
+        "shipping_pincode",
+        isChecked ? userData.pincode : userData.shipping_pincode
+      );
+      formData.append(
+        "shipping_state",
+        isChecked ? userData.state : userData.shipping_state
+      );
+      formData.append(
+        "shipping_city",
+        isChecked ? userData.city : userData.shipping_city
+      );
+
+      profileService
+        .updateProfile(formData)
+        .then((res) => {
+          if (res.status === true) {
+            setShowEdit(false);
+            getProfile();
+            profilename({
+              type: "SET_NAME",
+              payload: { profilename: !namestate?.profilename },
+            });
+            toast.success(res.message);
+            localStorage.setItem("verification", res.data.verification);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+        .finally(() => {
+          setSpinner(false);
+        });
+    } else {
+    }
+  };
+
+  useEffect(() => {
+    const validationErrors = {
+      shipping_address_err: "",
+      shipping_state_err: "",
+      shipping_city_err: "",
+      shipping_pincode_err: "",
+    };
+
+    if (!isChecked) {
+      if (!userData.shipping_address.trim()) {
+        validationErrors.shipping_address_err = "Shipping address is required";
+      }
+      if (!userData.shipping_pincode.trim()) {
+        validationErrors.shipping_pincode_err = "Shipping pincode is required";
+      }
+      if (!userData.shipping_state || userData.shipping_state === undefined) {
+        validationErrors.shipping_state_err = "Shipping state must be select";
+      }
+      if (!userData.shipping_city || userData.shipping_city === undefined) {
+        validationErrors.shipping_city_err = "Shipping city must be select";
+      }
+    } else {
+      validationErrors.shipping_address_err = "";
+      validationErrors.shipping_state_err = "";
+      validationErrors.shipping_city_err = "";
+      validationErrors.shipping_pincode_err = "";
+    }
+
+    setError(validationErrors);
+  }, [isChecked, userData]);
+
+  useEffect(() => {
+    setIsChecked(profileData?.address_same_as_company === 1);
+  }, [profileData?.address_same_as_company]);
 
   return (
     <>
@@ -339,10 +794,19 @@ const ReadyDesignCart = () => {
                                 {selectPaymentMethod === "Cash on delivery" ? (
                                   <button
                                     className="btn btn-success w-100 shadow-0 mb-2"
+                                    disabled={spinner}
                                     onClick={(e) => {
                                       handleCashClick();
+                                      handleProfileData(profileData);
                                     }}
                                   >
+                                    {" "}
+                                    {spinner && (
+                                      <CgSpinner
+                                        size={20}
+                                        className="animate_spin me-2"
+                                      />
+                                    )}
                                     Proceed to pay
                                   </button>
                                 ) : (
@@ -350,6 +814,7 @@ const ReadyDesignCart = () => {
                                     className="btn btn-success w-100 shadow-0 mb-2"
                                     onClick={(e) => {
                                       handlePhonepeClick();
+                                      handleProfileData(profileData);
                                     }}
                                   >
                                     Proceed to pay
@@ -414,7 +879,7 @@ const ReadyDesignCart = () => {
                 </>
               )}
 
-              {/* <Modal
+              <Modal
                 className="form_intent profile_model"
                 centered
                 show={showEdit}
@@ -750,7 +1215,7 @@ const ReadyDesignCart = () => {
                     </div>
                   </Form>
                 </Modal.Body>
-              </Modal> */}
+              </Modal>
             </div>
           </section>
         </>
