@@ -163,7 +163,7 @@ const ReadytoDispatch = () => {
                     <input
                       type="text"
                       className="form-control"
-                      placeholder="search with tag no"
+                      placeholder="Search with tag no"
                       value={tagNoChange}
                       onChange={(e) => setTagNoChange(e.target.value)}
                     />

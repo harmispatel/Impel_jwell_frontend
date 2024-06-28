@@ -36,8 +36,8 @@ const ReadyDesignCart = () => {
   const [Items, setItems] = useState([]);
   const [removingItemId, setRemovingItemId] = useState(null);
 
-  const [selectPaymentMethod, setSelectPaymentMethod] =
-    useState("Cash on delivery");
+  const [selectPaymentMethod, setSelectPaymentMethod] = useState("");
+  const [selectError, setSelectError] = useState("");
 
   const { dispatch: resetcartcount } = useContext(ReadyDesignCartSystem);
 
@@ -783,7 +783,7 @@ const ReadyDesignCart = () => {
                                 </label>
                                 <Dropdown
                                   options={options}
-                                  placeholder="Select.."
+                                  placeholder="Select payment method"
                                   value={selectPaymentMethod}
                                   onChange={handleSelectPayment}
                                   className="mt-1 w-100"
@@ -794,7 +794,7 @@ const ReadyDesignCart = () => {
                                 {selectPaymentMethod === "Cash on delivery" ? (
                                   <button
                                     className="btn btn-success w-100 shadow-0 mb-2"
-                                    disabled={spinner}
+                                    disabled={!selectPaymentMethod}
                                     onClick={(e) => {
                                       handleCashClick();
                                       handleProfileData(profileData);
@@ -812,6 +812,7 @@ const ReadyDesignCart = () => {
                                 ) : (
                                   <button
                                     className="btn btn-success w-100 shadow-0 mb-2"
+                                    disabled={!selectPaymentMethod}
                                     onClick={(e) => {
                                       handlePhonepeClick();
                                       handleProfileData(profileData);

@@ -237,7 +237,7 @@ const ReadyOrderDetails = () => {
                                     <th>Image</th>
                                     <th>Name</th>
                                     <th>Quantity</th>
-                                    <th>gross_weight</th>
+                                    <th>Gross Weight</th>
                                     <th>Net Weight</th>
                                     {/* <th>Metal Value</th>
                                   <th>Total</th> */}
