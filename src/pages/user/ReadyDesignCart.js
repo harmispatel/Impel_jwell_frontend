@@ -17,7 +17,7 @@ import { Col, Form, Modal } from "react-bootstrap";
 import profileService from "../../services/Auth";
 import { ProfileSystem } from "../../context/ProfileContext";
 
-const api = process.env.REACT_APP_READY_API_KEY;
+const api = process.env.REACT_APP_API_KEY;
 
 const options = ["Cash on delivery", "PhonePay"];
 

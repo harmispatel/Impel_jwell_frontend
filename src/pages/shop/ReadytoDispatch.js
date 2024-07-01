@@ -111,6 +111,7 @@ const ReadytoDispatch = () => {
       })
       .then((res) => {
         setProducts(res?.Tags);
+        console.log("res", res.Tags);
         setIsLoading(false);
       })
       .catch((err) => {
@@ -250,7 +251,7 @@ const ReadytoDispatch = () => {
                                   <>
                                     <img
                                       src={`https://api.indianjewelcast.com/${data?.Images[0]?.ImageName}`}
-                                      alt={`https://api.indianjewelcast.com/${data?.Images[0]?.ImageName}`}
+                                      alt=""
                                       className="w-100"
                                     />
                                   </>

@@ -8,8 +8,9 @@ import toast from "react-hot-toast";
 import { CgSpinner } from "react-icons/cg";
 import { ReadyDesignCartSystem } from "../../context/ReadyDesignCartContext";
 import noImage from "../../assets/images/No_Image_Available.jpg";
+import profileService from "../../services/Home";
 
-const api = process.env.REACT_APP_READY_API_KEY;
+const api = process.env.REACT_APP_API_KEY;
 
 const ReadyDetails = () => {
   const location = useLocation();
@@ -26,10 +27,10 @@ const ReadyDetails = () => {
 
   useEffect(() => {
     const getDetails = () => {
-      axios
-        .post(`https://api.indianjewelcast.com/api/Tag/GetInfo?TagNo=${id}`)
+      profileService
+        .GetProductsDetailsAPI({ TagNo: id })
         .then((res) => {
-          setDetails(res?.data?.lstTagInfo[0]);
+          setDetails(res?.lstTagInfo[0]);
           setIsLoading(false);
         })
         .catch((err) => {

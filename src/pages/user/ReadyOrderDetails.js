@@ -6,7 +6,7 @@ import Loader from "../../components/common/Loader";
 import axios from "axios";
 import noImage from "../../assets/images/No_Image_Available.jpg";
 
-const api = process.env.REACT_APP_READY_API_KEY;
+const api = process.env.REACT_APP_API_KEY;
 
 const ReadyOrderDetails = () => {
   const { id } = useParams();
