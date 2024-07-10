@@ -25,12 +25,41 @@ const ReadyDetails = () => {
   const [cartItems, setCartItems] = useState([]);
   const [spinner, setSpinner] = useState(false);
 
+  // useEffect(() => {
+  //   const getDetails = () => {
+  //     profileService
+  //       .GetProductsDetailsAPI({ TagNo: id })
+  //       .then((res) => {
+  //         setDetails(res?.lstTagInfo[0]);
+  //         setIsLoading(false);
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //         setIsLoading(false);
+  //       });
+  //   };
+  //   getDetails();
+  //   GetUserCartList();
+  // }, []);
+
   useEffect(() => {
     const getDetails = () => {
       profileService
+<<<<<<< HEAD
         .GetProductsDetailsAPI({ TagNo: id })
         .then((res) => {
           setDetails(res?.lstTagInfo[0]);
+=======
+        .GetProductsAPI({
+          PageNo: 1,
+          PageSize: 100,
+          DeviceID: 0,
+          SearchText: id,
+        })
+        .then((res) => {
+          setDetails(res?.Tags[0]);
+          console.log("res", res?.Tags[0]);
+>>>>>>> a9d3869b7d427b78c2b558fdde5738f2206580a1
           setIsLoading(false);
         })
         .catch((err) => {
@@ -38,6 +67,7 @@ const ReadyDetails = () => {
           setIsLoading(false);
         });
     };
+
     getDetails();
     GetUserCartList();
   }, []);

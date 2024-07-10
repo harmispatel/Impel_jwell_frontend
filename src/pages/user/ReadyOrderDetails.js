@@ -10,6 +10,7 @@ const api = process.env.REACT_APP_API_KEY;
 
 const ReadyOrderDetails = () => {
   const { id } = useParams();
+ 
   const user_id = localStorage.getItem("user_id");
   const user_type = localStorage.getItem("user_type");
   const [Items, setItems] = useState([]);

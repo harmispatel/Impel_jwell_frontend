@@ -360,6 +360,9 @@ const Navbar = () => {
   const cartTip = <Tooltip id="tooltip">cart</Tooltip>;
   const readyCartTip = <Tooltip id="tooltip">Ready design cart</Tooltip>;
 
+  const silver = "silver";
+  const gold = "gold";
+
   return (
     <header
       className={`${colorChange === true ? "header sticky_header" : "header"}`}
@@ -409,11 +412,21 @@ const Navbar = () => {
                     >
                       <ul>
                         <li>
+<<<<<<< HEAD
                           <Link to="/ready-to-dispatch">SILVER ORNAMENTS</Link>
                         </li>
                         <li>
                           <Link to="/ready-to-dispatch">GOLD ORNAMENTS</Link>
                         </li>
+=======
+                          <Link to={`/ready-to-dispatch/${silver}`}>
+                            SILVER
+                          </Link>
+                        </li>
+                        <li>
+                          <Link to={`/ready-to-dispatch/${gold}`}>GOLD</Link>
+                        </li>
+>>>>>>> a9d3869b7d427b78c2b558fdde5738f2206580a1
                       </ul>
                     </div>
 

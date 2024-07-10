@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
 import profileService from "../../services/Home";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Loader from "../../components/common/Loader";
 import Select from "react-select";
 
 const ReadytoDispatch = () => {
+  const { id } = useParams();
+
+  const gold_id = id === "silver" ? 3 : 1;
+
   const [products, setProducts] = useState([]);
   const [filters, setFilters] = useState([]);
   const [minPrice, setMinPrice] = useState(null);
@@ -94,6 +98,7 @@ const ReadytoDispatch = () => {
         CommaSeperate_ItemID: items?.value || "",
         CommaSeperate_StyleID: styles?.value || "",
         CommaSeperate_ProductID: "",
+        CommaSeperate_CompanyID: gold_id,
         CommaSeperate_SubItemID: subItems?.value || "",
         CommaSeperate_AppItemCategoryID: "",
         CommaSeperate_ItemSubID: "",
@@ -118,7 +123,7 @@ const ReadytoDispatch = () => {
         console.log(err);
         setIsLoading(false);
       });
-  }, [itemGroups, items, subItems, styles, sizes, tagNoChange]);
+  }, [itemGroups, items, subItems, styles, sizes, tagNoChange, gold_id]);
 
   const numberFormat = (value) =>
     new Intl.NumberFormat("en-IN")?.format(Math?.round(value));
@@ -245,7 +250,9 @@ const ReadytoDispatch = () => {
                       return (
                         <div className="col-md-3 col-sm-4 col-xs-6" key={index}>
                           <div className="item-product text-center">
-                            <Link to={`/ready-to-dispatch/${data?.TagNo}`}>
+                            <Link
+                              to={`/ready-to-dispatch/${id}/${data?.TagNo}`}
+                            >
                               <div className="product-thumb">
                                 {data?.Images[0]?.ImageName ? (
                                   <>
