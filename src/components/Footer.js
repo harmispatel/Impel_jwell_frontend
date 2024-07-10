@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { BsFacebook, BsInstagram, BsTwitter, BsYoutube } from "react-icons/bs";
 import GoTop from "./GoTop";
 import profileService from "../services/Home";
+import { FaPinterest } from "react-icons/fa";
 
 const Footer = () => {
   const [siteSetting, setSiteSetting] = useState("");
@@ -95,6 +96,15 @@ const Footer = () => {
                 <li>
                   <Link to={siteSetting?.youtube_link} target="_blank">
                     <BsYoutube />
+                  </Link>
+                </li>
+              ) : (
+                <></>
+              )}
+              {siteSetting?.pinterest_link ? (
+                <li>
+                  <Link to={siteSetting?.pinterest_link} target="_blank">
+                    <FaPinterest />
                   </Link>
                 </li>
               ) : (

@@ -12,6 +12,7 @@ import { BsHandbag, BsHeart } from "react-icons/bs";
 import { FaCartShopping } from "react-icons/fa6";
 import { IoLogOut } from "react-icons/io5";
 import { HiMiniShoppingBag } from "react-icons/hi2";
+import { AiOutlineGold } from "react-icons/ai";
 
 import Logo from "../assets/images/logo.png";
 import NOimage from "../assets/images/user-demo-image.png";
@@ -413,11 +414,15 @@ const Navbar = () => {
                       <ul>
                         <li>
                           <Link to={`/ready-to-dispatch/${silver}`}>
+                            <AiOutlineGold style={{ fontSize: "20px" }} />
                             SILVER
                           </Link>
                         </li>
                         <li>
-                          <Link to={`/ready-to-dispatch/${gold}`}>GOLD</Link>
+                          <Link to={`/ready-to-dispatch/${gold}`}>
+                            <AiOutlineGold style={{ fontSize: "20px" }} />
+                            GOLD
+                          </Link>
                         </li>
                       </ul>
                     </div>
