@@ -4,11 +4,13 @@ import { Helmet } from "react-helmet-async";
 import BreadCrumb from "../../components/common/BreadCrumb";
 import Loader from "../../components/common/Loader";
 import axios from "axios";
+import noImage from "../../assets/images/No_Image_Available.jpg";
 
-const api = process.env.REACT_APP_READY_API_KEY;
+const api = process.env.REACT_APP_API_KEY;
 
 const ReadyOrderDetails = () => {
   const { id } = useParams();
+ 
   const user_id = localStorage.getItem("user_id");
   const user_type = localStorage.getItem("user_type");
   const [Items, setItems] = useState([]);
@@ -236,7 +238,7 @@ const ReadyOrderDetails = () => {
                                     <th>Image</th>
                                     <th>Name</th>
                                     <th>Quantity</th>
-                                    <th>gross_weight</th>
+                                    <th>Gross Weight</th>
                                     <th>Net Weight</th>
                                     {/* <th>Metal Value</th>
                                   <th>Total</th> */}
@@ -247,29 +249,20 @@ const ReadyOrderDetails = () => {
                                     <>
                                       <tr>
                                         <td>
-                                          <Link
-                                            to={`/ready-to-dispatch/${datas?.design_id}`}
-                                            className="nav-link"
-                                          >
-                                            <img
-                                              src={`https://api.indianjewelcast.com/TagImage/${datas?.barcode}.jpg`}
-                                              onError={(e) => {
-                                                e.target.onerror = null;
-                                                e.target.src =
-                                                  "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg";
-                                              }}
-                                              alt=""
-                                              style={{ width: "100px" }}
-                                            />
-                                          </Link>
+                                          <img
+                                            src={`https://api.indianjewelcast.com/TagImage/${datas?.barcode}.jpg`}
+                                            onError={(e) => {
+                                              e.target.onerror = null;
+                                              e.target.src =
+                                                noImage?.No_Image_Available ||
+                                                "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg";
+                                            }}
+                                            alt=""
+                                            style={{ width: "100px" }}
+                                          />
                                         </td>
                                         <td>
-                                          <Link
-                                            to={`/ready-to-dispatch/${datas?.design_id}`}
-                                            className="nav-link"
-                                          >
-                                            <span>{datas?.design_name}</span>
-                                          </Link>
+                                          <span>{datas?.design_name}</span>
                                         </td>
 
                                         <td>

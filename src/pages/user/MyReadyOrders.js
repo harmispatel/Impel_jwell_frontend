@@ -7,7 +7,7 @@ import { OverlayTrigger, Pagination, Tooltip } from "react-bootstrap";
 import Loader from "../../components/common/Loader";
 import axios from "axios";
 
-const api = process.env.REACT_APP_READY_API_KEY;
+const api = process.env.REACT_APP_API_KEY;
 
 const MyReadyOrders = () => {
   const navigate = useNavigate();

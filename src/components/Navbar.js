@@ -28,7 +28,7 @@ import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { ReadyDesignCartSystem } from "../context/ReadyDesignCartContext";
 import axios from "axios";
 
-const api = process.env.REACT_APP_READY_API_KEY;
+const api = process.env.REACT_APP_API_KEY;
 
 const Navbar = () => {
   const navbarRef = useRef(null);
@@ -360,6 +360,9 @@ const Navbar = () => {
   const cartTip = <Tooltip id="tooltip">cart</Tooltip>;
   const readyCartTip = <Tooltip id="tooltip">Ready design cart</Tooltip>;
 
+  const silver = "silver";
+  const gold = "gold";
+
   return (
     <header
       className={`${colorChange === true ? "header sticky_header" : "header"}`}
@@ -400,7 +403,7 @@ const Navbar = () => {
                   </Link>
                 </li>
 
-                {/* <li className="nav-item">
+                <li className="nav-item">
                   <div onClick={DispatchLink} ref={DispatchRef}>
                     <div
                       className={`dispatch-dropdown ${
@@ -409,12 +412,13 @@ const Navbar = () => {
                     >
                       <ul>
                         <li>
-                          <Link to="/ready-to-dispatch">
-                            <AiFillGold />
-                            GOLD
+                          <Link to={`/ready-to-dispatch/${silver}`}>
+                            SILVER
                           </Link>
                         </li>
-                        <li></li>
+                        <li>
+                          <Link to={`/ready-to-dispatch/${gold}`}>GOLD</Link>
+                        </li>
                       </ul>
                     </div>
 
@@ -428,15 +432,12 @@ const Navbar = () => {
                         cursor: "pointer",
                       }}
                     >
-                      <Link to="/ready-to-dispatch">
-                        <AiFillGold />
-                        Ready To Dispatch
-                      </Link>
+                      Ready To Dispatch
                     </span>
                   </div>
-                </li> */}
+                </li>
 
-                <li className="nav-item">
+                {/* <li className="nav-item">
                   <Link
                     className={
                       currentRoute === "/ready-to-dispatch"
@@ -449,7 +450,7 @@ const Navbar = () => {
                   >
                     Ready To Dispatch
                   </Link>
-                </li>
+                </li> */}
 
                 <li className="nav-item">
                   <div onClick={TagsDropdown} ref={tagRef}>

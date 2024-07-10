@@ -7,8 +7,10 @@ import { BsCartDash, BsHandbagFill } from "react-icons/bs";
 import toast from "react-hot-toast";
 import { CgSpinner } from "react-icons/cg";
 import { ReadyDesignCartSystem } from "../../context/ReadyDesignCartContext";
+import noImage from "../../assets/images/No_Image_Available.jpg";
+import profileService from "../../services/Home";
 
-const api = process.env.REACT_APP_READY_API_KEY;
+const api = process.env.REACT_APP_API_KEY;
 
 const ReadyDetails = () => {
   const location = useLocation();
@@ -23,12 +25,35 @@ const ReadyDetails = () => {
   const [cartItems, setCartItems] = useState([]);
   const [spinner, setSpinner] = useState(false);
 
+  // useEffect(() => {
+  //   const getDetails = () => {
+  //     profileService
+  //       .GetProductsDetailsAPI({ TagNo: id })
+  //       .then((res) => {
+  //         setDetails(res?.lstTagInfo[0]);
+  //         setIsLoading(false);
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //         setIsLoading(false);
+  //       });
+  //   };
+  //   getDetails();
+  //   GetUserCartList();
+  // }, []);
+
   useEffect(() => {
     const getDetails = () => {
-      axios
-        .post(`https://api.indianjewelcast.com/api/Tag/GetInfo?TagNo=${id}`)
+      profileService
+        .GetProductsAPI({
+          PageNo: 1,
+          PageSize: 100,
+          DeviceID: 0,
+          SearchText: id,
+        })
         .then((res) => {
-          setDetails(res?.data?.lstTagInfo[0]);
+          setDetails(res?.Tags[0]);
+          console.log("res", res?.Tags[0]);
           setIsLoading(false);
         })
         .catch((err) => {
@@ -36,6 +61,7 @@ const ReadyDetails = () => {
           setIsLoading(false);
         });
     };
+
     getDetails();
     GetUserCartList();
   }, []);
@@ -67,7 +93,7 @@ const ReadyDetails = () => {
         gross_weight: details?.GrossWt,
         net_weight: details?.NetWt,
         quantity: 1,
-        barcode: details?.Barcode
+        barcode: details?.Barcode,
         // design_id: 145,
       })
       .then((res) => {
@@ -126,6 +152,7 @@ const ReadyDetails = () => {
                               onError={(e) => {
                                 e.target.onerror = null;
                                 e.target.src =
+                                  noImage?.No_Image_Available ||
                                   "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg";
                               }}
                               alt=""

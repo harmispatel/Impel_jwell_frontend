@@ -5,6 +5,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaLongArrowAltLeft } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import emptycart from "../../assets/images/empty-cart.png";
+import noImage from "../../assets/images/No_Image_Available.jpg";
 import axios from "axios";
 import { CgSpinner } from "react-icons/cg";
 import toast from "react-hot-toast";
@@ -16,7 +17,7 @@ import { Col, Form, Modal } from "react-bootstrap";
 import profileService from "../../services/Auth";
 import { ProfileSystem } from "../../context/ProfileContext";
 
-const api = process.env.REACT_APP_READY_API_KEY;
+const api = process.env.REACT_APP_API_KEY;
 
 const options = ["Cash on delivery", "PhonePay"];
 
@@ -35,8 +36,8 @@ const ReadyDesignCart = () => {
   const [Items, setItems] = useState([]);
   const [removingItemId, setRemovingItemId] = useState(null);
 
-  const [selectPaymentMethod, setSelectPaymentMethod] =
-    useState("Cash on delivery");
+  const [selectPaymentMethod, setSelectPaymentMethod] = useState("");
+  const [selectError, setSelectError] = useState("");
 
   const { dispatch: resetcartcount } = useContext(ReadyDesignCartSystem);
 
@@ -162,8 +163,6 @@ const ReadyDesignCart = () => {
       setSpinner(false);
     }
   };
-
-  const data = Items?.map((item) => item?.id);
 
   const handleCashClick = () => {
     if (Verification == 2) {
@@ -687,6 +686,7 @@ const ReadyDesignCart = () => {
                                                 onError={(e) => {
                                                   e.target.onerror = null;
                                                   e.target.src =
+                                                    noImage?.No_Image_Available ||
                                                     "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg";
                                                 }}
                                                 className="border rounded me-3 w-100 p-2"
@@ -783,7 +783,7 @@ const ReadyDesignCart = () => {
                                 </label>
                                 <Dropdown
                                   options={options}
-                                  placeholder="Select.."
+                                  placeholder="Select payment method"
                                   value={selectPaymentMethod}
                                   onChange={handleSelectPayment}
                                   className="mt-1 w-100"
@@ -794,7 +794,7 @@ const ReadyDesignCart = () => {
                                 {selectPaymentMethod === "Cash on delivery" ? (
                                   <button
                                     className="btn btn-success w-100 shadow-0 mb-2"
-                                    disabled={spinner}
+                                    disabled={!selectPaymentMethod}
                                     onClick={(e) => {
                                       handleCashClick();
                                       handleProfileData(profileData);
@@ -812,6 +812,7 @@ const ReadyDesignCart = () => {
                                 ) : (
                                   <button
                                     className="btn btn-success w-100 shadow-0 mb-2"
+                                    disabled={!selectPaymentMethod}
                                     onClick={(e) => {
                                       handlePhonepeClick();
                                       handleProfileData(profileData);
