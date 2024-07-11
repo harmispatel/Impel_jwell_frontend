@@ -83,10 +83,10 @@ const Footer = () => {
               ) : (
                 <></>
               )}
-              {siteSetting?.twitter_link ? (
+              {siteSetting?.pinterest_link ? (
                 <li>
-                  <Link to={siteSetting?.twitter_link} target="_blank">
-                    <BsTwitter />
+                  <Link to={siteSetting?.pinterest_link} target="_blank">
+                    <FaPinterest />
                   </Link>
                 </li>
               ) : (
@@ -96,15 +96,6 @@ const Footer = () => {
                 <li>
                   <Link to={siteSetting?.youtube_link} target="_blank">
                     <BsYoutube />
-                  </Link>
-                </li>
-              ) : (
-                <></>
-              )}
-              {siteSetting?.pinterest_link ? (
-                <li>
-                  <Link to={siteSetting?.pinterest_link} target="_blank">
-                    <FaPinterest />
                   </Link>
                 </li>
               ) : (

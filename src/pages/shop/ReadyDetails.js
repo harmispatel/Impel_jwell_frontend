@@ -53,7 +53,6 @@ const ReadyDetails = () => {
         })
         .then((res) => {
           setDetails(res?.Tags[0]);
-          console.log("res", res?.Tags[0]);
           setIsLoading(false);
         })
         .catch((err) => {

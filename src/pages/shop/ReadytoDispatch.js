@@ -3,11 +3,10 @@ import profileService from "../../services/Home";
 import { Link, useParams } from "react-router-dom";
 import Loader from "../../components/common/Loader";
 import Select from "react-select";
+import ReadyDetails from "./ReadyDetails";
 
 const ReadytoDispatch = () => {
   const { id } = useParams();
-
-  const gold_id = id === "silver" ? 3 : 1;
 
   const [products, setProducts] = useState([]);
   const [filters, setFilters] = useState([]);
@@ -49,6 +48,7 @@ const ReadytoDispatch = () => {
         StockStatus: "",
         DoNotShowInClientApp: 0,
         HasTagImage: 0,
+        CommaSeperate_CompanyID: id,
       })
       .then((res) => {
         setFilters(res?.Filters);
@@ -82,7 +82,7 @@ const ReadytoDispatch = () => {
     setTimeout(() => {
       getFilters();
     }, 2000);
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -98,7 +98,7 @@ const ReadytoDispatch = () => {
         CommaSeperate_ItemID: items?.value || "",
         CommaSeperate_StyleID: styles?.value || "",
         CommaSeperate_ProductID: "",
-        CommaSeperate_CompanyID: gold_id,
+        CommaSeperate_CompanyID: id || "",
         CommaSeperate_SubItemID: subItems?.value || "",
         CommaSeperate_AppItemCategoryID: "",
         CommaSeperate_ItemSubID: "",
@@ -122,7 +122,7 @@ const ReadytoDispatch = () => {
         console.log(err);
         setIsLoading(false);
       });
-  }, [itemGroups, items, subItems, styles, sizes, tagNoChange, gold_id]);
+  }, [itemGroups, items, subItems, styles, sizes, tagNoChange, id]);
 
   const numberFormat = (value) =>
     new Intl.NumberFormat("en-IN")?.format(Math?.round(value));

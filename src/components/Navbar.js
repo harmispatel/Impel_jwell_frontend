@@ -70,6 +70,8 @@ const Navbar = () => {
 
   const [goldData, setGoldData] = useState([]);
 
+  const [companyTags, setCompanyTags] = useState([]);
+
   const [tags, setTags] = useState([]);
   const [tag, setTag] = useState([]);
   const [TagDropdown, setTagDropdown] = useState(false);
@@ -100,7 +102,8 @@ const Navbar = () => {
   const Tags = () => {
     FilterServices.headerTags()
       .then((res) => {
-        setTags(res?.data);
+        setTags(res?.data?.header_tags);
+        setCompanyTags(res?.data?.company_masters_data);
       })
       .catch((err) => {
         console.log(err);
@@ -166,61 +169,6 @@ const Navbar = () => {
         console.log(err);
       });
   };
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const data = {
-  //         PageNo: 1,
-  //         PageSize: 100,
-  //         DeviceID: 0,
-  //         SortBy: "",
-  //         SearchText: "",
-  //         TranType: "",
-  //         CommaSeperate_ItemGroupID: "",
-  //         CommaSeperate_ItemID: "",
-  //         CommaSeperate_StyleID: "",
-  //         CommaSeperate_ProductID: "",
-  //         CommaSeperate_SubItemID: "",
-  //         CommaSeperate_AppItemCategoryID: "",
-  //         CommaSeperate_ItemSubID: "",
-  //         CommaSeperate_KarigarID: "",
-  //         CommaSeperate_BranchID: "",
-  //         CommaSeperate_Size: "",
-  //         CommaSeperate_CounterID: "",
-  //         MaxNetWt: 0,
-  //         MinNetWt: 100,
-  //         OnlyCartItem: false,
-  //         OnlyWishlistItem: false,
-  //         StockStatus: "",
-  //         DoNotShowInClientApp: 0,
-  //         HasTagImage: 0,
-  //       };
-
-  //       const response = await fetch(
-  //         "https://api.indianjewelcast.com/api/Tag/GetAll",
-  //         {
-  //           method: "POST",
-  //           headers: {
-  //             "Content-Type": "application/json",
-  //           },
-  //           body: JSON.stringify(data),
-  //         }
-  //       );
-
-  //       if (!response.ok) {
-  //         throw new Error("Failed to fetch data");
-  //       }
-
-  //       const responseData = await response.json();
-  //       console.log(responseData);
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
 
   useLayoutEffect(() => {
     GetUserCartList();
@@ -412,18 +360,21 @@ const Navbar = () => {
                       }`}
                     >
                       <ul>
-                        <li>
-                          <Link to={`/ready-to-dispatch/${silver}`}>
-                            <AiOutlineGold style={{ fontSize: "20px" }} />
-                            SILVER
-                          </Link>
-                        </li>
-                        <li>
-                          <Link to={`/ready-to-dispatch/${gold}`}>
-                            <AiOutlineGold style={{ fontSize: "20px" }} />
-                            GOLD
-                          </Link>
-                        </li>
+                        {companyTags?.length && (
+                          <>
+                            {companyTags?.map((tags, index) => (
+                              <li>
+                                <Link
+                                  to={`/ready-to-dispatch/${tags?.company_tag_id}`}
+                                  key={index}
+                                >
+                                  <AiOutlineGold style={{ fontSize: "20px" }} />
+                                  {tags?.company_name}
+                                </Link>
+                              </li>
+                            ))}
+                          </>
+                        )}
                       </ul>
                     </div>
 
