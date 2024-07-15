@@ -109,7 +109,7 @@ function App() {
                         element={<ReadytoDispatch />}
                       />
                       <Route
-                        path="ready-to-dispatch/:id/:id"
+                        path="ready-to-dispatch/:ids/:id"
                         element={<ReadyDetails />}
                       />
 

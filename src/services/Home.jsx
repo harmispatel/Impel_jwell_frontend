@@ -109,13 +109,13 @@ const GetPages = async () => {
   return d;
 };
 
-
 const exportObject = {
   banners,
   category,
   GetProductsDetailsAPI,
   TopSelling,
   RecentAdd,
+  WomansJoin,
   GetProductsAPI,
   GetProductsFilterAPI,
   CustomPages,

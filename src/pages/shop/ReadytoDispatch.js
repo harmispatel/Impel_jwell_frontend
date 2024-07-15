@@ -3,7 +3,6 @@ import profileService from "../../services/Home";
 import { Link, useParams } from "react-router-dom";
 import Loader from "../../components/common/Loader";
 import Select from "react-select";
-import ReadyDetails from "./ReadyDetails";
 
 const ReadytoDispatch = () => {
   const { id } = useParams();
@@ -81,7 +80,7 @@ const ReadytoDispatch = () => {
   useEffect(() => {
     setTimeout(() => {
       getFilters();
-    }, 2000);
+    }, 1000);
   }, [id]);
 
   useEffect(() => {

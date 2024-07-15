@@ -13,9 +13,10 @@ import { ReadyDesignCartSystem } from "../../context/ReadyDesignCartContext";
 import UserService from "../../services/Cart";
 import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
-import { Col, Form, Modal } from "react-bootstrap";
+import { Col, Form, Modal, OverlayTrigger, Tooltip } from "react-bootstrap";
 import profileService from "../../services/Auth";
 import { ProfileSystem } from "../../context/ProfileContext";
+import { IoIosCloseCircleOutline } from "react-icons/io";
 
 const api = process.env.REACT_APP_API_KEY;
 
@@ -43,9 +44,68 @@ const ReadyDesignCart = () => {
 
   const { dispatch: profilename, state: namestate } = useContext(ProfileSystem);
 
+  const [show, setShow] = useState(false);
+  const [dealer_code, setDealer_Code] = useState("");
+  const [isFormEmpty, setIsFormEmpty] = useState("");
+  const [code, setCode] = useState("");
+
+  const handleDealercode = (e) => {
+    setDealer_Code(e.target.value);
+  };
+
   const handleSelectPayment = (selectedOption) => {
     setSelectPaymentMethod(selectedOption?.value);
   };
+
+  const Applycoupen = (e) => {
+    e.preventDefault();
+    UserService.DealerCode({ phone: phone, dealer_code: dealer_code })
+      .then((res) => {
+        if (res.status === false) {
+          setIsFormEmpty(res.message);
+          setShow(false);
+          setDealer_Code("");
+        } else {
+          localStorage.setItem("dealerDiscount", JSON.stringify(res.data));
+          setShow(true);
+          setCode(res.data);
+          setMessage(true);
+          localStorage.setItem("dealermessage", JSON.stringify(true));
+          setIsFormEmpty("");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const removeCoupon = () => {
+    toast.success("Coupon has been removed");
+    setDealer_Code("");
+    setMessage(false);
+    setShow(false);
+    localStorage.removeItem("dealerDiscount");
+    localStorage.removeItem("dealermessage");
+    setCode({ discount_type: "", discount_value: 0 });
+    // calculateTotal();
+  };
+
+  useEffect(() => {
+    const savedDiscount = localStorage.getItem("savedDiscount");
+    if (savedDiscount) {
+      setCode(JSON.parse(savedDiscount));
+      setShow(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    const storedMessage = localStorage.getItem("message");
+    if (storedMessage) {
+      setMessage(JSON.parse(storedMessage));
+    }
+  }, []);
+
+  const removeCouping = <Tooltip id="tooltip">Remove Coupon</Tooltip>;
 
   const GetUserCartList = async () => {
     axios
@@ -751,6 +811,42 @@ const ReadyDesignCart = () => {
                           </div>
                         </div>
                         <div className="col-lg-3 mt-3 mt-md-0">
+                          {!show && (
+                            <div className="card mb-3 border shadow-0">
+                              <div className="card-body">
+                                <form>
+                                  <div className="form-group">
+                                    <label className="form-label">
+                                      Have a Dealer coupon?
+                                    </label>
+                                    <div className="input-group">
+                                      <input
+                                        type="text"
+                                        name="dealer_code"
+                                        className="form-control border"
+                                        placeholder="Dealer coupon code"
+                                        value={dealer_code}
+                                        onChange={(e) => handleDealercode(e)}
+                                      />
+                                      <button
+                                        className="btn btn-light border"
+                                        onClick={(e) => Applycoupen(e)}
+                                      >
+                                        Apply
+                                      </button>
+                                    </div>
+                                    {isFormEmpty ? (
+                                      <span className="text-danger">
+                                        {isFormEmpty}
+                                      </span>
+                                    ) : (
+                                      <></>
+                                    )}
+                                  </div>
+                                </form>
+                              </div>
+                            </div>
+                          )}
                           <div className="card shadow-0 border">
                             <div className="card-body">
                               {/* Sub Total :*/}
@@ -777,6 +873,39 @@ const ReadyDesignCart = () => {
                                 </p>
                               </div>
                               <hr />
+                              {message && (
+                                <div className="message-box">
+                                  <div className="text-end">
+                                    <OverlayTrigger
+                                      placement="top"
+                                      overlay={removeCouping}
+                                    >
+                                      <Link className="icon" to="#">
+                                        <IoIosCloseCircleOutline
+                                          onClick={removeCoupon}
+                                          style={{
+                                            color: "#ff0000",
+                                            fontSize: "25px",
+                                            cursor: "pointer",
+                                          }}
+                                        />
+                                      </Link>
+                                    </OverlayTrigger>
+                                  </div>
+                                  <span>
+                                    You are now eligible for a base
+                                    discount&nbsp;
+                                    <b>
+                                      {code.discount_type === "percentage" ? (
+                                        <>({code.discount_value}%)</>
+                                      ) : (
+                                        <>({code.discount_value}₹)</>
+                                      )}
+                                    </b>
+                                    &nbsp;off on making charges.
+                                  </span>
+                                </div>
+                              )}
                               <div className="mt-2">
                                 <label htmlFor="Payment Method">
                                   Payment Method :

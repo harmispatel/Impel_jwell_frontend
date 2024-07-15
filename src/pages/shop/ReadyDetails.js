@@ -16,7 +16,7 @@ const ReadyDetails = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const phone = localStorage.getItem("phone");
-  const { id } = useParams();
+  const { id, ids } = useParams();
 
   const { dispatch: addtocartDispatch } = useContext(ReadyDesignCartSystem);
 
@@ -63,7 +63,7 @@ const ReadyDetails = () => {
 
     getDetails();
     GetUserCartList();
-  }, []);
+  }, [ids]);
 
   const GetUserCartList = async () => {
     axios
@@ -86,14 +86,14 @@ const ReadyDetails = () => {
         phone: phone,
         tag_no: details?.TagNo,
         group_name: details?.GroupName,
-        name: "CP 18Y",
+        name: id,
         price: details?.MRP || 0,
         size: details?.Size1,
         gross_weight: details?.GrossWt,
         net_weight: details?.NetWt,
         quantity: 1,
         barcode: details?.Barcode,
-        // design_id: 145,
+        gold_id: ids == 1 ? "gold" : "silver",
       })
       .then((res) => {
         if (res?.data?.status === true) {
