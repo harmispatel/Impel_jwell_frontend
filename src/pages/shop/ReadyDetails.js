@@ -93,7 +93,7 @@ const ReadyDetails = () => {
         net_weight: details?.NetWt,
         quantity: 1,
         barcode: details?.Barcode,
-        gold_id: ids == 1 ? "gold" : "silver",
+        gold_id: ids == 1 ? 1 : 3,
       })
       .then((res) => {
         if (res?.data?.status === true) {

@@ -13,7 +13,6 @@ import { Helmet } from "react-helmet-async";
 import { CartSystem } from "../../context/CartContext";
 import { ProfileSystem } from "../../context/ProfileContext";
 import Loader from "../../components/common/Loader";
-import ProfileModal from "./ProfileModal";
 
 const Cart = ({ active }) => {
   const navigate = useNavigate();
@@ -30,7 +29,6 @@ const Cart = ({ active }) => {
   const [Items, setItems] = useState([]);
   const [dealer_code, setDealer_Code] = useState("");
   const [code, setCode] = useState("");
-  const [gst, setGst] = useState("");
   const [isFormEmpty, setIsFormEmpty] = useState("");
   const [show, setShow] = useState(false);
   const [removingItemId, setRemovingItemId] = useState(null);
@@ -45,7 +43,6 @@ const Cart = ({ active }) => {
   const [shipping_city, setShipping_city] = useState();
   const [isChecked, setIsChecked] = useState(false);
   const [valid, setValid] = useState("");
-  const [payment_link, setPayment_Link] = useState("");
   const [message, setMessage] = useState(false);
   const [userData, setUserData] = useState({
     name: "",
@@ -196,6 +193,18 @@ const Cart = ({ active }) => {
     }
   };
 
+  // SUB TOTAL
+  const SubAmount = () => {
+    let subTotal = 0;
+    Items.forEach((data) => {
+      const Pricekey = "total_amount_" + data.gold_type;
+      const price = parseFloat(data[Pricekey]);
+      subTotal += price;
+    });
+    return subTotal;
+  };
+
+  // GST TOTAL
   const SubGST = () => {
     let subGst = 0;
     Items.forEach((data) => {
@@ -205,16 +214,6 @@ const Cart = ({ active }) => {
     });
     const gstAmount = subGst * 0.03;
     return gstAmount;
-  };
-
-  const SubAmount = () => {
-    let subTotal = 0;
-    Items.forEach((data) => {
-      const Pricekey = "total_amount_" + data.gold_type;
-      const price = parseFloat(data[Pricekey]);
-      subTotal += price;
-    });
-    return subTotal;
   };
 
   const SubTotal = () => {
@@ -495,22 +494,6 @@ const Cart = ({ active }) => {
       });
   };
 
-  // const handlePayment = () => {
-  //   UserService.Payment({
-  //     user_id: user_id,
-  //     total: code?.discount_value
-  //       ? code.discount_type === "percentage"
-  //         ? SubTotal() + SubCharge() - (SubCharge() * code.discount_value) / 100
-  //         : SubTotal() + SubCharge() - code.discount_value
-  //       : SubTotal() + SubCharge(),
-  //   })
-  //     .then((res) => {
-  //       // setPayment_Link(res.data)
-  //       window.location.href = res.data;
-  //     })
-  //     .catch((err) => console.log(err));
-  // };
-
   const handleDealercode = (e) => {
     setDealer_Code(e.target.value);
   };
@@ -602,86 +585,7 @@ const Cart = ({ active }) => {
       });
   };
 
-  // Orderplacing Function Here
-
-  const Orderplacing = () => {
-    setSpinner(true);
-
-    if (Verification == 2) {
-      if (overAllAmount >= 200000 && !userData?.pan_no) {
-        setValid(
-          "Pancard is required for your total amount is more than 2 lakh or above"
-        );
-        setShowEdit(true);
-        setSpinner(false);
-      } else if (overAllAmount < 200000) {
-        UserService.Placeorder({
-          user_id: user_id,
-          dealer_code: code?.dealer_code,
-          dealer_discount_type: code?.discount_type,
-          dealer_discount_value: code?.discount_value,
-          cart_items: Items?.map((item) => item?.id),
-          sub_total: SubTotal(),
-          charges: SubCharge(),
-          total: code?.discount_value
-            ? code.discount_type === "percentage"
-              ? SubTotal() +
-                SubCharge() -
-                (SubCharge() * code.discount_value) / 100
-              : SubTotal() + SubCharge() - code.discount_value
-            : SubTotal() + SubCharge(),
-        })
-          .then((res) => {
-            if (res.status === true) {
-              localStorage.removeItem("savedDiscount");
-              localStorage.removeItem("cartItems");
-              localStorage.removeItem("message");
-              toast.success(res.message);
-              setTimeout(() => {
-                navigate(`/order-details/${res.data}`);
-              }, 1000);
-              resetcartcount({ type: "RESET_CART" });
-            }
-          })
-          .catch((error) => console.log(error));
-      } else {
-        UserService.Placeorder({
-          user_id: user_id,
-          dealer_code: code?.dealer_code,
-          dealer_discount_type: code?.discount_type,
-          dealer_discount_value: code?.discount_value,
-          cart_items: Items?.map((item) => item?.id),
-          sub_total: SubTotal(),
-          charges: SubCharge(),
-          total: code?.discount_value
-            ? code.discount_type === "percentage"
-              ? SubTotal() +
-                SubCharge() -
-                (SubCharge() * code.discount_value) / 100
-              : SubTotal() + SubCharge() - code.discount_value
-            : SubTotal() + SubCharge(),
-        })
-          .then((res) => {
-            if (res.status === true) {
-              localStorage.removeItem("savedDiscount");
-              localStorage.removeItem("cartItems");
-              localStorage.removeItem("message");
-              toast.success(res.message);
-              setSpinner(true);
-              setTimeout(() => {
-                navigate(`/order-details/${res.data}`);
-              }, 1000);
-              resetcartcount({ type: "RESET_CART" });
-            }
-          })
-          .catch((error) => console.log(error));
-      }
-    } else {
-      setShowEdit(true);
-      setSpinner(false);
-    }
-  };
-
+  // TOTAL PRICE
   let overAllAmount = SubTotal() + SubCharge() + SubGST();
 
   if (code?.discount_value) {
@@ -701,7 +605,6 @@ const Cart = ({ active }) => {
   const removeCouping = <Tooltip id="tooltip">Remove Coupon</Tooltip>;
 
   // Advance Payment Click Function Here advanceAmount
-
   const handlePhonepeClick = () => {
     if (Verification == 2) {
       if (overAllAmount >= 200000 && !userData?.pan_no) {
@@ -947,20 +850,6 @@ const Cart = ({ active }) => {
                               <div className="card mb-3 border shadow-0">
                                 <div className="card-body">
                                   <form>
-                                    {/* <div className="form-group">
-                              <label className="form-label">Have coupon?</label>
-                              <div className="input-group">
-                                <input
-                                  type="text"
-                                  className="form-control border"
-                                  name=""
-                                  placeholder="Coupon code"
-                                />
-                                <button className="btn btn-light border">
-                                  Apply
-                                </button>
-                              </div>
-                            </div> */}
                                     <div className="form-group">
                                       <label className="form-label">
                                         Have a Dealer coupon?
@@ -995,7 +884,7 @@ const Cart = ({ active }) => {
                             )}
                             <div className="card shadow-0 border">
                               <div className="card-body">
-                                {/* Sub Total :*/}
+                                {/* SUB TOTAL :*/}
                                 <div className="d-flex justify-content-between">
                                   <p className="mb-2">Sub total :</p>
                                   <p className="mb-2 fw-bold">
@@ -1003,37 +892,17 @@ const Cart = ({ active }) => {
                                   </p>
                                 </div>
                                 <hr />
+
+                                {/* GST TOTAL :*/}
                                 <div className="d-flex justify-content-between">
                                   <p className="mb-2">GST (3%)</p>
                                   <p className="mb-2 fw-bold">
                                     ₹{numberFormat(SubGST()?.toFixed())}
                                   </p>
                                 </div>
-                                {/* {show && (
-                            <div className="d-flex justify-content-between">
-                              <p className="mb-2 text-success">
-                                Dealer discount ({code.dealer_code})
-                                <p>
-                                  {code.discount_type === "percentage" ? (
-                                    <>(-{code.discount_value}%)</>
-                                  ) : (
-                                    <></>
-                                  )}
-                                </p>
-                              </p>
-                              <p className="mb-2 text-success fw-bold">
-                                {code.discount_type === "percentage"
-                                  ? `- ₹${(
-                                      (SubCharge() * code.discount_value) /
-                                      100
-                                    )?.toLocaleString("en-US")}`
-                                  : `- ₹${code.discount_value}`}
-                              </p>
-                            </div>
-                          )} */}
                                 <hr />
 
-                                {/* Total price :*/}
+                                {/* TOTAL PRICE :*/}
                                 <div className="d-flex justify-content-between">
                                   <p className="mb-2">Total price :</p>
                                   <p className="mb-2 fw-bold">
@@ -1092,10 +961,6 @@ const Cart = ({ active }) => {
                                       handlePhonepeClick();
                                       handleProfileData(profileData);
                                     }}
-                                    // onClick={() => {
-                                    //   handlePayment();
-                                    //   handleProfileData(profileData);
-                                    // }}
                                   >
                                     {spinner && (
                                       <CgSpinner

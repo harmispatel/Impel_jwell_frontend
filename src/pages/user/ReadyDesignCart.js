@@ -38,7 +38,6 @@ const ReadyDesignCart = () => {
   const [removingItemId, setRemovingItemId] = useState(null);
 
   const [selectPaymentMethod, setSelectPaymentMethod] = useState("");
-  const [selectError, setSelectError] = useState("");
 
   const { dispatch: resetcartcount } = useContext(ReadyDesignCartSystem);
 
@@ -91,7 +90,7 @@ const ReadyDesignCart = () => {
   };
 
   useEffect(() => {
-    const savedDiscount = localStorage.getItem("savedDiscount");
+    const savedDiscount = localStorage.getItem("dealerDiscount");
     if (savedDiscount) {
       setCode(JSON.parse(savedDiscount));
       setShow(true);
@@ -99,7 +98,7 @@ const ReadyDesignCart = () => {
   }, []);
 
   useEffect(() => {
-    const storedMessage = localStorage.getItem("message");
+    const storedMessage = localStorage.getItem("dealermessage");
     if (storedMessage) {
       setMessage(JSON.parse(storedMessage));
     }
@@ -738,7 +737,7 @@ const ReadyDesignCart = () => {
                                         <div className="col-md-3" key={index}>
                                           <div className="d-flex">
                                             <Link
-                                              to={`/ready-to-dispatch/${data.tag_no}`}
+                                              to={`/ready-to-dispatch/${data?.gold_id}/${data?.tag_no}`}
                                               className="nav-link"
                                             >
                                               <img
@@ -849,7 +848,8 @@ const ReadyDesignCart = () => {
                           )}
                           <div className="card shadow-0 border">
                             <div className="card-body">
-                              {/* Sub Total :*/}
+                              
+                              {/* SUB TOTAL :*/}
                               <div className="d-flex justify-content-between">
                                 <p className="mb-2">Sub total :</p>
                                 <p className="mb-2 fw-bold">
@@ -857,6 +857,8 @@ const ReadyDesignCart = () => {
                                 </p>
                               </div>
                               <hr />
+
+                              {/* GST TOTAL :*/}
                               <div className="d-flex justify-content-between">
                                 <p className="mb-2">GST (3%)</p>
                                 <p className="mb-2 fw-bold">
@@ -865,7 +867,7 @@ const ReadyDesignCart = () => {
                               </div>
                               <hr />
 
-                              {/* Total price :*/}
+                              {/* TOTAL PRICE :*/}
                               <div className="d-flex justify-content-between">
                                 <p className="mb-2">Total price :</p>
                                 <p className="mb-2 fw-bold">
@@ -873,6 +875,7 @@ const ReadyDesignCart = () => {
                                 </p>
                               </div>
                               <hr />
+
                               {message && (
                                 <div className="message-box">
                                   <div className="text-end">
