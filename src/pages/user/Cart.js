@@ -732,10 +732,6 @@ const Cart = ({ active }) => {
                                       <hr className="mt-0" />
                                     </div>
                                     {Items?.map((data, index) => {
-                                      const Pricekey =
-                                        "metal_price_" + data.gold_type;
-                                      const price = parseFloat(data[Pricekey]);
-
                                       return (
                                         <>
                                           <div className="col-md-3" key={index}>

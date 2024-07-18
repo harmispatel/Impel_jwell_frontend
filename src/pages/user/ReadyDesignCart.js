@@ -724,7 +724,7 @@ const ReadyDesignCart = () => {
                           <div className="card border shadow-0">
                             <div className="m-4">
                               <h4 className="card-title mb-4">
-                                Your shopping cart
+                                Your Ready Order Cart
                               </h4>
                               <div className="row gy-3">
                                 <>
@@ -974,7 +974,7 @@ const ReadyDesignCart = () => {
                           <div className="card border shadow-sm p-4">
                             <div className="text-center mb-4">
                               <h2 className="card-title mb-0">
-                                Your Shopping Cart
+                                Your Ready Order Cart
                               </h2>
                             </div>
 
@@ -996,7 +996,7 @@ const ReadyDesignCart = () => {
 
                             <div className="text-center">
                               <Link
-                                to="/ready-to-dispatch"
+                                to="/ready-to-dispatch/1"
                                 className="view_all_btn px-4 py-2"
                                 style={{ borderRadius: "8px" }}
                               >
