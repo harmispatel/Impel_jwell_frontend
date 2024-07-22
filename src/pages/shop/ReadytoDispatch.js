@@ -20,6 +20,8 @@ const ReadytoDispatch = () => {
   const [tagNumber, setTagNumber] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
+  const [price, setPrice] = useState([]);
+
   const getFilters = () => {
     profileService
       .GetProductsFilterAPI({
@@ -81,6 +83,17 @@ const ReadytoDispatch = () => {
     setTimeout(() => {
       getFilters();
     }, 1000);
+  }, [id]);
+
+  useEffect(() => {
+    profileService
+      .GetProductsPrices({ metal_type: id == 1 ? "gold" : "silver" })
+      .then((res) => {
+        setPrice(res?.data?.gold_price_24k_1gm_rtd);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, [id]);
 
   useEffect(() => {
@@ -245,37 +258,47 @@ const ReadytoDispatch = () => {
                 {products?.length > 0 ? (
                   <>
                     {products?.map((data, index) => {
+                      const metal_value_prices =
+                        ((price * data?.Touch) / 100) * data?.NetWt;
                       return (
-                        <div className="col-md-3 col-sm-4 col-xs-6" key={index}>
-                          <div className="item-product text-center">
-                            <Link
-                              to={`/ready-to-dispatch/${id}/${data?.TagNo}`}
-                            >
-                              <div className="product-thumb">
-                                {data?.Images[0]?.ImageName ? (
-                                  <>
-                                    <img
-                                      src={`https://api.indianjewelcast.com/${data?.Images[0]?.ImageName}`}
-                                      alt=""
-                                      className="w-100"
-                                    />
-                                  </>
-                                ) : (
-                                  <>
-                                    <img
-                                      src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930"
-                                      alt=""
-                                      className="w-100"
-                                    />
-                                  </>
-                                )}
-                              </div>
-                              <div className="product-info">
-                                <label>₹{numberFormat(data?.MRP)}</label>
-                              </div>
-                            </Link>
+                        <>
+                          <div
+                            className="col-md-3 col-sm-4 col-xs-6"
+                            key={index}
+                          >
+                            <div className="item-product text-center">
+                              <Link
+                                to={`/ready-to-dispatch/${id}/${data?.TagNo}`}
+                              >
+                                <div className="product-thumb">
+                                  {data?.Images[0]?.ImageName ? (
+                                    <>
+                                      <img
+                                        src={`https://api.indianjewelcast.com/${data?.Images[0]?.ImageName}`}
+                                        alt=""
+                                        className="w-100"
+                                      />
+                                    </>
+                                  ) : (
+                                    <>
+                                      <img
+                                        src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930"
+                                        alt=""
+                                        className="w-100"
+                                      />
+                                    </>
+                                  )}
+                                </div>
+                                <div className="product-info">
+                                  <label>
+                                    ₹{numberFormat(metal_value_prices)}
+                                    {/* {metal_value_prices} */}
+                                  </label>
+                                </div>
+                              </Link>
+                            </div>
                           </div>
-                        </div>
+                        </>
                       );
                     })}
                   </>

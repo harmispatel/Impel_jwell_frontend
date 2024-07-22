@@ -75,6 +75,15 @@ const GetProductsAPI = async (data) => {
   return d;
 };
 
+const GetProductsPrices = async (data) => {
+  let d = await call({
+    path: "ready-to-dispatch-price",
+    method: "POST",
+    data,
+  });
+  return d;
+};
+
 const GetProductsDetailsAPI = async (data) => {
   let d = await call({
     path: "ready-to-dispatch-details",
@@ -122,6 +131,7 @@ const exportObject = {
   Featured,
   GetPages,
   SiteSetting,
+  GetProductsPrices,
   TestiMonials,
 };
 
