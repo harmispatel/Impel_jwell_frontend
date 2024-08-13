@@ -175,7 +175,7 @@ const WomansClub = () => {
   return (
     <>
       <button className="womans-toggle" onClick={showDrawer}>
-        Join our women's club<span className="top"></span>
+        Join our buddies club<span className="top"></span>
         <span className="right"></span>
         <span className="bottom"></span>
         <span className="left"></span>

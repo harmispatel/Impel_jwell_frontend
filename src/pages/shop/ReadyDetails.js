@@ -11,6 +11,7 @@ import noImage from "../../assets/images/No_Image_Available.jpg";
 import profileService from "../../services/Home";
 
 const api = process.env.REACT_APP_API_KEY;
+const imageURL = process.env.REACT_APP_API_KEY_IMAGE;
 
 const ReadyDetails = () => {
   const location = useLocation();
@@ -147,7 +148,7 @@ const ReadyDetails = () => {
                         <div>
                           <div id="imageMagnifyer">
                             <img
-                              src={`https://api.indianjewelcast.com/TagImage/${details?.Barcode}.jpg`}
+                              src={`${imageURL}${details?.Barcode}.jpg`}
                               onError={(e) => {
                                 e.target.onerror = null;
                                 e.target.src =

@@ -234,6 +234,7 @@ const Navbar = () => {
   };
 
   const DispatchLink = () => {
+    console.log("hello");
     setDispatch(!dispatch);
   };
 
@@ -392,21 +393,6 @@ const Navbar = () => {
                     </span>
                   </div>
                 </li>
-
-                {/* <li className="nav-item">
-                  <Link
-                    className={
-                      currentRoute === "/ready-to-dispatch"
-                        ? "nav-link active"
-                        : "nav-link"
-                    }
-                    aria-current="page"
-                    to="/ready-to-dispatch"
-                    onClick={handleNavClick}
-                  >
-                    Ready To Dispatch
-                  </Link>
-                </li> */}
 
                 <li className="nav-item">
                   <div onClick={TagsDropdown} ref={tagRef}>

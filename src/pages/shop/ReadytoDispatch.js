@@ -4,6 +4,8 @@ import { Link, useParams } from "react-router-dom";
 import Loader from "../../components/common/Loader";
 import Select from "react-select";
 
+const imageURL = process.env.REACT_APP_API_KEY_IMAGE_;
+
 const ReadytoDispatch = () => {
   const { id } = useParams();
 
@@ -20,7 +22,9 @@ const ReadytoDispatch = () => {
   const [tagNumber, setTagNumber] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
-  const [price, setPrice] = useState([]);
+  const [silverPrice, setSilverPrice] = useState([]);
+  const [silverDiscount, setSilverDiscount] = useState([]);
+  const [goldPrice, setGoldPrice] = useState([]);
 
   const getFilters = () => {
     profileService
@@ -87,9 +91,10 @@ const ReadytoDispatch = () => {
 
   useEffect(() => {
     profileService
-      .GetProductsPrices({ metal_type: id == 1 ? "gold" : "silver" })
+      .GetProductsPrices()
       .then((res) => {
-        setPrice(res?.data?.gold_price_24k_1gm_rtd);
+        setSilverPrice(res?.data?.silver_price?.sales_price_rtd_silver);
+        setSilverDiscount(res?.data?.silver_price?.sales_discount_rtd_silver);
       })
       .catch((err) => {
         console.log(err);
@@ -258,8 +263,13 @@ const ReadytoDispatch = () => {
                 {products?.length > 0 ? (
                   <>
                     {products?.map((data, index) => {
-                      const metal_value_prices =
-                        ((price * data?.Touch) / 100) * data?.NetWt;
+                      const subItemID = String(data?.SubItemID);
+
+                      const silver_price = silverPrice[subItemID] || 0;
+                      const silver_price_discount =
+                        silverDiscount[subItemID] || 0;
+                      const silver_value_prices = silver_price * data?.NetWt;
+
                       return (
                         <>
                           <div
@@ -274,7 +284,7 @@ const ReadytoDispatch = () => {
                                   {data?.Images[0]?.ImageName ? (
                                     <>
                                       <img
-                                        src={`https://api.indianjewelcast.com/${data?.Images[0]?.ImageName}`}
+                                        src={`${imageURL}${data?.Images[0]?.ImageName}`}
                                         alt=""
                                         className="w-100"
                                       />
@@ -291,8 +301,27 @@ const ReadytoDispatch = () => {
                                 </div>
                                 <div className="product-info">
                                   <label>
-                                    ₹{numberFormat(metal_value_prices)}
-                                    {/* {metal_value_prices} */}
+                                    {silver_price_discount > 0 ? (
+                                      <>
+                                        <del>
+                                          ₹{numberFormat(silver_value_prices)}
+                                        </del>
+                                        &nbsp;&nbsp;
+                                        <strong>
+                                          ₹
+                                          {numberFormat(
+                                            silver_value_prices -
+                                              (silver_value_prices *
+                                                silver_price_discount) /
+                                                100
+                                          )}
+                                        </strong>
+                                      </>
+                                    ) : (
+                                      <strong>
+                                        ₹{numberFormat(silver_value_prices)}
+                                      </strong>
+                                    )}
                                   </label>
                                 </div>
                               </Link>
