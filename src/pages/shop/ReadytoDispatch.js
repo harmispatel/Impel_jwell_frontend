@@ -19,12 +19,9 @@ const ReadytoDispatch = () => {
   const [itemGroups, setItemGroups] = useState(null);
   const [styles, setStyles] = useState(null);
   const [sizes, setSizes] = useState(null);
-  const [tagNumber, setTagNumber] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
-  const [silverPrice, setSilverPrice] = useState([]);
-  const [silverDiscount, setSilverDiscount] = useState([]);
-  const [goldPrice, setGoldPrice] = useState([]);
+  const [allPrices, setAllPrices] = useState([]);
 
   const getFilters = () => {
     profileService
@@ -93,8 +90,7 @@ const ReadytoDispatch = () => {
     profileService
       .GetProductsPrices()
       .then((res) => {
-        setSilverPrice(res?.data?.silver_price?.sales_price_rtd_silver);
-        setSilverDiscount(res?.data?.silver_price?.sales_discount_rtd_silver);
+        setAllPrices(res?.data);
       })
       .catch((err) => {
         console.log(err);
@@ -143,6 +139,18 @@ const ReadytoDispatch = () => {
 
   const numberFormat = (value) =>
     new Intl.NumberFormat("en-IN")?.format(Math?.round(value));
+
+  var finalPrice = [
+    {
+      price_24k: allPrices?.price_24k,
+    },
+    {
+      sales_wastage: allPrices?.sales_wastage_rtd,
+    },
+    {
+      sales_wastage_discount: allPrices?.sales_wastage_discount_rtd,
+    },
+  ];
 
   return (
     <>
@@ -263,12 +271,30 @@ const ReadytoDispatch = () => {
                 {products?.length > 0 ? (
                   <>
                     {products?.map((data, index) => {
-                      const subItemID = String(data?.SubItemID);
+                      
+                      var sales_wastage_of_category =
+                        finalPrice[1]?.sales_wastage[data?.SubItemID] || 0;
 
-                      const silver_price = silverPrice[subItemID] || 0;
-                      const silver_price_discount =
-                        silverDiscount[subItemID] || 0;
-                      const silver_value_prices = silver_price * data?.NetWt;
+                      var sales_wastage_discount_of_category =
+                        finalPrice[2]?.sales_wastage_discount[
+                          data?.SubItemID
+                        ] || 0;
+
+                      var labour_charge =
+                        (finalPrice[0]?.price_24k[data?.SubItemID] *
+                          sales_wastage_of_category) /
+                          100 || 0;
+                      labour_charge = labour_charge * data?.NetWt || 0;
+
+                      var labour_charge_discount =
+                        labour_charge -
+                        (labour_charge * sales_wastage_discount_of_category) /
+                          100;
+
+                      var metal_value =
+                        finalPrice[0]?.price_24k[data?.SubItemID] *
+                          (data?.Touch / 100) *
+                          data?.NetWt || 0;
 
                       return (
                         <>
@@ -301,26 +327,9 @@ const ReadytoDispatch = () => {
                                 </div>
                                 <div className="product-info">
                                   <label>
-                                    {silver_price_discount > 0 ? (
-                                      <>
-                                        <del>
-                                          ₹{numberFormat(silver_value_prices)}
-                                        </del>
-                                        &nbsp;&nbsp;
-                                        <strong>
-                                          ₹
-                                          {numberFormat(
-                                            silver_value_prices -
-                                              (silver_value_prices *
-                                                silver_price_discount) /
-                                                100
-                                          )}
-                                        </strong>
-                                      </>
-                                    ) : (
-                                      <strong>
-                                        ₹{numberFormat(silver_value_prices)}
-                                      </strong>
+                                    ₹
+                                    {numberFormat(
+                                      metal_value + labour_charge_discount
                                     )}
                                   </label>
                                 </div>

@@ -234,7 +234,6 @@ const Navbar = () => {
   };
 
   const DispatchLink = () => {
-    console.log("hello");
     setDispatch(!dispatch);
   };
 
@@ -310,8 +309,7 @@ const Navbar = () => {
   const cartTip = <Tooltip id="tooltip">cart</Tooltip>;
   const readyCartTip = <Tooltip id="tooltip">Ready design cart</Tooltip>;
 
-  const silver = "silver";
-  const gold = "gold";
+  const impelID = 4;
 
   return (
     <header
@@ -354,6 +352,20 @@ const Navbar = () => {
                 </li>
 
                 <li className="nav-item">
+                  <Link
+                    className={
+                      currentRoute === "/ready-to-dispatch/4"
+                        ? "nav-link active"
+                        : "nav-link"
+                    }
+                    aria-current="page"
+                    to={`/ready-to-dispatch/${impelID}`}
+                    onClick={handleNavClick}
+                  >
+                    Ready Jewellery
+                  </Link>
+                </li>
+                {/* <li className="nav-item">
                   <div onClick={DispatchLink} ref={DispatchRef}>
                     <div
                       className={`dispatch-dropdown ${
@@ -389,10 +401,10 @@ const Navbar = () => {
                         cursor: "pointer",
                       }}
                     >
-                      Ready To Dispatch
+                      Ready Jewellery
                     </span>
                   </div>
-                </li>
+                </li> */}
 
                 <li className="nav-item">
                   <div onClick={TagsDropdown} ref={tagRef}>

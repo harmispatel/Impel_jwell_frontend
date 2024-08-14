@@ -25,23 +25,7 @@ const ReadyDetails = () => {
   const [details, setDetails] = useState("");
   const [cartItems, setCartItems] = useState([]);
   const [spinner, setSpinner] = useState(false);
-
-  // useEffect(() => {
-  //   const getDetails = () => {
-  //     profileService
-  //       .GetProductsDetailsAPI({ TagNo: id })
-  //       .then((res) => {
-  //         setDetails(res?.lstTagInfo[0]);
-  //         setIsLoading(false);
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //         setIsLoading(false);
-  //       });
-  //   };
-  //   getDetails();
-  //   GetUserCartList();
-  // }, []);
+  const [allPrices, setAllPrices] = useState([]);
 
   useEffect(() => {
     const getDetails = () => {
@@ -114,6 +98,17 @@ const ReadyDetails = () => {
       });
   };
 
+  useEffect(() => {
+    profileService
+      .GetProductsPrices()
+      .then((res) => {
+        setAllPrices(res?.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [id]);
+
   const numberFormat = (value) =>
     new Intl.NumberFormat("en-IN")?.format(Math?.round(value));
 
@@ -122,6 +117,18 @@ const ReadyDetails = () => {
     localStorage.setItem("redirectPath", location.pathname);
     navigate("/login");
   };
+
+  var finalPrice = [
+    {
+      price_24k: allPrices?.price_24k,
+    },
+    {
+      sales_wastage: allPrices?.sales_wastage_rtd,
+    },
+    {
+      sales_wastage_discount: allPrices?.sales_wastage_discount_rtd,
+    },
+  ];
 
   return (
     <>
@@ -134,7 +141,7 @@ const ReadyDetails = () => {
                   firstName="Home"
                   firstUrl="/"
                   secondName="Ready to dispatch"
-                  secondUrl="/ready-to-dispatch"
+                  secondUrl={`/ready-to-dispatch/${ids}`}
                   thirdName={id}
                 />
                 {isLoading ? (
