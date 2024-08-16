@@ -536,27 +536,13 @@ const ShopDetails = () => {
                                                       g. (Approx.)
                                                     </td>
                                                   </tr>
-                                                  {/* <tr>
-                                            <th>Less Gems Stone</th>
-                                            <td>
-                                              {productdetail?.less_gems_stone}
-                                              g.
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <th>Less C.Z. Stone</th>
-                                            <td>
-                                              {productdetail?.less_cz_stone}
-                                              g.
-                                            </td>
-                                          </tr> */}
                                                   <tr>
                                                     <th>Net Weight</th>
                                                     <td>
                                                       {
                                                         productdetail?.net_weight_22k
                                                       }
-                                                      g.
+                                                      g. (Approx.)
                                                     </td>
                                                   </tr>
                                                   <tr>
@@ -568,19 +554,6 @@ const ShopDetails = () => {
                                                       )}
                                                     </td>
                                                   </tr>
-                                                  {/* <tr>
-                                            <th>CZ Stone Charges</th>
-                                            <td>
-                                              ₹{productdetail?.cz_stone_price}
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <th>Gem stone charges</th>
-                                            <td>
-                                              ₹{productdetail?.gemstone_price}
-                                            </td>
-                                          </tr> */}
-
                                                   <tr>
                                                     <th>Making charge</th>
                                                     <td>
@@ -597,16 +570,22 @@ const ShopDetails = () => {
                                                           {
                                                             product?.sales_westage_discount
                                                           }
-                                                          % Off) &nbsp; ₹
-                                                          {numberFormat(
-                                                            product?.making_charge_discount_22k
-                                                          )}
+                                                          % Off) &nbsp;
+                                                          <strong>
+                                                            ₹
+                                                            {numberFormat(
+                                                              product?.making_charge_discount_22k
+                                                            )}
+                                                          </strong>
                                                         </>
                                                       ) : (
                                                         <>
-                                                          {numberFormat(
-                                                            product?.making_charge_22k
-                                                          )}
+                                                          <strong>
+                                                            ₹
+                                                            {numberFormat(
+                                                              product?.making_charge_22k
+                                                            )}
+                                                          </strong>
                                                         </>
                                                       )}
                                                     </td>
@@ -614,11 +593,13 @@ const ShopDetails = () => {
                                                   <tr>
                                                     <th>Total Amount</th>
                                                     <td>
-                                                      ₹
-                                                      {numberFormat(
-                                                        product?.total_amount_22k
-                                                      )}
-                                                      (Approx.)
+                                                      <strong className="text-success">
+                                                        ₹
+                                                        {numberFormat(
+                                                          product?.total_amount_22k
+                                                        )}
+                                                        &nbsp; (Approx.)
+                                                      </strong>
                                                     </td>
                                                   </tr>
                                                 </>
@@ -694,16 +675,22 @@ const ShopDetails = () => {
                                                           {
                                                             product?.sales_westage_discount
                                                           }
-                                                          % Off) &nbsp; ₹
-                                                          {numberFormat(
-                                                            product?.making_charge_discount_20k
-                                                          )}
+                                                          % Off) &nbsp;{" "}
+                                                          <strong>
+                                                            ₹
+                                                            {numberFormat(
+                                                              product?.making_charge_discount_20k
+                                                            )}
+                                                          </strong>
                                                         </>
                                                       ) : (
                                                         <>
-                                                          {numberFormat(
-                                                            product?.making_charge_20k
-                                                          )}
+                                                          <strong>
+                                                            {" "}
+                                                            {numberFormat(
+                                                              product?.making_charge_20k
+                                                            )}
+                                                          </strong>
                                                         </>
                                                       )}
                                                     </td>
@@ -711,11 +698,13 @@ const ShopDetails = () => {
                                                   <tr>
                                                     <th>Total Amount</th>
                                                     <td>
-                                                      ₹
-                                                      {numberFormat(
-                                                        product?.total_amount_20k
-                                                      )}
-                                                      (Approx.)
+                                                      <strong className="text-success">
+                                                        ₹
+                                                        {numberFormat(
+                                                          product?.total_amount_20k
+                                                        )}
+                                                        &nbsp; (Approx.)
+                                                      </strong>
                                                     </td>
                                                   </tr>
                                                 </>
@@ -791,16 +780,21 @@ const ShopDetails = () => {
                                                           {
                                                             product?.sales_westage_discount
                                                           }
-                                                          % Off) &nbsp; ₹
-                                                          {numberFormat(
-                                                            product?.making_charge_discount_18k
-                                                          )}
+                                                          % Off) &nbsp;{" "}
+                                                          <strong>
+                                                            ₹
+                                                            {numberFormat(
+                                                              product?.making_charge_discount_18k
+                                                            )}
+                                                          </strong>
                                                         </>
                                                       ) : (
                                                         <>
-                                                          {numberFormat(
-                                                            product?.making_charge_18k
-                                                          )}
+                                                          <strong>
+                                                            {numberFormat(
+                                                              product?.making_charge_18k
+                                                            )}
+                                                          </strong>
                                                         </>
                                                       )}
                                                     </td>
@@ -809,11 +803,13 @@ const ShopDetails = () => {
                                                   <tr>
                                                     <th>Total Amount</th>
                                                     <td>
-                                                      ₹
-                                                      {numberFormat(
-                                                        product?.total_amount_18k
-                                                      )}
-                                                      (Approx.)
+                                                      <strong className="text-success">
+                                                        ₹
+                                                        {numberFormat(
+                                                          product?.total_amount_18k
+                                                        )}
+                                                        &nbsp; (Approx.)
+                                                      </strong>
                                                     </td>
                                                   </tr>
                                                 </>
@@ -888,16 +884,21 @@ const ShopDetails = () => {
                                                           {numberFormat(
                                                             product?.sales_westage_discount
                                                           )}
-                                                          % Off) &nbsp; ₹
-                                                          {numberFormat(
-                                                            product?.making_charge_discount_14k
-                                                          )}
+                                                          % Off) &nbsp;{" "}
+                                                          <strong>
+                                                            ₹
+                                                            {numberFormat(
+                                                              product?.making_charge_discount_14k
+                                                            )}
+                                                          </strong>
                                                         </>
                                                       ) : (
                                                         <>
-                                                          {numberFormat(
-                                                            product?.making_charge_14k
-                                                          )}
+                                                          <strong>
+                                                            {numberFormat(
+                                                              product?.making_charge_14k
+                                                            )}
+                                                          </strong>
                                                         </>
                                                       )}
                                                     </td>
@@ -905,11 +906,13 @@ const ShopDetails = () => {
                                                   <tr>
                                                     <th>Total Amount</th>
                                                     <td>
-                                                      ₹
-                                                      {numberFormat(
-                                                        product?.total_amount_14k
-                                                      )}
-                                                      (Approx.)
+                                                      <strong className="text-success">
+                                                        ₹
+                                                        {numberFormat(
+                                                          product?.total_amount_14k
+                                                        )}
+                                                        &nbsp; (Approx.)
+                                                      </strong>
                                                     </td>
                                                   </tr>
                                                 </>

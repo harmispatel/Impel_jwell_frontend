@@ -173,7 +173,7 @@ const Home = () => {
         <title>Impel Store - Home</title>
       </Helmet>
 
-      {/* First Banner */}
+      {/* Hero Banner */}
       <section className="banner position-relative">
         <Swiper
           spaceBetween={30}
@@ -320,17 +320,36 @@ const Home = () => {
             <div className="banner_info_inr">
               <div className="banner_detail text-center">
                 <div className="info_img">
-                  <img src={Ring} width="100px" alt="" />
+                  <Link
+                    to={`/shop?tag_id=${
+                      tagIds?.includes(Middle_banner_tag)
+                        ? tagIds
+                        : Middle_banner_tag
+                    }`}
+                    onClick={(e) => handleTag(e)}
+                  >
+                    <img src={Ring} width="100px" alt="" />
+                  </Link>
                 </div>
                 {bannerSlider &&
                 bannerSlider?.middle_banners &&
                 bannerSlider?.middle_banners[0] ? (
                   <>
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html: bannerSlider?.middle_banners[0]?.description,
-                      }}
-                    />
+                    <Link
+                      to={`/shop?tag_id=${
+                        tagIds?.includes(Middle_banner_tag)
+                          ? tagIds
+                          : Middle_banner_tag
+                      }`}
+                      onClick={(e) => handleTag(e)}
+                      style={{ textDecoration: "none", color: "#000" }}
+                    >
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: bannerSlider?.middle_banners[0]?.description,
+                        }}
+                      />
+                    </Link>
                   </>
                 ) : (
                   <>
@@ -366,13 +385,32 @@ const Home = () => {
               {bannerSlider &&
               bannerSlider?.middle_banners &&
               bannerSlider?.middle_banners[0] ? (
-                <img
-                  src={bannerSlider?.middle_banners[0]?.image}
-                  className="w-100"
-                  alt=""
-                />
+                <Link
+                  to={`/shop?tag_id=${
+                    tagIds?.includes(Middle_banner_tag)
+                      ? tagIds
+                      : Middle_banner_tag
+                  }`}
+                  onClick={(e) => handleTag(e)}
+                  style={{ textDecoration: "none" }}
+                >
+                  <img
+                    src={bannerSlider?.middle_banners[0]?.image}
+                    className="w-100"
+                    alt=""
+                  />
+                </Link>
               ) : (
-                <img src={banner_1} className="w-100" alt="" />
+                <Link
+                  to={`/shop?tag_id=${
+                    tagIds?.includes(Middle_banner_tag)
+                      ? tagIds
+                      : Middle_banner_tag
+                  }`}
+                  onClick={(e) => handleTag(e)}
+                >
+                  <img src={banner_1} className="w-100" alt="" />
+                </Link>
               )}
             </div>
           </div>
@@ -496,9 +534,27 @@ const Home = () => {
               {bannerSlider &&
               bannerSlider?.bottom_banners &&
               bannerSlider?.bottom_banners[0] ? (
-                <img src={bannerSlider?.bottom_banners[0]?.image} alt="" />
+                <Link
+                  to={`/shop?tag_id=${
+                    tagIds?.includes(Bottom_banner_tag)
+                      ? tagIds
+                      : Bottom_banner_tag
+                  }`}
+                  onClick={(e) => handleTag(e)}
+                >
+                  <img src={bannerSlider?.bottom_banners[0]?.image} alt="" />
+                </Link>
               ) : (
-                <img src={Kada} className="w-100" alt="" />
+                <Link
+                  to={`/shop?tag_id=${
+                    tagIds?.includes(Bottom_banner_tag)
+                      ? tagIds
+                      : Bottom_banner_tag
+                  }`}
+                  onClick={(e) => handleTag(e)}
+                >
+                  <img src={Kada} className="w-100" alt="" />
+                </Link>
               )}
             </div>
             <div className="banner_info_inr">
@@ -507,11 +563,21 @@ const Home = () => {
                 bannerSlider?.bottom_banners &&
                 bannerSlider?.bottom_banners[0] ? (
                   <>
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html: bannerSlider?.bottom_banners[0]?.description,
-                      }}
-                    />
+                    <Link
+                      to={`/shop?tag_id=${
+                        tagIds?.includes(Bottom_banner_tag)
+                          ? tagIds
+                          : Bottom_banner_tag
+                      }`}
+                      onClick={(e) => handleTag(e)}
+                      style={{ textDecoration: "none", color: "#000" }}
+                    >
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: bannerSlider?.bottom_banners[0]?.description,
+                        }}
+                      />
+                    </Link>
                   </>
                 ) : (
                   <>
@@ -546,7 +612,16 @@ const Home = () => {
                   )}
 
                 <div className="info_img">
-                  <img src={Ring} width="100px" alt="" />
+                  <Link
+                    to={`/shop?tag_id=${
+                      tagIds?.includes(Bottom_banner_tag)
+                        ? tagIds
+                        : Bottom_banner_tag
+                    }`}
+                    onClick={(e) => handleTag(e)}
+                  >
+                    <img src={Ring} width="100px" alt="" />
+                  </Link>
                 </div>
               </div>
             </div>

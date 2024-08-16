@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import profileService from "../../services/Home";
 import { Link, useParams } from "react-router-dom";
 import Loader from "../../components/common/Loader";
+import profileService from "../../services/Home";
 import Select from "react-select";
 
 const imageURL = process.env.REACT_APP_API_KEY_IMAGE_;
@@ -11,8 +11,6 @@ const ReadytoDispatch = () => {
 
   const [products, setProducts] = useState([]);
   const [filters, setFilters] = useState([]);
-  const [minPrice, setMinPrice] = useState(null);
-  const [maxPrice, setMaxPrice] = useState(null);
   const [tagNoChange, setTagNoChange] = useState(null);
   const [items, setItems] = useState(null);
   const [subItems, setSubItems] = useState(null);
@@ -22,43 +20,6 @@ const ReadytoDispatch = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const [allPrices, setAllPrices] = useState([]);
-
-  const getFilters = () => {
-    profileService
-      .GetProductsFilterAPI({
-        PageNo: 1,
-        PageSize: 100,
-        DeviceID: 0,
-        SortBy: "",
-        SearchText: "",
-        TranType: "",
-        CommaSeperate_ItemGroupID: "",
-        CommaSeperate_ItemID: "",
-        CommaSeperate_StyleID: "",
-        CommaSeperate_ProductID: "",
-        CommaSeperate_SubItemID: "",
-        CommaSeperate_AppItemCategoryID: "",
-        CommaSeperate_ItemSubID: "",
-        CommaSeperate_KarigarID: "",
-        CommaSeperate_BranchID: "",
-        CommaSeperate_Size: "",
-        CommaSeperate_CounterID: "",
-        MaxNetWt: 0,
-        MinNetWt: 0,
-        OnlyCartItem: false,
-        OnlyWishlistItem: false,
-        StockStatus: "",
-        DoNotShowInClientApp: 0,
-        HasTagImage: 0,
-        CommaSeperate_CompanyID: id,
-      })
-      .then((res) => {
-        setFilters(res?.Filters);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
 
   const handleCategory = (selectedOption) => {
     setItemGroups(selectedOption);
@@ -82,9 +43,42 @@ const ReadytoDispatch = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      getFilters();
+      profileService
+        .GetProductsFilterAPI({
+          PageNo: 1,
+          PageSize: 100,
+          DeviceID: 0,
+          SortBy: "",
+          SearchText: "",
+          TranType: "",
+          CommaSeperate_ItemGroupID: itemGroups?.value || "",
+          CommaSeperate_ItemID: items?.value || "",
+          CommaSeperate_StyleID: styles?.value || "",
+          CommaSeperate_ProductID: "",
+          CommaSeperate_SubItemID: subItems?.value || "",
+          CommaSeperate_AppItemCategoryID: "",
+          CommaSeperate_ItemSubID: "",
+          CommaSeperate_KarigarID: "",
+          CommaSeperate_BranchID: "",
+          CommaSeperate_Size: sizes?.label || "",
+          CommaSeperate_CounterID: "",
+          MaxNetWt: 0,
+          MinNetWt: 0,
+          OnlyCartItem: false,
+          OnlyWishlistItem: false,
+          StockStatus: "",
+          DoNotShowInClientApp: 0,
+          HasTagImage: 0,
+          CommaSeperate_CompanyID: id,
+        })
+        .then((res) => {
+          setFilters(res?.Filters);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }, 1000);
-  }, [id]);
+  }, [itemGroups, items, subItems, styles, sizes, id]);
 
   useEffect(() => {
     profileService
@@ -163,7 +157,7 @@ const ReadytoDispatch = () => {
           ) : (
             <>
               <div className="row">
-                <div className="col-md-6 mb-4">
+                {/* <div className="col-md-6 mb-4">
                   <div className="form-group d-flex align-items-center">
                     <label htmlFor="price" className="form-label">
                       Price:
@@ -180,16 +174,16 @@ const ReadytoDispatch = () => {
                       onChange={(e) => setMaxPrice(e.target.value)}
                     />
                   </div>
-                </div>
+                </div> */}
                 <div className="col-md-3 mb-4">
                   <div className="form-group d-flex align-items-center">
-                    <label
+                    {/* <label
                       htmlFor="price"
                       className="form-label"
                       style={{ width: "70px" }}
                     >
                       Tag No:
-                    </label>
+                    </label> */}
                     <input
                       type="text"
                       className="form-control"
@@ -271,7 +265,6 @@ const ReadytoDispatch = () => {
                 {products?.length > 0 ? (
                   <>
                     {products?.map((data, index) => {
-                      
                       var sales_wastage_of_category =
                         finalPrice[1]?.sales_wastage[data?.SubItemID] || 0;
 
@@ -284,12 +277,18 @@ const ReadytoDispatch = () => {
                         (finalPrice[0]?.price_24k[data?.SubItemID] *
                           sales_wastage_of_category) /
                           100 || 0;
-                      labour_charge = labour_charge * data?.NetWt || 0;
 
-                      var labour_charge_discount =
-                        labour_charge -
-                        (labour_charge * sales_wastage_discount_of_category) /
-                          100;
+                      if (labour_charge > 0) {
+                        labour_charge = labour_charge * data?.NetWt || 0;
+                      }
+
+                      const labour_charge_discount =
+                        sales_wastage_discount_of_category > 0
+                          ? labour_charge -
+                            (labour_charge *
+                              sales_wastage_discount_of_category) /
+                              100
+                          : 0;
 
                       var metal_value =
                         finalPrice[0]?.price_24k[data?.SubItemID] *
@@ -325,15 +324,37 @@ const ReadytoDispatch = () => {
                                     </>
                                   )}
                                 </div>
-                                <div className="product-info">
-                                  <label>
-                                    ₹
-                                    {numberFormat(
-                                      metal_value + labour_charge_discount
-                                    )}
-                                  </label>
-                                </div>
                               </Link>
+                              <div className="product-info d-grid">
+                                {labour_charge_discount > 0 ? (
+                                  <>
+                                    <del>
+                                      ₹
+                                      {numberFormat(
+                                        labour_charge + metal_value
+                                      )}
+                                    </del>
+                                    <label>
+                                      <strong className="text-success">
+                                        ₹
+                                        {numberFormat(
+                                          metal_value + labour_charge_discount
+                                        )}
+                                      </strong>
+                                    </label>
+                                  </>
+                                ) : (
+                                  <>
+                                    {" "}
+                                    <strong className="text-success">
+                                      ₹
+                                      {numberFormat(
+                                        metal_value + labour_charge
+                                      )}
+                                    </strong>
+                                  </>
+                                )}
+                              </div>
                             </div>
                           </div>
                         </>

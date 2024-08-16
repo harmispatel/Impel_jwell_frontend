@@ -157,7 +157,7 @@ const ReadyDesignCart = () => {
     let subTotal = 0;
 
     Items.forEach((data) => {
-      const price = parseFloat(data.price);
+      const price = parseFloat(data.total_amount);
       subTotal += price;
     });
 
@@ -167,12 +167,33 @@ const ReadyDesignCart = () => {
   const SubGST = () => {
     let subGst = 0;
     Items.forEach((data) => {
-      const price = parseFloat(data.price);
+      const price = parseFloat(data.total_amount);
       subGst += price;
     });
     const gstAmount = subGst * 0.03;
     return gstAmount;
   };
+
+  const SubCharge = () => {
+    let subCharge = 0;
+
+    Items.forEach((data) => {
+      const price = parseFloat(data.making_charge);
+      subCharge += price;
+    });
+    return subCharge;
+  };
+
+  let overAllAmount = SubAmount() + SubGST();
+
+  if (code?.discount_value) {
+    if (code?.discount_type === "percentage") {
+      overAllAmount =
+        overAllAmount - (SubCharge() * code?.discount_value) / 100;
+    } else {
+      overAllAmount = overAllAmount - code?.discount_value;
+    }
+  }
 
   const handlePhonepeClick = () => {
     if (Verification == 2) {
@@ -321,7 +342,6 @@ const ReadyDesignCart = () => {
   const [shipping_city, setShipping_city] = useState();
   const [isChecked, setIsChecked] = useState(false);
   const [valid, setValid] = useState("");
-  const [payment_link, setPayment_Link] = useState("");
   const [message, setMessage] = useState(false);
   const [userData, setUserData] = useState({
     name: "",
@@ -772,7 +792,12 @@ const ReadyDesignCart = () => {
                                           </div>
                                           <div className="mt-3">
                                             <h6>
-                                              ₹{numberFormat(data?.price)}
+                                              <strong className="text-success">
+                                                ₹
+                                                {numberFormat(
+                                                  data?.total_amount
+                                                )}
+                                              </strong>
                                             </h6>
                                           </div>
                                         </div>
@@ -848,7 +873,6 @@ const ReadyDesignCart = () => {
                           )}
                           <div className="card shadow-0 border">
                             <div className="card-body">
-                              
                               {/* SUB TOTAL :*/}
                               <div className="d-flex justify-content-between">
                                 <p className="mb-2">Sub total :</p>
@@ -871,7 +895,16 @@ const ReadyDesignCart = () => {
                               <div className="d-flex justify-content-between">
                                 <p className="mb-2">Total price :</p>
                                 <p className="mb-2 fw-bold">
-                                  ₹{numberFormat(SubAmount() + SubGST())}
+                                  {code?.discount_value ? (
+                                    <>
+                                      ₹
+                                      {code?.discount_type === "percentage"
+                                        ? numberFormat(overAllAmount)
+                                        : numberFormat(overAllAmount)}
+                                    </>
+                                  ) : (
+                                    <>₹{numberFormat(overAllAmount)}</>
+                                  )}
                                 </p>
                               </div>
                               <hr />

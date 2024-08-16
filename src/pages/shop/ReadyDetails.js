@@ -9,6 +9,7 @@ import { CgSpinner } from "react-icons/cg";
 import { ReadyDesignCartSystem } from "../../context/ReadyDesignCartContext";
 import noImage from "../../assets/images/No_Image_Available.jpg";
 import profileService from "../../services/Home";
+import { Accordion } from "react-bootstrap";
 
 const api = process.env.REACT_APP_API_KEY;
 const imageURL = process.env.REACT_APP_API_KEY_IMAGE;
@@ -26,6 +27,11 @@ const ReadyDetails = () => {
   const [cartItems, setCartItems] = useState([]);
   const [spinner, setSpinner] = useState(false);
   const [allPrices, setAllPrices] = useState([]);
+  const [accordionOpen, setAccordionOpen] = useState(true);
+
+  const toggleAccordion = () => {
+    setAccordionOpen(!accordionOpen);
+  };
 
   useEffect(() => {
     const getDetails = () => {
@@ -63,6 +69,65 @@ const ReadyDetails = () => {
       });
   };
 
+  var finalPrice = [
+    {
+      price_24k: allPrices?.price_24k,
+    },
+    {
+      sales_wastage: allPrices?.sales_wastage_rtd,
+    },
+    {
+      sales_wastage_discount: allPrices?.sales_wastage_discount_rtd,
+    },
+    {
+      show_estimate: allPrices?.show_estimate,
+    },
+  ];
+
+  const sales_wastage_of_category =
+    details && finalPrice[1]?.sales_wastage
+      ? finalPrice[1].sales_wastage[details.SubItemID] || 0
+      : 0;
+
+  const sales_wastage_discount_of_category =
+    details && finalPrice[2]?.sales_wastage_discount
+      ? finalPrice[2].sales_wastage_discount[details.SubItemID] || 0
+      : 0;
+
+  const is_estimate =
+    details && finalPrice[3]?.show_estimate
+      ? finalPrice[3].show_estimate[details.SubItemID] || 0
+      : 0;
+
+  var metal_value =
+    details && finalPrice[0]?.price_24k
+      ? finalPrice[0].price_24k[details.SubItemID] *
+          (details?.Touch / 100) *
+          details?.NetWt || 0
+      : 0;
+
+  var labour_charge =
+    details && finalPrice[0]?.price_24k
+      ? (finalPrice[0].price_24k[details.SubItemID] *
+          sales_wastage_of_category) /
+          100 || 0
+      : 0;
+
+  if (labour_charge > 0) {
+    labour_charge = labour_charge * details?.NetWt || 0;
+  }
+
+  if (sales_wastage_discount_of_category > 0) {
+    var labour_charge_discount =
+      labour_charge -
+      (labour_charge * sales_wastage_discount_of_category) / 100;
+  } else {
+    var labour_charge_discount = 0;
+  }
+
+  const numberFormat = (value) =>
+    new Intl.NumberFormat("en-IN")?.format(Math?.round(value));
+
   const handleAddToCart = (product) => {
     const payload = { id: product?.TagNo };
     setSpinner(true);
@@ -72,13 +137,20 @@ const ReadyDetails = () => {
         tag_no: details?.TagNo,
         group_name: details?.GroupName,
         name: id,
-        price: details?.MRP || 0,
         size: details?.Size1,
         gross_weight: details?.GrossWt,
         net_weight: details?.NetWt,
+        item_group_id: details?.ItemGroupID,
+        item_id: details?.ItemID,
+        sub_item_id: details?.ItemSubID,
+        style_id: details?.StyleID,
         quantity: 1,
         barcode: details?.Barcode,
-        gold_id: ids == 1 ? 1 : 3,
+        company_id: 4,
+        metal_value:metal_value || 0,
+        making_charge:labour_charge|| 0,
+        making_charge_discount: labour_charge_discount || 0,
+        total_amount: labour_charge_discount > 0 ?  metal_value + labour_charge_discount : metal_value + labour_charge || 0,
       })
       .then((res) => {
         if (res?.data?.status === true) {
@@ -109,26 +181,13 @@ const ReadyDetails = () => {
       });
   }, [id]);
 
-  const numberFormat = (value) =>
-    new Intl.NumberFormat("en-IN")?.format(Math?.round(value));
+  
 
   const UserLogin = (e) => {
     e.preventDefault();
     localStorage.setItem("redirectPath", location.pathname);
     navigate("/login");
   };
-
-  var finalPrice = [
-    {
-      price_24k: allPrices?.price_24k,
-    },
-    {
-      sales_wastage: allPrices?.sales_wastage_rtd,
-    },
-    {
-      sales_wastage_discount: allPrices?.sales_wastage_discount_rtd,
-    },
-  ];
 
   return (
     <>
@@ -176,27 +235,184 @@ const ReadyDetails = () => {
                           <h5 className="mb-3">
                             Metal : <strong>{details?.GroupName}</strong>
                           </h5>
-                          {/* <h5 className="mb-3">
-                            Design code : <strong>{details?.DesignCode}</strong>
-                          </h5> */}
+
                           <h5 className="mb-3">
                             Size : <strong>{details?.Size1 || "---"}</strong>
                           </h5>
-                          <h5 className="mb-3">
-                            Gross Weight :{" "}
-                            <strong>{details?.GrossWt} Gram(Approx.)</strong>
-                          </h5>
-                          <h5 className="mb-3">
-                            Net Weight :{" "}
-                            <strong>{details?.NetWt} Gram(Approx.)</strong>
-                          </h5>
-                          <h5 className="mb-3">
-                            Price :{" "}
-                            <strong>
-                              ₹{numberFormat(details?.MRP || "1000")}
-                            </strong>
-                            {/* Price : <strong>₹1000</strong> */}
-                          </h5>
+                          {is_estimate == 1 ? (
+                            <>
+                              <div className="mt-3">
+                                <Accordion className="accordian">
+                                  <Accordion.Item eventKey="3" className="my-2">
+                                    <Accordion.Header onClick={toggleAccordion}>
+                                      Approximate - Estimate
+                                    </Accordion.Header>
+                                    <Accordion.Body className="p-0">
+                                      <table className="table table-bordered mb-0">
+                                        <tbody>
+                                          <tr>
+                                            <th>Gross Weight</th>
+                                            <td>
+                                              {details?.GrossWt} g. (Approx.)
+                                            </td>
+                                          </tr>
+                                          <tr>
+                                            <th>Net Weight</th>
+                                            <td>
+                                              {details?.GrossWt} g. (Approx.)
+                                            </td>
+                                          </tr>
+                                          <tr>
+                                            <th>Metal value</th>
+                                            <td>
+                                              ₹{numberFormat(metal_value)}
+                                            </td>
+                                          </tr>
+                                          <tr>
+                                            <th>Making charge</th>
+                                            {labour_charge_discount > 0 ? (
+                                              <td>
+                                                <del>
+                                                  ₹{numberFormat(labour_charge)}
+                                                </del>{" "}
+                                                &nbsp;{" "}
+                                                <strong>
+                                                  ₹
+                                                  {numberFormat(
+                                                    labour_charge_discount
+                                                  )}
+                                                </strong>
+                                              </td>
+                                            ) : (
+                                              <td>
+                                                <>
+                                                  <strong>
+                                                    ₹
+                                                    {numberFormat(
+                                                      labour_charge
+                                                    )}
+                                                  </strong>
+                                                </>
+                                              </td>
+                                            )}
+                                          </tr>
+                                          <tr>
+                                            <th>Total Amount</th>
+                                            {labour_charge_discount > 0 ? (
+                                              <td>
+                                                <strong className="text-success">
+                                                  ₹
+                                                  {numberFormat(
+                                                    metal_value +
+                                                      labour_charge_discount
+                                                  )}
+                                                </strong>
+                                              </td>
+                                            ) : (
+                                              <td>
+                                                <>
+                                                  <strong className="text-success">
+                                                    ₹
+                                                    {numberFormat(
+                                                      metal_value +
+                                                        labour_charge
+                                                    )}
+                                                  </strong>
+                                                </>
+                                              </td>
+                                            )}
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </Accordion.Body>
+                                  </Accordion.Item>
+                                </Accordion>
+                                {accordionOpen && (
+                                  <div className="mt-3">
+                                    <table className="table table-bordered">
+                                      <tbody>
+                                        <tr>
+                                          <th>Total Amount</th>
+                                          {labour_charge_discount > 0 ? (
+                                            <td>
+                                              <del>
+                                                ₹
+                                                {numberFormat(
+                                                  labour_charge + metal_value
+                                                )}
+                                              </del>{" "}
+                                              &nbsp;{" "}
+                                              <strong className="text-success">
+                                                ₹
+                                                {numberFormat(
+                                                  labour_charge_discount +
+                                                    metal_value
+                                                )}
+                                              </strong>
+                                            </td>
+                                          ) : (
+                                            <td>
+                                              <>
+                                                <strong className="text-success">
+                                                  ₹
+                                                  {numberFormat(
+                                                    metal_value + labour_charge
+                                                  )}
+                                                </strong>
+                                              </>
+                                            </td>
+                                          )}
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                )}
+                              </div>
+                            </>
+                          ) : (
+                            <>
+                              {accordionOpen && (
+                                <div className="mt-3">
+                                  <table className="table table-bordered">
+                                    <tbody>
+                                      <tr>
+                                        <th>Total Amount</th>
+                                        {labour_charge_discount > 0 ? (
+                                          <td>
+                                            <del>
+                                              ₹
+                                              {numberFormat(
+                                                labour_charge + metal_value
+                                              )}
+                                            </del>{" "}
+                                            &nbsp;{" "}
+                                            <strong className="text-success">
+                                              ₹
+                                              {numberFormat(
+                                                labour_charge_discount +
+                                                  metal_value
+                                              )}
+                                            </strong>
+                                          </td>
+                                        ) : (
+                                          <td>
+                                            <>
+                                              <strong className="text-success">
+                                                ₹
+                                                {numberFormat(
+                                                  metal_value + labour_charge
+                                                )}
+                                              </strong>
+                                            </>
+                                          </td>
+                                        )}
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </div>
+                              )}
+                            </>
+                          )}
                         </div>
                         <>
                           {phone ? (
