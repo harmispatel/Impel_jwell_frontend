@@ -178,7 +178,10 @@ const ReadyDesignCart = () => {
     let subCharge = 0;
 
     Items.forEach((data) => {
-      const price = parseFloat(data.making_charge);
+      const price =
+        data?.making_charge_discount > 0
+          ? parseFloat(data.making_charge_discount)
+          : parseFloat(data.making_charge);
       subCharge += price;
     });
     return subCharge;
@@ -197,16 +200,16 @@ const ReadyDesignCart = () => {
 
   const handlePhonepeClick = () => {
     if (Verification == 2) {
-      if (SubAmount() + SubGST() >= 200000 && !userData?.pan_no) {
+      if (overAllAmount >= 200000 && !userData?.pan_no) {
         setValid(
           "Pancard is required for your total amount is more than 2 lakh or above"
         );
         setShowEdit(true);
         setSpinner(false);
-      } else if (SubAmount() + SubGST() < 200000) {
+      } else if (overAllAmount < 200000) {
         UserService.PayByPhonepeAPI({
           user_id: user_id,
-          total_amount: (SubAmount() + SubGST()).toFixed(),
+          total_amount: overAllAmount?.toFixed(),
           ready_order: 1,
         })
           .then((res) => {
@@ -223,7 +226,7 @@ const ReadyDesignCart = () => {
       } else {
         UserService.PayByPhonepeAPI({
           user_id: user_id,
-          total_amount: (SubAmount() + SubGST()).toFixed(),
+          total_amount: overAllAmount?.toFixed(),
           ready_order: 1,
         })
           .then((res) => {
@@ -246,13 +249,13 @@ const ReadyDesignCart = () => {
 
   const handleCashClick = () => {
     if (Verification == 2) {
-      if (SubAmount() + SubGST() >= 200000 && !userData?.pan_no) {
+      if (overAllAmount >= 200000 && !userData?.pan_no) {
         setValid(
           "Pancard is required for your total amount is more than 2 lakh or above"
         );
         setShowEdit(true);
         setSpinner(false);
-      } else if (SubAmount() + SubGST() < 200000) {
+      } else if (overAllAmount < 200000) {
         axios
           .post(api + "ready/purchase-order", {
             user_id: user_id,
@@ -260,7 +263,11 @@ const ReadyDesignCart = () => {
             cart_items: Items?.map((item) => item?.id),
             sub_total: SubAmount(),
             gst_amount: SubGST().toFixed(),
-            total: (SubAmount() + SubGST())?.toFixed(),
+            total: overAllAmount?.toFixed(),
+            dealer_code: code?.dealer_code || "",
+            dealer_discount_type: code?.discount_type || "",
+            dealer_discount_value: code?.discount_value || "",
+            charges: SubCharge()?.toFixed() || "",
           })
           .then((res) => {
             navigate(`/ready-order-details/${res?.data?.data}`);
@@ -280,7 +287,11 @@ const ReadyDesignCart = () => {
             cart_items: Items?.map((item) => item?.id),
             sub_total: SubAmount(),
             gst_amount: SubGST().toFixed(),
-            total: (SubAmount() + SubGST())?.toFixed(),
+            total: overAllAmount?.toFixed(),
+            dealer_code: code?.dealer_code || "",
+            dealer_discount_type: code?.discount_type || "",
+            dealer_discount_value: code?.discount_value || "",
+            charges: SubCharge()?.toFixed() || "",
           })
           .then((res) => {
             navigate(`/ready-order-details/${res?.data?.data}`);
@@ -304,7 +315,6 @@ const ReadyDesignCart = () => {
       const queryParams = new URLSearchParams(location.search);
       const transaction_id = queryParams.get("transaction_id") || "";
 
-      // Ensure Items is not empty before making the API call
       if (Items.length > 0) {
         axios
           .post(api + "ready/purchase-order", {
@@ -313,8 +323,12 @@ const ReadyDesignCart = () => {
             cart_items: Items.map((item) => item.id),
             sub_total: SubAmount(),
             gst_amount: SubGST().toFixed(),
-            total: (SubAmount() + SubGST()).toFixed(),
+            total: overAllAmount?.toFixed(),
             transaction_id: transaction_id ? transaction_id : "",
+            dealer_code: code?.dealer_code || "",
+            dealer_discount_type: code?.discount_type || "",
+            dealer_discount_value: code?.discount_value || "",
+            charges: SubCharge()?.toFixed() || "",
           })
           .then((res) => {
             resetcartcount({ type: "RESET_CART" });
@@ -757,7 +771,9 @@ const ReadyDesignCart = () => {
                                         <div className="col-md-3" key={index}>
                                           <div className="d-flex">
                                             <Link
-                                              to={`/ready-to-dispatch/${data?.gold_id}/${data?.tag_no}`}
+                                              to={`/ready-to-dispatch/${4}/${
+                                                data?.tag_no
+                                              }`}
                                               className="nav-link"
                                             >
                                               <img

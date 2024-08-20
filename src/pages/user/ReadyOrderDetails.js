@@ -10,7 +10,7 @@ const api = process.env.REACT_APP_API_KEY;
 
 const ReadyOrderDetails = () => {
   const { id } = useParams();
- 
+
   const user_id = localStorage.getItem("user_id");
   const user_type = localStorage.getItem("user_type");
   const [Items, setItems] = useState([]);
@@ -40,6 +40,9 @@ const ReadyOrderDetails = () => {
   useEffect(() => {
     GetUserOrders();
   }, []);
+
+  const numberFormat = (value) =>
+    new Intl.NumberFormat("en-IN")?.format(Math?.round(value));
 
   return (
     <>
@@ -141,6 +144,22 @@ const ReadyOrderDetails = () => {
                                   <th scope="col">Payment Method :</th>
                                   <td>{Items?.payment_method}</td>
                                 </tr>
+                                <tr>
+                                  <th scope="col">Payment Status :</th>
+                                  {Items?.payment_status == 1 ? (
+                                    <td>
+                                      <span className="badge bg-success">
+                                        Paid
+                                      </span>
+                                    </td>
+                                  ) : (
+                                    <td>
+                                      <span className="badge bg-danger">
+                                        UnPaid
+                                      </span>
+                                    </td>
+                                  )}
+                                </tr>
                               </tbody>
                             </table>
                           </div>
@@ -235,13 +254,13 @@ const ReadyOrderDetails = () => {
                               <table className="table mb-0">
                                 <thead className="table-light text-center">
                                   <tr>
-                                    <th>Image</th>
-                                    <th>Name</th>
-                                    <th>Quantity</th>
-                                    <th>Gross Weight</th>
-                                    <th>Net Weight</th>
-                                    {/* <th>Metal Value</th>
-                                  <th>Total</th> */}
+                                    <th>IMAGE</th>
+                                    <th>NAME</th>
+                                    <th>QTY.</th>
+                                    <th>NET WEIGHT</th>
+                                    <th>METAL VALUE</th>
+                                    <th>MAKING CHARGE</th>
+                                    <th>TOTAL AMOUNT</th>
                                   </tr>
                                 </thead>
                                 <tbody className="text-center">
@@ -269,34 +288,33 @@ const ReadyOrderDetails = () => {
                                           <span>{datas?.quantity}</span>
                                         </td>
                                         <td>
+                                          <span>{datas?.net_weight} g.</span>
+                                        </td>
+                                        <td>
                                           <span>
-                                            {datas?.gross_weight} g. (Approx.)
+                                            ₹{numberFormat(datas?.metal_value)}
                                           </span>
                                         </td>
                                         <td>
                                           <span>
-                                            {" "}
-                                            {datas?.net_weight} g. (Approx.)
+                                            ₹
+                                            {datas?.making_charge_discount > 0
+                                              ? numberFormat(
+                                                  datas?.making_charge_discount
+                                                )
+                                              : numberFormat(
+                                                  datas?.making_charge
+                                                )}
                                           </span>
                                         </td>
-                                        {/* <td>
-                                        <span>
-                                          ₹
-                                          {datas?.item_sub_total?.toLocaleString(
-                                            "en-US"
-                                          )}
-                                        </span>
-                                      </td>
-                                      <td>
-                                        <span>
-                                          <strong>
-                                            ₹
-                                            {datas?.item_total?.toLocaleString(
-                                              "en-US"
-                                            )}
-                                          </strong>
-                                        </span>
-                                      </td> */}
+
+                                        <td>
+                                          <span>
+                                            <strong>
+                                              ₹{numberFormat(datas?.item_total)}
+                                            </strong>
+                                          </span>
+                                        </td>
                                       </tr>
                                     </>
                                   ))}
@@ -310,94 +328,87 @@ const ReadyOrderDetails = () => {
                   </div>
 
                   {/* Order Payments */}
-                  {/* <div className="order_payments">
-                  <div className="row justify-content-end">
-                    <div className="col-lg-4 col-md-4">
-                      <div
-                        className="card"
-                        style={{
-                          border: "none",
-                          boxShadow: "2px 2px 2px  #ccc",
-                        }}
-                      >
-                        <div className="card-body">
-                          <h4 className="header-title">Order Summary</h4>
-                          <div className="table-responsive">
-                            <table className="table mb-0">
-                              <thead className="table-light">
-                                <tr>
-                                  <th>Description</th>
-                                  <th>Price</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr>
-                                  <th>
-                                    <strong>Metal Value :</strong>
-                                  </th>
-                                  <td>
-                                    ₹{Items?.sub_total?.toLocaleString("en-US")}
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <th>
-                                    <strong>Charges :</strong>
-                                  </th>
-                                  <td>
-                                    ₹{Items?.charges?.toLocaleString("en-US")}
-                                  </td>
-                                </tr>
-                                {Items?.dealer_code &&
-                                  Items?.dealer_discount_type &&
-                                  Items?.dealer_discount_value && (
-                                    <tr>
-                                      <th>
-                                        <strong className="text-success">
-                                          Dealer Discount <br />(
-                                          {Items?.dealer_code}) &nbsp;
-                                          <span>
+                  <div className="order_payments order_details">
+                    <div className="row justify-content-end">
+                      <div className="col-lg-4 col-md-4">
+                        <div
+                          className="card"
+                          style={{
+                            border: "none",
+                            boxShadow: "2px 2px 2px  #ccc",
+                          }}
+                        >
+                          <div className="card-body">
+                            <h4 className="header-title">Order Summary</h4>
+                            <div className="table-responsive">
+                              <table className="table mb-0">
+                                <tbody>
+                                  <tr>
+                                    <th>
+                                      <strong>SUB TOTAL :</strong>
+                                    </th>
+                                    <td>₹{numberFormat(Items?.sub_total)}</td>
+                                  </tr>
+                                  <tr>
+                                    <th>
+                                      <strong>GST (3%) :</strong>
+                                    </th>
+                                    <td>₹{numberFormat(Items?.gst_amount)}</td>
+                                  </tr>
+                                  {Items?.dealer_code &&
+                                    Items?.dealer_discount_type &&
+                                    Items?.dealer_discount_value && (
+                                      <tr>
+                                        <th>
+                                          <strong className="text-success">
+                                            Dealer Discount <br />(
+                                            {Items?.dealer_code}) &nbsp;
+                                            <span>
+                                              {Items?.dealer_discount_type ===
+                                              "percentage" ? (
+                                                <>
+                                                  (-
+                                                  {Items?.dealer_discount_value}
+                                                  %)
+                                                </>
+                                              ) : (
+                                                <></>
+                                              )}
+                                            </span>
+                                          </strong>
+                                          &nbsp;:
+                                        </th>
+                                        <td className="text-success">
+                                          <p className="m-0">
                                             {Items?.dealer_discount_type ===
-                                            "percentage" ? (
-                                              <>
-                                                (-{Items?.dealer_discount_value}
-                                                %)
-                                              </>
-                                            ) : (
-                                              <></>
-                                            )}
-                                          </span>
-                                        </strong>
-                                        &nbsp;:
-                                      </th>
-                                      <td className="text-success">
-                                        <p className="m-0">
-                                          {Items?.dealer_discount_type ===
-                                          "percentage"
-                                            ? `- ₹${(
-                                                (Items?.charges *
-                                                  Items?.dealer_discount_value) /
-                                                100
-                                              )?.toLocaleString("en-US")}`
-                                            : `- ₹${Items?.dealer_discount_value}`}
-                                        </p>
-                                      </td>
-                                    </tr>
-                                  )}
+                                            "percentage"
+                                              ? `- ₹${numberFormat(
+                                                  (Items?.charges *
+                                                    Items?.dealer_discount_value) /
+                                                    100
+                                                )}`
+                                              : `- ₹${numberFormat(
+                                                  Items?.dealer_discount_value
+                                                )}`}
+                                          </p>
+                                        </td>
+                                      </tr>
+                                    )}
 
-                                <tr>
-                                  <th>Total Amount (Approx) :</th>
-                                  <td className="font-weight-bold">
-                                    ₹{Items?.total?.toLocaleString("en-US")}
-                                  </td>
-                                </tr>
-                              </tbody>
-                            </table>
+                                  <tr>
+                                    <th>TOTAL :</th>
+                                    <td className="font-weight-bold">
+                                      ₹{Items?.total?.toLocaleString("en-US")}
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div> */}
                 </>
               )}
             </div>
