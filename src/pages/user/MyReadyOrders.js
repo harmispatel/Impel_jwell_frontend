@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaEye } from "react-icons/fa";
-import Userservice from "../../services/Cart";
 import { Helmet } from "react-helmet-async";
 import { OverlayTrigger, Pagination, Tooltip } from "react-bootstrap";
 import Loader from "../../components/common/Loader";
@@ -16,7 +15,7 @@ const MyReadyOrders = () => {
   const [Items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(5);
+  const [itemsPerPage] = useState(10);
 
   // Pagination function
   const paginate = (array, currentPage, itemsPerPage) => {
@@ -30,6 +29,7 @@ const MyReadyOrders = () => {
     axios
       .post(api + "ready/my-orders", {
         user_id: user_id,
+        user_type: user_type,
       })
       .then((res) => {
         setItems(res?.data?.data);
@@ -46,13 +46,14 @@ const MyReadyOrders = () => {
   }, [currentPage]);
 
   const paginatedItems = paginate(Items, currentPage, itemsPerPage);
-  const totalPages = Math.ceil(Items.length / itemsPerPage);
+  const totalPages = Math.ceil(Items?.length / itemsPerPage);
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
 
   const orderDetails = <Tooltip id="tooltip">View order</Tooltip>;
+  
   return (
     <>
       <Helmet>
@@ -80,6 +81,10 @@ const MyReadyOrders = () => {
                               <th>Order No.</th>
                               <th>Customer</th>
                               <th>Phone No.</th>
+                              <th>Dealer</th>
+                              <th>Dealer Code</th>
+                              {user_type == 1 ? <th>Dealer Commission</th> : ""}
+                              {user_type == 1 ? <th>Commission Status</th> : ""}
                               <th>Order Satus</th>
                               <th>Actions</th>
                             </tr>
@@ -104,7 +109,49 @@ const MyReadyOrders = () => {
                                         <td>
                                           <span>{phoneNumber}</span>
                                         </td>
+                                        <td>
+                                          {datas?.dealer ? (
+                                            <span>{datas?.dealer}</span>
+                                          ) : (
+                                            <span>-</span>
+                                          )}
+                                        </td>
+                                        <td>
+                                          {datas?.dealer_code ? (
+                                            <span>{datas?.dealer_code}</span>
+                                          ) : (
+                                            <span>-</span>
+                                          )}
+                                        </td>
+                                        {user_type == 1 ? (
+                                          <td>
+                                            <span>
+                                              ₹
+                                              {Math.round(
+                                                datas?.dealer_commission
+                                              )}
+                                            </span>
+                                          </td>
+                                        ) : (
+                                          ""
+                                        )}
 
+                                        {user_type == 1 ? (
+                                          <td>
+                                            {datas?.commission_status == 1 && (
+                                              <span className="badge bg-success">
+                                                Paid
+                                              </span>
+                                            )}
+                                            {datas?.commission_status == 0 && (
+                                              <span className="badge bg-danger">
+                                                Unpaid
+                                              </span>
+                                            )}
+                                          </td>
+                                        ) : (
+                                          ""
+                                        )}
                                         <td>
                                           {datas?.order_status == "pending" && (
                                             <span className="badge bg-warning">

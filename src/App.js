@@ -166,10 +166,6 @@ function App() {
                         element={<MyReadyOrders />}
                       />
 
-                      {/* <Route
-                      path="processing-order"
-                      element={<CommonOrderPlace />}
-                    /> */}
                       <Route path="/processing-order" element={<Cart />} />
                       <Route
                         path="/ready-processing-order"

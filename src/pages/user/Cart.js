@@ -685,6 +685,9 @@ const Cart = ({ active }) => {
             }, 1000);
             resetcartcount({ type: "RESET_CART" });
             // console.log("Hello", res);
+          }else{
+            navigate("/")
+            toast.error(res.message);
           }
         })
         .catch((error) => console.log(error));
@@ -941,7 +944,7 @@ const Cart = ({ active }) => {
                                         {code.discount_type === "percentage" ? (
                                           <>({code.discount_value}%)</>
                                         ) : (
-                                          <>({code.discount_value}₹)</>
+                                          <>₹({code.discount_value})</>
                                         )}
                                       </b>
                                       &nbsp;off on making charges.

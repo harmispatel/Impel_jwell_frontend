@@ -160,6 +160,8 @@ const ReadyDetails = () => {
             type: "ADD_TO_CART",
             payload,
           });
+        }else{
+          toast.error(res?.data?.message);
         }
       })
       .catch((err) => {

@@ -17,7 +17,7 @@ const Footer = () => {
     await profileService
       .SiteSetting()
       .then((res) => {
-        setSiteSetting(res.data);
+        setSiteSetting(res?.data);
       })
       .catch((err) => {
         console.log(err);
@@ -28,7 +28,7 @@ const Footer = () => {
     await profileService
       .GetPages()
       .then((res) => {
-        setGetPage(res.data);
+        setGetPage(res?.data);
       })
       .catch((err) => {
         console.log(err);

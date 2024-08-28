@@ -5,7 +5,6 @@ import { FiHeart } from "react-icons/fi";
 import { FcLike } from "react-icons/fc";
 import { FaRegStar, FaStar } from "react-icons/fa";
 import toast from "react-hot-toast";
-import loadinggif from "../../assets/video/impel-bird-unscreen.gif";
 import Select from "react-select";
 import Accordion from "react-bootstrap/Accordion";
 import Slider from "rc-slider";
@@ -103,7 +102,6 @@ const Shop = () => {
   const handleSelectChange = (selectedSort) => {
     setIsLoading(true);
     const queryParams = new URLSearchParams(location.search);
-    console.log("queryParams",location.search)
 
     if (selectedSort) {
       queryParams.set("sort_by", selectedSort.value);
@@ -537,7 +535,6 @@ const Shop = () => {
   const userTip = (
     <Tooltip id="tooltip">Login to add wishlist products</Tooltip>
   );
-
 
   const numberFormat = (value) =>
     new Intl.NumberFormat("en-IN")?.format(Math?.round(value));

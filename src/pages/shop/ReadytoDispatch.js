@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import Loader from "../../components/common/Loader";
 import profileService from "../../services/Home";
 import Select from "react-select";
@@ -8,21 +8,42 @@ const imageURL = process.env.REACT_APP_API_KEY_IMAGE_;
 
 const ReadytoDispatch = () => {
   const { id } = useParams();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const [products, setProducts] = useState([]);
+
   const [filters, setFilters] = useState([]);
+
   const [tagNoChange, setTagNoChange] = useState(null);
+
   const [items, setItems] = useState(null);
+
   const [subItems, setSubItems] = useState(null);
+
   const [itemGroups, setItemGroups] = useState(null);
+  const [itemGroupsId, setItemGroupsId] = useState(null);
+
   const [styles, setStyles] = useState(null);
+
   const [sizes, setSizes] = useState(null);
+
   const [isLoading, setIsLoading] = useState(true);
 
   const [allPrices, setAllPrices] = useState([]);
 
   const handleCategory = (selectedOption) => {
+    // const queryParams = new URLSearchParams(location.search);
+
+    // if (selectedOption) {
+    //   queryParams.set("selected_category", selectedOption.value);
+    // } else {
+    //   queryParams.delete("selected_category");
+    // }
+
+    // navigate(`/ready-to-dispatch/${4}?${queryParams.toString()}`);
     setItemGroups(selectedOption);
+    // setItemGroupsId(selectedOption.value ? selectedOption.value : null);
   };
 
   const handleItems = (selectedOption) => {
@@ -41,6 +62,31 @@ const ReadytoDispatch = () => {
     setSizes(selectedOption);
   };
 
+  // useEffect(() => {
+  //   const searchParams = new URLSearchParams(location.search);
+  //   const SelectedCategory = searchParams?.get("selected_category");
+
+  //   if (SelectedCategory && SelectedCategory?.length > 0) {
+  //     if (SelectedCategory) {
+  //       const Category_ids = filters?.ItemGroups?.find(
+  //         (item) => item?.ItemGroupID === Number(SelectedCategory)
+  //       );
+
+  //       if (Category_ids) {
+  //         setItemGroupsId(Number(SelectedCategory));
+  //         setItemGroups({
+  //           label: Category_ids?.GroupName,
+  //           value: Category_ids?.ItemGroupID,
+  //         });
+  //       }
+  //     }
+  //   } else {
+  //     setIsLoading(true);
+  //     setItemGroupsId(null);
+  //     setItemGroups("");
+  //   }
+  // }, [location.search]);
+
   useEffect(() => {
     setTimeout(() => {
       profileService
@@ -51,7 +97,9 @@ const ReadytoDispatch = () => {
           SortBy: "",
           SearchText: "",
           TranType: "",
-          CommaSeperate_ItemGroupID: itemGroups?.value || "",
+          CommaSeperate_ItemGroupID: itemGroups?.value
+            ? itemGroups?.value
+            : itemGroups,
           CommaSeperate_ItemID: items?.value || "",
           CommaSeperate_StyleID: styles?.value || "",
           CommaSeperate_ProductID: "",
@@ -96,12 +144,14 @@ const ReadytoDispatch = () => {
     profileService
       .GetProductsAPI({
         PageNo: 1,
-        PageSize: 300,
+        PageSize: 40,
         DeviceID: 0,
         SortBy: "",
         SearchText: tagNoChange || "",
         TranType: "",
-        CommaSeperate_ItemGroupID: itemGroups?.value || "",
+        CommaSeperate_ItemGroupID: itemGroups?.value
+          ? itemGroups?.value
+          : itemGroups,
         CommaSeperate_ItemID: items?.value || "",
         CommaSeperate_StyleID: styles?.value || "",
         CommaSeperate_ProductID: "",

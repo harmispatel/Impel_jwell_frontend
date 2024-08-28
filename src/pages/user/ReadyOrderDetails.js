@@ -80,7 +80,7 @@ const ReadyOrderDetails = () => {
                           firstName="Home"
                           firstUrl="/"
                           secondName="My Orders"
-                          secondUrl="/my-orders"
+                          secondUrl="/my-ready-orders"
                           thirdName="Order Details"
                         />
                       </div>

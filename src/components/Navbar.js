@@ -7,7 +7,13 @@ import React, {
 } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
-import { FaBars, FaStar, FaUser, FaUserAlt } from "react-icons/fa";
+import {
+  FaBars,
+  FaShoppingBag,
+  FaStar,
+  FaUser,
+  FaUserAlt,
+} from "react-icons/fa";
 import { BsHandbag, BsHeart } from "react-icons/bs";
 import { FaCartShopping } from "react-icons/fa6";
 import { IoLogOut } from "react-icons/io5";
@@ -536,6 +542,11 @@ const Navbar = () => {
                               <li>
                                 <Link to="/my-orders">
                                   <FaCartShopping /> My Orders
+                                </Link>
+                              </li>
+                              <li>
+                                <Link to="/my-ready-orders">
+                                  <FaShoppingBag /> My Ready Orders
                                 </Link>
                               </li>
                               <li>

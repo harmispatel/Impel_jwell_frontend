@@ -132,6 +132,10 @@ const ReadyDesignCart = () => {
         if (res?.data?.status === true) {
           GetUserCartList();
           toast.success(res?.data?.message);
+          if (res?.data?.data?.total_quantity === 0) {
+            localStorage.removeItem("dealerDiscount");
+            localStorage.removeItem("dealermessage");
+          }
           removeFromCartDispatch({
             type: "REMOVE_FROM_CART",
             payload,
@@ -270,9 +274,16 @@ const ReadyDesignCart = () => {
             charges: SubCharge()?.toFixed() || "",
           })
           .then((res) => {
-            navigate(`/ready-order-details/${res?.data?.data}`);
-            resetcartcount({ type: "RESET_CART" });
-            toast.success(res.data.message);
+            if (res.data.status === true) {
+              navigate(`/ready-order-details/${res?.data?.data}`);
+              resetcartcount({ type: "RESET_CART" });
+              toast.success(res.data.message);
+              localStorage.removeItem("dealerDiscount");
+              localStorage.removeItem("dealermessage");
+            } else {
+              toast.error(res.data.message);
+              navigate("/");
+            }
             setIsLoading(false);
           })
           .catch((err) => {
@@ -294,9 +305,16 @@ const ReadyDesignCart = () => {
             charges: SubCharge()?.toFixed() || "",
           })
           .then((res) => {
-            navigate(`/ready-order-details/${res?.data?.data}`);
-            resetcartcount({ type: "RESET_CART" });
-            toast.success(res.data.message);
+            if (res.data.status === true) {
+              navigate(`/ready-order-details/${res?.data?.data}`);
+              resetcartcount({ type: "RESET_CART" });
+              toast.success(res.data.message);
+              localStorage.removeItem("dealerDiscount");
+              localStorage.removeItem("dealermessage");
+            } else {
+              toast.error(res.data.message);
+              navigate("/");
+            }
             setIsLoading(false);
           })
           .catch((err) => {
@@ -331,12 +349,18 @@ const ReadyDesignCart = () => {
             charges: SubCharge()?.toFixed() || "",
           })
           .then((res) => {
-            resetcartcount({ type: "RESET_CART" });
-            toast.success(res.data.message);
-
-            setTimeout(() => {
-              navigate(`/ready-order-details/${res.data.data}`);
-            }, 1000);
+            if (res.data.status === true) {
+              resetcartcount({ type: "RESET_CART" });
+              toast.success(res.data.message);
+              localStorage.removeItem("dealerDiscount");
+              localStorage.removeItem("dealermessage");
+              setTimeout(() => {
+                navigate(`/ready-order-details/${res.data.data}`);
+              }, 1000);
+            } else {
+              toast.error(res.data.message);
+              navigate("/");
+            }
             setIsLoading(false);
           })
           .catch((error) => {
@@ -900,7 +924,7 @@ const ReadyDesignCart = () => {
 
                               {/* GST TOTAL :*/}
                               <div className="d-flex justify-content-between">
-                                <p className="mb-2">GST (3%)</p>
+                                <p className="mb-2">GST (3%) :</p>
                                 <p className="mb-2 fw-bold">
                                   ₹{numberFormat(SubGST()?.toFixed())}
                                 </p>
@@ -951,7 +975,7 @@ const ReadyDesignCart = () => {
                                       {code.discount_type === "percentage" ? (
                                         <>({code.discount_value}%)</>
                                       ) : (
-                                        <>({code.discount_value}₹)</>
+                                        <>₹({code.discount_value})</>
                                       )}
                                     </b>
                                     &nbsp;off on making charges.
@@ -1045,7 +1069,7 @@ const ReadyDesignCart = () => {
 
                             <div className="text-center">
                               <Link
-                                to="/ready-to-dispatch/1"
+                                to={`/ready-to-dispatch/${4}`}
                                 className="view_all_btn px-4 py-2"
                                 style={{ borderRadius: "8px" }}
                               >
