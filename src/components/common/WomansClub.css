@@ -595,3 +595,17 @@
 :where(.css-dev-only-do-not-override-98ntnt).ant-drawer {
   font-family: "KoHo" !important;
 }
+
+@media screen and (max-width: 767px) {
+  .join_our_women_club .ant-drawer-body {
+    padding: 10px !important;
+  }
+
+  .join_our_women_club .ant-drawer-title {
+    font-size: 22px !important;
+  }
+
+  .contact_form {
+    padding: 12px 12px !important;
+  }
+}

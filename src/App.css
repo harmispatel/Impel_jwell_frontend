@@ -1976,6 +1976,7 @@ input[type="file"] {
     width: 200px !important;
     right: 0;
     left: unset !important;
+    z-index: 999 !important;
   }
 
   .banner_detail_iner {
