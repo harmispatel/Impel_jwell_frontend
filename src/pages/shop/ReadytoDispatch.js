@@ -73,7 +73,7 @@ const ReadytoDispatch = () => {
   //       );
 
   //       if (Category_ids) {
-  //         setItemGroupsId(Number(SelectedCategory));
+  //         setItemGroupsId(Number(SelectedCategory)); 
   //         setItemGroups({
   //           label: Category_ids?.GroupName,
   //           value: Category_ids?.ItemGroupID,
@@ -207,33 +207,8 @@ const ReadytoDispatch = () => {
           ) : (
             <>
               <div className="row">
-                {/* <div className="col-md-6 mb-4">
-                  <div className="form-group d-flex align-items-center">
-                    <label htmlFor="price" className="form-label">
-                      Price:
-                    </label>
-                    <input
-                      type="number"
-                      className="form-control ms-2"
-                      onChange={(e) => setMinPrice(e.target.value)}
-                    />
-                    <span className="mx-3">To</span>
-                    <input
-                      type="number"
-                      className="form-control"
-                      onChange={(e) => setMaxPrice(e.target.value)}
-                    />
-                  </div>
-                </div> */}
                 <div className="col-md-3 mb-4">
                   <div className="form-group d-flex align-items-center">
-                    {/* <label
-                      htmlFor="price"
-                      className="form-label"
-                      style={{ width: "70px" }}
-                    >
-                      Tag No:
-                    </label> */}
                     <input
                       type="text"
                       className="form-control"

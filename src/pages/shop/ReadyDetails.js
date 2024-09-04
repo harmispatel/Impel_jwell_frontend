@@ -10,6 +10,7 @@ import { ReadyDesignCartSystem } from "../../context/ReadyDesignCartContext";
 import noImage from "../../assets/images/No_Image_Available.jpg";
 import profileService from "../../services/Home";
 import { Accordion } from "react-bootstrap";
+import { Helmet } from "react-helmet-async";
 
 const api = process.env.REACT_APP_API_KEY;
 const imageURL = process.env.REACT_APP_API_KEY_IMAGE;
@@ -147,10 +148,13 @@ const ReadyDetails = () => {
         quantity: 1,
         barcode: details?.Barcode,
         company_id: 4,
-        metal_value:metal_value || 0,
-        making_charge:labour_charge|| 0,
+        metal_value: metal_value || 0,
+        making_charge: labour_charge || 0,
         making_charge_discount: labour_charge_discount || 0,
-        total_amount: labour_charge_discount > 0 ?  metal_value + labour_charge_discount : metal_value + labour_charge || 0,
+        total_amount:
+          labour_charge_discount > 0
+            ? metal_value + labour_charge_discount
+            : metal_value + labour_charge || 0,
       })
       .then((res) => {
         if (res?.data?.status === true) {
@@ -160,7 +164,7 @@ const ReadyDetails = () => {
             type: "ADD_TO_CART",
             payload,
           });
-        }else{
+        } else {
           toast.error(res?.data?.message);
         }
       })
@@ -183,8 +187,6 @@ const ReadyDetails = () => {
       });
   }, [id]);
 
-  
-
   const UserLogin = (e) => {
     e.preventDefault();
     localStorage.setItem("redirectPath", location.pathname);
@@ -193,6 +195,10 @@ const ReadyDetails = () => {
 
   return (
     <>
+      {/* <Helmet>
+        <title>Impel Store - {id} - {details?.GroupName}</title>
+      </Helmet> */}
+
       <section className="shop_details">
         <div className="container">
           <div className="Shop_product">
@@ -239,7 +245,7 @@ const ReadyDetails = () => {
                           </h5>
 
                           <h5 className="mb-3">
-                            Size : <strong>{details?.Size1 || "---"}</strong>
+                            Size : <strong>{details?.Size1 || "-"}</strong>
                           </h5>
                           {is_estimate == 1 ? (
                             <>
