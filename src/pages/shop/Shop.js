@@ -548,7 +548,7 @@ const Shop = () => {
         <div className="container">
           <div className="shopping_data">
             <div className="row">
-              <div className="col-md-9 col-7">
+              <div className="col-md-9 col-12 md-mb-0 mb-2">
                 <Select
                   placeholder="Shop by category"
                   isClearable={true}
@@ -561,7 +561,7 @@ const Shop = () => {
                   onChange={handleSelectCategory}
                 />
               </div>
-              <div className="col-md-3 col-5">
+              <div className="col-md-3 col-12">
                 <Select
                   value={selectedOption}
                   onChange={handleSelectChange}
@@ -588,7 +588,7 @@ const Shop = () => {
                   )}
                 </div>
               </div>
-              <div className="col-md-3 col-6 mt-2 mt-md-2">
+              <div className="col-md-3 col-12 mt-2 mt-md-2">
                 <Select
                   placeholder="Shop by Gender"
                   isClearable
@@ -601,7 +601,7 @@ const Shop = () => {
                   onChange={handleSelectGender}
                 />
               </div>
-              <div className="col-md-3 col-6 mt-2 mt-md-2">
+              <div className="col-md-3 col-12 mt-2 mt-md-2">
                 <Select
                   placeholder="Shop by Tag"
                   isClearable

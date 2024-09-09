@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import BreadCrumb from "../../components/common/BreadCrumb";
-import loadinggif from "../../assets/video/impel-bird-unscreen.gif";
 import { FaLongArrowAltLeft } from "react-icons/fa";
 import homeService from "../../services/Home";
 import categoryDetail from "../../services/Shop";
-import Loader from "../../components/common/Loader"
+import Loader from "../../components/common/Loader";
 
 const CategoriesItems = () => {
   const paramId = useParams();
@@ -14,7 +13,6 @@ const CategoriesItems = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [categoriesData, setCategoriesData] = useState([]);
   const [paginate, setPaginate] = useState();
-  const [offset, setOffset] = useState();
 
   const Category = () => {
     homeService
@@ -68,8 +66,7 @@ const CategoriesItems = () => {
   });
 
   const paginationPage = (page) => {
-    const calculatedOffset = (page - 1) * pagination.dataShowLength;
-    setOffset(calculatedOffset);
+    const calculatedOffset = (page - 1) * pagination?.dataShowLength;
     CategoriesData(calculatedOffset);
     setPagination({ ...pagination, currentPage: page });
     scrollup();
@@ -84,9 +81,8 @@ const CategoriesItems = () => {
   const paginationPrev = () => {
     if (pagination.currentPage > 1) {
       const prevPage = pagination.currentPage - 1;
-      const calculatedOffset = (prevPage - 1) * pagination.dataShowLength;
+      const calculatedOffset = (prevPage - 1) * pagination?.dataShowLength;
       setPagination({ ...pagination, currentPage: prevPage });
-      setOffset(calculatedOffset);
       CategoriesData(calculatedOffset);
       scrollup();
       setIsLoading(true);
@@ -103,9 +99,8 @@ const CategoriesItems = () => {
   const paginationNext = () => {
     if (pagination.currentPage < totalPages) {
       const nextPage = pagination.currentPage + 1;
-      const calculatedOffset = (nextPage - 1) * pagination.dataShowLength;
+      const calculatedOffset = (nextPage - 1) * pagination?.dataShowLength;
       setPagination({ ...pagination, currentPage: nextPage });
-      setOffset(calculatedOffset);
       CategoriesData(calculatedOffset);
       scrollup();
       setIsLoading(true);
@@ -114,7 +109,6 @@ const CategoriesItems = () => {
       // );
     }
   };
-
 
   const numberFormat = (value) =>
     new Intl.NumberFormat("en-IN")?.format(Math?.round(value));
@@ -151,7 +145,7 @@ const CategoriesItems = () => {
             <div className="row">
               {isLoading ? (
                 <div className="animation-loading">
-                  <Loader/>
+                  <Loader />
                 </div>
               ) : (
                 <>
@@ -183,14 +177,8 @@ const CategoriesItems = () => {
                                     )}
                                   </div>
                                   <div className="product-info">
-                                    {/* <h4>
-                                      {data?.name}&nbsp;
-                                      <span>({data?.code})</span>
-                                    </h4> */}
-
                                     <label>
-                                      ₹
-                                      {numberFormat(data?.total_amount_18k)}
+                                      ₹{numberFormat(data?.total_amount_18k)}
                                     </label>
                                   </div>
                                 </Link>
@@ -218,7 +206,8 @@ const CategoriesItems = () => {
                                         : "block",
                                   }}
                                 >
-                                  <a
+                                  <Link
+                                    to="#"
                                     className="page-link"
                                     onClick={paginationPrev}
                                   >
@@ -231,7 +220,7 @@ const CategoriesItems = () => {
                                       <polyline points="15 18 9 12 15 6"></polyline>
                                     </svg>
                                     Prev
-                                  </a>
+                                  </Link>
                                 </li>
 
                                 {/* Display pages with ellipses */}
@@ -260,9 +249,9 @@ const CategoriesItems = () => {
                                             paginationPage(pageNumber)
                                           }
                                         >
-                                          <a className="page-link">
+                                          <Link to="#" className="page-link">
                                             {pageNumber}
-                                          </a>
+                                          </Link>
                                         </li>
                                       );
                                     }
@@ -277,7 +266,9 @@ const CategoriesItems = () => {
                                           key={pageNumber}
                                           className="page-item disabled"
                                         >
-                                          <a className="page-link">...</a>
+                                          <Link to="#" className="page-link">
+                                            ...
+                                          </Link>
                                         </li>
                                       );
                                     }
@@ -300,7 +291,8 @@ const CategoriesItems = () => {
                                         : "block",
                                   }}
                                 >
-                                  <a
+                                  <Link
+                                    to="#"
                                     className="page-link"
                                     onClick={paginationNext}
                                   >
@@ -313,7 +305,7 @@ const CategoriesItems = () => {
                                     >
                                       <polyline points="9 18 15 12 9 6"></polyline>
                                     </svg>
-                                  </a>
+                                  </Link>
                                 </li>
                               </ul>
                             </nav>

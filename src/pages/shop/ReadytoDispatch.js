@@ -31,6 +31,7 @@ const ReadytoDispatch = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const [allPrices, setAllPrices] = useState([]);
+  const [totalItems, setTotalItems] = useState([]);
 
   const handleCategory = (selectedOption) => {
     // const queryParams = new URLSearchParams(location.search);
@@ -44,6 +45,10 @@ const ReadytoDispatch = () => {
     // navigate(`/ready-to-dispatch/${4}?${queryParams.toString()}`);
     setItemGroups(selectedOption);
     // setItemGroupsId(selectedOption.value ? selectedOption.value : null);
+  };
+
+  const handleSearchItems = (e) => {
+    setTagNoChange(e.target.value);
   };
 
   const handleItems = (selectedOption) => {
@@ -73,7 +78,7 @@ const ReadytoDispatch = () => {
   //       );
 
   //       if (Category_ids) {
-  //         setItemGroupsId(Number(SelectedCategory)); 
+  //         setItemGroupsId(Number(SelectedCategory));
   //         setItemGroups({
   //           label: Category_ids?.GroupName,
   //           value: Category_ids?.ItemGroupID,
@@ -92,7 +97,7 @@ const ReadytoDispatch = () => {
       profileService
         .GetProductsFilterAPI({
           PageNo: 1,
-          PageSize: 100,
+          PageSize: 60,
           DeviceID: 0,
           SortBy: "",
           SearchText: "",
@@ -139,12 +144,75 @@ const ReadytoDispatch = () => {
       });
   }, [id]);
 
-  useEffect(() => {
+  const numberFormat = (value) =>
+    new Intl.NumberFormat("en-IN")?.format(Math?.round(value));
+
+  var finalPrice = [
+    {
+      price_24k: allPrices?.price_24k,
+    },
+    {
+      sales_wastage: allPrices?.sales_wastage_rtd,
+    },
+    {
+      sales_wastage_discount: allPrices?.sales_wastage_discount_rtd,
+    },
+  ];
+
+  // <-------------------- PAGINATION FUNCTION HERE START-------------------->
+
+  const scrollup = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
+  const totalPages = Math.ceil(totalItems / 60);
+
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    dataShowLength: 60,
+  });
+
+  const paginationPage = (page) => {
+    getProducts(page);
+    setPagination({ ...pagination, currentPage: page });
+    scrollup();
+    setIsLoading(true);
+  };
+
+  const paginationPrev = () => {
+    if (pagination.currentPage > 1) {
+      const prevPage = pagination.currentPage - 1;
+      setPagination({ ...pagination, currentPage: prevPage });
+      getProducts(prevPage);
+      scrollup();
+      setIsLoading(true);
+    }
+  };
+
+  const paginationNext = () => {
+    if (pagination.currentPage < totalPages) {
+      const nextPage = pagination.currentPage + 1;
+      setPagination({ ...pagination, currentPage: nextPage });
+      getProducts(nextPage);
+      scrollup();
+      setIsLoading(true);
+    }
+  };
+
+  // <-------------------- PAGINATION FUNCTION HERE END-------------------->
+
+  const getProducts = (page) => {
+    if (tagNoChange?.length > 0) {
+      setIsLoading(false);
+    }
     setIsLoading(true);
     profileService
       .GetProductsAPI({
-        PageNo: 1,
-        PageSize: 40,
+        PageNo: page,
+        PageSize: 60,
         DeviceID: 0,
         SortBy: "",
         SearchText: tagNoChange || "",
@@ -173,28 +241,27 @@ const ReadytoDispatch = () => {
       })
       .then((res) => {
         setProducts(res?.Tags);
+        setTotalItems(res?.TotalItems);
         setIsLoading(false);
       })
       .catch((err) => {
         console.log(err);
         setIsLoading(false);
       });
-  }, [itemGroups, items, subItems, styles, sizes, tagNoChange, id]);
+  };
 
-  const numberFormat = (value) =>
-    new Intl.NumberFormat("en-IN")?.format(Math?.round(value));
-
-  var finalPrice = [
-    {
-      price_24k: allPrices?.price_24k,
-    },
-    {
-      sales_wastage: allPrices?.sales_wastage_rtd,
-    },
-    {
-      sales_wastage_discount: allPrices?.sales_wastage_discount_rtd,
-    },
-  ];
+  useEffect(() => {
+    getProducts(pagination?.currentPage || 1);
+  }, [
+    itemGroups,
+    items,
+    subItems,
+    styles,
+    sizes,
+    tagNoChange,
+    id,
+    pagination?.currentPage,
+  ]);
 
   return (
     <>
@@ -207,18 +274,18 @@ const ReadytoDispatch = () => {
           ) : (
             <>
               <div className="row">
-                <div className="col-md-3 mb-4">
+                <div className="col-md-3 mb-2 mb-md-4">
                   <div className="form-group d-flex align-items-center">
                     <input
                       type="text"
                       className="form-control"
                       placeholder="Search with tag no"
                       value={tagNoChange}
-                      onChange={(e) => setTagNoChange(e.target.value)}
+                      onChange={handleSearchItems}
                     />
                   </div>
                 </div>
-                <div className="col-md-3 mb-4">
+                <div className="col-md-3 mb-2 mb-md-4">
                   <Select
                     placeholder="Select Sizes"
                     isClearable
@@ -246,7 +313,7 @@ const ReadytoDispatch = () => {
                     }))}
                   />
                 </div>
-                <div className="col-md-3">
+                <div className="col-md-3 my-2 my-md-0">
                   <Select
                     placeholder="Select Item"
                     isClearable
@@ -259,7 +326,7 @@ const ReadytoDispatch = () => {
                     }))}
                   />
                 </div>
-                <div className="col-md-3">
+                <div className="col-md-3 mb-2 mb-md-0">
                   <Select
                     placeholder="Select Sub Item"
                     isClearable
@@ -385,6 +452,126 @@ const ReadytoDispatch = () => {
                         </>
                       );
                     })}
+
+                    {/* PAGINATION */}
+                    <div className="pt-5">
+                      {totalPages > 1 && (
+                        <div className="paginationArea">
+                          <nav aria-label="navigation">
+                            <ul className="pagination">
+                              {/* Previous Page Button */}
+                              <li
+                                className={`page-item ${
+                                  pagination.currentPage === 1 ? "disabled" : ""
+                                }`}
+                                style={{
+                                  display:
+                                    pagination.currentPage === 1
+                                      ? "none"
+                                      : "block",
+                                }}
+                              >
+                                <Link
+                                  to="#"
+                                  className="page-link"
+                                  onClick={paginationPrev}
+                                >
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <polyline points="15 18 9 12 15 6"></polyline>
+                                  </svg>
+                                  Prev
+                                </Link>
+                              </li>
+
+                              {/* Display pages with ellipses */}
+                              {Array.from({ length: totalPages }).map(
+                                (_, index) => {
+                                  const pageNumber = index + 1;
+                                  const isCurrentPage =
+                                    pagination.currentPage === pageNumber;
+
+                                  // Display first and last pages
+                                  if (
+                                    pageNumber === 1 ||
+                                    pageNumber === totalPages ||
+                                    (pageNumber >= pagination.currentPage - 1 &&
+                                      pageNumber <= pagination.currentPage + 1)
+                                  ) {
+                                    return (
+                                      <li
+                                        key={pageNumber}
+                                        className={`page-item ${
+                                          isCurrentPage ? "active" : ""
+                                        }`}
+                                        onClick={() =>
+                                          paginationPage(pageNumber)
+                                        }
+                                      >
+                                        <Link to="#" className="page-link">
+                                          {pageNumber}
+                                        </Link>
+                                      </li>
+                                    );
+                                  }
+
+                                  // Display ellipses
+                                  if (index === 1 || index === totalPages - 2) {
+                                    return (
+                                      <li
+                                        key={pageNumber}
+                                        className="page-item disabled"
+                                      >
+                                        <Link to="#" className="page-link">
+                                          ...
+                                        </Link>
+                                      </li>
+                                    );
+                                  }
+
+                                  return null;
+                                }
+                              )}
+
+                              {/* Next Page Button */}
+                              <li
+                                className={`page-item ${
+                                  pagination.currentPage === totalPages
+                                    ? "disabled"
+                                    : ""
+                                }`}
+                                style={{
+                                  display:
+                                    pagination.currentPage === totalPages
+                                      ? "none"
+                                      : "block",
+                                }}
+                              >
+                                <Link
+                                  to="#"
+                                  className="page-link"
+                                  onClick={paginationNext}
+                                >
+                                  Next
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <polyline points="9 18 15 12 9 6"></polyline>
+                                  </svg>
+                                </Link>
+                              </li>
+                            </ul>
+                          </nav>
+                        </div>
+                      )}
+                    </div>
                   </>
                 ) : (
                   <>
