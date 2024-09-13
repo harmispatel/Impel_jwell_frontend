@@ -159,7 +159,7 @@ const ReadytoDispatch = () => {
     },
   ];
 
-  // <-------------------- PAGINATION FUNCTION HERE START-------------------->
+  // <-------------------- PAGINATION FUNCTION HERE START -------------------->
 
   const scrollup = () => {
     window.scrollTo({
@@ -202,7 +202,7 @@ const ReadytoDispatch = () => {
     }
   };
 
-  // <-------------------- PAGINATION FUNCTION HERE END-------------------->
+  // <-------------------- PAGINATION FUNCTION HERE END -------------------->
 
   const getProducts = (page) => {
     if (tagNoChange?.length > 0) {

@@ -1,8 +1,7 @@
 import React, { useLayoutEffect, useRef, useState } from "react";
-import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
+import { Swiper, SwiperSlide } from "swiper/react";
 import { Link, useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import { FaLongArrowAltRight, FaLongArrowAltLeft } from "react-icons/fa";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 
 import FilterServices from "../services/Filter";
@@ -49,7 +48,6 @@ const Home = () => {
   const [hero, setHero] = useState([]);
   const [category, SetCategory] = useState([]);
   const [newAdd, SetNewAdd] = useState([]);
-  // const [Featured, SetFeatured] = useState([]);
   const [TopSell, SetTopSell] = useState([]);
   const [tags, setTags] = useState([]);
   const [tag, setTag] = useState([]);
@@ -85,7 +83,6 @@ const Home = () => {
     Tags();
     RecentAdd();
     Reviews();
-    // FeaturedProduct();
     HighSell();
     attemptPlay();
   }, []);
@@ -134,17 +131,6 @@ const Home = () => {
         console.log(err);
       });
   };
-
-  // const FeaturedProduct = () => {
-  //   homeService
-  //     .Featured()
-  //     .then((res) => {
-  //       SetFeatured(res.data);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
 
   const HighSell = () => {
     homeService
@@ -777,61 +763,6 @@ const Home = () => {
           </div>
         </section>
       )}
-
-      {/* Featured product */}
-      {/* <section className="Featured_products">
-        <div className="container">
-          <div className="Featured_header">
-            <h3>Featured Products</h3>
-          </div>
-          <div className="Featured_slider">
-            <Swiper
-              breakpoints={{
-                640: {
-                  slidesPerView: 1,
-                  spaceBetween: 20,
-                },
-                768: {
-                  slidesPerView: 2,
-                  spaceBetween: 40,
-                },
-                992: {
-                  slidesPerView: 2,
-                  spaceBetween: 50,
-                },
-                1199: {
-                  slidesPerView: 2,
-                  spaceBetween: 50,
-                },
-              }}
-              spaceBetween={20}
-              onSlideChange={() => console.log("slide change")}
-              onSwiper={(swiper) => console.log(swiper)}
-            >
-              {Featured.slice(0, 6).map((data) => {
-                return (
-                  <SwiperSlide>
-                    <Link
-                      to={`/shopdetails/${data.id}`}
-                      className="text-decoration-none"
-                      style={{ color: "#000" }}
-                    >
-                      <div className="profile-pic">
-                        <img src={data.image} alt="" />
-                        <div className="product_details">
-                          <h4>{data.name}</h4>
-                          <p>Minola Golden Earrings</p>
-                          <h5>₹{data.price}</h5>
-                        </div>
-                      </div>
-                    </Link>
-                  </SwiperSlide>
-                );
-              })}
-            </Swiper>
-          </div>
-        </div>
-      </section> */}
     </>
   );
 };

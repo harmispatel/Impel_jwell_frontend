@@ -160,8 +160,8 @@ const ReadyDesignCart = () => {
   const SubAmount = () => {
     let subTotal = 0;
 
-    Items.forEach((data) => {
-      const price = parseFloat(data.total_amount);
+    Items?.forEach((data) => {
+      const price = parseFloat(data?.total_amount);
       subTotal += price;
     });
 
@@ -170,8 +170,8 @@ const ReadyDesignCart = () => {
 
   const SubGST = () => {
     let subGst = 0;
-    Items.forEach((data) => {
-      const price = parseFloat(data.total_amount);
+    Items?.forEach((data) => {
+      const price = parseFloat(data?.total_amount);
       subGst += price;
     });
     const gstAmount = subGst * 0.03;
@@ -181,7 +181,7 @@ const ReadyDesignCart = () => {
   const SubCharge = () => {
     let subCharge = 0;
 
-    Items.forEach((data) => {
+    Items?.forEach((data) => {
       const price =
         data?.making_charge_discount > 0
           ? parseFloat(data.making_charge_discount)
