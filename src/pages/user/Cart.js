@@ -13,6 +13,9 @@ import { Helmet } from "react-helmet-async";
 import { CartSystem } from "../../context/CartContext";
 import { ProfileSystem } from "../../context/ProfileContext";
 import Loader from "../../components/common/Loader";
+import axios from "axios";
+
+const api = process.env.REACT_APP_API_KEY;
 
 const Cart = ({ active }) => {
   const navigate = useNavigate();
@@ -196,7 +199,7 @@ const Cart = ({ active }) => {
   // SUB TOTAL
   const SubAmount = () => {
     let subTotal = 0;
-    Items.forEach((data) => {
+    Items?.forEach((data) => {
       const Pricekey = "total_amount_" + data.gold_type;
       const price = parseFloat(data[Pricekey]);
       subTotal += price;
@@ -207,7 +210,7 @@ const Cart = ({ active }) => {
   // GST TOTAL
   const SubGST = () => {
     let subGst = 0;
-    Items.forEach((data) => {
+    Items?.forEach((data) => {
       const Pricekey = "total_amount_" + data.gold_type;
       const price = parseFloat(data[Pricekey]);
       subGst += price;
@@ -218,7 +221,7 @@ const Cart = ({ active }) => {
 
   const SubTotal = () => {
     let subTotal = 0;
-    Items.forEach((data) => {
+    Items?.forEach((data) => {
       const Pricekey = "metal_value_" + data.gold_type;
       const price = parseFloat(data[Pricekey]);
       subTotal += price;
@@ -228,7 +231,7 @@ const Cart = ({ active }) => {
 
   const SubCharge = () => {
     let subCharge = 0;
-    Items.forEach((data) => {
+    Items?.forEach((data) => {
       const czStoneCharge = parseFloat(data.cz_stone_charge) || 0;
       const gemstoneCharge = parseFloat(data.gemstone_charge) || 0;
       let finalmakingCharge = 0;
@@ -482,10 +485,10 @@ const Cart = ({ active }) => {
   }, [profileData?.address_same_as_company]);
 
   // cart all functiolity
-  const UserCartItems = () => {
+  const UserCartItems = async () => {
     UserService.CartList({ phone: Phone })
       .then((res) => {
-        setItems(res.data.cart_items);
+        setItems(res?.data?.cart_items);
         setIsLoading(false);
       })
       .catch((err) => {
@@ -659,38 +662,47 @@ const Cart = ({ active }) => {
   };
 
   useEffect(() => {
-    if (location.pathname == "/processing-order") {
+    if (location.pathname === "/processing-order") {
       const queryParams = new URLSearchParams(location.search);
       const transaction_id = queryParams.get("transaction_id") || "";
-      UserService.Placeorder({
-        user_id: user_id,
-        dealer_code: code?.dealer_code,
-        dealer_discount_type: code?.discount_type,
-        dealer_discount_value: code?.discount_value,
-        cart_items: Items?.map((item) => item?.id),
-        sub_total: SubTotal(),
-        charges: SubCharge(),
-        gst_amount: SubGST().toFixed(),
-        total: overAllAmount.toFixed(),
-        transaction_id: transaction_id ? transaction_id : "",
-      })
-        .then((res) => {
-          if (res.status === true) {
-            localStorage.removeItem("savedDiscount");
-            localStorage.removeItem("cartItems");
-            localStorage.removeItem("message");
-            toast.success(res.message);
-            setTimeout(() => {
-              navigate(`/order-details/${res.data}`);
-            }, 1000);
-            resetcartcount({ type: "RESET_CART" });
-            // console.log("Hello", res);
-          }else{
-            navigate("/")
-            toast.error(res.message);
-          }
-        })
-        .catch((error) => console.log(error));
+
+      if (Items.length > 0) {
+        console.log("Items", Items);
+        axios
+          .post(api + "user/purchase-order", {
+            user_id: user_id,
+            dealer_code: code?.dealer_code,
+            dealer_discount_type: code?.discount_type,
+            dealer_discount_value: code?.discount_value,
+            cart_items: Items.map((item) => item.id),
+            sub_total: SubTotal(),
+            charges: SubCharge(),
+            gst_amount: SubGST().toFixed(),
+            total: overAllAmount?.toFixed(),
+            transaction_id: transaction_id ? transaction_id : "",
+          })
+          .then((res) => {
+            if (res.status === true) {
+              console.log("res.message", res.message);
+              resetcartcount({ type: "RESET_CART" });
+              toast.success(res.message);
+              localStorage.removeItem("savedDiscount");
+              localStorage.removeItem("cartItems");
+              localStorage.removeItem("message");
+              setTimeout(() => {
+                navigate(`/order-details/${res?.data}`);
+              }, 2000);
+            } else {
+              toast.error(res.message);
+              navigate("/");
+            }
+            setIsLoading(false);
+          })
+          .catch((error) => {
+            console.log(error);
+            setIsLoading(false);
+          });
+      }
     }
   }, [location.pathname, location.search, Items]);
 
@@ -703,7 +715,7 @@ const Cart = ({ active }) => {
         <title>Impel Store - Cart</title>
       </Helmet>
 
-      {location.pathname == "/processing-order" ? (
+      {location.pathname === "/processing-order" ? (
         <div className="animation-loading">
           <Loader />
         </div>

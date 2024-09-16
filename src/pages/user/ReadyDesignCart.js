@@ -334,6 +334,7 @@ const ReadyDesignCart = () => {
       const transaction_id = queryParams.get("transaction_id") || "";
 
       if (Items.length > 0) {
+        console.log("Items", Items);
         axios
           .post(api + "ready/purchase-order", {
             user_id: user_id,
@@ -371,7 +372,7 @@ const ReadyDesignCart = () => {
     }
   }, [location.pathname, location.search, Items]);
 
-  // user profile functionlity
+  // user profile functionlity here
   const [spinner, setSpinner] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
   const [profileData, setProfileData] = useState([]);
