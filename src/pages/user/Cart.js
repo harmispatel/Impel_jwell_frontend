@@ -667,7 +667,6 @@ const Cart = ({ active }) => {
       const transaction_id = queryParams.get("transaction_id") || "";
 
       if (Items.length > 0) {
-        console.log("Items", Items);
         axios
           .post(api + "user/purchase-order", {
             user_id: user_id,
@@ -682,18 +681,18 @@ const Cart = ({ active }) => {
             transaction_id: transaction_id ? transaction_id : "",
           })
           .then((res) => {
-            if (res.status === true) {
-              console.log("res.message", res.message);
+            if (res?.data?.status === true) {
+              console.log("res.message", res.data.message);
               resetcartcount({ type: "RESET_CART" });
-              toast.success(res.message);
+              toast.success(res.data.message);
               localStorage.removeItem("savedDiscount");
               localStorage.removeItem("cartItems");
               localStorage.removeItem("message");
               setTimeout(() => {
-                navigate(`/order-details/${res?.data}`);
+                navigate(`/order-details/${res?.data?.data}`);
               }, 2000);
             } else {
-              toast.error(res.message);
+              toast.error(res.data.message);
               navigate("/");
             }
             setIsLoading(false);
