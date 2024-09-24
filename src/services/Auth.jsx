@@ -9,9 +9,27 @@ const login = async (data) => {
   return d;
 };
 
+const otpLogin = async (data) => {
+  let d = await Call({
+    path: "send-otp-login",
+    method: "post",
+    data,
+  });
+  return d;
+};
+
+const otpVerify = async (data) => {
+  let d = await Call({
+    path: "login-with-otp",
+    method: "post",
+    data,
+  });
+  return d;
+};
+
 const checkUser = async (data) => {
   let d = await Call({
-    path: "login/",
+    path: "login",
     method: "post",
     data,
   });
@@ -115,6 +133,8 @@ const exportObject = {
   forget,
   getProfile,
   getCity,
+  otpLogin,
+  otpVerify
 };
 
 export default exportObject;

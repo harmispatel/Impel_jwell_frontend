@@ -18,7 +18,6 @@ import { BsHandbag, BsHeart } from "react-icons/bs";
 import { FaCartShopping } from "react-icons/fa6";
 import { IoLogOut } from "react-icons/io5";
 import { HiMiniShoppingBag } from "react-icons/hi2";
-import { AiOutlineGold } from "react-icons/ai";
 
 import Logo from "../assets/images/logo.png";
 import NOimage from "../assets/images/user-demo-image.png";
@@ -73,8 +72,6 @@ const Navbar = () => {
   const [cartItemsQu, setCartItemsQu] = useState([]);
 
   const [dealerData, setDealerData] = useState([]);
-
-  const [goldData, setGoldData] = useState([]);
 
   const [companyTags, setCompanyTags] = useState([]);
 
@@ -136,7 +133,7 @@ const Navbar = () => {
         phone: Phone,
       })
       .then((res) => {
-        setCartItemsQu(res.data.data.total_qty);
+        setCartItemsQu(res?.data?.data?.total_qty);
       })
       .catch((err) => {
         console.log(err);
