@@ -1,96 +1,59 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Loader from "../../components/common/Loader";
 import profileService from "../../services/Home";
 import Select from "react-select";
+import { BsSearch } from "react-icons/bs";
 
 const imageURL = process.env.REACT_APP_API_KEY_IMAGE_;
 
 const ReadytoDispatch = () => {
   const { id } = useParams();
-  const location = useLocation();
-  const navigate = useNavigate();
 
   const [products, setProducts] = useState([]);
-
   const [filters, setFilters] = useState([]);
-
   const [tagNoChange, setTagNoChange] = useState(null);
-
   const [items, setItems] = useState(null);
-
   const [subItems, setSubItems] = useState(null);
-
   const [itemGroups, setItemGroups] = useState(null);
-  const [itemGroupsId, setItemGroupsId] = useState(null);
-
   const [styles, setStyles] = useState(null);
-
   const [sizes, setSizes] = useState(null);
-
   const [isLoading, setIsLoading] = useState(true);
 
   const [allPrices, setAllPrices] = useState([]);
   const [totalItems, setTotalItems] = useState([]);
 
   const handleCategory = (selectedOption) => {
-    // const queryParams = new URLSearchParams(location.search);
-
-    // if (selectedOption) {
-    //   queryParams.set("selected_category", selectedOption.value);
-    // } else {
-    //   queryParams.delete("selected_category");
-    // }
-
-    // navigate(`/ready-to-dispatch/${4}?${queryParams.toString()}`);
+    setIsLoading(true);
     setItemGroups(selectedOption);
-    // setItemGroupsId(selectedOption.value ? selectedOption.value : null);
   };
 
   const handleSearchItems = (e) => {
+    if (tagNoChange?.length < 0) {
+      setIsLoading(true);
+    }
     setTagNoChange(e.target.value);
   };
 
   const handleItems = (selectedOption) => {
+    setIsLoading(true);
     setItems(selectedOption);
   };
 
   const handleSubItems = (selectedOption) => {
+    setIsLoading(true);
     setSubItems(selectedOption);
   };
 
   const handleStylesTag = (selectedOption) => {
+    setIsLoading(true);
     setStyles(selectedOption);
   };
 
   const handleSizeTag = (selectedOption) => {
+    setIsLoading(true);
     setSizes(selectedOption);
   };
-
-  // useEffect(() => {
-  //   const searchParams = new URLSearchParams(location.search);
-  //   const SelectedCategory = searchParams?.get("selected_category");
-
-  //   if (SelectedCategory && SelectedCategory?.length > 0) {
-  //     if (SelectedCategory) {
-  //       const Category_ids = filters?.ItemGroups?.find(
-  //         (item) => item?.ItemGroupID === Number(SelectedCategory)
-  //       );
-
-  //       if (Category_ids) {
-  //         setItemGroupsId(Number(SelectedCategory));
-  //         setItemGroups({
-  //           label: Category_ids?.GroupName,
-  //           value: Category_ids?.ItemGroupID,
-  //         });
-  //       }
-  //     }
-  //   } else {
-  //     setIsLoading(true);
-  //     setItemGroupsId(null);
-  //     setItemGroups("");
-  //   }
-  // }, [location.search]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -205,10 +168,6 @@ const ReadytoDispatch = () => {
   // <-------------------- PAGINATION FUNCTION HERE END -------------------->
 
   const getProducts = (page) => {
-    if (tagNoChange?.length > 0) {
-      setIsLoading(false);
-    }
-    setIsLoading(true);
     profileService
       .GetProductsAPI({
         PageNo: page,
@@ -246,6 +205,9 @@ const ReadytoDispatch = () => {
       })
       .catch((err) => {
         console.log(err);
+        setIsLoading(true);
+      })
+      .finally(() => {
         setIsLoading(false);
       });
   };
@@ -277,12 +239,18 @@ const ReadytoDispatch = () => {
                 <div className="col-md-3 mb-2 mb-md-4">
                   <div className="form-group d-flex align-items-center">
                     <input
-                      type="text"
+                      type="search"
                       className="form-control"
                       placeholder="Search with tag no"
-                      value={tagNoChange}
-                      onChange={handleSearchItems}
+                      onChange={(e) => handleSearchItems(e)}
+                      isClearable={true}
                     />
+                    {tagNoChange && tagNoChange.length >= 1 ? null : (
+                      <BsSearch
+                        className="search-icon"
+                        style={{ cursor: "pointer" }}
+                      />
+                    )}
                   </div>
                 </div>
                 <div className="col-md-3 mb-2 mb-md-4">

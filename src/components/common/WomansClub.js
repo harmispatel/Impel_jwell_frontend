@@ -14,7 +14,6 @@ const WomansClub = () => {
     number: "",
     email: "",
     city: "",
-    date: null,
     message: "",
   });
 
@@ -77,18 +76,6 @@ const WomansClub = () => {
       valid = false;
     }
 
-    if (!details.date) {
-      newErrors.date = "Date of registration is required!";
-      valid = false;
-    } else {
-      const selectedDate = new Date(details.date);
-      const today = new Date();
-      if (selectedDate < today.setHours(0, 0, 0, 0)) {
-        newErrors.date = "Date cannot be in the past!";
-        valid = false;
-      }
-    }
-
     if (
       !(
         isChecked.instagram ||
@@ -116,7 +103,6 @@ const WomansClub = () => {
       formdata.append("mobile", details.number);
       formdata.append("email", details.email);
       formdata.append("city", details.city);
-      formdata.append("date", details.date);
       formdata.append(
         "how_you_know",
         Object.keys(isChecked).filter((key) => isChecked[key])
@@ -128,7 +114,6 @@ const WomansClub = () => {
         mobile: details.number,
         email: details.email,
         city: details.city,
-        date: details.date,
         how_you_know: Object.keys(isChecked).filter((key) => isChecked[key]),
         message: details.message,
       };
@@ -145,7 +130,6 @@ const WomansClub = () => {
               number: "",
               email: "",
               city: "",
-              date: "",
               message: "",
             });
             setIsChecked({
@@ -175,7 +159,6 @@ const WomansClub = () => {
       number: "",
       email: "",
       city: "",
-      date: "",
       message: "",
     });
     setIsChecked({
@@ -188,8 +171,6 @@ const WomansClub = () => {
     });
     setErrors({});
   };
-
-  const today = new Date().toISOString().split("T")[0];
 
   return (
     <>
@@ -294,7 +275,7 @@ const WomansClub = () => {
                             </div>
                           </div>
 
-                          <div className="col-md-6 col-12">
+                          <div className="col-md-12">
                             <div className="form-group position-relative">
                               <label htmlFor="city">City</label>
                               <input
@@ -311,29 +292,6 @@ const WomansClub = () => {
                               {errors.city && (
                                 <div className="invalid-feedback">
                                   {errors.city}
-                                </div>
-                              )}
-                            </div>
-                          </div>
-
-                          <div className="col-md-6 col-12">
-                            <div className="form-group position-relative">
-                              <label htmlFor="date">Date of Registration</label>
-                              <input
-                                type="date"
-                                name="date"
-                                id="date"
-                                className={`form-control ${
-                                  errors.date ? "is-invalid" : ""
-                                }`}
-                                placeholder="Enter city"
-                                value={details.date}
-                                onChange={handleChange}
-                                min={today}
-                              />
-                              {errors.date && (
-                                <div className="invalid-feedback">
-                                  {errors.date}
                                 </div>
                               )}
                             </div>

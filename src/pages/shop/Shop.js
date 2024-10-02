@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { BsHeart, BsSearch } from "react-icons/bs";
+import { BsSearch } from "react-icons/bs";
 import { FiHeart } from "react-icons/fi";
 import { FcLike } from "react-icons/fc";
 import { FaRegStar, FaStar } from "react-icons/fa";
@@ -78,16 +78,6 @@ const Shop = () => {
 
   // sort by searching
   const searchbar = (e) => {
-    // const queryParams = new URLSearchParams(location.search);
-
-    // const searchValue = e.target.value;
-    // if (searchValue) {
-    //   queryParams.set("search_query", searchValue);
-    // } else {
-    //   queryParams.delete("search_query");
-    // }
-
-    // navigate(`/shop?${queryParams.toString()}`);
     setSearchInput(e.target.value);
   };
 
