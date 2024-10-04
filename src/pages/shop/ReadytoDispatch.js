@@ -8,7 +8,9 @@ import { BsSearch } from "react-icons/bs";
 const imageURL = process.env.REACT_APP_API_KEY_IMAGE_;
 
 const ReadytoDispatch = () => {
-  const { id } = useParams();
+  // const { id } = useParams();
+
+  const id = "1,4";
 
   const [products, setProducts] = useState([]);
   const [filters, setFilters] = useState([]);
@@ -245,12 +247,6 @@ const ReadytoDispatch = () => {
                       onChange={(e) => handleSearchItems(e)}
                       isClearable={true}
                     />
-                    {tagNoChange && tagNoChange.length >= 1 ? null : (
-                      <BsSearch
-                        className="search-icon"
-                        style={{ cursor: "pointer" }}
-                      />
-                    )}
                   </div>
                 </div>
                 <div className="col-md-3 mb-2 mb-md-4">
