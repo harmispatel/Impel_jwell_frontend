@@ -49,17 +49,15 @@ const CustomPage = () => {
                 </div>
                 <div className="text-center mt-3 mb-3">
                   {params?.id === "about-us" && (
-                    <img src={pageDetails?.image} alt="" className=" w-100" />
+                    <img src={pageDetails?.image} alt="" className="w-100" />
                   )}
                 </div>
                 <div className="col-md-12">
-                  <div className="">
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html: pageDetails?.content,
-                      }}
-                    />
-                  </div>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: pageDetails?.content,
+                    }}
+                  />
                 </div>
               </div>
             </div>

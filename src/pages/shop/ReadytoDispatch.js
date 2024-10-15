@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Loader from "../../components/common/Loader";
 import profileService from "../../services/Home";
 import Select from "react-select";
-import { BsSearch } from "react-icons/bs";
+import { Skeleton } from "antd";
 
 const imageURL = process.env.REACT_APP_API_KEY_IMAGE_;
 
 const ReadytoDispatch = () => {
-  // const { id } = useParams();
-
   const id = "1,4";
+
+  const [loading, setLoading] = useState(true);
 
   const [products, setProducts] = useState([]);
   const [filters, setFilters] = useState([]);
@@ -227,6 +227,14 @@ const ReadytoDispatch = () => {
     pagination?.currentPage,
   ]);
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 5000); // 4 seconds
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <>
       <section className="ready-to-dispatch">
@@ -362,22 +370,23 @@ const ReadytoDispatch = () => {
                                 to={`/ready-to-dispatch/${id}/${data?.TagNo}`}
                               >
                                 <div className="product-thumb">
-                                  {data?.Images[0]?.ImageName ? (
-                                    <>
-                                      <img
-                                        src={`${imageURL}${data?.Images[0]?.ImageName}`}
-                                        alt=""
-                                        className="w-100"
-                                      />
-                                    </>
+                                  {loading ? (
+                                    <Skeleton.Image
+                                      active
+                                      style={{ width: "100%"}}
+                                    />
+                                  ) : data?.Images[0]?.ImageName ? (
+                                    <img
+                                      src={`${imageURL}${data?.Images[0]?.ImageName}`}
+                                      alt=""
+                                      className="w-100"
+                                    />
                                   ) : (
-                                    <>
-                                      <img
-                                        src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930"
-                                        alt=""
-                                        className="w-100"
-                                      />
-                                    </>
+                                    <img
+                                      src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930"
+                                      alt=""
+                                      className="w-100"
+                                    />
                                   )}
                                 </div>
                               </Link>
@@ -400,15 +409,9 @@ const ReadytoDispatch = () => {
                                     </label>
                                   </>
                                 ) : (
-                                  <>
-                                    {" "}
-                                    <strong className="text-success">
-                                      ₹
-                                      {numberFormat(
-                                        metal_value + labour_charge
-                                      )}
-                                    </strong>
-                                  </>
+                                  <strong className="text-success">
+                                    ₹{numberFormat(metal_value + labour_charge)}
+                                  </strong>
                                 )}
                               </div>
                             </div>

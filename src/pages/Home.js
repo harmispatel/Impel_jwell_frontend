@@ -153,6 +153,8 @@ const Home = () => {
     bannerSlider?.bottom_banners &&
     bannerSlider?.bottom_banners[0].tag_id;
 
+  console.log("review?.length", review?.length > 0);
+
   return (
     <>
       <Helmet>
@@ -164,6 +166,7 @@ const Home = () => {
         <Swiper
           spaceBetween={30}
           effect={"fade"}
+          lazy={true}
           centeredSlides={true}
           loop={true}
           autoplay={{
@@ -212,92 +215,94 @@ const Home = () => {
       </section>
 
       {/* Categories */}
-      <section className="more_categories">
-        <div className="container">
-          <div className="more_categories_detail">
-            <h3>Browse our categories</h3>
-            <Link
-              to="/categories"
-              className="custom-btn btn-16 mb-4"
-              style={{ textDecoration: "none" }}
-            >
-              View All
-            </Link>
+      {category?.length > 0 && (
+        <section className="more_categories">
+          <div className="container">
+            <div className="more_categories_detail">
+              <h3>Browse our categories</h3>
+              <Link
+                to="/categories"
+                className="custom-btn btn-16 mb-4"
+                style={{ textDecoration: "none" }}
+              >
+                View All
+              </Link>
+            </div>
+            <div className="second_banner_button">
+              <button
+                onClick={() => secondbannerRef?.current?.slidePrev()}
+                className="prev-button-swiper"
+              >
+                <MdKeyboardArrowLeft className="swiper-icon" />
+              </button>
+              <button
+                onClick={() => secondbannerRef?.current?.slideNext()}
+                className="next-button-swiper"
+              >
+                <MdKeyboardArrowRight className="swiper-icon" />
+              </button>
+            </div>
+            <div className="more_categories_slide">
+              <Swiper
+                slidesPerView={2}
+                breakpoints={{
+                  640: {
+                    slidesPerView: 2,
+                    spaceBetween: 20,
+                  },
+                  768: {
+                    slidesPerView: 2,
+                    spaceBetween: 40,
+                  },
+                  992: {
+                    slidesPerView: 2,
+                    spaceBetween: 50,
+                  },
+                  1199: {
+                    slidesPerView: 4,
+                    spaceBetween: 50,
+                  },
+                }}
+                modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
+                spaceBetween={50}
+                loop={true}
+                autoplay={{
+                  delay: 4000,
+                  disableOnInteraction: false,
+                }}
+                onSwiper={(swiper) => (secondbannerRef.current = swiper)}
+              >
+                {category?.length ? (
+                  <>
+                    {category?.map((data, index) => {
+                      return (
+                        <SwiperSlide key={index}>
+                          <Link
+                            to={`/categories/${data.id}`}
+                            className="text-decoration-none"
+                            style={{ color: "#000" }}
+                          >
+                            <div className="category_box animate__animated animate__fadeInLeft animate__delay-2s">
+                              <img
+                                src={data.image}
+                                className="w-100"
+                                alt="item_category"
+                              />
+                              <div className="category_name">{data.name}</div>
+                            </div>
+                          </Link>
+                        </SwiperSlide>
+                      );
+                    })}
+                  </>
+                ) : (
+                  <></>
+                )}
+              </Swiper>
+            </div>
           </div>
-          <div className="second_banner_button">
-            <button
-              onClick={() => secondbannerRef?.current?.slidePrev()}
-              className="prev-button-swiper"
-            >
-              <MdKeyboardArrowLeft className="swiper-icon" />
-            </button>
-            <button
-              onClick={() => secondbannerRef?.current?.slideNext()}
-              className="next-button-swiper"
-            >
-              <MdKeyboardArrowRight className="swiper-icon" />
-            </button>
-          </div>
-          <div className="more_categories_slide">
-            <Swiper
-              slidesPerView={2}
-              breakpoints={{
-                640: {
-                  slidesPerView: 2,
-                  spaceBetween: 20,
-                },
-                768: {
-                  slidesPerView: 2,
-                  spaceBetween: 40,
-                },
-                992: {
-                  slidesPerView: 2,
-                  spaceBetween: 50,
-                },
-                1199: {
-                  slidesPerView: 4,
-                  spaceBetween: 50,
-                },
-              }}
-              modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
-              spaceBetween={50}
-              loop={true}
-              autoplay={{
-                delay: 4000,
-                disableOnInteraction: false,
-              }}
-              onSwiper={(swiper) => (secondbannerRef.current = swiper)}
-            >
-              {category?.length ? (
-                <>
-                  {category?.map((data, index) => {
-                    return (
-                      <SwiperSlide key={index}>
-                        <Link
-                          to={`/categories/${data.id}`}
-                          className="text-decoration-none"
-                          style={{ color: "#000" }}
-                        >
-                          <div className="category_box animate__animated animate__fadeInLeft animate__delay-2s">
-                            <img
-                              src={data.image}
-                              className="w-100"
-                              alt="item_category"
-                            />
-                            <div className="category_name">{data.name}</div>
-                          </div>
-                        </Link>
-                      </SwiperSlide>
-                    );
-                  })}
-                </>
-              ) : (
-                <></>
-              )}
-            </Swiper>
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Second Banner */}
       <section className="discover_banner">
@@ -404,77 +409,78 @@ const Home = () => {
       </section>
 
       {/* New Arrivals */}
-      <section className="new_arrivals">
-        <div className="container">
-          <div className="new_arrival_detail">
-            <h3>New Arrivals</h3>
-          </div>
-          <Link
-            to="/latest-designs"
-            className="custom-btn btn-16 mb-4"
-            style={{ textDecoration: "none" }}
-          >
-            View All
-          </Link>
-          <div className="second_banner_button">
-            <button
-              onClick={() => thirdbannerRef?.current?.slidePrev()}
-              className="prev-button-swiper"
+      {newAdd?.length > 0 && (
+        <section className="new_arrivals">
+          <div className="container">
+            <div className="new_arrival_detail">
+              <h3>New Arrivals</h3>
+            </div>
+            <Link
+              to="/latest-designs"
+              className="custom-btn btn-16 mb-4"
+              style={{ textDecoration: "none" }}
             >
-              <MdKeyboardArrowLeft className="swiper-icon" />
-            </button>
-            <button
-              onClick={() => thirdbannerRef?.current?.slideNext()}
-              className="next-button-swiper"
-            >
-              <MdKeyboardArrowRight className="swiper-icon" />
-            </button>
-          </div>
-          <div className="new_arrival_slide">
-            <Swiper
-              slidesPerView={2}
-              breakpoints={{
-                640: {
-                  slidesPerView: 2,
-                  spaceBetween: 20,
-                },
-                768: {
-                  slidesPerView: 2,
-                  spaceBetween: 40,
-                },
-                992: {
-                  slidesPerView: 2,
-                  spaceBetween: 50,
-                },
-                1199: {
-                  slidesPerView: 4,
-                  spaceBetween: 50,
-                },
-              }}
-              modules={[Pagination, Navigation, Scrollbar, A11y, Autoplay]}
-              spaceBetween={20}
-              loop={true}
-              onSwiper={(swiper) => (thirdbannerRef.current = swiper)}
-              autoplay={{
-                delay: 4000,
-                disableOnInteraction: false,
-              }}
-            >
-              {newAdd?.length ? (
-                <>
-                  {newAdd?.slice(0, 50).map((data, index) => {
-                    return (
-                      <SwiperSlide key={index}>
-                        <Link
-                          to={`/shopdetails/${data.id}`}
-                          className="text-decoration-none"
-                          style={{ color: "#000" }}
-                        >
-                          <div className="profile-pic">
-                            <div className="profile_img">
-                              <img src={data.image} alt="" />
-                            </div>
-                            {/* <div className="edit">
+              View All
+            </Link>
+            <div className="second_banner_button">
+              <button
+                onClick={() => thirdbannerRef?.current?.slidePrev()}
+                className="prev-button-swiper"
+              >
+                <MdKeyboardArrowLeft className="swiper-icon" />
+              </button>
+              <button
+                onClick={() => thirdbannerRef?.current?.slideNext()}
+                className="next-button-swiper"
+              >
+                <MdKeyboardArrowRight className="swiper-icon" />
+              </button>
+            </div>
+            <div className="new_arrival_slide">
+              <Swiper
+                slidesPerView={2}
+                breakpoints={{
+                  640: {
+                    slidesPerView: 2,
+                    spaceBetween: 20,
+                  },
+                  768: {
+                    slidesPerView: 2,
+                    spaceBetween: 40,
+                  },
+                  992: {
+                    slidesPerView: 2,
+                    spaceBetween: 50,
+                  },
+                  1199: {
+                    slidesPerView: 4,
+                    spaceBetween: 50,
+                  },
+                }}
+                modules={[Pagination, Navigation, Scrollbar, A11y, Autoplay]}
+                spaceBetween={20}
+                loop={true}
+                onSwiper={(swiper) => (thirdbannerRef.current = swiper)}
+                autoplay={{
+                  delay: 4000,
+                  disableOnInteraction: false,
+                }}
+              >
+                {newAdd?.length ? (
+                  <>
+                    {newAdd?.slice(0, 50).map((data, index) => {
+                      return (
+                        <SwiperSlide key={index}>
+                          <Link
+                            to={`/shopdetails/${data.id}`}
+                            className="text-decoration-none"
+                            style={{ color: "#000" }}
+                          >
+                            <div className="profile-pic">
+                              <div className="profile_img">
+                                <img src={data.image} alt="" />
+                              </div>
+                              {/* <div className="edit">
                           <div>
                             <a
                               href="#"
@@ -495,22 +501,23 @@ const Home = () => {
                             </a>
                           </div>
                         </div> */}
-                            <div className="product_details">
-                              <h4>{data.name}</h4>
+                              <div className="product_details">
+                                <h4>{data.name}</h4>
+                              </div>
                             </div>
-                          </div>
-                        </Link>
-                      </SwiperSlide>
-                    );
-                  })}
-                </>
-              ) : (
-                <></>
-              )}
-            </Swiper>
+                          </Link>
+                        </SwiperSlide>
+                      );
+                    })}
+                  </>
+                ) : (
+                  <></>
+                )}
+              </Swiper>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Third Banner */}
       <section className="explore_banner">
@@ -616,93 +623,95 @@ const Home = () => {
       </section>
 
       {/* Top_Sellers */}
-      <section className="Top_sellers">
-        <div className="container">
-          <div className="seller_header">
-            <h3>Top sellers</h3>
-          </div>
-          <Link
-            to="/top-selling-designs"
-            className="custom-btn btn-16 mb-4"
-            style={{ textDecoration: "none" }}
-          >
-            View All
-          </Link>
-          <div className="second_banner_button">
-            <button
-              onClick={() => fourthbannerRef?.current?.slidePrev()}
-              className="prev-button-swiper"
+      {TopSell?.length > 0 && (
+        <section className="Top_sellers">
+          <div className="container">
+            <div className="seller_header">
+              <h3>Top sellers</h3>
+            </div>
+            <Link
+              to="/top-selling-designs"
+              className="custom-btn btn-16 mb-4"
+              style={{ textDecoration: "none" }}
             >
-              <MdKeyboardArrowLeft className="swiper-icon" />
-            </button>
-            <button
-              onClick={() => fourthbannerRef?.current?.slideNext()}
-              className="next-button-swiper"
-            >
-              <MdKeyboardArrowRight className="swiper-icon" />
-            </button>
-          </div>
-          <div className="seller_slider">
-            <Swiper
-              slidesPerView={2}
-              breakpoints={{
-                640: {
-                  slidesPerView: 2,
-                  spaceBetween: 20,
-                },
-                768: {
-                  slidesPerView: 2,
-                  spaceBetween: 40,
-                },
-                992: {
-                  slidesPerView: 3,
-                  spaceBetween: 50,
-                },
-                1199: {
-                  slidesPerView: 4,
-                  spaceBetween: 50,
-                },
-              }}
-              modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
-              spaceBetween={10}
-              loop={true}
-              onSwiper={(swiper) => (fourthbannerRef.current = swiper)}
-              autoplay={{
-                delay: 4000,
-                disableOnInteraction: false,
-              }}
-            >
-              {TopSell?.length ? (
-                <>
-                  {TopSell?.slice(0, 50).map((data, index) => {
-                    return (
-                      <SwiperSlide key={index}>
-                        <Link
-                          to={`/shopdetails/${data.id}`}
-                          className="text-decoration-none"
-                          style={{ color: "#000" }}
-                        >
-                          <div className="profile-pic">
-                            <img src={data.image} alt="" />
-                            <div className="product_details">
-                              <h4>{data.name}</h4>
+              View All
+            </Link>
+            <div className="second_banner_button">
+              <button
+                onClick={() => fourthbannerRef?.current?.slidePrev()}
+                className="prev-button-swiper"
+              >
+                <MdKeyboardArrowLeft className="swiper-icon" />
+              </button>
+              <button
+                onClick={() => fourthbannerRef?.current?.slideNext()}
+                className="next-button-swiper"
+              >
+                <MdKeyboardArrowRight className="swiper-icon" />
+              </button>
+            </div>
+            <div className="seller_slider">
+              <Swiper
+                slidesPerView={2}
+                breakpoints={{
+                  640: {
+                    slidesPerView: 2,
+                    spaceBetween: 20,
+                  },
+                  768: {
+                    slidesPerView: 2,
+                    spaceBetween: 40,
+                  },
+                  992: {
+                    slidesPerView: 3,
+                    spaceBetween: 50,
+                  },
+                  1199: {
+                    slidesPerView: 4,
+                    spaceBetween: 50,
+                  },
+                }}
+                modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
+                spaceBetween={10}
+                loop={true}
+                onSwiper={(swiper) => (fourthbannerRef.current = swiper)}
+                autoplay={{
+                  delay: 4000,
+                  disableOnInteraction: false,
+                }}
+              >
+                {TopSell?.length ? (
+                  <>
+                    {TopSell?.slice(0, 50).map((data, index) => {
+                      return (
+                        <SwiperSlide key={index}>
+                          <Link
+                            to={`/shopdetails/${data.id}`}
+                            className="text-decoration-none"
+                            style={{ color: "#000" }}
+                          >
+                            <div className="profile-pic">
+                              <img src={data.image} alt="" />
+                              <div className="product_details">
+                                <h4>{data.name}</h4>
+                              </div>
                             </div>
-                          </div>
-                        </Link>
-                      </SwiperSlide>
-                    );
-                  })}
-                </>
-              ) : (
-                <></>
-              )}
-            </Swiper>
+                          </Link>
+                        </SwiperSlide>
+                      );
+                    })}
+                  </>
+                ) : (
+                  <></>
+                )}
+              </Swiper>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* testimonials */}
-      {review?.length && (
+      {review?.length > 0 && (
         <section className="testimonial">
           <div className="container">
             <div className="testimonial_header">

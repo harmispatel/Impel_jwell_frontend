@@ -3272,7 +3272,7 @@ input[type="file"] {
 
 .womans-toggle {
   position: fixed;
-  top: 50%;
+  top: 70%;
   left: 0;
   transform: rotate(-90deg) translate3d(0, -74px, 0);
   z-index: 999;
@@ -3654,4 +3654,9 @@ input[type="file"] {
   justify-content: end;
   gap: 10px;
   margin-bottom: 20px;
+}
+
+
+:where(.css-dev-only-do-not-override-98ntnt).ant-skeleton.ant-skeleton-element{
+  width: 100% !important;
 }

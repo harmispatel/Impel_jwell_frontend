@@ -97,8 +97,10 @@ const Navbar = () => {
   const handleTag = (tagId) => {
     if (tag.includes(tagId)) {
       setTag(tag.filter((id) => id !== tagId));
+      setIsCollapsed(!isCollapsed);
     } else {
       setTag([...tag, tagId]);
+      setIsCollapsed(!isCollapsed);
     }
   };
 
