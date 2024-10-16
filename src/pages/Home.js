@@ -25,6 +25,7 @@ import banner_1 from "../assets/images/bg-01.jpeg";
 import Ring from "../assets/images/ring.png";
 import Kada from "../assets/images/kada.jpg";
 import Gold_Ring from "../assets/images/gold_ring.png";
+import WomansClub from "../components/common/WomansClub";
 
 const Home = () => {
   const firstbannerRef = useRef(null);
@@ -160,7 +161,7 @@ const Home = () => {
       <Helmet>
         <title>Impel Store - Home</title>
       </Helmet>
-
+      <WomansClub />
       {/* Hero Banner */}
       <section className="banner position-relative">
         <Swiper

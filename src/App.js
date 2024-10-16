@@ -30,12 +30,10 @@ import WishlistProvider from "./context/WishListContext";
 import ProfileProvider from "./context/ProfileContext";
 import { useEffect, useState } from "react";
 import CustomPage from "./components/CustomPage";
-import WomansClub from "./components/common/WomansClub";
 import Topseller from "./pages/shop/Topseller";
 import LatestDesign from "./pages/shop/LatestDesign";
 import ReadytoDispatch from "./pages/shop/ReadytoDispatch";
 import ReadyDetails from "./pages/shop/ReadyDetails";
-import CommonOrderPlace from "./components/common/CommonOrderPlace";
 import ReadyDesignCart from "./pages/user/ReadyDesignCart";
 import ReadyDesignCartProvider from "./context/ReadyDesignCartContext";
 import MyReadyOrders from "./pages/user/MyReadyOrders";
@@ -45,7 +43,6 @@ function App() {
   const location = useLocation();
   const navigate = useNavigate();
   const userType = localStorage.getItem("user_type");
-  const popupshow = localStorage.getItem("user_type");
   const helmetContext = {};
 
   const [active, setActive] = useState(false);
@@ -89,13 +86,6 @@ function App() {
           <CartProvider>
             <ReadyDesignCartProvider>
               <ScrollToTop />
-              {!location.pathname.startsWith("/login") &&
-                !location.pathname.startsWith("/forget-password") &&
-                !location.pathname.startsWith("/reset-password") &&
-                !location.pathname.startsWith("/dealer-login") && (
-                  <WomansClub />
-                )}
-
               <HelmetProvider context={helmetContext}>
                 {/* {shouldShowPopup && popupshow == null ? <Popup /> : <></>} */}
                 <Routes>

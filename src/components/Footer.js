@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import Logo from "../assets/images/logo.png";
-import { Link } from "react-router-dom";
-import { BsFacebook, BsInstagram, BsTwitter, BsYoutube } from "react-icons/bs";
+import { Link, useLocation } from "react-router-dom";
+import { BsFacebook, BsInstagram, BsYoutube } from "react-icons/bs";
 import GoTop from "./GoTop";
 import profileService from "../services/Home";
 import { FaPinterest } from "react-icons/fa";
 
 const Footer = () => {
+  const location = useLocation();
+  const currentRoute = location.pathname;
+
   const [siteSetting, setSiteSetting] = useState("");
   const [getPage, setGetPage] = useState([]);
   const currentYear = new Date().getFullYear();
@@ -51,8 +54,15 @@ const Footer = () => {
           <div className="footer_list">
             <ul>
               {getPage?.map((page, index) => {
+                console.log("page", page.slug)
                 return (
-                  <li className="text-uppercase pb-2 pb-md-0">
+                  <li
+                    className={
+                      currentRoute === page?.slug
+                        ? "text-uppercase pb-2 pb-md-0 active"
+                        : "text-uppercase pb-2 pb-md-0"
+                    }
+                  >
                     <Link to={`${page?.slug}`}>
                       <b>{page?.name}</b>
                     </Link>

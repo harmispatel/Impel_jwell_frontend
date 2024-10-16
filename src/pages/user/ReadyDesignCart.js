@@ -20,8 +20,6 @@ import { IoIosCloseCircleOutline } from "react-icons/io";
 
 const api = process.env.REACT_APP_API_KEY;
 
-const options = ["Cash on delivery", "PhonePay"];
-
 const ReadyDesignCart = () => {
   const user_id = localStorage.getItem("user_id");
   const Verification = localStorage.getItem("verification");
@@ -752,6 +750,9 @@ const ReadyDesignCart = () => {
   useEffect(() => {
     setIsChecked(profileData?.address_same_as_company === 1);
   }, [profileData?.address_same_as_company]);
+
+  const options =
+    overAllAmount > 50000 ? ["PhonePay"] : ["Cash on delivery", "PhonePay"];
 
   return (
     <>

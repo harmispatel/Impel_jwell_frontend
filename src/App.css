@@ -901,6 +901,10 @@ input[type="file"] {
   flex-wrap: wrap;
 }
 
+.footer_list .active {
+  color: #db9662 !important;
+}
+
 .footer_social_list ul {
   display: flex;
   justify-content: center;
@@ -2115,7 +2119,7 @@ input[type="file"] {
     margin-bottom: 15px !important;
   }
 
-  .user-login-form .react-tel-input .flag-dropdown{
+  .user-login-form .react-tel-input .flag-dropdown {
     display: none !important;
   }
 
@@ -3656,7 +3660,6 @@ input[type="file"] {
   margin-bottom: 20px;
 }
 
-
-:where(.css-dev-only-do-not-override-98ntnt).ant-skeleton.ant-skeleton-element{
+:where(.css-dev-only-do-not-override-98ntnt).ant-skeleton.ant-skeleton-element {
   width: 100% !important;
 }
