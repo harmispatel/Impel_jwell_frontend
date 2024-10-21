@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FaAngleUp } from "react-icons/fa";
+import { BsWhatsapp } from "react-icons/bs";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 const GoTop = () => {
   const [backButton, setBackButton] = useState(false);
@@ -21,14 +23,31 @@ const GoTop = () => {
     });
   };
 
+  const whatsappTip = <Tooltip id="tooltip">Chat with us</Tooltip>;
+
   return (
-    <div>
-      {backButton && (
-        <button className="btn go-top-button" onClick={scrollup}>
-          <FaAngleUp style={{ color: "#fff" }} />
-        </button>
-      )}
-    </div>
+    <>
+      <div>
+        <OverlayTrigger placement="top" overlay={whatsappTip}>
+          <a
+            href="https://wa.me/+918799619939"
+            className="whatsapp-btn"
+            target="_blank"
+            rel="noreferrer"
+            title="Chat with us"
+          >
+            <BsWhatsapp />
+          </a>
+        </OverlayTrigger>
+      </div>
+      <div>
+        {backButton && (
+          <button className="go-top-button" onClick={scrollup}>
+            <FaAngleUp style={{ color: "#fff" }} />
+          </button>
+        )}
+      </div>
+    </>
   );
 };
 

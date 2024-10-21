@@ -142,7 +142,7 @@ const Shop = () => {
 
   const handleSelectGender = (genderId) => {
     setIsLoading(true);
-    const queryParams = new URLSearchParams(location.search);
+    const queryParams = new URLSearchParams(location.search); 
     if (genderId) {
       queryParams.set("gender_id", genderId.value);
     } else {
@@ -151,7 +151,7 @@ const Shop = () => {
 
     navigate(`/shop?${queryParams.toString()}`);
 
-    setGender(genderId ? genderId.value : null);
+    setGender(genderId ? genderId?.value : null);
     setSelectedGender(genderId);
   };
 

@@ -50,6 +50,16 @@ const DealerCode = async (data) => {
   return d;
 };
 
+const PinCodeCheck = async (data) => {
+  let d = await call({
+    path: "check-service-ability",
+    method: "POST",
+    enctype: "multipart/form-data",
+    data,
+  });
+  return d;
+};
+
 const Payment = async (data) => {
   let d = await call({
     path: "cashfree/payments/doCashFreePayment",
@@ -111,6 +121,7 @@ const exportObject = {
   PayByPhonepeAPI,
   UserOrders,
   Orderdetails,
+  PinCodeCheck
 };
 
 export default exportObject;

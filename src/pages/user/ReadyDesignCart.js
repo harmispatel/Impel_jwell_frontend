@@ -43,6 +43,8 @@ const ReadyDesignCart = () => {
 
   const [show, setShow] = useState(false);
   const [dealer_code, setDealer_Code] = useState("");
+  const [pin_code, setPin_Code] = useState("");
+  const [pin_code_err, setPin_Code_Err] = useState("");
   const [isFormEmpty, setIsFormEmpty] = useState("");
   const [code, setCode] = useState("");
 
@@ -85,6 +87,26 @@ const ReadyDesignCart = () => {
     localStorage.removeItem("dealermessage");
     setCode({ discount_type: "", discount_value: 0 });
     // calculateTotal();
+  };
+
+  const handlePincode = (e) => {
+    setPin_Code(e.target.value);
+  };
+
+  const ApplyPincode = (e) => {
+    e.preventDefault();
+    UserService.PinCodeCheck({
+      token: "d55c9549f11637d0ad4d2808ffc3fcaa",
+      pin_code: pin_code,
+    })
+      .then((res) => {
+        if(res?.status === true){
+          setPin_Code_Err(res.message);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   useEffect(() => {
@@ -983,6 +1005,39 @@ const ReadyDesignCart = () => {
                                   </span>
                                 </div>
                               )}
+                              <div>
+                                <form onSubmit={ApplyPincode}>
+                                  <div className="form-group">
+                                    <div className="input-group">
+                                      <input
+                                        type="text"
+                                        name="pin_code"
+                                        className="form-control border"
+                                        placeholder="Enter pincode"
+                                        value={pin_code}
+                                        onChange={(e) => handlePincode(e)}
+                                        required
+                                        pattern="\d{5,6}"
+                                        title="Please enter a valid pin code"
+                                      />
+                                      <button
+                                        type="submit"
+                                        className="btn btn-light border"
+                                      >
+                                        Check
+                                      </button>
+                                    </div>
+                                    {pin_code_err ? (
+                                      <span className="text-danger">
+                                        {pin_code_err}
+                                      </span>
+                                    ) : (
+                                      <></>
+                                    )}
+                                  </div>
+                                </form>
+                              </div>
+                              <hr />
                               <div className="mt-2">
                                 <label htmlFor="Payment Method">
                                   Payment Method :

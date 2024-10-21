@@ -9,6 +9,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import {
   FaBars,
+  FaRegFilePdf,
   FaShoppingBag,
   FaStar,
   FaUser,
@@ -551,6 +552,11 @@ const Navbar = () => {
                               <li>
                                 <Link to="/dealer-wishlist">
                                   <FaStar /> My Selections
+                                </Link>
+                              </li>
+                              <li>
+                                <Link to="/create-pdf">
+                                <FaRegFilePdf /> Create PDF
                                 </Link>
                               </li>
                               <li>

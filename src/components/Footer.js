@@ -54,7 +54,6 @@ const Footer = () => {
           <div className="footer_list">
             <ul>
               {getPage?.map((page, index) => {
-                console.log("page", page.slug)
                 return (
                   <li
                     className={

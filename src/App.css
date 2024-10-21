@@ -1926,6 +1926,11 @@ input[type="file"] {
     right: 25px !important;
   }
 
+  .whatsapp-btn {
+    bottom: 90px !important;
+    right: 25px !important;
+  }
+
   .dealer_profile_data th {
     width: 45% !important;
   }
@@ -2878,10 +2883,10 @@ input[type="file"] {
   border-color: #bfb;
 }
 
-.go-top-button {
+.whatsapp-btn {
   position: fixed;
-  background-color: #db9662 !important;
-  bottom: 50px;
+  background-color: #25d366 !important;
+  bottom: 110px;
   right: 50px;
   height: 50px;
   width: 50px;
@@ -2890,6 +2895,51 @@ input[type="file"] {
   justify-content: center;
   align-items: center;
   z-index: 9;
+  border-radius: 50%;
+  color: #fff !important;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease;
+  animation: pulse 1.5s infinite;
+}
+
+.whatsapp-btn:hover {
+  transform: scale(1.1);
+}
+
+.go-top-button {
+  position: fixed;
+  background-color: #db9662 !important;
+  bottom: 50px;
+  right: 50px;
+  height: 50px;
+  width: 50px;
+  font-size: 27px !important;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  border: none;
+  z-index: 9;
+  color: #fff;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.3);
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.go-top-button:hover {
+  background-color: #c0834e;
+  transform: scale(1.1);
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 .message-box {

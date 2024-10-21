@@ -267,7 +267,7 @@ const ReadyDetails = () => {
                                           <tr>
                                             <th>Net Weight</th>
                                             <td>
-                                              {details?.GrossWt} g. (Approx.)
+                                              {details?.NetWt} g. (Approx.)
                                             </td>
                                           </tr>
                                           <tr>

@@ -10,17 +10,26 @@ const imageURL = process.env.REACT_APP_API_KEY_IMAGE_;
 const ReadytoDispatch = () => {
   const id = "1,4";
 
+  const userType = localStorage.getItem("user_type");
+
   const [loading, setLoading] = useState(true);
 
   const [products, setProducts] = useState([]);
   const [filters, setFilters] = useState([]);
-  const [tagNoChange, setTagNoChange] = useState(null);
-  const [items, setItems] = useState(null);
-  const [subItems, setSubItems] = useState(null);
-  const [itemGroups, setItemGroups] = useState(null);
-  const [styles, setStyles] = useState(null);
-  const [sizes, setSizes] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  const [tagNoChange, setTagNoChange] = useState(null);
+
+  const [items, setItems] = useState(null);
+
+  const [subItems, setSubItems] = useState(null);
+
+  const [itemGroups, setItemGroups] = useState(null);
+  const [selectedItemGroups, setSelectedItemGroups] = useState(null);
+
+  const [styles, setStyles] = useState(null);
+
+  const [sizes, setSizes] = useState(null);
 
   const [allPrices, setAllPrices] = useState([]);
   const [totalItems, setTotalItems] = useState([]);
@@ -230,7 +239,7 @@ const ReadytoDispatch = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 5000); // 4 seconds
+    }, 5000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -272,7 +281,7 @@ const ReadytoDispatch = () => {
                 </div>
 
                 {/* Category Wise Filter */}
-                <div className="col-md-3">
+                {/* <div className="col-md-3">
                   <Select
                     placeholder="Select Category"
                     isClearable
@@ -284,7 +293,7 @@ const ReadytoDispatch = () => {
                       value: data?.ItemGroupID,
                     }))}
                   />
-                </div>
+                </div> */}
                 <div className="col-md-3 my-2 my-md-0">
                   <Select
                     placeholder="Select Item"
@@ -311,7 +320,7 @@ const ReadytoDispatch = () => {
                     }))}
                   />
                 </div>
-                <div className="col-md-3">
+                {/* <div className="col-md-3">
                   <Select
                     placeholder="Select Style"
                     isClearable
@@ -323,7 +332,7 @@ const ReadytoDispatch = () => {
                       value: data?.StyleID,
                     }))}
                   />
-                </div>
+                </div> */}
               </div>
               <div className="row mt-4">
                 {products?.length > 0 ? (
@@ -373,7 +382,7 @@ const ReadytoDispatch = () => {
                                   {loading ? (
                                     <Skeleton.Image
                                       active
-                                      style={{ width: "100%"}}
+                                      style={{ width: "100%" }}
                                     />
                                   ) : data?.Images[0]?.ImageName ? (
                                     <img
@@ -390,6 +399,18 @@ const ReadytoDispatch = () => {
                                   )}
                                 </div>
                               </Link>
+                              {userType == 1 && (
+                                <div className="mt-2">
+                                  <span
+                                    style={{
+                                      color: "#db9662",
+                                      fontWeight: 700,
+                                    }}
+                                  >
+                                    {data?.TagNo}
+                                  </span>
+                                </div>
+                              )}
                               <div className="product-info d-grid">
                                 {labour_charge_discount > 0 ? (
                                   <>

@@ -38,6 +38,7 @@ import ReadyDesignCart from "./pages/user/ReadyDesignCart";
 import ReadyDesignCartProvider from "./context/ReadyDesignCartContext";
 import MyReadyOrders from "./pages/user/MyReadyOrders";
 import ReadyOrderDetails from "./pages/user/ReadyOrderDetails";
+import CreatePDF from "./pages/Dealer/CreatePDF";
 
 function App() {
   const location = useLocation();
@@ -184,6 +185,14 @@ function App() {
                         element={
                           <DealerProtectedRoute>
                             <DealerProfile />
+                          </DealerProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path="create-pdf"
+                        element={
+                          <DealerProtectedRoute>
+                            <CreatePDF />
                           </DealerProtectedRoute>
                         }
                       />
