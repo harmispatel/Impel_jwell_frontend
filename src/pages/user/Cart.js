@@ -14,6 +14,8 @@ import { CartSystem } from "../../context/CartContext";
 import { ProfileSystem } from "../../context/ProfileContext";
 import Loader from "../../components/common/Loader";
 import axios from "axios";
+import { Spin } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
 
 const api = process.env.REACT_APP_API_KEY;
 
@@ -37,6 +39,43 @@ const Cart = ({ active }) => {
   const [removingItemId, setRemovingItemId] = useState(null);
   const [spinner, setSpinner] = useState(false);
   const [total, setTotal] = useState(0);
+
+  const [pin_code, setPin_Code] = useState("");
+  const [pin_code_err, setPin_Code_Err] = useState("");
+  const [pin_code_msg, setPin_Code_Msg] = useState("");
+  const [pin_code_loader, setPin_Code_Loader] = useState(false);
+  const [pin_code_valid, setPin_Code_Valid] = useState(false);
+
+  const handlePincode = (e) => {
+    setPin_Code(e.target.value);
+  };
+
+  const ApplyPincode = (e) => {
+    e.preventDefault();
+    setPin_Code_Loader(true);
+    UserService.PinCodeCheck({
+      token: "d55c9549f11637d0ad4d2808ffc3fcaa",
+      pin_code: pin_code,
+    })
+      .then((res) => {
+        if (res?.status === "true") {
+          setPin_Code_Err("Service available");
+          setPin_Code_Msg("");
+          setPin_Code_Valid(true);
+          setPin_Code_Loader(false);
+        } else if (res?.status === "false") {
+          setPin_Code_Err("");
+          setPin_Code_Msg("Service not available");
+          setPin_Code_Valid(false);
+          setPin_Code_Loader(false);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        setPin_Code_Valid(false);
+        setPin_Code_Loader(false);
+      });
+  };
 
   // user profile functionlity
   const [showEdit, setShowEdit] = useState(false);
@@ -928,9 +967,10 @@ const Cart = ({ active }) => {
                                     )}
                                   </p>
                                 </div>
+                                <hr />
 
                                 {message && (
-                                  <div className="message-box">
+                                  <div className="message-box mb-3">
                                     <div className="text-end">
                                       <OverlayTrigger
                                         placement="top"
@@ -963,32 +1003,87 @@ const Cart = ({ active }) => {
                                   </div>
                                 )}
 
-                                <div className="pt-2">
-                                  <button
-                                    className="btn btn-success w-100 shadow-0 mb-2"
-                                    disabled={spinner}
-                                    onClick={(e) => {
-                                      handlePhonepeClick();
-                                      handleProfileData(profileData);
-                                    }}
-                                  >
-                                    {spinner && (
-                                      <CgSpinner
-                                        size={20}
-                                        className="animate_spin me-2"
-                                      />
-                                    )}
-                                    Minimum Advance Payable Amount (₹
-                                    {numberFormat(advanceAmount)})
-                                  </button>
-                                  <button
-                                    type="button"
-                                    className="light-up-button w-100 rounded-2"
-                                    onClick={() => navigate("/shop")}
-                                  >
-                                    Back to shop
-                                  </button>
+                                <div>
+                                  <form onSubmit={ApplyPincode}>
+                                    <div className="form-group">
+                                      <div className="input-group">
+                                        <input
+                                          type="number"
+                                          name="pin_code"
+                                          className="form-control border"
+                                          placeholder="Enter pincode"
+                                          value={pin_code}
+                                          onChange={(e) => handlePincode(e)}
+                                          required
+                                          pattern="\d{5,6}"
+                                          title="Please enter a valid pin code"
+                                        />
+                                        {pin_code_loader ? (
+                                          <>
+                                            <Spin
+                                              indicator={
+                                                <LoadingOutlined
+                                                  spin
+                                                  style={{ margin: "10px" }}
+                                                />
+                                              }
+                                            />
+                                          </>
+                                        ) : (
+                                          <>
+                                            <button
+                                              type="submit"
+                                              className="btn btn-light border"
+                                            >
+                                              Check
+                                            </button>
+                                          </>
+                                        )}
+                                      </div>
+                                      {pin_code_err && (
+                                        <span className="text-success fw-bold">
+                                          {pin_code_err}
+                                        </span>
+                                      )}
+                                      {pin_code_msg && (
+                                        <span className="text-danger fw-bold">
+                                          {pin_code_msg}
+                                        </span>
+                                      )}
+                                    </div>
+                                  </form>
                                 </div>
+
+                                {pin_code_valid === true && (
+                                  <>
+                                    <div className="pt-2">
+                                      <button
+                                        className="btn btn-success w-100 shadow-0 mb-2"
+                                        disabled={spinner}
+                                        onClick={(e) => {
+                                          handlePhonepeClick();
+                                          handleProfileData(profileData);
+                                        }}
+                                      >
+                                        {spinner && (
+                                          <CgSpinner
+                                            size={20}
+                                            className="animate_spin me-2"
+                                          />
+                                        )}
+                                        Minimum Advance Payable Amount (₹
+                                        {numberFormat(advanceAmount)})
+                                      </button>
+                                      <button
+                                        type="button"
+                                        className="light-up-button w-100 rounded-2"
+                                        onClick={() => navigate("/shop")}
+                                      >
+                                        Back to shop
+                                      </button>
+                                    </div>
+                                  </>
+                                )}
                               </div>
                             </div>
                           </div>

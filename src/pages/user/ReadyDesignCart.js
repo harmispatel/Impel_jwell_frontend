@@ -17,6 +17,8 @@ import { Col, Form, Modal, OverlayTrigger, Tooltip } from "react-bootstrap";
 import profileService from "../../services/Auth";
 import { ProfileSystem } from "../../context/ProfileContext";
 import { IoIosCloseCircleOutline } from "react-icons/io";
+import { Spin } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
 
 const api = process.env.REACT_APP_API_KEY;
 
@@ -43,8 +45,13 @@ const ReadyDesignCart = () => {
 
   const [show, setShow] = useState(false);
   const [dealer_code, setDealer_Code] = useState("");
+
   const [pin_code, setPin_Code] = useState("");
   const [pin_code_err, setPin_Code_Err] = useState("");
+  const [pin_code_msg, setPin_Code_Msg] = useState("");
+  const [pin_code_loader, setPin_Code_Loader] = useState(false);
+  const [pin_code_valid, setPin_Code_Valid] = useState(false);
+  
   const [isFormEmpty, setIsFormEmpty] = useState("");
   const [code, setCode] = useState("");
 
@@ -95,17 +102,28 @@ const ReadyDesignCart = () => {
 
   const ApplyPincode = (e) => {
     e.preventDefault();
+    setPin_Code_Loader(true);
     UserService.PinCodeCheck({
       token: "d55c9549f11637d0ad4d2808ffc3fcaa",
       pin_code: pin_code,
     })
       .then((res) => {
-        if(res?.status === true){
-          setPin_Code_Err(res.message);
+        if (res?.status === "true") {
+          setPin_Code_Err("Service available");
+          setPin_Code_Msg("");
+          setPin_Code_Valid(true);
+          setPin_Code_Loader(false);
+        } else if (res?.status === "false") {
+          setPin_Code_Err("");
+          setPin_Code_Msg("Service not available");
+          setPin_Code_Valid(false);
+          setPin_Code_Loader(false);
         }
       })
       .catch((err) => {
         console.log(err);
+        setPin_Code_Valid(false);
+        setPin_Code_Loader(false);
       });
   };
 
@@ -973,7 +991,7 @@ const ReadyDesignCart = () => {
                               <hr />
 
                               {message && (
-                                <div className="message-box">
+                                <div className="message-box mb-3">
                                   <div className="text-end">
                                     <OverlayTrigger
                                       placement="top"
@@ -1010,7 +1028,7 @@ const ReadyDesignCart = () => {
                                   <div className="form-group">
                                     <div className="input-group">
                                       <input
-                                        type="text"
+                                        type="number"
                                         name="pin_code"
                                         className="form-control border"
                                         placeholder="Enter pincode"
@@ -1020,77 +1038,102 @@ const ReadyDesignCart = () => {
                                         pattern="\d{5,6}"
                                         title="Please enter a valid pin code"
                                       />
-                                      <button
-                                        type="submit"
-                                        className="btn btn-light border"
-                                      >
-                                        Check
-                                      </button>
+                                      {pin_code_loader ? (
+                                        <>
+                                          <Spin
+                                            indicator={
+                                              <LoadingOutlined
+                                                spin
+                                                style={{ margin: "10px" }}
+                                              />
+                                            }
+                                          />
+                                        </>
+                                      ) : (
+                                        <>
+                                          <button
+                                            type="submit"
+                                            className="btn btn-light border"
+                                          >
+                                            Check
+                                          </button>
+                                        </>
+                                      )}
                                     </div>
-                                    {pin_code_err ? (
-                                      <span className="text-danger">
+                                    {pin_code_err && (
+                                      <span className="text-success fw-bold">
                                         {pin_code_err}
                                       </span>
-                                    ) : (
-                                      <></>
+                                    )}
+                                    {pin_code_msg && (
+                                      <span className="text-danger fw-bold">
+                                        {pin_code_msg}
+                                      </span>
                                     )}
                                   </div>
                                 </form>
                               </div>
-                              <hr />
-                              <div className="mt-2">
-                                <label htmlFor="Payment Method">
-                                  Payment Method :
-                                </label>
-                                <Dropdown
-                                  options={options}
-                                  placeholder="Select payment method"
-                                  value={selectPaymentMethod}
-                                  onChange={handleSelectPayment}
-                                  className="mt-1 w-100"
-                                />
-                              </div>
+                              {pin_code_valid === true && (
+                                <>
+                                  <hr />
+                                  <div className="mt-2">
+                                    <label htmlFor="Payment Method">
+                                      Payment Method :
+                                    </label>
+                                    <Dropdown
+                                      options={options}
+                                      placeholder="Select payment method"
+                                      value={selectPaymentMethod}
+                                      onChange={handleSelectPayment}
+                                      className="mt-1 w-100"
+                                    />
+                                  </div>
 
-                              <div className="pt-2">
-                                {selectPaymentMethod === "Cash on delivery" ? (
-                                  <button
-                                    className="btn btn-success w-100 shadow-0 mb-2"
-                                    disabled={!selectPaymentMethod}
-                                    onClick={(e) => {
-                                      handleCashClick();
-                                      handleProfileData(profileData);
-                                    }}
-                                  >
-                                    {" "}
-                                    {spinner && (
-                                      <CgSpinner
-                                        size={20}
-                                        className="animate_spin me-2"
-                                      />
+                                  <div className="pt-2">
+                                    {selectPaymentMethod ===
+                                    "Cash on delivery" ? (
+                                      <button
+                                        className="btn btn-success w-100 shadow-0 mb-2"
+                                        disabled={!selectPaymentMethod}
+                                        onClick={(e) => {
+                                          handleCashClick();
+                                          handleProfileData(profileData);
+                                        }}
+                                      >
+                                        {" "}
+                                        {spinner && (
+                                          <CgSpinner
+                                            size={20}
+                                            className="animate_spin me-2"
+                                          />
+                                        )}
+                                        Proceed to pay
+                                      </button>
+                                    ) : (
+                                      <button
+                                        className="btn btn-success w-100 shadow-0 mb-2"
+                                        disabled={!selectPaymentMethod}
+                                        onClick={(e) => {
+                                          handlePhonepeClick();
+                                          handleProfileData(profileData);
+                                        }}
+                                      >
+                                        Proceed to pay
+                                      </button>
                                     )}
-                                    Proceed to pay
-                                  </button>
-                                ) : (
-                                  <button
-                                    className="btn btn-success w-100 shadow-0 mb-2"
-                                    disabled={!selectPaymentMethod}
-                                    onClick={(e) => {
-                                      handlePhonepeClick();
-                                      handleProfileData(profileData);
-                                    }}
-                                  >
-                                    Proceed to pay
-                                  </button>
-                                )}
 
-                                <button
-                                  type="button"
-                                  className="light-up-button w-100 rounded-2"
-                                  onClick={() => navigate("/ready-to-dispatch")}
-                                >
-                                  Back to shop
-                                </button>
-                              </div>
+                                    <button
+                                      type="button"
+                                      className="light-up-button w-100 rounded-2"
+                                      onClick={() =>
+                                        navigate("/ready-to-dispatch")
+                                      }
+                                    >
+                                      Back to shop
+                                    </button>
+                                  </div>
+                                </>
+                              )}
                             </div>
                           </div>
                         </div>
