@@ -51,7 +51,7 @@ const ReadyDesignCart = () => {
   const [pin_code_msg, setPin_Code_Msg] = useState("");
   const [pin_code_loader, setPin_Code_Loader] = useState(false);
   const [pin_code_valid, setPin_Code_Valid] = useState(false);
-  
+
   const [isFormEmpty, setIsFormEmpty] = useState("");
   const [code, setCode] = useState("");
 
@@ -989,6 +989,22 @@ const ReadyDesignCart = () => {
                                 </p>
                               </div>
                               <hr />
+
+                              {message && (
+                                <>
+                                  <div className="d-flex justify-content-between">
+                                    <p className="mb-2 fw-bold text-success">
+                                      Discount :
+                                    </p>
+                                    <p className="mb-2 fw-bold text-success">
+                                      - ₹
+                                      {numberFormat((SubCharge() * code.discount_value) /
+                                        100)}
+                                    </p>
+                                  </div>
+                                  <hr />
+                                </>
+                              )}
 
                               {message && (
                                 <div className="message-box mb-3">

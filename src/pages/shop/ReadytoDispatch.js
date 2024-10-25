@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Loader from "../../components/common/Loader";
 import profileService from "../../services/Home";
 import Select from "react-select";
@@ -9,6 +9,7 @@ const imageURL = process.env.REACT_APP_API_KEY_IMAGE_;
 
 const ReadytoDispatch = () => {
   const id = "1,4";
+  const navigate = useNavigate();
 
   const userType = localStorage.getItem("user_type");
 
@@ -21,7 +22,6 @@ const ReadytoDispatch = () => {
   const [tagNoChange, setTagNoChange] = useState(null);
 
   const [items, setItems] = useState(null);
-
   const [subItems, setSubItems] = useState(null);
 
   const [itemGroups, setItemGroups] = useState(null);
@@ -64,6 +64,11 @@ const ReadytoDispatch = () => {
   const handleSizeTag = (selectedOption) => {
     setIsLoading(true);
     setSizes(selectedOption);
+    navigate(
+      `/ready-to-dispatch/${id}${
+        selectedOption ? `?sizes=${selectedOption.label}` : ""
+      }`
+    );
   };
 
   useEffect(() => {
@@ -399,18 +404,7 @@ const ReadytoDispatch = () => {
                                   )}
                                 </div>
                               </Link>
-                              {userType == 1 && (
-                                <div className="mt-2">
-                                  <span
-                                    style={{
-                                      color: "#db9662",
-                                      fontWeight: 700,
-                                    }}
-                                  >
-                                    {data?.TagNo}
-                                  </span>
-                                </div>
-                              )}
+
                               <div className="product-info d-grid">
                                 {labour_charge_discount > 0 ? (
                                   <>
@@ -435,6 +429,18 @@ const ReadytoDispatch = () => {
                                   </strong>
                                 )}
                               </div>
+                              {userType == 1 && (
+                                <div className="mt-2">
+                                  <span
+                                    style={{
+                                      color: "#db9662",
+                                      fontWeight: 700,
+                                    }}
+                                  >
+                                    {data?.TagNo}
+                                  </span>
+                                </div>
+                              )}
                             </div>
                           </div>
                         </>

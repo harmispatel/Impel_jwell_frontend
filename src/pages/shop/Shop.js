@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { BsSearch } from "react-icons/bs";
 import { FiHeart } from "react-icons/fi";
 import { FcLike } from "react-icons/fc";
-import { FaRegStar, FaStar } from "react-icons/fa";
+import { FaFilePdf, FaRegFilePdf, FaRegStar, FaStar } from "react-icons/fa";
 import toast from "react-hot-toast";
 import Select from "react-select";
 import Accordion from "react-bootstrap/Accordion";
@@ -14,6 +14,7 @@ import { Helmet } from "react-helmet-async";
 import ShopServices from "../../services/Shop";
 import FilterServices from "../../services/Filter";
 import DealerWishlist from "../../services/Dealer/Collection";
+import DealerPdf from "../../services/Dealer/PdfShare";
 import UserWishlist from "../../services/Auth";
 import { WishlistSystem } from "../../context/WishListContext";
 import Loader from "../../components/common/Loader";
@@ -68,6 +69,7 @@ const Shop = () => {
   const [goldColor, setGoldColor] = useState("yellow_gold");
   const [goldType, setGoldType] = useState("18k");
   const [UsercartItems, setUserCartItems] = useState([]);
+  const [pdfItems, setPdfItems] = useState([]);
 
   const scrollup = () => {
     window.scrollTo({
@@ -142,7 +144,7 @@ const Shop = () => {
 
   const handleSelectGender = (genderId) => {
     setIsLoading(true);
-    const queryParams = new URLSearchParams(location.search); 
+    const queryParams = new URLSearchParams(location.search);
     if (genderId) {
       queryParams.set("gender_id", genderId.value);
     } else {
@@ -459,6 +461,58 @@ const Shop = () => {
       });
   };
 
+  // Dealder List PDF creation
+  const getPdfList = async () => {
+    DealerPdf.pdfList({ email: email })
+      .then((res) => {
+        setPdfItems(res?.data?.pdf_items);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useLayoutEffect(() => {
+    getPdfList();
+  }, []);
+
+  // Dealder add product for PDF creation
+  const addToPDF = async (e, product) => {
+    e.preventDefault();
+    if (!pdfItems.some((item) => item.id === product.id)) {
+      DealerPdf.addToPdf({
+        email: email,
+        design_id: product.id,
+      })
+        .then((res) => {
+          getPdfList();
+          toast.success(res.message);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+    }
+  };
+
+  // Dealder remove product for PDF creation
+  const removeToPDF = (e, product) => {
+    e.preventDefault();
+    DealerPdf.removePdf({
+      email: email,
+      design_id: product.id,
+    })
+      .then((res) => {
+        if (res.success === true) {
+          getPdfList();
+          toast.success(res.message);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   // PAGINATION FUNCTION
   const totalPages = Math.ceil(paginate?.total_records / 40);
 
@@ -522,6 +576,7 @@ const Shop = () => {
 
   const wishlistTip = <Tooltip id="tooltip">wishlist</Tooltip>;
   const selectionTip = <Tooltip id="tooltip">My Selections</Tooltip>;
+  const pdfTip = <Tooltip id="tooltip">My PDF share</Tooltip>;
   const userTip = (
     <Tooltip id="tooltip">Login to add wishlist products</Tooltip>
   );
@@ -693,54 +748,116 @@ const Shop = () => {
                                           {numberFormat(data?.total_amount_18k)}
                                         </label>
                                       </div>
+                                      {userType == 1 && (
+                                        <div className="mt-1">
+                                          <span
+                                            style={{
+                                              color: "#db9662",
+                                              fontWeight: 700,
+                                            }}
+                                          >
+                                            {data?.code}
+                                          </span>
+                                        </div>
+                                      )}
                                     </Link>
                                     <div className="wishlist-top">
                                       {userType == 1 ? (
                                         <>
-                                          {email ? (
-                                            <OverlayTrigger
-                                              placement="top"
-                                              overlay={selectionTip}
-                                            >
-                                              <Link
-                                                to="#"
-                                                className=""
-                                                onClick={(e) => {
-                                                  if (
-                                                    DealerCollection?.find(
+                                          <div className="mt-3">
+                                            <div>
+                                              {email ? (
+                                                <OverlayTrigger
+                                                  placement="top"
+                                                  overlay={selectionTip}
+                                                >
+                                                  <Link
+                                                    to="#"
+                                                    className=""
+                                                    onClick={(e) => {
+                                                      if (
+                                                        DealerCollection?.find(
+                                                          (item) =>
+                                                            item?.id ===
+                                                            data?.id
+                                                        )
+                                                      ) {
+                                                        removeFromSelection(
+                                                          e,
+                                                          data
+                                                        );
+                                                      } else {
+                                                        AddToDealerSelection(
+                                                          e,
+                                                          data
+                                                        );
+                                                      }
+                                                    }}
+                                                  >
+                                                    {DealerCollection?.find(
                                                       (item) =>
                                                         item?.id === data?.id
-                                                    )
-                                                  ) {
-                                                    removeFromSelection(
-                                                      e,
-                                                      data
-                                                    );
-                                                  } else {
-                                                    AddToDealerSelection(
-                                                      e,
-                                                      data
-                                                    );
+                                                    ) ? (
+                                                      <FaStar />
+                                                    ) : (
+                                                      <FaRegStar />
+                                                    )}
+                                                  </Link>
+                                                </OverlayTrigger>
+                                              ) : (
+                                                <span
+                                                  onClick={(e) =>
+                                                    DealerLogin(e)
                                                   }
-                                                }}
-                                              >
-                                                {DealerCollection?.find(
-                                                  (item) =>
-                                                    item?.id === data?.id
-                                                ) ? (
-                                                  <FaStar />
-                                                ) : (
+                                                >
                                                   <FaRegStar />
-                                                )}
-                                              </Link>
-                                            </OverlayTrigger>
-                                          ) : (
-                                            <span
-                                              onClick={(e) => DealerLogin(e)}
-                                            >
-                                              <FaRegStar />
-                                            </span>
-                                          )}
+                                                </span>
+                                              )}
+                                            </div>
+                                            <div className="mt-2">
+                                              {email ? (
+                                                <OverlayTrigger
+                                                  placement="top"
+                                                  overlay={pdfTip}
+                                                >
+                                                  <Link
+                                                    to="#"
+                                                    className=""
+                                                    onClick={(e) => {
+                                                      if (
+                                                        pdfItems?.find(
+                                                          (item) =>
+                                                            item?.id ===
+                                                            data?.id
+                                                        )
+                                                      ) {
+                                                        removeToPDF(e, data);
+                                                      } else {
+                                                        addToPDF(e, data);
+                                                      }
+                                                    }}
+                                                  >
+                                                    {pdfItems?.find(
+                                                      (item) =>
+                                                        item?.id === data?.id
+                                                    ) ? (
+                                                      <FaFilePdf />
+                                                    ) : (
+                                                      <FaRegFilePdf />
+                                                    )}
+                                                  </Link>
+                                                </OverlayTrigger>
+                                              ) : (
+                                                <span
+                                                  onClick={(e) =>
+                                                    DealerLogin(e)
+                                                  }
+                                                >
+                                                  <FaRegFilePdf />
+                                                </span>
+                                              )}
+                                            </div>
+                                          </div>
                                         </>
                                       ) : (
                                         <>

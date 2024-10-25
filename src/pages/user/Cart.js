@@ -312,6 +312,8 @@ const Cart = ({ active }) => {
       : SubTotal() + SubCharge() - code.discount_value
     : SubTotal() + SubCharge();
 
+  console.log("SubCharge", (SubCharge() * code.discount_value) / 100);
+
   const isPriceAboveLimit = totalPrice >= 200000;
 
   const FormValidation = () => {
@@ -968,6 +970,22 @@ const Cart = ({ active }) => {
                                   </p>
                                 </div>
                                 <hr />
+
+                                {message && (
+                                  <>
+                                    <div className="d-flex justify-content-between">
+                                      <p className="mb-2 fw-bold text-success">
+                                        Discount :
+                                      </p>
+                                      <p className="mb-2 fw-bold text-success">
+                                        - ₹
+                                        {numberFormat((SubCharge() * code.discount_value) /
+                                          100)}
+                                      </p>
+                                    </div>
+                                    <hr />
+                                  </>
+                                )}
 
                                 {message && (
                                   <div className="message-box mb-3">
