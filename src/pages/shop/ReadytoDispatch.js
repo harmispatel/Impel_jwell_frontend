@@ -1,17 +1,23 @@
-import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useLayoutEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Loader from "../../components/common/Loader";
 import profileService from "../../services/Home";
 import Select from "react-select";
 import { Skeleton } from "antd";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import { FaFilePdf, FaRegFilePdf } from "react-icons/fa";
+import toast from "react-hot-toast";
+import DealerPdf from "../../services/Dealer/PdfShare";
 
 const imageURL = process.env.REACT_APP_API_KEY_IMAGE_;
 
 const ReadytoDispatch = () => {
   const id = "1,4";
   const navigate = useNavigate();
+  const location = useLocation();
 
   const userType = localStorage.getItem("user_type");
+  const email = localStorage.getItem("email");
 
   const [loading, setLoading] = useState(true);
 
@@ -33,6 +39,8 @@ const ReadytoDispatch = () => {
 
   const [allPrices, setAllPrices] = useState([]);
   const [totalItems, setTotalItems] = useState([]);
+
+  const [pdfItems, setPdfItems] = useState([]);
 
   const handleCategory = (selectedOption) => {
     setIsLoading(true);
@@ -249,6 +257,80 @@ const ReadytoDispatch = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  const pdfTip = <Tooltip id="tooltip">My PDF share</Tooltip>;
+
+  const DealerLogin = (e) => {
+    e.preventDefault();
+    localStorage.setItem("redirectPath", location.pathname);
+    navigate("/dealer-login");
+  };
+
+  // Dealder List PDF creation
+  const getPdfList = async () => {
+    DealerPdf.readyPdfList({ email: email })
+      .then((res) => {
+        setPdfItems(res?.data?.ready_pdfs_list);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useLayoutEffect(() => {
+    getPdfList();
+  }, []);
+
+  // Dealder add product for PDF creation
+  const addToPDF = async (e, product, allPrices) => {
+    e.preventDefault();
+    if (!pdfItems.some((item) => item.Barcode === product.Barcode)) {
+      DealerPdf.readytAddToPdf({
+        email: email,
+        company_id: 4,
+        item_group_id: 44,
+        item_id: product?.ItemGroupID,
+        sub_item_id: product?.ItemSubID,
+        style_id: product?.StyleID,
+        barcode: product?.Barcode,
+        tag_no: product?.TagNo,
+        group_name: product?.GroupName,
+        name: product?.ItemName,
+        size: "",
+        gross_weight: product?.GrossWt,
+        net_weight: product?.NetAmt,
+        metal_value: allPrices?.metal_value,
+        making_charge: allPrices?.labour_charge,
+        making_charge_discount: allPrices?.labour_charge_discount,
+        total_amount: allPrices?.total_prices,
+      })
+        .then((res) => {
+          getPdfList();
+          toast.success(res.message);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+    }
+  };
+
+  // Dealder remove product for PDF creation
+  const removeToPDF = (e, product) => {
+    e.preventDefault();
+    DealerPdf.readyRemovePdf({
+      ready_pdf_id: product.id,
+    })
+      .then((res) => {
+        if (res.success === true) {
+          getPdfList();
+          toast.success(res.message);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <>
       <section className="ready-to-dispatch">
@@ -373,6 +455,18 @@ const ReadytoDispatch = () => {
                           (data?.Touch / 100) *
                           data?.NetWt || 0;
 
+                      const allPrices = {
+                        total_prices:
+                          labour_charge_discount > 0
+                            ? metal_value + labour_charge_discount
+                            : metal_value + labour_charge,
+                        labour_charge_discount: numberFormat(
+                          labour_charge_discount
+                        ),
+                        metal_value: numberFormat(metal_value),
+                        labour_charge: numberFormat(labour_charge),
+                      };
+
                       return (
                         <>
                           <div
@@ -404,6 +498,51 @@ const ReadytoDispatch = () => {
                                   )}
                                 </div>
                               </Link>
+                              <div className="wishlist-top">
+                                {userType == 1 && (
+                                  <>
+                                    <div className="mt-2">
+                                      {email ? (
+                                        <OverlayTrigger
+                                          placement="top"
+                                          overlay={pdfTip}
+                                        >
+                                          <Link
+                                            to="#"
+                                            className=""
+                                            onClick={(e) => {
+                                              if (
+                                                pdfItems?.find(
+                                                  (item) =>
+                                                    item?.Barcode ===
+                                                    data?.Barcode
+                                                )
+                                              ) {
+                                                removeToPDF(e, data);
+                                              } else {
+                                                addToPDF(e, data, allPrices);
+                                              }
+                                            }}
+                                          >
+                                            {pdfItems?.find(
+                                              (item) =>
+                                                item?.Barcode === data?.Barcode
+                                            ) ? (
+                                              <FaFilePdf />
+                                            ) : (
+                                              <FaRegFilePdf />
+                                            )}
+                                          </Link>
+                                        </OverlayTrigger>
+                                      ) : (
+                                        <span onClick={(e) => DealerLogin(e)}>
+                                          <FaRegFilePdf />
+                                        </span>
+                                      )}
+                                    </div>
+                                  </>
+                                )}
+                              </div>
 
                               <div className="product-info d-grid">
                                 {labour_charge_discount > 0 ? (

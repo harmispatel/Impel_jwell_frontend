@@ -40,6 +40,16 @@ const Placeorder = async (data) => {
   return d;
 };
 
+const ShipmentCreate = async (data) => {
+  let d = await call({
+    path: "shipment-create",
+    method: "POST",
+    enctype: "multipart/form-data",
+    data,
+  });
+  return d;
+};
+
 const DealerCode = async (data) => {
   let d = await call({
     path: "apply-dealer-code",
@@ -90,6 +100,16 @@ const Orderdetails = async (data) => {
   return d;
 };
 
+const DeliveryTrack = async (data) => {
+  let d = await call({
+    path: "delivery-track",
+    method: "POST",
+    enctype: "multipart/form-data",
+    data,
+  });
+  return d;
+};
+
 const UserOrders = async (data) => {
   let d = await call({
     path: "my-orders",
@@ -121,7 +141,9 @@ const exportObject = {
   PayByPhonepeAPI,
   UserOrders,
   Orderdetails,
-  PinCodeCheck
+  ShipmentCreate,
+  PinCodeCheck,
+  DeliveryTrack
 };
 
 export default exportObject;

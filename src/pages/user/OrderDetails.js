@@ -1,10 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import loadinggif from "../../assets/video/impel-bird-unscreen.gif";
 import BreadCrumb from "../../components/common/BreadCrumb";
 import Userservice from "../../services/Cart";
-import Loader from "../../components/common/Loader"
+import Loader from "../../components/common/Loader";
+import { FaPhoneFlip } from "react-icons/fa6";
+import {
+  FaBox,
+  FaCheck,
+  FaChevronLeft,
+  FaRegUser,
+  FaTruck,
+} from "react-icons/fa";
+import "./OrderTrack.css";
 
 const Orders = () => {
   const id = useParams();
@@ -13,6 +22,7 @@ const Orders = () => {
   const [Items, setItems] = useState([]);
   const [status, setStatus] = useState();
   const [product, setProduct] = useState([]);
+  const [trackStatus, setTrackStatus] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const GetUserOrders = async () => {
@@ -22,10 +32,26 @@ const Orders = () => {
       user_type: user_type,
     })
       .then((res) => {
-        setItems(res.data);
-        setProduct(res.data?.order_items);
-        setStatus(res?.status);
-        setIsLoading(false);
+        if (res?.status === true && res?.data?.docate_number) {
+          const docketNumber = res?.data?.docate_number;
+          setItems(res?.data);
+          setProduct(res.data?.order_items);
+          setStatus(res?.status);
+          setIsLoading(false);
+
+          Userservice.DeliveryTrack({
+            docket: docketNumber,
+          })
+            .then((res) => {
+              if (res.status === true) {
+                setTrackStatus(res?.data);
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+              setIsLoading(false);
+            });
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -33,7 +59,7 @@ const Orders = () => {
       });
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     GetUserOrders();
   }, []);
 
@@ -45,7 +71,7 @@ const Orders = () => {
       <section className="my-orders">
         {isLoading ? (
           <div className="animation-loading">
-            <Loader/>
+            <Loader />
           </div>
         ) : (
           <>
@@ -279,7 +305,10 @@ const Orders = () => {
                                           <span>{datas?.gold_color}</span>
                                         </td>
                                         <td>
-                                          <span> {datas?.net_weight} g. (Approx.)</span>
+                                          <span>
+                                            {" "}
+                                            {datas?.net_weight} g. (Approx.)
+                                          </span>
                                         </td>
                                         {/* <td>
                                         <span>
@@ -400,6 +429,98 @@ const Orders = () => {
                     </div>
                   </div>
                 </div> */}
+                  <div className="order-track-section">
+                    <article className="card">
+                      <header className="card-header">
+                        My Orders / Tracking
+                      </header>
+                      <div className="card-body">
+                        <h6>Order ID: #{Items?.order_id}</h6>
+                        <article className="card">
+                          <div className="card-body row">
+                            <div className="col">
+                              <strong>Estimated Delivery time:</strong> <br />
+                              {trackStatus?.estimated_delivery}
+                            </div>
+                            <div className="col">
+                              <strong>Shipping BY:</strong> <br />
+                              {trackStatus?.insurance}
+                              {/* BLUEDART, | <FaPhoneFlip /> +1598675986 */}
+                            </div>
+                            <div className="col">
+                              <strong>Status:</strong> <br />
+                              {trackStatus?.shipment_status}
+                            </div>
+                            <div className="col">
+                              <strong>Tracking #:</strong> <br />
+                              {trackStatus?.docket_no}
+                            </div>
+                          </div>
+                        </article>
+                        <div className="track">
+                          <div className="step active">
+                            <span className="icon">
+                              <FaCheck />
+                            </span>
+                            <span className="text">Order confirmed</span>
+                          </div>
+                          <div className="step active">
+                            <span className="icon">
+                              <FaRegUser />
+                            </span>
+                            <span className="text">Picked by courier</span>
+                          </div>
+                          <div className="step">
+                            <span className="icon">
+                              <FaTruck />
+                            </span>
+                            <span className="text">On the way</span>
+                          </div>
+                          <div className="step">
+                            <span className="icon">
+                              <FaBox />
+                            </span>
+                            <span className="text">Ready for pickup</span>
+                          </div>
+                        </div>
+                        <hr />
+                        <ul className="row">
+                          {product?.map((datas) => (
+                            <>
+                              <li className="col-md-4">
+                                <figure className="itemside mb-3">
+                                  <div className="aside">
+                                    <img
+                                      src={datas?.design_image}
+                                      className="img-sm border"
+                                      alt={datas?.design_name}
+                                    />
+                                  </div>
+                                  <figcaption className="info">
+                                    <h6 className="title">
+                                      {datas?.design_name}
+                                    </h6>
+                                    <h5>{datas?.design_code}</h5>
+                                    <span className="text-muted">
+                                      {datas?.net_weight} g.(Approx.)
+                                    </span>
+                                  </figcaption>
+                                </figure>
+                              </li>
+                            </>
+                          ))}
+                        </ul>
+                        <hr />
+                        <Link
+                          to="/my-orders"
+                          className="btn btn-warning"
+                          data-abc="true"
+                        >
+                          <FaChevronLeft /> Back to orders
+                        </Link>
+                      </div>
+                    </article>
+                  </div>
                 </>
               )}
             </div>

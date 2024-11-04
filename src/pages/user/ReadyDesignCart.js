@@ -55,6 +55,8 @@ const ReadyDesignCart = () => {
   const [isFormEmpty, setIsFormEmpty] = useState("");
   const [code, setCode] = useState("");
 
+  const [docket_Number, setDocket_Number] = useState([]);
+
   const handleDealercode = (e) => {
     setDealer_Code(e.target.value);
   };
@@ -289,6 +291,170 @@ const ReadyDesignCart = () => {
     }
   };
 
+  // const handleCashClick = () => {
+  //   if (Verification == 2) {
+  //     if (overAllAmount >= 200000 && !userData?.pan_no) {
+  //       setValid(
+  //         "Pancard is required for your total amount is more than 2 lakh or above"
+  //       );
+  //       setShowEdit(true);
+  //       setSpinner(false);
+  //     } else if (overAllAmount < 200000) {
+  //       UserService.ShipmentCreate({
+  //         consignee_name: "Siddhartha K",
+  //         address_line1: "House No: 3405, Gondhali",
+  //         address_line2: "Galli",
+  //         pinCode: "380007",
+  //         auth_receiver_name: "imple",
+  //         auth_receiver_phone: "9737392505",
+  //         net_weight: "10",
+  //         gross_weight: "23",
+  //         net_value: "454645",
+  //         codValue: "49999",
+  //         no_of_packages: "2",
+  //         boxes: [
+  //           {
+  //             box_number: "",
+  //             lock_number: "",
+  //             length: "",
+  //             breadth: "",
+  //             height: "",
+  //             gross_weight: "",
+  //           },
+  //           {
+  //             box_number: "",
+  //             lock_number: "",
+  //             length: "",
+  //             breadth: "",
+  //             height: "",
+  //             gross_weight: "",
+  //           },
+  //         ],
+  //       })
+  //         .then((res) => {
+  //           if (res?.status == "true") {
+  //             console.log(res?.data?.docket_number);
+  //             setDocket_Number(res?.data?.docket_number);
+  //           }
+  //         })
+  //         .catch((err) => {
+  //           console.log(err);
+  //         });
+
+  //       if (docket_Number?.length > 0) {
+  //         axios
+  //           .post(api + "ready/purchase-order", {
+  //             user_id: user_id,
+  //             payment_method: "cash",
+  //             cart_items: Items?.map((item) => item?.id),
+  //             sub_total: SubAmount(),
+  //             gst_amount: SubGST().toFixed(),
+  //             total: overAllAmount?.toFixed(),
+  //             dealer_code: code?.dealer_code || "",
+  //             dealer_discount_type: code?.discount_type || "",
+  //             dealer_discount_value: code?.discount_value || "",
+  //             charges: SubCharge()?.toFixed() || "",
+  //             docate_number: docket_Number ? docket_Number : "",
+  //           })
+  //           .then((res) => {
+  //             if (res.data.status === true) {
+  //               navigate(`/ready-order-details/${res?.data?.data}`);
+  //               resetcartcount({ type: "RESET_CART" });
+  //               toast.success(res.data.message);
+  //               localStorage.removeItem("dealerDiscount");
+  //               localStorage.removeItem("dealermessage");
+  //             } else {
+  //               toast.error(res.data.message);
+  //               navigate("/");
+  //             }
+  //             setIsLoading(false);
+  //           })
+  //           .catch((err) => {
+  //             console.log(err);
+  //             setIsLoading(false);
+  //           });
+  //       }
+  //     } else {
+  //       UserService.ShipmentCreate({
+  //         consignee_name: "Siddhartha K",
+  //         address_line1: "House No: 3405, Gondhali",
+  //         address_line2: "Galli",
+  //         pinCode: "380007",
+  //         auth_receiver_name: "imple",
+  //         auth_receiver_phone: "9737392505",
+  //         net_weight: "10",
+  //         gross_weight: "23",
+  //         net_value: "454645",
+  //         codValue: "49999",
+  //         no_of_packages: "2",
+  //         boxes: [
+  //           {
+  //             box_number: "",
+  //             lock_number: "",
+  //             length: "",
+  //             breadth: "",
+  //             height: "",
+  //             gross_weight: "",
+  //           },
+  //           {
+  //             box_number: "",
+  //             lock_number: "",
+  //             length: "",
+  //             breadth: "",
+  //             height: "",
+  //             gross_weight: "",
+  //           },
+  //         ],
+  //       })
+  //         .then((res) => {
+  //           if (res?.status == "true") {
+  //             console.log(res?.data?.docket_number);
+  //             setDocket_Number(res?.data?.docket_number);
+  //           }
+  //         })
+  //         .catch((err) => {
+  //           console.log(err);
+  //         });
+  //       if (docket_Number?.length > 0) {
+  //         axios
+  //           .post(api + "ready/purchase-order", {
+  //             user_id: user_id,
+  //             payment_method: "cash",
+  //             cart_items: Items?.map((item) => item?.id),
+  //             sub_total: SubAmount(),
+  //             gst_amount: SubGST().toFixed(),
+  //             total: overAllAmount?.toFixed(),
+  //             dealer_code: code?.dealer_code || "",
+  //             dealer_discount_type: code?.discount_type || "",
+  //             dealer_discount_value: code?.discount_value || "",
+  //             charges: SubCharge()?.toFixed() || "",
+  //             docate_number: docket_Number ? docket_Number : "",
+  //           })
+  //           .then((res) => {
+  //             if (res.data.status === true) {
+  //               navigate(`/ready-order-details/${res?.data?.data}`);
+  //               resetcartcount({ type: "RESET_CART" });
+  //               toast.success(res.data.message);
+  //               localStorage.removeItem("dealerDiscount");
+  //               localStorage.removeItem("dealermessage");
+  //             } else {
+  //               toast.error(res.data.message);
+  //               navigate("/");
+  //             }
+  //             setIsLoading(false);
+  //           })
+  //           .catch((err) => {
+  //             console.log(err);
+  //             setIsLoading(false);
+  //           });
+  //       }
+  //     }
+  //   } else {
+  //     setShowEdit(true);
+  //     setSpinner(false);
+  //   }
+  // };
+
   const handleCashClick = () => {
     if (Verification == 2) {
       if (overAllAmount >= 200000 && !userData?.pan_no) {
@@ -297,63 +463,75 @@ const ReadyDesignCart = () => {
         );
         setShowEdit(true);
         setSpinner(false);
-      } else if (overAllAmount < 200000) {
-        axios
-          .post(api + "ready/purchase-order", {
-            user_id: user_id,
-            payment_method: "cash",
-            cart_items: Items?.map((item) => item?.id),
-            sub_total: SubAmount(),
-            gst_amount: SubGST().toFixed(),
-            total: overAllAmount?.toFixed(),
-            dealer_code: code?.dealer_code || "",
-            dealer_discount_type: code?.discount_type || "",
-            dealer_discount_value: code?.discount_value || "",
-            charges: SubCharge()?.toFixed() || "",
-          })
-          .then((res) => {
-            if (res.data.status === true) {
-              navigate(`/ready-order-details/${res?.data?.data}`);
-              resetcartcount({ type: "RESET_CART" });
-              toast.success(res.data.message);
-              localStorage.removeItem("dealerDiscount");
-              localStorage.removeItem("dealermessage");
-            } else {
-              toast.error(res.data.message);
-              navigate("/");
-            }
-            setIsLoading(false);
-          })
-          .catch((err) => {
-            console.log(err);
-            setIsLoading(false);
-          });
       } else {
-        axios
-          .post(api + "ready/purchase-order", {
-            user_id: user_id,
-            payment_method: "cash",
-            cart_items: Items?.map((item) => item?.id),
-            sub_total: SubAmount(),
-            gst_amount: SubGST().toFixed(),
-            total: overAllAmount?.toFixed(),
-            dealer_code: code?.dealer_code || "",
-            dealer_discount_type: code?.discount_type || "",
-            dealer_discount_value: code?.discount_value || "",
-            charges: SubCharge()?.toFixed() || "",
-          })
+        UserService.ShipmentCreate({
+          consignee_name: "Siddhartha K",
+          address_line1: "House No: 3405, Gondhali",
+          address_line2: "Galli",
+          pinCode: "380007",
+          auth_receiver_name: "imple",
+          auth_receiver_phone: "9737392505",
+          net_weight: "10",
+          gross_weight: "23",
+          net_value: "454645",
+          codValue: "49999",
+          no_of_packages: "2",
+          boxes: [
+            {
+              box_number: "",
+              lock_number: "",
+              length: "",
+              breadth: "",
+              height: "",
+              gross_weight: "",
+            },
+            {
+              box_number: "",
+              lock_number: "",
+              length: "",
+              breadth: "",
+              height: "",
+              gross_weight: "",
+            },
+          ],
+        })
           .then((res) => {
-            if (res.data.status === true) {
-              navigate(`/ready-order-details/${res?.data?.data}`);
-              resetcartcount({ type: "RESET_CART" });
-              toast.success(res.data.message);
-              localStorage.removeItem("dealerDiscount");
-              localStorage.removeItem("dealermessage");
-            } else {
-              toast.error(res.data.message);
-              navigate("/");
+            if (res?.status == "true" && res?.data?.docket_number) {
+              const docketNumber = res.data.docket_number;
+              setDocket_Number(docketNumber);
+
+              axios
+                .post(api + "ready/purchase-order", {
+                  user_id: user_id,
+                  payment_method: "cash",
+                  cart_items: Items?.map((item) => item?.id),
+                  sub_total: SubAmount(),
+                  gst_amount: SubGST().toFixed(),
+                  total: overAllAmount?.toFixed(),
+                  dealer_code: code?.dealer_code || "",
+                  dealer_discount_type: code?.discount_type || "",
+                  dealer_discount_value: code?.discount_value || "",
+                  charges: SubCharge()?.toFixed() || "",
+                  docate_number: docketNumber,
+                })
+                .then((res) => {
+                  if (res.data.status === true) {
+                    navigate(`/ready-order-details/${res?.data?.data}`);
+                    resetcartcount({ type: "RESET_CART" });
+                    toast.success(res.data.message);
+                    localStorage.removeItem("dealerDiscount");
+                    localStorage.removeItem("dealermessage");
+                  } else {
+                    toast.error(res.data.message);
+                    navigate("/");
+                  }
+                  setIsLoading(false);
+                })
+                .catch((err) => {
+                  console.log(err);
+                  setIsLoading(false);
+                });
             }
-            setIsLoading(false);
           })
           .catch((err) => {
             console.log(err);
@@ -371,41 +549,83 @@ const ReadyDesignCart = () => {
       const queryParams = new URLSearchParams(location.search);
       const transaction_id = queryParams.get("transaction_id") || "";
 
-      if (Items.length > 0) {
-        axios
-          .post(api + "ready/purchase-order", {
-            user_id: user_id,
-            payment_method: "phonepe",
-            cart_items: Items.map((item) => item.id),
-            sub_total: SubAmount(),
-            gst_amount: SubGST().toFixed(),
-            total: overAllAmount?.toFixed(),
-            transaction_id: transaction_id ? transaction_id : "",
-            dealer_code: code?.dealer_code || "",
-            dealer_discount_type: code?.discount_type || "",
-            dealer_discount_value: code?.discount_value || "",
-            charges: SubCharge()?.toFixed() || "",
-          })
-          .then((res) => {
-            if (res.data.status === true) {
-              resetcartcount({ type: "RESET_CART" });
-              toast.success(res.data.message);
-              localStorage.removeItem("dealerDiscount");
-              localStorage.removeItem("dealermessage");
-              setTimeout(() => {
-                navigate(`/ready-order-details/${res.data.data}`);
-              }, 1000);
-            } else {
-              toast.error(res.data.message);
-              navigate("/");
+      UserService.ShipmentCreate({
+        consignee_name: "Siddhartha K",
+        address_line1: "House No: 3405, Gondhali",
+        address_line2: "Galli",
+        pinCode: "380007",
+        auth_receiver_name: "imple",
+        auth_receiver_phone: "9737392505",
+        net_weight: "10",
+        gross_weight: "23",
+        net_value: "454645",
+        codValue: "49999",
+        no_of_packages: "2",
+        boxes: [
+          {
+            box_number: "ZV_EFD789",
+            lock_number: "LK_7845",
+            length: "10",
+            breadth: "4",
+            height: "10",
+            gross_weight: "512",
+          },
+          {
+            box_number: "ZV_EFD780",
+            lock_number: "LK_7845",
+            length: "10",
+            breadth: "4",
+            height: "10",
+            gross_weight: "512",
+          },
+        ],
+      })
+        .then((res) => {
+          if (res?.status == "true" && res?.data?.docket_number) {
+            const docketNumber = res.data.docket_number;
+            setDocket_Number(docketNumber);
+
+            if (Items.length > 0) {
+              axios
+                .post(api + "ready/purchase-order", {
+                  user_id: user_id,
+                  payment_method: "phonepe",
+                  cart_items: Items.map((item) => item.id),
+                  sub_total: SubAmount(),
+                  gst_amount: SubGST().toFixed(),
+                  total: overAllAmount?.toFixed(),
+                  transaction_id: transaction_id ? transaction_id : "",
+                  dealer_code: code?.dealer_code || "",
+                  dealer_discount_type: code?.discount_type || "",
+                  dealer_discount_value: code?.discount_value || "",
+                  charges: SubCharge()?.toFixed() || "",
+                  docate_number: docket_Number ? docket_Number : "",
+                })
+                .then((res) => {
+                  if (res.data.status === true) {
+                    resetcartcount({ type: "RESET_CART" });
+                    toast.success(res.data.message);
+                    localStorage.removeItem("dealerDiscount");
+                    localStorage.removeItem("dealermessage");
+                    setTimeout(() => {
+                      navigate(`/ready-order-details/${res.data.data}`);
+                    }, 1000);
+                  } else {
+                    toast.error(res.data.message);
+                    navigate("/");
+                  }
+                  setIsLoading(false);
+                })
+                .catch((error) => {
+                  console.log(error);
+                  setIsLoading(false);
+                });
             }
-            setIsLoading(false);
-          })
-          .catch((error) => {
-            console.log(error);
-            setIsLoading(false);
-          });
-      }
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   }, [location.pathname, location.search, Items]);
 
@@ -975,18 +1195,34 @@ const ReadyDesignCart = () => {
                               {/* TOTAL PRICE :*/}
                               <div className="d-flex justify-content-between">
                                 <p className="mb-2">Total price :</p>
-                                <p className="mb-2 fw-bold">
-                                  {code?.discount_value ? (
+                                <div>
+                                  {message ? (
                                     <>
-                                      ₹
-                                      {code?.discount_type === "percentage"
-                                        ? numberFormat(overAllAmount)
-                                        : numberFormat(overAllAmount)}
+                                      <del className="text-danger me-2">
+                                        ₹{numberFormat(SubAmount() + SubGST())}
+                                      </del>
+                                      <span className="fw-bold text-success">
+                                        ₹{numberFormat(overAllAmount)}
+                                      </span>
                                     </>
                                   ) : (
-                                    <>₹{numberFormat(overAllAmount)}</>
+                                    <>
+                                      <p className="mb-2 fw-bold">
+                                        {code?.discount_value ? (
+                                          <>
+                                            ₹
+                                            {code?.discount_type ===
+                                            "percentage"
+                                              ? numberFormat(overAllAmount)
+                                              : numberFormat(overAllAmount)}
+                                          </>
+                                        ) : (
+                                          <>₹{numberFormat(overAllAmount)}</>
+                                        )}
+                                      </p>
+                                    </>
                                   )}
-                                </p>
+                                </div>
                               </div>
                               <hr />
 
@@ -998,8 +1234,10 @@ const ReadyDesignCart = () => {
                                     </p>
                                     <p className="mb-2 fw-bold text-success">
                                       - ₹
-                                      {numberFormat((SubCharge() * code.discount_value) /
-                                        100)}
+                                      {numberFormat(
+                                        (SubCharge() * code.discount_value) /
+                                          100
+                                      )}
                                     </p>
                                   </div>
                                   <hr />

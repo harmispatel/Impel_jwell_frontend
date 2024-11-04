@@ -30,6 +30,43 @@ const removePdf = async (data) => {
   return d;
 };
 
-const exportObject = { addToPdf, pdfList, removePdf };
+const readytAddToPdf = async (data) => {
+  let d = await call({
+    path: "ready-to-pdf-store",
+    method: "POST",
+    enctype: "multipart/form-data",
+    data,
+  });
+  return d;
+};
+
+const readyPdfList = async (data) => {
+  let d = await call({
+    path: "ready-to-pdf-list",
+    method: "POST",
+    enctype: "multipart/form-data",
+    data,
+  });
+  return d;
+};
+
+const readyRemovePdf = async (data) => {
+  let d = await call({
+    path: "ready-to-pdf-delete",
+    method: "POST",
+    enctype: "multipart/form-data",
+    data,
+  });
+  return d;
+};
+
+const exportObject = {
+  addToPdf,
+  pdfList,
+  removePdf,
+  readytAddToPdf,
+  readyPdfList,
+  readyRemovePdf,
+};
 
 export default exportObject;

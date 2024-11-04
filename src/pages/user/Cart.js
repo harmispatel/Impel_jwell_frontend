@@ -46,6 +46,8 @@ const Cart = ({ active }) => {
   const [pin_code_loader, setPin_Code_Loader] = useState(false);
   const [pin_code_valid, setPin_Code_Valid] = useState(false);
 
+  const [docket_Number, setDocket_Number] = useState([]);
+
   const handlePincode = (e) => {
     setPin_Code(e.target.value);
   };
@@ -311,8 +313,6 @@ const Cart = ({ active }) => {
       ? SubTotal() + SubCharge() - (SubCharge() * code.discount_value) / 100
       : SubTotal() + SubCharge() - code.discount_value
     : SubTotal() + SubCharge();
-
-  console.log("SubCharge", (SubCharge() * code.discount_value) / 100);
 
   const isPriceAboveLimit = totalPrice >= 200000;
 
@@ -707,42 +707,82 @@ const Cart = ({ active }) => {
       const queryParams = new URLSearchParams(location.search);
       const transaction_id = queryParams.get("transaction_id") || "";
 
-      if (Items.length > 0) {
-        axios
-          .post(api + "user/purchase-order", {
-            user_id: user_id,
-            dealer_code: code?.dealer_code,
-            dealer_discount_type: code?.discount_type,
-            dealer_discount_value: code?.discount_value,
-            cart_items: Items.map((item) => item.id),
-            sub_total: SubTotal(),
-            charges: SubCharge(),
-            gst_amount: SubGST().toFixed(),
-            total: overAllAmount?.toFixed(),
-            transaction_id: transaction_id ? transaction_id : "",
-          })
-          .then((res) => {
-            if (res?.data?.status === true) {
-              console.log("res.message", res.data.message);
-              resetcartcount({ type: "RESET_CART" });
-              toast.success(res.data.message);
-              localStorage.removeItem("savedDiscount");
-              localStorage.removeItem("cartItems");
-              localStorage.removeItem("message");
-              setTimeout(() => {
-                navigate(`/order-details/${res?.data?.data}`);
-              }, 2000);
-            } else {
-              toast.error(res.data.message);
-              navigate("/");
+      UserService.ShipmentCreate({
+        consignee_name: "Siddhartha K",
+        address_line1: "House No: 3405, Gondhali",
+        address_line2: "Galli",
+        pinCode: "380007",
+        auth_receiver_name: "imple",
+        auth_receiver_phone: "9737392505",
+        net_weight: "10",
+        gross_weight: "23",
+        net_value: "454645",
+        codValue: "49999",
+        no_of_packages: "2",
+        boxes: [
+          {
+            box_number: "ZV_EFD789",
+            lock_number: "LK_7845",
+            length: "10",
+            breadth: "4",
+            height: "10",
+            gross_weight: "512",
+          },
+          {
+            box_number: "ZV_EFD780",
+            lock_number: "LK_7845",
+            length: "10",
+            breadth: "4",
+            height: "10",
+            gross_weight: "512",
+          },
+        ],
+      })
+        .then((res) => {
+          if (res?.status == "true" && res?.data?.docket_number) {
+            const docketNumber = res.data.docket_number;
+            setDocket_Number(docketNumber);
+            if (Items.length > 0) {
+              axios
+                .post(api + "user/purchase-order", {
+                  user_id: user_id,
+                  dealer_code: code?.dealer_code,
+                  dealer_discount_type: code?.discount_type,
+                  dealer_discount_value: code?.discount_value,
+                  cart_items: Items.map((item) => item.id),
+                  sub_total: SubTotal(),
+                  charges: SubCharge(),
+                  gst_amount: SubGST().toFixed(),
+                  total: overAllAmount?.toFixed(),
+                  transaction_id: transaction_id ? transaction_id : "",
+                  docate_number: docket_Number ? docket_Number : "",
+                })
+                .then((res) => {
+                  if (res?.data?.status === true) {
+                    resetcartcount({ type: "RESET_CART" });
+                    toast.success(res.data.message);
+                    localStorage.removeItem("savedDiscount");
+                    localStorage.removeItem("cartItems");
+                    localStorage.removeItem("message");
+                    setTimeout(() => {
+                      navigate(`/order-details/${res?.data?.data}`);
+                    }, 2000);
+                  } else {
+                    toast.error(res.data.message);
+                    navigate("/");
+                  }
+                  setIsLoading(false);
+                })
+                .catch((error) => {
+                  console.log(error);
+                  setIsLoading(false);
+                });
             }
-            setIsLoading(false);
-          })
-          .catch((error) => {
-            console.log(error);
-            setIsLoading(false);
-          });
-      }
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   }, [location.pathname, location.search, Items]);
 
@@ -956,18 +996,37 @@ const Cart = ({ active }) => {
                                 {/* TOTAL PRICE :*/}
                                 <div className="d-flex justify-content-between">
                                   <p className="mb-2">Total price :</p>
-                                  <p className="mb-2 fw-bold">
-                                    {code?.discount_value ? (
+                                  <div>
+                                    {message ? (
                                       <>
-                                        ₹
-                                        {code?.discount_type === "percentage"
-                                          ? numberFormat(overAllAmount)
-                                          : numberFormat(overAllAmount)}
+                                        <del className="text-danger me-2">
+                                          ₹
+                                          {numberFormat(
+                                            SubTotal() + SubCharge() + SubGST()
+                                          )}
+                                        </del>
+                                        <span className="fw-bold text-success">
+                                          ₹{numberFormat(overAllAmount)}
+                                        </span>
                                       </>
                                     ) : (
-                                      <>₹{numberFormat(overAllAmount)}</>
+                                      <>
+                                        <p className="mb-2 fw-bold">
+                                          {code?.discount_value ? (
+                                            <>
+                                              ₹
+                                              {code?.discount_type ===
+                                              "percentage"
+                                                ? numberFormat(overAllAmount)
+                                                : numberFormat(overAllAmount)}
+                                            </>
+                                          ) : (
+                                            <>₹{numberFormat(overAllAmount)}</>
+                                          )}
+                                        </p>
+                                      </>
                                     )}
-                                  </p>
+                                  </div>
                                 </div>
                                 <hr />
 
@@ -979,8 +1038,10 @@ const Cart = ({ active }) => {
                                       </p>
                                       <p className="mb-2 fw-bold text-success">
                                         - ₹
-                                        {numberFormat((SubCharge() * code.discount_value) /
-                                          100)}
+                                        {numberFormat(
+                                          (SubCharge() * code.discount_value) /
+                                            100
+                                        )}
                                       </p>
                                     </div>
                                     <hr />

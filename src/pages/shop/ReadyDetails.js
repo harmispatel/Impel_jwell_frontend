@@ -143,7 +143,7 @@ const ReadyDetails = () => {
         net_weight: details?.NetWt,
         item_group_id: details?.ItemGroupID,
         item_id: details?.ItemID,
-        sub_item_id: details?.ItemSubID,
+        sub_item_id: details?.SubItemID,
         style_id: details?.StyleID,
         quantity: 1,
         barcode: details?.Barcode,

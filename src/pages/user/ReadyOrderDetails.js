@@ -4,7 +4,16 @@ import { Helmet } from "react-helmet-async";
 import BreadCrumb from "../../components/common/BreadCrumb";
 import Loader from "../../components/common/Loader";
 import axios from "axios";
+import profileService from "../../services/Home";
+import Userservice from "../../services/Cart";
 import noImage from "../../assets/images/No_Image_Available.jpg";
+import {
+  FaBox,
+  FaCheck,
+  FaChevronLeft,
+  FaRegUser,
+  FaTruck,
+} from "react-icons/fa";
 
 const api = process.env.REACT_APP_API_KEY;
 
@@ -17,6 +26,8 @@ const ReadyOrderDetails = () => {
   const [status, setStatus] = useState();
   const [product, setProduct] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [allPrices, setAllPrices] = useState([]);
+  const [trackStatus, setTrackStatus] = useState([]);
 
   const GetUserOrders = async () => {
     axios
@@ -26,10 +37,26 @@ const ReadyOrderDetails = () => {
         user_type: user_type,
       })
       .then((res) => {
-        setItems(res.data.data);
-        setProduct(res.data?.data?.order_items);
-        setStatus(res.data.data.order_status);
-        setIsLoading(false);
+        if (res?.data?.status === true && res?.data?.data?.docate_number) {
+          const docketNumber = res?.data?.data?.docate_number;
+          setItems(res.data.data);
+          setProduct(res.data?.data?.order_items);
+          setStatus(res.data.data.order_status);
+          setIsLoading(false);
+
+          Userservice.DeliveryTrack({
+            docket: docketNumber,
+          })
+            .then((res) => {
+              if (res.status === "true") {
+                setTrackStatus(res?.data);
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+              setIsLoading(false);
+            });
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -41,8 +68,56 @@ const ReadyOrderDetails = () => {
     GetUserOrders();
   }, []);
 
+  useEffect(() => {
+    profileService
+      .GetProductsPrices()
+      .then((res) => {
+        setAllPrices(res?.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [id]);
+
+  var finalPrice = [
+    {
+      price_24k: allPrices?.price_24k,
+    },
+    {
+      sales_wastage: allPrices?.sales_wastage_rtd,
+    },
+    {
+      sales_wastage_discount: allPrices?.sales_wastage_discount_rtd,
+    },
+    {
+      show_estimate: allPrices?.show_estimate,
+    },
+  ];
+
   const numberFormat = (value) =>
     new Intl.NumberFormat("en-IN")?.format(Math?.round(value));
+
+  let tracking_status = "";
+
+  if (trackStatus?.shipment_status === "SCREATED") {
+    tracking_status = "Shipment Created";
+  } else if (trackStatus?.shipment_status === "SCHECKIN") {
+    tracking_status = "If the shipment picked up by sequel staff";
+  } else if (trackStatus?.shipment_status === "SLINREC") {
+    tracking_status =
+      "If the shipment is at the hub and checked into the hub is at the hub";
+  } else if (trackStatus?.shipment_status === "SLINORIN") {
+    tracking_status = "Shipment Departed from Origin Hub";
+  } else if (trackStatus?.shipment_status === "SLINDEST") {
+    tracking_status = "Shipment Arrived at destination hub";
+  } else if (trackStatus?.shipment_status === "SDELASN") {
+    tracking_status = "Shipment out for delivery";
+  } else if (trackStatus?.shipment_status === "SDELVD") {
+    tracking_status = "Shipment is delivered";
+  } else if (trackStatus?.shipment_status === "SCANCELLED") {
+    tracking_status = "Shipment is cancelled";
+  } else {
+  }
 
   return (
     <>
@@ -264,60 +339,93 @@ const ReadyOrderDetails = () => {
                                   </tr>
                                 </thead>
                                 <tbody className="text-center">
-                                  {product?.map((datas) => (
-                                    <>
-                                      <tr>
-                                        <td>
-                                          <img
-                                            src={`https://api.indianjewelcast.com/TagImage/${datas?.barcode}.jpg`}
-                                            onError={(e) => {
-                                              e.target.onerror = null;
-                                              e.target.src =
-                                                noImage?.No_Image_Available ||
-                                                "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg";
-                                            }}
-                                            alt=""
-                                            style={{ width: "100px" }}
-                                          />
-                                        </td>
-                                        <td>
-                                          <span>{datas?.design_name}</span>
-                                        </td>
+                                  {product?.map((datas) => {
+                                    var is_estimate =
+                                      product && finalPrice[3]?.show_estimate
+                                        ? finalPrice[3].show_estimate[
+                                            datas.sub_item_id
+                                          ] || 0
+                                        : 0;
+                                    return (
+                                      <>
+                                        <tr>
+                                          <td>
+                                            <img
+                                              src={`https://api.indianjewelcast.com/TagImage/${datas?.barcode}.jpg`}
+                                              onError={(e) => {
+                                                e.target.onerror = null;
+                                                e.target.src =
+                                                  noImage?.No_Image_Available ||
+                                                  "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg";
+                                              }}
+                                              alt=""
+                                              style={{ width: "100px" }}
+                                            />
+                                          </td>
+                                          <td>
+                                            <span>{datas?.design_name}</span>
+                                          </td>
 
-                                        <td>
-                                          <span>{datas?.quantity}</span>
-                                        </td>
-                                        <td>
-                                          <span>{datas?.net_weight} g.</span>
-                                        </td>
-                                        <td>
-                                          <span>
-                                            ₹{numberFormat(datas?.metal_value)}
-                                          </span>
-                                        </td>
-                                        <td>
-                                          <span>
-                                            ₹
-                                            {datas?.making_charge_discount > 0
-                                              ? numberFormat(
-                                                  datas?.making_charge_discount
-                                                )
-                                              : numberFormat(
-                                                  datas?.making_charge
+                                          <td>
+                                            <span>{datas?.quantity}</span>
+                                          </td>
+                                          <td>
+                                            <span>{datas?.net_weight} g.</span>
+                                          </td>
+
+                                          {is_estimate == 1 ? (
+                                            <>
+                                              <td>
+                                                <span>
+                                                  ₹
+                                                  {numberFormat(
+                                                    datas?.metal_value
+                                                  )}
+                                                </span>
+                                              </td>
+                                            </>
+                                          ) : (
+                                            <>
+                                              <td>-</td>
+                                            </>
+                                          )}
+
+                                          {is_estimate == 1 ? (
+                                            <>
+                                              <td>
+                                                <span>
+                                                  ₹
+                                                  {datas?.making_charge_discount >
+                                                  0
+                                                    ? numberFormat(
+                                                        datas?.making_charge_discount
+                                                      )
+                                                    : numberFormat(
+                                                        datas?.making_charge
+                                                      )}
+                                                </span>
+                                              </td>
+                                            </>
+                                          ) : (
+                                            <>
+                                              <td>-</td>
+                                            </>
+                                          )}
+
+                                          <td>
+                                            <span>
+                                              <strong>
+                                                ₹
+                                                {numberFormat(
+                                                  datas?.item_total
                                                 )}
-                                          </span>
-                                        </td>
-
-                                        <td>
-                                          <span>
-                                            <strong>
-                                              ₹{numberFormat(datas?.item_total)}
-                                            </strong>
-                                          </span>
-                                        </td>
-                                      </tr>
-                                    </>
-                                  ))}
+                                              </strong>
+                                            </span>
+                                          </td>
+                                        </tr>
+                                      </>
+                                    );
+                                  })}
                                 </tbody>
                               </table>
                             </div>
@@ -408,6 +516,105 @@ const ReadyOrderDetails = () => {
                         </div>
                       </div>
                     </div>
+                  </div>
+
+                  {/* Order Tracking */}
+                  <div className="order-track-section mt-3">
+                    <article className="card">
+                      <header className="card-header">
+                        My Orders / Tracking
+                      </header>
+                      <div className="card-body">
+                        <h6>Order ID: #{Items?.order_id}</h6>
+                        <article className="card">
+                          <div className="card-body row">
+                            <div className="col">
+                              <strong>Estimated Delivery time:</strong> <br />
+                              {trackStatus?.estimated_delivery}
+                            </div>
+                            <div className="col">
+                              <strong>Shipping BY:</strong> <br />
+                              {trackStatus?.insurance}
+                            </div>
+                            <div className="col">
+                              <strong>Status:</strong> <br />
+                              {tracking_status}
+                            </div>
+                            <div className="col">
+                              <strong>Tracking #:</strong> <br />
+                              {trackStatus?.docket_no}
+                            </div>
+                          </div>
+                        </article>
+                        <div className="track">
+                          <div className="step active">
+                            <span className="icon">
+                              <FaCheck />
+                            </span>
+                            <span className="text">Order confirmed</span>
+                          </div>
+                          <div className="step active">
+                            <span className="icon">
+                              <FaRegUser />
+                            </span>
+                            <span className="text">Picked by courier</span>
+                          </div>
+                          <div className="step">
+                            <span className="icon">
+                              <FaTruck />
+                            </span>
+                            <span className="text">On the way</span>
+                          </div>
+                          <div className="step">
+                            <span className="icon">
+                              <FaBox />
+                            </span>
+                            <span className="text">Ready for pickup</span>
+                          </div>
+                        </div>
+                        <hr />
+                        <ul className="row">
+                          {product?.map((datas) => (
+                            <>
+                              <li className="col-md-4">
+                                <figure className="itemside mb-3">
+                                  <div className="aside">
+                                    <img
+                                      src={`https://api.indianjewelcast.com/TagImage/${datas?.barcode}.jpg`}
+                                      onError={(e) => {
+                                        e.target.onerror = null;
+                                        e.target.src =
+                                          noImage?.No_Image_Available ||
+                                          "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg";
+                                      }}
+                                      className="img-sm border"
+                                      alt=""
+                                    />
+                                  </div>
+                                  <figcaption className="info">
+                                    <h6 className="title">
+                                      {datas?.design_name}
+                                    </h6>
+                                    <h6>{datas?.net_weight} g.(Approx.)</h6>
+                                    <span className="text-muted">
+                                      ₹{numberFormat(datas?.item_total)}
+                                    </span>
+                                  </figcaption>
+                                </figure>
+                              </li>
+                            </>
+                          ))}
+                        </ul>
+                        <hr />
+                        <Link
+                          to="/my-ready-orders"
+                          className="btn btn-warning"
+                          data-abc="true"
+                        >
+                          <FaChevronLeft /> Back to orders
+                        </Link>
+                      </div>
+                    </article>
                   </div>
                 </>
               )}
