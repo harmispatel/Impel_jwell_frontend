@@ -13,6 +13,7 @@ const imageURL = process.env.REACT_APP_API_KEY_IMAGE_;
 
 const ReadytoDispatch = () => {
   const id = "1,4";
+  const staticId = 4;
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -31,7 +32,6 @@ const ReadytoDispatch = () => {
   const [subItems, setSubItems] = useState(null);
 
   const [itemGroups, setItemGroups] = useState(null);
-  const [selectedItemGroups, setSelectedItemGroups] = useState(null);
 
   const [styles, setStyles] = useState(null);
 
@@ -70,13 +70,9 @@ const ReadytoDispatch = () => {
   };
 
   const handleSizeTag = (selectedOption) => {
+    console.log("selectedOption", selectedOption);
     setIsLoading(true);
     setSizes(selectedOption);
-    navigate(
-      `/ready-to-dispatch/${id}${
-        selectedOption ? `?sizes=${selectedOption.label}` : ""
-      }`
-    );
   };
 
   useEffect(() => {
@@ -100,7 +96,7 @@ const ReadytoDispatch = () => {
           CommaSeperate_ItemSubID: "",
           CommaSeperate_KarigarID: "",
           CommaSeperate_BranchID: "",
-          CommaSeperate_Size: sizes?.label || "",
+          CommaSeperate_Size: sizes?.value || "",
           CommaSeperate_CounterID: "",
           MaxNetWt: 0,
           MinNetWt: 0,
@@ -212,7 +208,7 @@ const ReadytoDispatch = () => {
         CommaSeperate_ItemSubID: "",
         CommaSeperate_KarigarID: "",
         CommaSeperate_BranchID: "",
-        CommaSeperate_Size: sizes?.label || "",
+        CommaSeperate_Size: sizes?.value || "",
         CommaSeperate_CounterID: "",
         MaxNetWt: 0,
         MinNetWt: 0,

@@ -37,7 +37,7 @@ const Shop = () => {
 
   const [categoryData, setCategoryData] = useState([]);
   const [category, setCategory] = useState(null);
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState(null);  
 
   const [genderData, setGenderData] = useState([]);
   const [gender, setGender] = useState();
@@ -700,6 +700,7 @@ const Shop = () => {
                 </Accordion>
               </div>
             </div>
+            
             <hr />
             <div className="row">
               <div className="col-md-12">

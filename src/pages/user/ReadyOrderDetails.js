@@ -546,32 +546,64 @@ const ReadyOrderDetails = () => {
                             </div>
                           </div>
                         </article>
+
                         <div className="track">
-                          <div className="step active">
+                          <div
+                            className={`step ${
+                              trackStatus?.shipment_status === "SCREATED" ||
+                              trackStatus?.shipment_status === "SCHECKIN" ||
+                              trackStatus?.shipment_status === "SDELVD" ||
+                              trackStatus?.shipment_status === "SDELASN"
+                                ? "active"
+                                : ""
+                            }`}
+                          >
                             <span className="icon">
                               <FaCheck />
                             </span>
                             <span className="text">Order confirmed</span>
                           </div>
-                          <div className="step active">
+                          <div
+                            className={`step ${
+                              trackStatus?.shipment_status === "SCHECKIN" ||
+                              trackStatus?.shipment_status === "SDELASN" ||
+                              trackStatus?.shipment_status === "SDELVD"
+                                ? "active"
+                                : ""
+                            }`}
+                          >
                             <span className="icon">
                               <FaRegUser />
                             </span>
                             <span className="text">Picked by courier</span>
                           </div>
-                          <div className="step">
+                          <div
+                            className={`step ${
+                              trackStatus?.shipment_status === "SDELASN" ||
+                              trackStatus?.shipment_status === "SDELVD"
+                                ? "active"
+                                : ""
+                            }`}
+                          >
                             <span className="icon">
                               <FaTruck />
                             </span>
                             <span className="text">On the way</span>
                           </div>
-                          <div className="step">
+                          <div
+                            className={`step ${
+                              trackStatus?.shipment_status === "SDELVD"
+                                ? "active"
+                                : ""
+                            }`}
+                          >
                             <span className="icon">
                               <FaBox />
                             </span>
                             <span className="text">Ready for pickup</span>
                           </div>
                         </div>
+
                         <hr />
                         <ul className="row">
                           {product?.map((datas) => (

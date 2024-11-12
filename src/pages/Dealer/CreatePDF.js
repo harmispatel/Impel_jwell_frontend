@@ -23,35 +23,64 @@ const styles = StyleSheet.create({
   productContainer: {
     border: "1px solid grey",
     borderRadius: 5,
-    padding: 10,
     marginVertical: 10,
   },
-  container: {
+  table: {
+    width: "100%",
+    borderCollapse: "collapse",
+  },
+  tableHeader: {
     flexDirection: "row",
-    alignItems: "center",
+    backgroundColor: "#f4f4f4",
+    border: "1px solid grey",
+  },
+  tableHeaderCell: {
+    flex: 1,
+    fontWeight: "bold",
+    textAlign: "center",
+    borderRight: "1px solid grey",
+    padding: "10px",
+  },
+  tableRow: {
+    flexDirection: "row",
+    border: "1px solid grey",
+    textAlign: "center",
+  },
+  tableCell: {
+    flex: 1,
+    textAlign: "center",
+    padding: "10px",
+    borderRight: "1px solid grey",
   },
   image: {
     width: 180,
     height: 180,
-    marginRight: 15,
+    marginRight: 10,
   },
   textContainer: {
     flex: 1,
   },
   name: {
-    fontSize: 16,
+    fontSize: 12,
     marginBottom: 5,
     textAlign: "left",
   },
   code: {
-    fontSize: 14,
+    fontSize: 12,
     marginBottom: 5,
     textAlign: "left",
   },
   totalAmount: {
-    fontSize: 14,
+    fontSize: 12,
     color: "black",
     textAlign: "left",
+  },
+  headerText: {
+    fontSize: 18,
+    textAlign: "center",
+    marginBottom: 15,
+    marginTop: 15,
+    fontWeight: "bold",
   },
 });
 
@@ -125,21 +154,34 @@ const CreatePDF = () => {
   const pdfDataPrint = () => {
     return (
       <Document>
-        <Page size="A4">
-          {pdfLists.map((page) => (
-            <View key={page.id} style={styles.productContainer}>
-              <View style={styles.container}>
-                <Image style={styles.image} cache={false} src={page?.image} />
-                <View style={styles.textContainer}>
+        <Page size="A3">
+          <Text style={styles.headerText}>Make by Order PDF Share Design</Text>
+          <View style={styles.table}>
+            <View style={styles.tableHeader}>
+              <Text style={styles.tableHeaderCell}>Image</Text>
+              <Text style={styles.tableHeaderCell}>Name</Text>
+              <Text style={styles.tableHeaderCell}>Code</Text>
+              <Text style={styles.tableHeaderCell}>Total Amount</Text>
+            </View>
+            {pdfLists.map((page) => (
+              <View key={page.id} style={styles.tableRow}>
+                <View style={styles.tableCell}>
+                  <Image style={styles.image} cache={false} src={page?.image} />
+                </View>
+                <View style={styles.tableCell}>
                   <Text style={styles.name}>{page.name}</Text>
+                </View>
+                <View style={styles.tableCell}>
                   <Text style={styles.code}>{page.code}</Text>
+                </View>
+                <View style={styles.tableCell}>
                   <Text style={styles.totalAmount}>
-                    ₹{page.total_amount_18k}
+                    Rs. {page.total_amount_18k}
                   </Text>
                 </View>
               </View>
-            </View>
-          ))}
+            ))}
+          </View>
         </Page>
       </Document>
     );
@@ -148,22 +190,36 @@ const CreatePDF = () => {
   const pdfReadyDataPrint = () => {
     return (
       <Document>
-        <Page>
-          {readyPdfLists.map((page) => (
-            <View key={page.id} style={styles.productContainer}>
-              <View style={styles.container}>
-                <Image
-                  style={styles.image}
-                  src={`https://api.indianjewelcast.com/TagImage/${page?.barcode}.jpg`}
-                />
-                <View style={styles.textContainer}>
+        <Page size="A3">
+          <Text style={styles.headerText}>
+            Ready jewellery PDF Share Design
+          </Text>
+          <View style={styles.table}>
+            <View style={styles.tableHeader}>
+              <Text style={styles.tableHeaderCell}>Image</Text>
+              <Text style={styles.tableHeaderCell}>Name</Text>
+              <Text style={styles.tableHeaderCell}>Code</Text>
+              <Text style={styles.tableHeaderCell}>Total Amount</Text>
+            </View>
+            {readyPdfLists.map((page) => (
+              <View key={page.id} style={styles.tableRow}>
+                <View style={styles.tableCell}>
+                  <Image style={styles.image} cache={false} src={page?.image} />
+                </View>
+                <View style={styles.tableCell}>
                   <Text style={styles.name}>{page.name}</Text>
+                </View>
+                <View style={styles.tableCell}>
                   <Text style={styles.code}>{page.tag_no}</Text>
-                  <Text style={styles.totalAmount}>₹{page.total_amount}</Text>
+                </View>
+                <View style={styles.tableCell}>
+                  <Text style={styles.totalAmount}>
+                    Rs. {page.total_amount}
+                  </Text>
                 </View>
               </View>
-            </View>
-          ))}
+            ))}
+          </View>
         </Page>
       </Document>
     );
@@ -192,7 +248,7 @@ const CreatePDF = () => {
                         <>
                           <div className="col-lg-6 col-md-6 col-12">
                             <div className="d-flex justify-content-between">
-                              <h3>Dealer PDF Share</h3>
+                              <h3>Make by Order PDF Share</h3>
                             </div>
                             <div
                               style={{
@@ -244,7 +300,7 @@ const CreatePDF = () => {
                                                       {product?.code}
                                                     </p>
                                                     <h5 className="text-success fw-bold">
-                                                      ₹
+                                                      &#x20B9;
                                                       {numberFormat(
                                                         product?.total_amount_18k
                                                       )}
@@ -328,7 +384,7 @@ const CreatePDF = () => {
                         <>
                           <div className="col-lg-6 col-md-6 col-12">
                             <div className="d-flex justify-content-between">
-                              <h3>Dealer PDF Share</h3>
+                              <h3>Ready jewellery PDF Share Design</h3>
                             </div>
                             <div
                               style={{
@@ -370,7 +426,7 @@ const CreatePDF = () => {
                                                     width: "120px",
                                                     height: "auto",
                                                   }}
-                                                  src={`https://api.indianjewelcast.com/TagImage/${product?.barcode}.jpg`}
+                                                  src={product?.image}
                                                   onError={(e) => {
                                                     e.target.onerror = null;
                                                   }}

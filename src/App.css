@@ -3272,6 +3272,7 @@ input[type="file"] {
   background: #fff;
   padding: 15px;
   position: relative;
+  height: 400px;
   margin-bottom: 30px;
   border-radius: 10px;
   box-shadow: 0 3px 10px #e4e4e4;
