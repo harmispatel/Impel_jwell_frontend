@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import BreadCrumb from "../../components/common/BreadCrumb";
 import Loader from "../../components/common/Loader";
@@ -20,6 +20,9 @@ const api = process.env.REACT_APP_API_KEY;
 const ReadyOrderDetails = () => {
   const { id } = useParams();
 
+  const location = useLocation();
+  const dynamicId = location.search ? location.search.substring(1) : null;
+
   const user_id = localStorage.getItem("user_id");
   const user_type = localStorage.getItem("user_type");
   const [Items, setItems] = useState([]);
@@ -32,7 +35,7 @@ const ReadyOrderDetails = () => {
   const GetUserOrders = async () => {
     axios
       .post(api + "ready/order-details", {
-        order_id: id,
+        order_id: dynamicId,
         user_id: user_id,
         user_type: user_type,
       })
@@ -516,137 +519,6 @@ const ReadyOrderDetails = () => {
                         </div>
                       </div>
                     </div>
-                  </div>
-
-                  {/* Order Tracking */}
-                  <div className="order-track-section mt-3">
-                    <article className="card">
-                      <header className="card-header">
-                        My Orders / Tracking
-                      </header>
-                      <div className="card-body">
-                        <h6>Order ID: #{Items?.order_id}</h6>
-                        <article className="card">
-                          <div className="card-body row">
-                            <div className="col">
-                              <strong>Estimated Delivery time:</strong> <br />
-                              {trackStatus?.estimated_delivery}
-                            </div>
-                            <div className="col">
-                              <strong>Shipping BY:</strong> <br />
-                              {trackStatus?.insurance}
-                            </div>
-                            <div className="col">
-                              <strong>Status:</strong> <br />
-                              {tracking_status}
-                            </div>
-                            <div className="col">
-                              <strong>Tracking #:</strong> <br />
-                              {trackStatus?.docket_no}
-                            </div>
-                          </div>
-                        </article>
-
-                        <div className="track">
-                          <div
-                            className={`step ${
-                              trackStatus?.shipment_status === "SCREATED" ||
-                              trackStatus?.shipment_status === "SCHECKIN" ||
-                              trackStatus?.shipment_status === "SDELVD" ||
-                              trackStatus?.shipment_status === "SDELASN"
-                                ? "active"
-                                : ""
-                            }`}
-                          >
-                            <span className="icon">
-                              <FaCheck />
-                            </span>
-                            <span className="text">Order confirmed</span>
-                          </div>
-                          <div
-                            className={`step ${
-                              trackStatus?.shipment_status === "SCHECKIN" ||
-                              trackStatus?.shipment_status === "SDELASN" ||
-                              trackStatus?.shipment_status === "SDELVD"
-                                ? "active"
-                                : ""
-                            }`}
-                          >
-                            <span className="icon">
-                              <FaRegUser />
-                            </span>
-                            <span className="text">Picked by courier</span>
-                          </div>
-                          <div
-                            className={`step ${
-                              trackStatus?.shipment_status === "SDELASN" ||
-                              trackStatus?.shipment_status === "SDELVD"
-                                ? "active"
-                                : ""
-                            }`}
-                          >
-                            <span className="icon">
-                              <FaTruck />
-                            </span>
-                            <span className="text">On the way</span>
-                          </div>
-                          <div
-                            className={`step ${
-                              trackStatus?.shipment_status === "SDELVD"
-                                ? "active"
-                                : ""
-                            }`}
-                          >
-                            <span className="icon">
-                              <FaBox />
-                            </span>
-                            <span className="text">Ready for pickup</span>
-                          </div>
-                        </div>
-
-                        <hr />
-                        <ul className="row">
-                          {product?.map((datas) => (
-                            <>
-                              <li className="col-md-4">
-                                <figure className="itemside mb-3">
-                                  <div className="aside">
-                                    <img
-                                      src={`https://api.indianjewelcast.com/TagImage/${datas?.barcode}.jpg`}
-                                      onError={(e) => {
-                                        e.target.onerror = null;
-                                        e.target.src =
-                                          noImage?.No_Image_Available ||
-                                          "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg";
-                                      }}
-                                      className="img-sm border"
-                                      alt=""
-                                    />
-                                  </div>
-                                  <figcaption className="info">
-                                    <h6 className="title">
-                                      {datas?.design_name}
-                                    </h6>
-                                    <h6>{datas?.net_weight} g.(Approx.)</h6>
-                                    <span className="text-muted">
-                                      ₹{numberFormat(datas?.item_total)}
-                                    </span>
-                                  </figcaption>
-                                </figure>
-                              </li>
-                            </>
-                          ))}
-                        </ul>
-                        <hr />
-                        <Link
-                          to="/my-ready-orders"
-                          className="btn btn-warning"
-                          data-abc="true"
-                        >
-                          <FaChevronLeft /> Back to orders
-                        </Link>
-                      </div>
-                    </article>
                   </div>
                 </>
               )}

@@ -53,7 +53,7 @@ const MyReadyOrders = () => {
   };
 
   const orderDetails = <Tooltip id="tooltip">View order</Tooltip>;
-  
+
   return (
     <>
       <Helmet>
@@ -186,7 +186,7 @@ const MyReadyOrders = () => {
                                               <button
                                                 onClick={() =>
                                                   navigate(
-                                                    `/ready-order-details/${datas?.order_id}`
+                                                    `/ready-order-details/?${datas?.order_id}`
                                                   )
                                                 }
                                                 className="btn btn-primary btn-sm"

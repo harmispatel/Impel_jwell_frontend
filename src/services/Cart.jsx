@@ -130,6 +130,16 @@ const PayByPhonepeAPI = async (data) => {
   return d;
 };
 
+const OrdersTracking = async (data) => {
+  let d = await call({
+    path: "order-track-details",
+    method: "POST",
+    enctype: "multipart/form-data",
+    data,
+  });
+  return d;
+};
+
 const exportObject = {
   AddtoCart,
   RemovetoCart,
@@ -143,7 +153,8 @@ const exportObject = {
   Orderdetails,
   ShipmentCreate,
   PinCodeCheck,
-  DeliveryTrack
+  DeliveryTrack,
+  OrdersTracking,
 };
 
 export default exportObject;

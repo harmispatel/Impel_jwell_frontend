@@ -30,7 +30,7 @@ const Profile = () => {
     shipping_address: "",
     shipping_pincode: "",
     shipping_state: "",
-    shipping_city: "",
+    shipping__city: "",
     gst_no: "",
     pan_no: "",
     state: "",
@@ -121,7 +121,7 @@ const Profile = () => {
         shipping_address: userData.address,
         shipping_pincode: userData.pincode,
         shipping_state: userData.state,
-        shipping_city: userData.city,
+        shipping__city: userData.city,
       });
     } else {
       setUserData({
@@ -129,7 +129,7 @@ const Profile = () => {
         shipping_address: "",
         shipping_pincode: "",
         shipping_state: "",
-        shipping_city: "",
+        shipping__city: "",
       });
     }
   };
@@ -163,7 +163,7 @@ const Profile = () => {
           state: res.data.state.id,
           city: res.data.city.id,
           shipping_state: res.data.shipping_state.id,
-          shipping_city: res.data.shipping_city.id,
+          shipping__city: res.data.shipping_city.id,
         });
         res.data.state.id && fetchCity(res.data.state.id);
         res.data.shipping_state.id &&
@@ -215,7 +215,7 @@ const Profile = () => {
       setUserData({
         ...userData,
         shipping_state: value,
-        shipping_city: "",
+        shipping__city: "",
       });
     } else {
       setUserData({
@@ -329,7 +329,7 @@ const Profile = () => {
         validationErrors.shipping_state_err = "";
       }
 
-      if (!userData.shipping_city || userData.shipping_city === "") {
+      if (!userData.shipping__city || userData.shipping__city === "") {
         validationErrors.shipping_city_err = "Shipping city must be selected";
         isValid = false;
       } else {
@@ -383,7 +383,7 @@ const Profile = () => {
       );
       formData.append(
         "shipping_city",
-        isChecked ? userData.city : userData.shipping_city
+        isChecked ? userData.city : userData.shipping__city
       );
 
       profileService
@@ -831,11 +831,11 @@ const Profile = () => {
                     </Form.Label>
                     <select
                       className="form-control"
-                      name="shipping_city"
+                      name="shipping__city"
                       onChange={(e) => {
                         handleEditChange(e);
                       }}
-                      value={userData?.shipping_city}
+                      value={userData.shipping__city}
                     >
                       <option value="">--shipping City select--</option>
                       {shipping_city?.map((usercity, index) => (

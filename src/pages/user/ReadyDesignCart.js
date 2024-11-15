@@ -516,7 +516,8 @@ const ReadyDesignCart = () => {
                 })
                 .then((res) => {
                   if (res.data.status === true) {
-                    navigate(`/ready-order-details/${res?.data?.data}`);
+                    navigate(`/ready-order-details/?${res?.data?.data}`);
+                    // navigate(`/ready-order-details/${res?.data?.data}`);
                     resetcartcount({ type: "RESET_CART" });
                     toast.success(res.data.message);
                     localStorage.removeItem("dealerDiscount");
@@ -608,7 +609,7 @@ const ReadyDesignCart = () => {
                     localStorage.removeItem("dealerDiscount");
                     localStorage.removeItem("dealermessage");
                     setTimeout(() => {
-                      navigate(`/ready-order-details/${res.data.data}`);
+                      navigate(`/ready-order-details/?${res?.data?.data}`);
                     }, 1000);
                   } else {
                     toast.error(res.data.message);

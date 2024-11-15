@@ -39,6 +39,7 @@ import ReadyDesignCartProvider from "./context/ReadyDesignCartContext";
 import MyReadyOrders from "./pages/user/MyReadyOrders";
 import ReadyOrderDetails from "./pages/user/ReadyOrderDetails";
 import CreatePDF from "./pages/Dealer/CreatePDF";
+import OrderTracking from "./pages/user/OrderTracking";
 
 function App() {
   const location = useLocation();
@@ -72,7 +73,8 @@ function App() {
       location.pathname.startsWith("/login") ||
       location.pathname.startsWith("/forget-password") ||
       location.pathname.startsWith("/reset-password") ||
-      location.pathname.startsWith("/dealer-login")
+      location.pathname.startsWith("/dealer-login") ||
+      location.pathname.startsWith("/order-tracking-details")
     ) {
       return null;
     } else {
@@ -167,7 +169,7 @@ function App() {
                         element={<OrderDetails />}
                       />
                       <Route
-                        path="ready-order-details/:id"
+                        path="ready-order-details"
                         element={<ReadyOrderDetails />}
                       />
 
@@ -207,6 +209,10 @@ function App() {
                       <Route
                         path="/reset-password/:token"
                         element={<Resetpassword />}
+                      />
+                      <Route
+                        path="/order-tracking-details"
+                        element={<OrderTracking />}
                       />
                     </Route>
                   </>

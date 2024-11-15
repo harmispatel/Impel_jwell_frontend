@@ -70,7 +70,6 @@ const ReadytoDispatch = () => {
   };
 
   const handleSizeTag = (selectedOption) => {
-    console.log("selectedOption", selectedOption);
     setIsLoading(true);
     setSizes(selectedOption);
   };

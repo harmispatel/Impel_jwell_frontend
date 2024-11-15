@@ -14,6 +14,18 @@
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 0.1rem;
 }
+
+@media screen and (max-width: 767px) {
+  .order-track-section .card .row {
+    display: grid !important;
+    gap: 18px;
+  }
+
+  .order-track-section .track {
+    margin-bottom: 100px;
+  }
+}
+
 .order-track-section .card-header:first-child {
   border-radius: calc(0.37rem - 1px) calc(0.37rem - 1px) 0 0;
 }
@@ -30,7 +42,7 @@
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  margin-bottom: 60px;
+  margin-bottom: 70px;
   margin-top: 50px;
 }
 .order-track-section .track .step {
