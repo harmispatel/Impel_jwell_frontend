@@ -600,7 +600,7 @@ const ReadyDesignCart = () => {
                   dealer_discount_type: code?.discount_type || "",
                   dealer_discount_value: code?.discount_value || "",
                   charges: SubCharge()?.toFixed() || "",
-                  docate_number: docket_Number ? docket_Number : "",
+                  docate_number: docketNumber ? docketNumber : "",
                 })
                 .then((res) => {
                   if (res.data.status === true) {

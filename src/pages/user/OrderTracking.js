@@ -183,13 +183,7 @@ const OrderTracking = () => {
                                 <figure className="itemside mb-3">
                                   <div className="aside">
                                     <img
-                                      src={`https://api.indianjewelcast.com/TagImage/${datas?.barcode}.jpg`}
-                                      onError={(e) => {
-                                        e.target.onerror = null;
-                                        e.target.src =
-                                          noImage?.No_Image_Available ||
-                                          "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg";
-                                      }}
+                                      src={datas?.design_image}
                                       className="img-sm border"
                                       alt=""
                                     />
