@@ -40,6 +40,7 @@ import MyReadyOrders from "./pages/user/MyReadyOrders";
 import ReadyOrderDetails from "./pages/user/ReadyOrderDetails";
 import CreatePDF from "./pages/Dealer/CreatePDF";
 import OrderTracking from "./pages/user/OrderTracking";
+import { NavigationProvider } from "./context/NavigationContext";
 
 function App() {
   const location = useLocation();
@@ -85,6 +86,7 @@ function App() {
   return (
     <>
       <WishlistProvider>
+        <NavigationProvider>
         <ProfileProvider>
           <CartProvider>
             <ReadyDesignCartProvider>
@@ -223,6 +225,7 @@ function App() {
             </ReadyDesignCartProvider>
           </CartProvider>
         </ProfileProvider>
+        </NavigationProvider>
       </WishlistProvider>
       <Toaster toastOptions={{ duration: 3000 }} />
     </>

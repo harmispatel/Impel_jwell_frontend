@@ -1425,14 +1425,6 @@ input[type="file"] {
   z-index: 1;
 }
 
-.btn-check:checked + .btn,
-.btn.active,
-.btn.show,
-.btn:first-child:active,
-:not(.btn-check) + .btn:active {
-  border: 2px solid black !important;
-}
-
 .btn:disabled {
   border: 1px solid #dee2ef !important;
 }
@@ -3778,4 +3770,23 @@ input[type="file"] {
   font-size: 18px;
   display: flex;
   align-items: center;
+}
+
+.breadcumb-section-btn {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+.breadcumb-section-btn .breadcrumb {
+  margin-bottom: 0 !important;
+}
+
+@media only screen and (max-width: 767px) {
+  .breadcumb-section-btn {
+    display: grid;
+    gap: 12px;
+  }
+  .breadcumb-section-btn button {
+    width: 15%;
+  }
 }

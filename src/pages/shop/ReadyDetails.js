@@ -11,6 +11,8 @@ import noImage from "../../assets/images/No_Image_Available.jpg";
 import profileService from "../../services/Home";
 import { Accordion } from "react-bootstrap";
 import { Helmet } from "react-helmet-async";
+import { useNavigation } from "../../context/NavigationContext";
+import { FaArrowLeftLong } from "react-icons/fa6";
 
 const api = process.env.REACT_APP_API_KEY;
 const imageURL = process.env.REACT_APP_API_KEY_IMAGE;
@@ -18,6 +20,7 @@ const imageURL = process.env.REACT_APP_API_KEY_IMAGE;
 const ReadyDetails = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { previousUrl } = useNavigation();
   const phone = localStorage.getItem("phone");
   const { id, ids } = useParams();
 
@@ -193,24 +196,46 @@ const ReadyDetails = () => {
     navigate("/login");
   };
 
+  const impelID = 4;
+
+  const handleBackToShop = () => {
+    if (previousUrl) {
+      navigate(previousUrl);
+    } else {
+      navigate(`/ready-to-dispatch/${impelID}`);
+    }
+  };
+
   return (
     <>
-      {/* <Helmet>
-        <title>Impel Store - {id} - {details?.GroupName}</title>
-      </Helmet> */}
+      <Helmet>
+        <title>
+          Impel Store - {details?.GroupName ? `(${details.GroupName})` : ""}
+        </title>
+        <meta name="description" content="Helmet application" />
+      </Helmet>
 
       <section className="shop_details">
         <div className="container">
           <div className="Shop_product">
             <div className="row justify-content-center">
               <div className="col-md-10">
-                <BreadCrumb
-                  firstName="Home"
-                  firstUrl="/"
-                  secondName="Ready to dispatch"
-                  secondUrl={`/ready-to-dispatch/${ids}`}
-                  thirdName={id}
-                />
+                <div className="breadcumb-section-btn mb-4">
+                  <BreadCrumb
+                    firstName="Home"
+                    firstUrl="/"
+                    secondName="Ready to dispatch"
+                    secondUrl={`/ready-to-dispatch/${ids}`}
+                    thirdName={id}
+                  />
+                  <button
+                    className="btn btn-outline-dark d-flex align-items-center text-center"
+                    onClick={handleBackToShop}
+                  >
+                    <FaArrowLeftLong />
+                  </button>
+                </div>
+
                 {isLoading ? (
                   <div className="animation-loading">
                     <Loader />

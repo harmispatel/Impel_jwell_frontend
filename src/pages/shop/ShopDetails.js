@@ -21,10 +21,14 @@ import { Accordion } from "react-bootstrap";
 import Loader from "../../components/common/Loader";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import profileService from "../../services/Home";
+import { FaArrowLeftLong } from "react-icons/fa6";
+import { useNavigation } from "../../context/NavigationContext";
 
 const ShopDetails = () => {
   const location = useLocation();
   const navigate = useNavigate();
+
+  const { previousUrl } = useNavigation();
 
   const { dispatch: wishlistDispatch } = useContext(WishlistSystem);
   const { dispatch: removeWishlistDispatch } = useContext(WishlistSystem);
@@ -268,6 +272,14 @@ const ShopDetails = () => {
   const numberFormat = (value) =>
     new Intl.NumberFormat("en-IN")?.format(Math?.round(value));
 
+  const handleBackToShop = () => {
+    if (previousUrl) {
+      navigate(previousUrl);
+    } else {
+      navigate("/shop");
+    }
+  };
+
   return (
     <>
       <Helmet>
@@ -285,13 +297,21 @@ const ShopDetails = () => {
           <div className="Shop_product">
             <div className="row justify-content-center">
               <div className="col-md-10">
-                <BreadCrumb
-                  firstName="Home"
-                  firstUrl="/"
-                  secondName="Shop"
-                  secondUrl="/shop"
-                  thirdName="Shopdetails"
-                />
+                <div className="breadcumb-section-btn mb-4">
+                  <BreadCrumb
+                    firstName="Home"
+                    firstUrl="/"
+                    secondName="Shop"
+                    secondUrl="/shop"
+                    thirdName="Shopdetails"
+                  />
+                  <button
+                    className="btn btn-outline-dark d-flex align-items-center text-center"
+                    onClick={handleBackToShop}
+                  >
+                    <FaArrowLeftLong />
+                  </button>
+                </div>
                 {isLoading ? (
                   <div className="animation-loading">
                     <Loader />

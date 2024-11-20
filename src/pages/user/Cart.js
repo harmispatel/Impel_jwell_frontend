@@ -771,14 +771,14 @@ const Cart = ({ active }) => {
               axios
                 .post(api + "user/purchase-order", {
                   user_id: user_id,
-                  dealer_code: code?.dealer_code,
-                  dealer_discount_type: code?.discount_type,
-                  dealer_discount_value: code?.discount_value,
+                  dealer_code: code?.dealer_code || "",
+                  dealer_discount_type: code?.discount_type || "",
+                  dealer_discount_value: code?.discount_value || "",
                   cart_items: Items.map((item) => item.id),
-                  sub_total: SubTotal(),
-                  charges: SubCharge(),
-                  gst_amount: SubGST().toFixed(),
-                  total: numberFormat(overAllAmount),
+                  sub_total: SubTotal() || 0,
+                  charges: SubCharge() || 0,
+                  gst_amount: SubGST().toFixed() || 0,
+                  total: overAllAmount.toFixed(),
                   transaction_id: transaction_id ? transaction_id : "",
                   docate_number: docketNumber ? docketNumber : "",
                 })

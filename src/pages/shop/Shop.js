@@ -18,6 +18,7 @@ import DealerPdf from "../../services/Dealer/PdfShare";
 import UserWishlist from "../../services/Auth";
 import { WishlistSystem } from "../../context/WishListContext";
 import Loader from "../../components/common/Loader";
+import { useNavigation } from "../../context/NavigationContext";
 
 const Shop = () => {
   const { dispatch: wishlistDispatch } = useContext(WishlistSystem);
@@ -25,6 +26,12 @@ const Shop = () => {
 
   const location = useLocation();
   const navigate = useNavigate();
+
+  const { setPreviousPageUrl } = useNavigation();
+
+  useEffect(() => {
+    setPreviousPageUrl(location.pathname + location.search);
+  }, [location, setPreviousPageUrl]);
 
   const userType = localStorage.getItem("user_type");
   const userId = localStorage.getItem("user_id");
@@ -37,7 +44,7 @@ const Shop = () => {
 
   const [categoryData, setCategoryData] = useState([]);
   const [category, setCategory] = useState(null);
-  const [selectedCategory, setSelectedCategory] = useState(null);  
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
   const [genderData, setGenderData] = useState([]);
   const [gender, setGender] = useState();
@@ -700,7 +707,7 @@ const Shop = () => {
                 </Accordion>
               </div>
             </div>
-            
+
             <hr />
             <div className="row">
               <div className="col-md-12">
@@ -718,7 +725,14 @@ const Shop = () => {
                               <>
                                 <div className="col-md-3 col-sm-4 col-xs-6">
                                   <div className="item-product text-center">
-                                    <Link to={`/shopdetails/${data?.id}`}>
+                                    <Link
+                                      to={`/shopdetails/${data?.id}`}
+                                      onClick={() =>
+                                        setPreviousPageUrl(
+                                          location.pathname + location.search
+                                        )
+                                      }
+                                    >
                                       <div className="product-thumb">
                                         {data?.image ? (
                                           <>

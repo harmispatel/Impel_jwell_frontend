@@ -8,12 +8,12 @@ import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { FaFilePdf, FaRegFilePdf } from "react-icons/fa";
 import toast from "react-hot-toast";
 import DealerPdf from "../../services/Dealer/PdfShare";
+import { useNavigation } from "../../context/NavigationContext";
 
 const imageURL = process.env.REACT_APP_API_KEY_IMAGE_;
 
 const ReadytoDispatch = () => {
   const id = "1,4";
-  const staticId = 4;
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -29,13 +29,17 @@ const ReadytoDispatch = () => {
   const [tagNoChange, setTagNoChange] = useState(null);
 
   const [items, setItems] = useState(null);
+  const [selectedItems, setSelectedItems] = useState(null);
+
   const [subItems, setSubItems] = useState(null);
+  const [selectedSubItems, setSelectedSubItems] = useState(null);
 
   const [itemGroups, setItemGroups] = useState(null);
 
   const [styles, setStyles] = useState(null);
 
   const [sizes, setSizes] = useState(null);
+  const [selectedSizes, setSelectedSizes] = useState(null);
 
   const [allPrices, setAllPrices] = useState([]);
   const [totalItems, setTotalItems] = useState([]);
@@ -56,12 +60,42 @@ const ReadytoDispatch = () => {
 
   const handleItems = (selectedOption) => {
     setIsLoading(true);
-    setItems(selectedOption);
+    const queryParams = new URLSearchParams(location.search);
+
+    if (selectedOption) {
+      queryParams.set("items", selectedOption.value);
+    } else {
+      queryParams.delete("items");
+    }
+
+    navigate(
+      `/ready-to-dispatch/${id}${
+        queryParams ? `?${queryParams.toString()}` : ""
+      }`
+    );
+
+    setItems(selectedOption ? selectedOption.value : "");
+    setSelectedItems(selectedOption);
   };
 
   const handleSubItems = (selectedOption) => {
     setIsLoading(true);
-    setSubItems(selectedOption);
+    const queryParams = new URLSearchParams(location.search);
+
+    if (selectedOption) {
+      queryParams.set("sub-items", selectedOption.value);
+    } else {
+      queryParams.delete("sub-items");
+    }
+
+    navigate(
+      `/ready-to-dispatch/${id}${
+        queryParams ? `?${queryParams.toString()}` : ""
+      }`
+    );
+
+    setSubItems(selectedOption ? selectedOption.value : "");
+    setSelectedSubItems(selectedOption);
   };
 
   const handleStylesTag = (selectedOption) => {
@@ -71,7 +105,22 @@ const ReadytoDispatch = () => {
 
   const handleSizeTag = (selectedOption) => {
     setIsLoading(true);
-    setSizes(selectedOption);
+    const queryParams = new URLSearchParams(location.search);
+
+    if (selectedOption) {
+      queryParams.set("sizes", selectedOption.value);
+    } else {
+      queryParams.delete("sizes");
+    }
+
+    navigate(
+      `/ready-to-dispatch/${id}${
+        queryParams ? `?${queryParams.toString()}` : ""
+      }`
+    );
+
+    setSizes(selectedOption ? selectedOption.value : "");
+    setSelectedSizes(selectedOption);
   };
 
   useEffect(() => {
@@ -84,18 +133,16 @@ const ReadytoDispatch = () => {
           SortBy: "",
           SearchText: "",
           TranType: "",
-          CommaSeperate_ItemGroupID: itemGroups?.value
-            ? itemGroups?.value
-            : itemGroups,
-          CommaSeperate_ItemID: items?.value || "",
+          CommaSeperate_ItemGroupID: itemGroups?.value || "",
+          CommaSeperate_ItemID: items || "",
           CommaSeperate_StyleID: styles?.value || "",
           CommaSeperate_ProductID: "",
-          CommaSeperate_SubItemID: subItems?.value || "",
+          CommaSeperate_SubItemID: subItems || "",
           CommaSeperate_AppItemCategoryID: "",
           CommaSeperate_ItemSubID: "",
           CommaSeperate_KarigarID: "",
           CommaSeperate_BranchID: "",
-          CommaSeperate_Size: sizes?.value || "",
+          CommaSeperate_Size: sizes || "",
           CommaSeperate_CounterID: "",
           MaxNetWt: 0,
           MinNetWt: 0,
@@ -140,6 +187,34 @@ const ReadytoDispatch = () => {
       sales_wastage_discount: allPrices?.sales_wastage_discount_rtd,
     },
   ];
+
+  const { setPreviousPageUrl } = useNavigation();
+
+  useEffect(() => {
+    setPreviousPageUrl(location.pathname + location.search);
+  }, [location, setPreviousPageUrl]);
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const sortbyItems = searchParams.get("items");
+    const sortbySizes = searchParams.get("sizes");
+    const sortbySubItems = searchParams.get("sub-items");
+
+    // if (sortbySizes && sortbySizes.length > 0) {
+    //   if (sortbySizes) {
+    //     const selectedSort = filters?.Size.find(
+    //       (item) => item.RowNumber === sortbySizes
+    //     );
+
+    //     if (selectedSort) {
+    //       setSelectedSizes(selectedSort);
+    //     }
+    //   }
+    // } else {
+    //   setIsLoading(true);
+    //   setSelectedSizes(null);
+    // }
+  }, [location.search, filters?.length]);
 
   // <-------------------- PAGINATION FUNCTION HERE START -------------------->
 
@@ -195,19 +270,17 @@ const ReadytoDispatch = () => {
         SortBy: "",
         SearchText: tagNoChange || "",
         TranType: "",
-        CommaSeperate_ItemGroupID: itemGroups?.value
-          ? itemGroups?.value
-          : itemGroups,
-        CommaSeperate_ItemID: items?.value || "",
+        CommaSeperate_ItemGroupID: itemGroups?.value || "",
+        CommaSeperate_ItemID: items || "",
         CommaSeperate_StyleID: styles?.value || "",
         CommaSeperate_ProductID: "",
         CommaSeperate_CompanyID: id || "",
-        CommaSeperate_SubItemID: subItems?.value || "",
+        CommaSeperate_SubItemID: subItems || "",
         CommaSeperate_AppItemCategoryID: "",
         CommaSeperate_ItemSubID: "",
         CommaSeperate_KarigarID: "",
         CommaSeperate_BranchID: "",
-        CommaSeperate_Size: sizes?.value || "",
+        CommaSeperate_Size: sizes || "",
         CommaSeperate_CounterID: "",
         MaxNetWt: 0,
         MinNetWt: 0,
@@ -353,7 +426,7 @@ const ReadytoDispatch = () => {
                     placeholder="Select Sizes"
                     isClearable
                     isSearchable={false}
-                    value={sizes}
+                    value={selectedSizes}
                     onChange={handleSizeTag}
                     options={filters?.Size?.map((data) => ({
                       label: data?.Size1,
@@ -381,7 +454,7 @@ const ReadytoDispatch = () => {
                     placeholder="Select Item"
                     isClearable
                     isSearchable={false}
-                    value={items}
+                    value={selectedItems}
                     onChange={handleItems}
                     options={filters?.Items?.map((data) => ({
                       label: data?.ItemName,
@@ -394,7 +467,7 @@ const ReadytoDispatch = () => {
                     placeholder="Select Sub Item"
                     isClearable
                     isSearchable={false}
-                    value={subItems}
+                    value={selectedSubItems}
                     onChange={handleSubItems}
                     options={filters?.SubItems?.map((data) => ({
                       label: data?.SubItemName,
@@ -471,6 +544,11 @@ const ReadytoDispatch = () => {
                             <div className="item-product text-center">
                               <Link
                                 to={`/ready-to-dispatch/${id}/${data?.TagNo}`}
+                                onClick={() =>
+                                  setPreviousPageUrl(
+                                    location.pathname + location.search
+                                  )
+                                }
                               >
                                 <div className="product-thumb">
                                   {loading ? (

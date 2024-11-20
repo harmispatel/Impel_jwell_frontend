@@ -464,27 +464,30 @@ const ReadyDesignCart = () => {
         setShowEdit(true);
         setSpinner(false);
       } else {
+        let totalNetWeight = 0;
+        let totalGrossWeight = 0;
+
+        Items.forEach((item) => {
+          totalNetWeight += item.net_weight;
+          totalGrossWeight += item.gross_weight;
+        });
+
         UserService.ShipmentCreate({
-          consignee_name: "Siddhartha K",
-          address_line1: "House No: 3405, Gondhali",
-          address_line2: "Galli",
-          pinCode: "380007",
-          auth_receiver_name: "imple",
-          auth_receiver_phone: "9737392505",
-          net_weight: "10",
-          gross_weight: "23",
-          net_value: "454645",
-          codValue: "49999",
-          no_of_packages: "2",
+          consignee_name: profileData?.name,
+          address_line1: profileData?.shipping_address,
+          address_line2:
+            profileData?.shipping_city_name +
+            "," +
+            profileData?.shipping_state_name,
+          pinCode: profileData?.shipping_pincode,
+          auth_receiver_name: profileData?.name,
+          auth_receiver_phone: profileData?.phone?.replace("+91", ""),
+          net_weight: totalNetWeight.toString(),
+          gross_weight: totalGrossWeight.toString(),
+          net_value: numberFormat(overAllAmount),
+          codValue: "",
+          no_of_packages: "1",
           boxes: [
-            {
-              box_number: "",
-              lock_number: "",
-              length: "",
-              breadth: "",
-              height: "",
-              gross_weight: "",
-            },
             {
               box_number: "",
               lock_number: "",
@@ -550,34 +553,37 @@ const ReadyDesignCart = () => {
       const queryParams = new URLSearchParams(location.search);
       const transaction_id = queryParams.get("transaction_id") || "";
 
+      let totalNetWeight = 0;
+      let totalGrossWeight = 0;
+
+      Items.forEach((item) => {
+        totalNetWeight += item.net_weight;
+        totalGrossWeight += item.gross_weight;
+      });
+
       UserService.ShipmentCreate({
-        consignee_name: "Siddhartha K",
-        address_line1: "House No: 3405, Gondhali",
-        address_line2: "Galli",
-        pinCode: "380007",
-        auth_receiver_name: "imple",
-        auth_receiver_phone: "9737392505",
-        net_weight: "10",
-        gross_weight: "23",
-        net_value: "454645",
-        codValue: "49999",
-        no_of_packages: "2",
+        consignee_name: profileData?.name,
+        address_line1: profileData?.shipping_address,
+        address_line2:
+          profileData?.shipping_city_name +
+          "," +
+          profileData?.shipping_state_name,
+        pinCode: profileData?.shipping_pincode,
+        auth_receiver_name: profileData?.name,
+        auth_receiver_phone: profileData?.phone?.replace("+91", ""),
+        net_weight: totalNetWeight.toString(),
+        gross_weight: totalGrossWeight.toString(),
+        net_value: numberFormat(overAllAmount),
+        codValue: "",
+        no_of_packages: "1",
         boxes: [
           {
-            box_number: "ZV_EFD789",
-            lock_number: "LK_7845",
-            length: "10",
-            breadth: "4",
-            height: "10",
-            gross_weight: "512",
-          },
-          {
-            box_number: "ZV_EFD780",
-            lock_number: "LK_7845",
-            length: "10",
-            breadth: "4",
-            height: "10",
-            gross_weight: "512",
+            box_number: "",
+            lock_number: "",
+            length: "",
+            breadth: "",
+            height: "",
+            gross_weight: "",
           },
         ],
       })

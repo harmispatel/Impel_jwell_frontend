@@ -315,7 +315,7 @@ const Navbar = () => {
   const cartTip = <Tooltip id="tooltip">cart</Tooltip>;
   const readyCartTip = <Tooltip id="tooltip">Ready design cart</Tooltip>;
 
-  const impelID = 4;
+  const impelID = "1,4";
 
   return (
     <header
@@ -360,7 +360,7 @@ const Navbar = () => {
                 <li className="nav-item">
                   <Link
                     className={
-                      currentRoute === "/ready-to-dispatch/4"
+                      currentRoute === "/ready-to-dispatch/1,4"
                         ? "nav-link active"
                         : "nav-link"
                     }
@@ -556,7 +556,7 @@ const Navbar = () => {
                               </li>
                               <li>
                                 <Link to="/create-pdf">
-                                <FaRegFilePdf /> Create PDF
+                                  <FaRegFilePdf /> Create PDF
                                 </Link>
                               </li>
                               <li>
