@@ -395,7 +395,7 @@ const ShopDetails = () => {
                           )}
                         </div>
                       </div>
-                      <div className="col-md-6">
+                      <div className="col-md-6 product-details-content">
                         <div>
                           <h3>{product?.name}</h3>
                           <h5 className="mb-3">
@@ -698,7 +698,7 @@ const ShopDetails = () => {
                                                           <strong>
                                                             ₹
                                                             {numberFormat(
-                                                              product?.making_charge_discount_20k
+                                                              product?.making_charge_discount_20k 
                                                             )}
                                                           </strong>
                                                         </>
@@ -1134,6 +1134,24 @@ const ShopDetails = () => {
                               )}
                             </div>
                           </div>
+
+                          {Phone && (
+                            <>
+                              {cartItems &&
+                              cartItems.find(
+                                (item) => item?.design_id === product?.id
+                              ) ? (
+                                ""
+                              ) : (
+                                <div className="discount-info">
+                                  <span>
+                                    To get Maximum Discount apply coupon code in
+                                    cart.
+                                  </span>
+                                </div>
+                              )}
+                            </>
+                          )}
                         </div>
                       </div>
                     </div>

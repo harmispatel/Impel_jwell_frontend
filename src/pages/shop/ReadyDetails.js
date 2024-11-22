@@ -509,6 +509,23 @@ const ReadyDetails = () => {
                               </button>
                             </>
                           )}
+                          {phone && (
+                            <>
+                              {cartItems &&
+                              cartItems?.find(
+                                (item) => item?.tag_no === details?.TagNo
+                              ) ? (
+                                ""
+                              ) : (
+                                <div className="discount-info">
+                                  <span>
+                                    To get Maximum Discount apply coupon code in
+                                    cart.
+                                  </span>
+                                </div>
+                              )}
+                            </>
+                          )}
                         </>
                       </div>
                     </div>

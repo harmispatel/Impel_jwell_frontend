@@ -176,10 +176,31 @@ const CategoriesItems = () => {
                                       </>
                                     )}
                                   </div>
-                                  <div className="product-info">
-                                    <label>
-                                      ₹{numberFormat(data?.total_amount_18k)}
-                                    </label>
+                                  <div className="product-info d-grid">
+                                    {data?.making_charge_discount_18k > 0 ? (
+                                      <>
+                                        <del style={{ color: "#000" }}>
+                                          ₹
+                                          {numberFormat(
+                                            data?.making_charge_18k +
+                                              data?.metal_value_18k
+                                          )}
+                                        </del>
+                                        <label>
+                                          <strong className="text-success">
+                                            ₹
+                                            {numberFormat(
+                                              data?.metal_value_18k +
+                                                data?.making_charge_discount_18k
+                                            )}
+                                          </strong>
+                                        </label>
+                                      </>
+                                    ) : (
+                                      <strong className="text-success">
+                                        ₹{numberFormat(data?.total_amount_18k)}
+                                      </strong>
+                                    )}
                                   </div>
                                 </Link>
                               </div>

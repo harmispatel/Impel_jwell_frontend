@@ -1833,6 +1833,10 @@ input[type="file"] {
     padding: 12px !important;
   }
 
+  .product-details-content{
+    margin-top: 30px !important;
+  }
+
   .collapse ul {
     align-items: flex-start;
   }
@@ -3264,7 +3268,7 @@ input[type="file"] {
   background: #fff;
   padding: 15px;
   position: relative;
-  height: 400px;
+  /* height: 400px; */
   margin-bottom: 30px;
   border-radius: 10px;
   box-shadow: 0 3px 10px #e4e4e4;
@@ -3789,4 +3793,22 @@ input[type="file"] {
   .breadcumb-section-btn button {
     width: 15%;
   }
+}
+
+.discount-info {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 12px 10px;
+  border: 1px solid #e1e1e1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 15px;
+}
+
+.discount-info span {
+  color: #db9662;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
 }

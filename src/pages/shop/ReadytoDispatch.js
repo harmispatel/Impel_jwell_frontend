@@ -124,42 +124,40 @@ const ReadytoDispatch = () => {
   };
 
   useEffect(() => {
-    setTimeout(() => {
-      profileService
-        .GetProductsFilterAPI({
-          PageNo: 1,
-          PageSize: 60,
-          DeviceID: 0,
-          SortBy: "",
-          SearchText: "",
-          TranType: "",
-          CommaSeperate_ItemGroupID: itemGroups?.value || "",
-          CommaSeperate_ItemID: items || "",
-          CommaSeperate_StyleID: styles?.value || "",
-          CommaSeperate_ProductID: "",
-          CommaSeperate_SubItemID: subItems || "",
-          CommaSeperate_AppItemCategoryID: "",
-          CommaSeperate_ItemSubID: "",
-          CommaSeperate_KarigarID: "",
-          CommaSeperate_BranchID: "",
-          CommaSeperate_Size: sizes || "",
-          CommaSeperate_CounterID: "",
-          MaxNetWt: 0,
-          MinNetWt: 0,
-          OnlyCartItem: false,
-          OnlyWishlistItem: false,
-          StockStatus: "",
-          DoNotShowInClientApp: 0,
-          HasTagImage: 0,
-          CommaSeperate_CompanyID: id,
-        })
-        .then((res) => {
-          setFilters(res?.Filters);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }, 1000);
+    profileService
+      .GetProductsFilterAPI({
+        PageNo: 1,
+        PageSize: 60,
+        DeviceID: 0,
+        SortBy: "",
+        SearchText: "",
+        TranType: "",
+        CommaSeperate_ItemGroupID: itemGroups?.value || "",
+        CommaSeperate_ItemID: items || "",
+        CommaSeperate_StyleID: styles?.value || "",
+        CommaSeperate_ProductID: "",
+        CommaSeperate_SubItemID: subItems || "",
+        CommaSeperate_AppItemCategoryID: "",
+        CommaSeperate_ItemSubID: "",
+        CommaSeperate_KarigarID: "",
+        CommaSeperate_BranchID: "",
+        CommaSeperate_Size: sizes || "",
+        CommaSeperate_CounterID: "",
+        MaxNetWt: 0,
+        MinNetWt: 0,
+        OnlyCartItem: false,
+        OnlyWishlistItem: false,
+        StockStatus: "",
+        DoNotShowInClientApp: 0,
+        HasTagImage: 0,
+        CommaSeperate_CompanyID: id,
+      })
+      .then((res) => {
+        setFilters(res?.Filters);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, [itemGroups, items, subItems, styles, sizes, id]);
 
   useEffect(() => {
@@ -194,27 +192,73 @@ const ReadytoDispatch = () => {
     setPreviousPageUrl(location.pathname + location.search);
   }, [location, setPreviousPageUrl]);
 
-  useEffect(() => {
-    const searchParams = new URLSearchParams(location.search);
-    const sortbyItems = searchParams.get("items");
-    const sortbySizes = searchParams.get("sizes");
-    const sortbySubItems = searchParams.get("sub-items");
+  // useEffect(() => {
+  //   const searchParams = new URLSearchParams(location.search);
+  //   const sortbyItems = searchParams.get("items");
+  //   const sortbySizes = searchParams.get("sizes");
+  //   const sortbySubItems = searchParams.get("sub-items");
 
-    // if (sortbySizes && sortbySizes.length > 0) {
-    //   if (sortbySizes) {
-    //     const selectedSort = filters?.Size.find(
-    //       (item) => item.RowNumber === sortbySizes
-    //     );
+  //   if (sortbySizes && sortbySizes.length > 0) {
+  //     if (sortbySizes) {
 
-    //     if (selectedSort) {
-    //       setSelectedSizes(selectedSort);
-    //     }
-    //   }
-    // } else {
-    //   setIsLoading(true);
-    //   setSelectedSizes(null);
-    // }
-  }, [location.search, filters?.length]);
+  //       const selectedSort = filters?.Size?.find(
+  //         (item) => item.RowNumber === Number(sortbySizes)
+  //       );
+
+  //       if (selectedSort) {
+  //         setSizes(Number(sortbySizes));
+  //         setSelectedSizes({
+  //           value: selectedSort?.RowNumber,
+  //           label: selectedSort?.Size1,
+  //         });
+  //       }
+  //     }
+  //   } else {
+  //     setIsLoading(true);
+  //     setSelectedSizes("");
+  //     setSizes("");
+  //   }
+
+  //   // if (sortbyItems && sortbyItems?.length > 0) {
+  //   //   if (sortbyItems) {
+  //   //     const selectedSort = filters?.Items?.find(
+  //   //       (item) => item.ItemID === Number(sortbyItems)
+  //   //     );
+
+  //   //     if (selectedSort) {
+  //   //       setItems(Number(sortbyItems));
+  //   //       setSelectedItems({
+  //   //         value: selectedSort?.ItemID,
+  //   //         label: selectedSort?.ItemName,
+  //   //       });
+  //   //     }
+  //   //   }
+  //   // } else {
+  //   //   setIsLoading(true);
+  //   //   setSelectedItems("");
+  //   //   setItems("");
+  //   // }
+
+  //   // if (sortbySubItems && sortbySubItems?.length > 0) {
+  //   //   if (sortbySubItems) {
+  //   //     const selectedSort = filters?.SubItems?.find(
+  //   //       (item) => item.SubItemID === Number(sortbySubItems)
+  //   //     );
+
+  //   //     if (selectedSort) {
+  //   //       setSubItems(Number(sortbySubItems));
+  //   //       setSelectedSubItems({
+  //   //         value: selectedSort?.SubItemID,
+  //   //         label: selectedSort?.SubItemName,
+  //   //       });
+  //   //     }
+  //   //   }
+  //   // } else {
+  //   //   setIsLoading(true);
+  //   //   setSelectedSubItems("");
+  //   //   setSubItems("");
+  //   // }
+  // }, [location.search, filters?.length]);
 
   // <-------------------- PAGINATION FUNCTION HERE START -------------------->
 
@@ -551,24 +595,11 @@ const ReadytoDispatch = () => {
                                 }
                               >
                                 <div className="product-thumb">
-                                  {loading ? (
-                                    <Skeleton.Image
-                                      active
-                                      style={{ width: "100%" }}
-                                    />
-                                  ) : data?.Images[0]?.ImageName ? (
-                                    <img
+                                <img
                                       src={`${imageURL}${data?.Images[0]?.ImageName}`}
                                       alt=""
                                       className="w-100"
                                     />
-                                  ) : (
-                                    <img
-                                      src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930"
-                                      alt=""
-                                      className="w-100"
-                                    />
-                                  )}
                                 </div>
                               </Link>
                               <div className="wishlist-top">

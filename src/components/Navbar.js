@@ -485,10 +485,13 @@ const Navbar = () => {
                     </div>
 
                     <span
-                      className="nav-link dropdown-toggle"
+                      className={`nav-link dropdown-toggle ${
+                        currentRoute === "/shop"
+                          ? "nav-link active"
+                          : "nav-link"
+                      }`}
                       style={{
                         fontWeight: "500",
-                        color: "#000",
                         textTransform: "uppercase",
                         fontSize: "14px",
                         cursor: "pointer",
