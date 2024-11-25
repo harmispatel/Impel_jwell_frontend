@@ -15,7 +15,9 @@ const OrderTracking = () => {
   const [Items, setItems] = useState([]);
   const [trackStatus, setTrackStatus] = useState([]);
   const [product, setProduct] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [message, setmessage] = useState([]);
+  const [isLoading, setIsLoading] = useState("");
+  const [itemStatus, setItemStatus] = useState(true);
 
   const GetUserOrders = async () => {
     Userservice.OrdersTracking({
@@ -27,6 +29,7 @@ const OrderTracking = () => {
           setItems(res.data);
           setProduct(res.data?.order_items);
           setIsLoading(false);
+          setItemStatus(res.status);
 
           Userservice.DeliveryTrack({
             docket: docketNumber,
@@ -40,6 +43,10 @@ const OrderTracking = () => {
               console.log(err);
               setIsLoading(false);
             });
+        } else {
+          setIsLoading(false);
+          setmessage(res?.message);
+          setItemStatus(res.status);
         }
       })
       .catch((err) => {
@@ -95,125 +102,146 @@ const OrderTracking = () => {
                       <div className="text-center p-3">
                         <img src={Logo} alt="logo" style={{ width: "130px" }} />
                       </div>
-                      <div className="card-body">
-                        <h6>Order ID: #{Items?.order_id}</h6>
-                        <article className="card">
-                          <div className="card-body row">
-                            <div className="col">
-                              <strong>Estimated Delivery time:</strong> <br />
-                              {trackStatus?.estimated_delivery}
-                            </div>
-                            <div className="col">
-                              <strong>Shipping BY:</strong> <br />
-                              {trackStatus?.insurance}
-                            </div>
-                            <div className="col">
-                              <strong>Status:</strong> <br />
-                              {tracking_status}
-                            </div>
-                            <div className="col">
-                              <strong>Tracking #:</strong> <br />
-                              {trackStatus?.docket_no}
-                            </div>
-                          </div>
-                        </article>
 
-                        <div className="track">
-                          <div
-                            className={`step ${
-                              trackStatus?.shipment_status === "SCREATED" ||
-                              trackStatus?.shipment_status === "SCHECKIN" ||
-                              trackStatus?.shipment_status === "SDELVD" ||
-                              trackStatus?.shipment_status === "SDELASN"
-                                ? "active"
-                                : ""
-                            }`}
-                          >
-                            <span className="icon">
-                              <FaCheck />
-                            </span>
-                            <span className="text">Order confirmed</span>
-                          </div>
-                          <div
-                            className={`step ${
-                              trackStatus?.shipment_status === "SCHECKIN" ||
-                              trackStatus?.shipment_status === "SDELASN" ||
-                              trackStatus?.shipment_status === "SDELVD"
-                                ? "active"
-                                : ""
-                            }`}
-                          >
-                            <span className="icon">
-                              <FaRegUser />
-                            </span>
-                            <span className="text">Picked by courier</span>
-                          </div>
-                          <div
-                            className={`step ${
-                              trackStatus?.shipment_status === "SDELASN" ||
-                              trackStatus?.shipment_status === "SDELVD"
-                                ? "active"
-                                : ""
-                            }`}
-                          >
-                            <span className="icon">
-                              <FaTruck />
-                            </span>
-                            <span className="text">On the way</span>
-                          </div>
-                          <div
-                            className={`step ${
-                              trackStatus?.shipment_status === "SDELVD"
-                                ? "active"
-                                : ""
-                            }`}
-                          >
-                            <span className="icon">
-                              <FaBox />
-                            </span>
-                            <span className="text">Ready for pickup</span>
-                          </div>
-                        </div>
+                      {itemStatus === true ? (
+                        <>
+                          <div className="card-body">
+                            <h6>Order ID: #{Items?.order_id}</h6>
+                            <article className="card">
+                              <div className="card-body row">
+                                <div className="col">
+                                  <strong>Estimated Delivery time:</strong>{" "}
+                                  <br />
+                                  {trackStatus?.estimated_delivery}
+                                </div>
+                                <div className="col">
+                                  <strong>Shipping BY:</strong> <br />
+                                  {trackStatus?.insurance}
+                                </div>
+                                <div className="col">
+                                  <strong>Status:</strong> <br />
+                                  {tracking_status}
+                                </div>
+                                <div className="col">
+                                  <strong>Tracking #:</strong> <br />
+                                  {trackStatus?.docket_no}
+                                </div>
+                              </div>
+                            </article>
 
-                        <hr />
-                        <ul className="row">
-                          {product?.map((datas) => (
-                            <>
-                              <li className="col-md-4">
-                                <figure className="itemside mb-3">
-                                  <div className="aside">
-                                    <img
-                                      src={datas?.design_image}
-                                      className="img-sm border"
-                                      alt=""
-                                    />
-                                  </div>
-                                  <figcaption className="info">
-                                    <h6 className="title">
-                                      {datas?.design_name}
-                                    </h6>
-                                    {/* <h6>{datas?.net_weight} g.(Approx.)</h6>
+                            <div className="track">
+                              <div
+                                className={`step ${
+                                  trackStatus?.shipment_status === "SCREATED" ||
+                                  trackStatus?.shipment_status === "SCHECKIN" ||
+                                  trackStatus?.shipment_status === "SDELVD" ||
+                                  trackStatus?.shipment_status === "SDELASN"
+                                    ? "active"
+                                    : ""
+                                }`}
+                              >
+                                <span className="icon">
+                                  <FaCheck />
+                                </span>
+                                <span className="text">Order confirmed</span>
+                              </div>
+                              <div
+                                className={`step ${
+                                  trackStatus?.shipment_status === "SCHECKIN" ||
+                                  trackStatus?.shipment_status === "SDELASN" ||
+                                  trackStatus?.shipment_status === "SDELVD"
+                                    ? "active"
+                                    : ""
+                                }`}
+                              >
+                                <span className="icon">
+                                  <FaRegUser />
+                                </span>
+                                <span className="text">Picked by courier</span>
+                              </div>
+                              <div
+                                className={`step ${
+                                  trackStatus?.shipment_status === "SDELASN" ||
+                                  trackStatus?.shipment_status === "SDELVD"
+                                    ? "active"
+                                    : ""
+                                }`}
+                              >
+                                <span className="icon">
+                                  <FaTruck />
+                                </span>
+                                <span className="text">On the way</span>
+                              </div>
+                              <div
+                                className={`step ${
+                                  trackStatus?.shipment_status === "SDELVD"
+                                    ? "active"
+                                    : ""
+                                }`}
+                              >
+                                <span className="icon">
+                                  <FaBox />
+                                </span>
+                                <span className="text">Ready for pickup</span>
+                              </div>
+                            </div>
+
+                            <hr />
+                            <ul className="row">
+                              {product?.map((datas) => (
+                                <>
+                                  <li className="col-md-4">
+                                    <figure className="itemside mb-3">
+                                      <div className="aside">
+                                        <img
+                                          src={datas?.design_image}
+                                          className="img-sm border"
+                                          alt=""
+                                        />
+                                      </div>
+                                      <figcaption className="info">
+                                        <h6 className="title">
+                                          {datas?.design_name}
+                                        </h6>
+                                        {/* <h6>{datas?.net_weight} g.(Approx.)</h6>
                                       <span className="text-muted">
                                         ₹{numberFormat(datas?.item_total)}
                                       </span> */}
-                                  </figcaption>
-                                </figure>
-                              </li>
-                            </>
-                          ))}
-                        </ul>
-                        <hr />
+                                      </figcaption>
+                                    </figure>
+                                  </li>
+                                </>
+                              ))}
+                            </ul>
+                            <hr />
 
-                        <div className="d-flex justify-content-center align-items-center">
-                          <button
-                            className="view_all_btn px-4 py-2"
-                            style={{ borderRadius: "8px" }}
-                            onClick={() => navigate("/")}
-                          >
-                            Back to Site
-                          </button>
-                        </div>
-                      </div>
+                            <div className="d-flex justify-content-center align-items-center">
+                              <button
+                                className="view_all_btn px-4 py-2"
+                                style={{ borderRadius: "8px" }}
+                                onClick={() => navigate("/")}
+                              >
+                                Back to Site
+                              </button>
+                            </div>
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <div className="card-body">
+                            <h4 className="text-center">{message}</h4>
+                            <div className="d-flex justify-content-center align-items-center mt-4">
+                              <button
+                                className="view_all_btn px-4 py-2"
+                                style={{ borderRadius: "8px" }}
+                                onClick={() => navigate("/")}
+                              >
+                                Back to Site
+                              </button>
+                            </div>
+                          </div>
+                        </>
+                      )}
                     </article>
                   </div>
                 </div>

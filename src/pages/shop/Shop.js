@@ -1660,100 +1660,88 @@ const Shop = () => {
                                     <div className="wishlist-top">
                                       {userType == 1 ? (
                                         <>
-                                          <div className="mt-3">
-                                            <div>
-                                              {email ? (
-                                                <OverlayTrigger
-                                                  placement="top"
-                                                  overlay={selectionTip}
-                                                >
-                                                  <Link
-                                                    to="#"
-                                                    className=""
-                                                    onClick={(e) => {
-                                                      if (
-                                                        DealerCollection?.find(
-                                                          (item) =>
-                                                            item?.id ===
-                                                            data?.id
-                                                        )
-                                                      ) {
-                                                        removeFromSelection(
-                                                          e,
-                                                          data
-                                                        );
-                                                      } else {
-                                                        AddToDealerSelection(
-                                                          e,
-                                                          data
-                                                        );
-                                                      }
-                                                    }}
-                                                  >
-                                                    {DealerCollection?.find(
+                                          {email ? (
+                                            <OverlayTrigger
+                                              placement="top"
+                                              overlay={selectionTip}
+                                            >
+                                              <Link
+                                                to="#"
+                                                className="dealer_heart_icon"
+                                                onClick={(e) => {
+                                                  if (
+                                                    DealerCollection?.find(
                                                       (item) =>
                                                         item?.id === data?.id
-                                                    ) ? (
-                                                      <FaStar />
-                                                    ) : (
-                                                      <FaRegStar />
-                                                    )}
-                                                  </Link>
-                                                </OverlayTrigger>
-                                              ) : (
-                                                <span
-                                                  onClick={(e) =>
-                                                    DealerLogin(e)
+                                                    )
+                                                  ) {
+                                                    removeFromSelection(
+                                                      e,
+                                                      data
+                                                    );
+                                                  } else {
+                                                    AddToDealerSelection(
+                                                      e,
+                                                      data
+                                                    );
                                                   }
-                                                >
+                                                }}
+                                              >
+                                                {DealerCollection?.find(
+                                                  (item) =>
+                                                    item?.id === data?.id
+                                                ) ? (
+                                                  <FaStar />
+                                                ) : (
                                                   <FaRegStar />
-                                                </span>
-                                              )}
-                                            </div>
-                                            <div className="mt-2">
-                                              {email ? (
-                                                <OverlayTrigger
-                                                  placement="top"
-                                                  overlay={pdfTip}
-                                                >
-                                                  <Link
-                                                    to="#"
-                                                    className=""
-                                                    onClick={(e) => {
-                                                      if (
-                                                        pdfItems?.find(
-                                                          (item) =>
-                                                            item?.id ===
-                                                            data?.id
-                                                        )
-                                                      ) {
-                                                        removeToPDF(e, data);
-                                                      } else {
-                                                        addToPDF(e, data);
-                                                      }
-                                                    }}
-                                                  >
-                                                    {pdfItems?.find(
+                                                )}
+                                              </Link>
+                                            </OverlayTrigger>
+                                          ) : (
+                                            <span
+                                              onClick={(e) => DealerLogin(e)}
+                                            >
+                                              <FaRegStar />
+                                            </span>
+                                          )}
+                                          {email ? (
+                                            <OverlayTrigger
+                                              placement="top"
+                                              overlay={pdfTip}
+                                            >
+                                              <Link
+                                                to="#"
+                                                className="dealer_heart_icon"
+                                                onClick={(e) => {
+                                                  if (
+                                                    pdfItems?.find(
                                                       (item) =>
                                                         item?.id === data?.id
-                                                    ) ? (
-                                                      <FaFilePdf />
-                                                    ) : (
-                                                      <FaRegFilePdf />
-                                                    )}
-                                                  </Link>
-                                                </OverlayTrigger>
-                                              ) : (
-                                                <span
-                                                  onClick={(e) =>
-                                                    DealerLogin(e)
+                                                    )
+                                                  ) {
+                                                    removeToPDF(e, data);
+                                                  } else {
+                                                    addToPDF(e, data);
                                                   }
-                                                >
+                                                }}
+                                              >
+                                                {pdfItems?.find(
+                                                  (item) =>
+                                                    item?.id === data?.id
+                                                ) ? (
+                                                  <FaFilePdf />
+                                                ) : (
                                                   <FaRegFilePdf />
-                                                </span>
-                                              )}
-                                            </div>
-                                          </div>
+                                                )}
+                                              </Link>
+                                            </OverlayTrigger>
+                                          ) : (
+                                            <span
+                                              onClick={(e) => DealerLogin(e)}
+                                            >
+                                              <FaRegFilePdf />
+                                            </span>
+                                          )}
                                         </>
                                       ) : (
                                         <>

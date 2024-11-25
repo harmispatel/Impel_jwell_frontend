@@ -1833,7 +1833,7 @@ input[type="file"] {
     padding: 12px !important;
   }
 
-  .product-details-content{
+  .product-details-content {
     margin-top: 30px !important;
   }
 
@@ -3273,6 +3273,7 @@ input[type="file"] {
   border-radius: 10px;
   box-shadow: 0 3px 10px #e4e4e4;
   transition: box-shadow 0.15s ease-out;
+  overflow: hidden;
 }
 
 .item-product:hover {
@@ -3290,21 +3291,45 @@ input[type="file"] {
 .wishlist-top {
   position: absolute;
   top: 10px;
-  right: 10px;
-  width: 35px;
-  height: 35px;
+  right: -100%;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
   cursor: pointer;
+  row-gap: 5px;
+  flex-direction: column;
+  transition: all 0.5s ease-in-out;
+}
+
+.item-product:hover .wishlist-top {
+  right: 10px;
 }
 
 .wishlist-top a {
-  color: #000;
-  font-size: 18px;
-  line-height: 18px;
-  font-size: 22px;
+  background-color: #25d366;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: #fff;
+}
+
+.wishlist-top span {
+  background-color: #25d366;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: #fff;
+}
+
+.wishlist-top svg {
+  font-size: 19px;
 }
 
 .product-info h4 {

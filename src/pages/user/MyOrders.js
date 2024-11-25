@@ -175,16 +175,16 @@ const MyOrders = () => {
                                               placement="top"
                                               overlay={orderDetails}
                                             >
-                                              <button
+                                              <h5
                                                 onClick={() =>
                                                   navigate(
                                                     `/order-details/${datas?.order_id}`
                                                   )
                                                 }
-                                                className="btn btn-primary btn-sm"
+                                                style={{ cursor: "pointer" }}
                                               >
                                                 <FaEye />
-                                              </button>
+                                              </h5>
                                             </OverlayTrigger>
                                           </span>
                                         </td>

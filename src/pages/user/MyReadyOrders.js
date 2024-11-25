@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaEye } from "react-icons/fa";
 import { Helmet } from "react-helmet-async";
 import { OverlayTrigger, Pagination, Tooltip } from "react-bootstrap";
@@ -183,16 +183,16 @@ const MyReadyOrders = () => {
                                               placement="top"
                                               overlay={orderDetails}
                                             >
-                                              <button
+                                              <h5
                                                 onClick={() =>
                                                   navigate(
                                                     `/ready-order-details/?${datas?.order_id}`
                                                   )
                                                 }
-                                                className="btn btn-primary btn-sm"
+                                                style={{ cursor: "pointer" }}
                                               >
                                                 <FaEye />
-                                              </button>
+                                              </h5>
                                             </OverlayTrigger>
                                           </span>
                                         </td>
