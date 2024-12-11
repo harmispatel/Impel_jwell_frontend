@@ -3290,8 +3290,8 @@ input[type="file"] {
 
 .wishlist-top {
   position: absolute;
-  top: 10px;
-  right: -100%;
+  top: 50px;
+  right: 15px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -3299,15 +3299,17 @@ input[type="file"] {
   cursor: pointer;
   row-gap: 5px;
   flex-direction: column;
-  transition: all 0.5s ease-in-out;
+  transition: all 0.1s ease-in-out;
+  opacity: 0;
 }
 
 .item-product:hover .wishlist-top {
-  right: 10px;
+  top: 15px;
+  opacity: 1;
 }
 
 .wishlist-top a {
-  background-color: #25d366;
+  background-color: #db9662;
   width: 35px;
   height: 35px;
   display: flex;
@@ -3318,7 +3320,7 @@ input[type="file"] {
 }
 
 .wishlist-top span {
-  background-color: #25d366;
+  background-color: #db9662;
   width: 35px;
   height: 35px;
   display: flex;

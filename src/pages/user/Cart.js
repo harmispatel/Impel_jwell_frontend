@@ -709,6 +709,7 @@ const Cart = ({ active }) => {
     if (location.pathname === "/processing-order") {
       const queryParams = new URLSearchParams(location.search);
       const transaction_id = queryParams.get("transaction_id") || "";
+      const advanceplus = overAllAmount - advanceAmount;
 
       let totalNetWeight = 0;
       let totalGrossWeight = 0;
@@ -749,8 +750,8 @@ const Cart = ({ active }) => {
         auth_receiver_phone: profileData?.phone?.replace("+91", ""),
         net_weight: totalNetWeight.toString(),
         gross_weight: totalGrossWeight.toString(),
-        net_value: numberFormat(overAllAmount),
-        codValue: "",
+        net_value: overAllAmount?.toString(),
+        codValue: advanceplus?.toString(),
         no_of_packages: "1",
         boxes: [
           {
@@ -781,6 +782,7 @@ const Cart = ({ active }) => {
                   total: overAllAmount.toFixed(),
                   transaction_id: transaction_id ? transaction_id : "",
                   docate_number: docketNumber ? docketNumber : "",
+                  pending_cash : advanceplus?.toString() ? advanceplus?.toString() : ""
                 })
                 .then((res) => {
                   if (res?.data?.status === true) {
@@ -810,6 +812,10 @@ const Cart = ({ active }) => {
         });
     }
   }, [location.pathname, location.search, Items]);
+
+  const handleClose = () => {
+    setShowEdit(false);
+  };
 
   return (
     <>
@@ -1243,8 +1249,9 @@ const Cart = ({ active }) => {
                   className="form_intent profile_model"
                   centered
                   show={showEdit}
+                  onHide={handleClose}
                 >
-                  <Modal.Header>
+                  <Modal.Header closeButton>
                     <Modal.Title>Edit Profile</Modal.Title>
                   </Modal.Header>
 

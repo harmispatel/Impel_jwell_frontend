@@ -636,6 +636,9 @@ const ReadyDesignCart = () => {
     }
   }, [location.pathname, location.search, Items]);
 
+  const handleClose = () => {
+    setShowEdit(false);
+  };
   // user profile functionlity here
   const [spinner, setSpinner] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
@@ -1449,8 +1452,9 @@ const ReadyDesignCart = () => {
                 className="form_intent profile_model"
                 centered
                 show={showEdit}
+                onHide={handleClose}
               >
-                <Modal.Header>
+                <Modal.Header closeButton>
                   <Modal.Title>Edit Profile</Modal.Title>
                 </Modal.Header>
 
