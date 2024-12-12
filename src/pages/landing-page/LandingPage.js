@@ -1,6 +1,15 @@
 import React from "react";
 import "./index.css";
 import bottom_banner from "./assets/bottom-banner.png";
+import insta_post from "./assets/insta-post.png";
+import trending_img_1 from "./assets/daily use bracelet for ladies.jpg";
+import trending_img_2 from "./assets/daily use bracelet.jpg";
+import trending_img_3 from "./assets/rings for daily use.jpg";
+import trending_img_4 from "./assets/bangles for daily use.jpg";
+import love_img from "./assets/silver ring for women.jpg";
+import daily_wear from "./assets/daily wear necklace for women.jpg";
+import modern_bracelet from "./assets/modern bracelet designs.jpg";
+import minimalistic from "./assets/Minimalistic necklace for women.jpg";
 
 const LandingPage = () => {
   const currentYear = new Date().getFullYear();
@@ -66,41 +75,25 @@ const LandingPage = () => {
             </div>
           </div>
         </div>
-        <div className="row mt-5">
+        <div className="row mt-3">
           <div className="col-md-3">
             <div className="product-card">
-              <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcLqhoKWDjExZQ6I9xOh0yNg-miRWWNf2c8A&s"
-                alt=""
-                className="w-100"
-              />
+              <img src={trending_img_1} alt="" className="w-100" />
             </div>
           </div>
           <div className="col-md-3">
             <div className="product-card">
-              <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcLqhoKWDjExZQ6I9xOh0yNg-miRWWNf2c8A&s"
-                alt=""
-                className="w-100"
-              />
+              <img src={trending_img_2} alt="" className="w-100" />
             </div>
           </div>
           <div className="col-md-3">
             <div className="product-card">
-              <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcLqhoKWDjExZQ6I9xOh0yNg-miRWWNf2c8A&s"
-                alt=""
-                className="w-100"
-              />
+              <img src={minimalistic} alt="" className="w-100" />
             </div>
           </div>
           <div className="col-md-3">
             <div className="product-card">
-              <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcLqhoKWDjExZQ6I9xOh0yNg-miRWWNf2c8A&s"
-                alt=""
-                className="w-100"
-              />
+              <img src={trending_img_4} alt="" className="w-100" />
             </div>
           </div>
         </div>
@@ -108,12 +101,12 @@ const LandingPage = () => {
       {/* Product Section End */}
 
       {/* Bottom Banner Start */}
-      <section className="product-section mt-5">
+      <section className="product-section mt-1">
         <div className="row">
           <div className="col-md-6">
             <div className="banner-img">
               <img
-                src="https://static.toiimg.com/thumb/msid-100766424,width-1280,height-720,resizemode-4/100766424.jpg"
+                src={daily_wear}
                 alt=""
                 className="w-100"
               />
@@ -147,7 +140,7 @@ const LandingPage = () => {
           <div className="col-md-6">
             <div className="banner-img">
               <img
-                src="https://static.toiimg.com/thumb/msid-100766424,width-1280,height-720,resizemode-4/100766424.jpg"
+                src={modern_bracelet}
                 alt=""
                 className="w-100"
               />
@@ -167,14 +160,13 @@ const LandingPage = () => {
             <div class="product-card">
               <div class="badge">Hot</div>
               <div class="product-tumb">
-                <img src="https://i.imgur.com/xdbHo4E.png" alt="" />
+                <img src={trending_img_1} alt="" className="w-100"/>
               </div>
               <div class="product-details">
-                <span class="product-catagory">Women,bag</span>
                 <h4>
                   <a href="">Women leather bag</a>
                 </h4>
-                <p>₹ 100</p>
+                <p className="text-success">₹ 100</p>
               </div>
             </div>
           </div>
@@ -182,17 +174,13 @@ const LandingPage = () => {
             <div class="product-card">
               <div class="badge">Hot</div>
               <div class="product-tumb">
-                <img src="https://i.imgur.com/xdbHo4E.png" alt="" />
+                <img src={trending_img_2} alt="" className="w-100"/>
               </div>
               <div class="product-details">
-                <span class="product-catagory">Women,bag</span>
                 <h4>
                   <a href="">Women leather bag</a>
                 </h4>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                  Vero, possimus nostrum!
-                </p>
+                <p className="text-success">₹ 100</p>
               </div>
             </div>
           </div>
@@ -200,17 +188,13 @@ const LandingPage = () => {
             <div class="product-card">
               <div class="badge">Hot</div>
               <div class="product-tumb">
-                <img src="https://i.imgur.com/xdbHo4E.png" alt="" />
+                <img src={trending_img_3} alt="" className="w-100"/>
               </div>
               <div class="product-details">
-                <span class="product-catagory">Women,bag</span>
                 <h4>
                   <a href="">Women leather bag</a>
                 </h4>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                  Vero, possimus nostrum!
-                </p>
+                <p className="text-success">₹ 100</p>
               </div>
             </div>
           </div>
@@ -218,17 +202,13 @@ const LandingPage = () => {
             <div class="product-card">
               <div class="badge">Hot</div>
               <div class="product-tumb">
-                <img src="https://i.imgur.com/xdbHo4E.png" alt="" />
+                <img src={trending_img_4} alt="" className="w-100"/>
               </div>
               <div class="product-details">
-                <span class="product-catagory">Women,bag</span>
                 <h4>
                   <a href="">Women leather bag</a>
                 </h4>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                  Vero, possimus nostrum!
-                </p>
+                <p className="text-success">₹ 100</p>
               </div>
             </div>
           </div>
@@ -242,7 +222,7 @@ const LandingPage = () => {
           <div className="col-md-6">
             <div className="h-100 d-flex align-items-center">
               <div className="img-info">
-                <h3>It started with love</h3>
+                <h2>It started with love</h2>
                 <p>
                   Lorem ipsum dolor sit amet consectetur adipiscing elit felis
                   faucibus, parturient fermentum elementum erat litora habitasse
@@ -261,15 +241,39 @@ const LandingPage = () => {
           </div>
           <div className="col-md-6">
             <div className="banner-img">
-              <img src={bottom_banner} alt="" className="w-100" />
+              <img src={love_img} alt="" className="w-100" />
             </div>
           </div>
         </div>
       </section>
       {/* Start-Love Section End */}
 
+      {/* Instagram Post Section Start */}
+      <section className="insta-section mt-4">
+        <div className="row justify-content-center">
+          <div className="product-text text-center mt-4">
+            <h4>impel_store instagram</h4>
+          </div>
+          <div className="row mt-3 mb-5">
+            <div className="col-md-3">
+              <img src={trending_img_1} alt="" className="w-100" />
+            </div>
+            <div className="col-md-3">
+              <img src={trending_img_2} alt="" className="w-100" />
+            </div>
+            <div className="col-md-3">
+              <img src={trending_img_3} alt="" className="w-100" />
+            </div>
+            <div className="col-md-3">
+              <img src={trending_img_4} alt="" className="w-100" />
+            </div>
+          </div>
+        </div>
+      </section>
+      {/* Instagram Post Section End */}
+
       {/* Latest News Section Start */}
-      <section className="latest-news">
+      <section className="latest-news mt-5 mb-5">
         <div className="row">
           <div className="newsletter text-center">
             <h3>Latest From Impel!</h3>
