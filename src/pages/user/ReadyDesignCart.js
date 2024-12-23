@@ -1432,7 +1432,7 @@ const ReadyDesignCart = () => {
 
                             <div className="text-center">
                               <Link
-                                to={`/ready-to-dispatch/${4}`}
+                                to={"/ready-to-dispatch"}
                                 className="view_all_btn px-4 py-2"
                                 style={{ borderRadius: "8px" }}
                               >

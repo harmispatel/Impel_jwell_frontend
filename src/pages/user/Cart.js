@@ -1249,6 +1249,7 @@ const Cart = ({ active }) => {
                   className="form_intent profile_model"
                   centered
                   show={showEdit}
+                  backdrop="static"
                   onHide={handleClose}
                 >
                   <Modal.Header closeButton>

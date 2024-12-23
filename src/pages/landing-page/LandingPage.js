@@ -1,8 +1,6 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import "./index.css";
 import banner_1 from "./assets/Banner Images/Impel_Landing Page Banners_01.jpg";
-import banner_2 from "./assets/Banner Images/Impel_Landing Page Banners_02.jpg";
-import banner_3 from "./assets/Banner Images/Impel_Landing Page Banners_03.jpg";
 
 import product_1 from "./assets/3rd Section/Rings.jpg";
 import product_2 from "./assets/3rd Section/Necklace.jpg";
@@ -17,75 +15,149 @@ import trending_img_4 from "./assets/Trending Products/Silver Bracelet.jpg";
 import love_img from "./assets/silver ring for women.jpg";
 import daily_wear from "./assets/daily wear necklace for women.jpg";
 import modern_bracelet from "./assets/Bracelet_3.jpg";
-import Carousel from "react-bootstrap/Carousel";
-import { FaInstagram } from "react-icons/fa";
+import {
+  FaBars,
+  FaInstagram,
+  FaPhoneAlt,
+  FaQuestionCircle,
+} from "react-icons/fa";
 import { Link } from "react-router-dom";
 
+import emailjs from "@emailjs/browser";
+
+import { Col, Form, Modal } from "react-bootstrap";
+
 const LandingPage = () => {
+  const formRef = useRef();
   const currentYear = new Date().getFullYear();
+  const [showEdit, setShowEdit] = useState(false);
+
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    emailjs
+      .send(
+        "service_cd8i9z8",
+        "template_4lhpngl",
+        {
+          to_name: "Impel store",
+          to_email: "baldhavansh2505@gmail.com",
+          from_name: form.name,
+          from_email: document.querySelector('form input[name="email"]').value,
+          from_phone: form.phone,
+        },
+        "gNvP3pb_uObggad1C"
+      )
+      .then(
+        () => {
+          alert("Thank you. I will get back to you as soon as possible.");
+          setForm({
+            name: "",
+            email: "",
+            phone: "",
+          });
+          setShowEdit(false)
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+  };
+
   return (
     <>
-      <nav
-        class="navbar navbar-expand-lg navbar-light"
-        style={{ backgroundColor: "#cb7f61" }}
-      >
-        <div class="container-fluid my-container-fluid">
-          <button
-            class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarNav"
-            aria-controls="navbarNav"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav mx-auto navbar-name-list">
-              <li class="nav-item">
-                <Link class="nav-link nav-link-name" aria-current="page" to="#">
-                  Home
-                </Link>
-              </li>
-              <li class="nav-item">
-                <Link class="nav-link nav-link-name" to="#">
-                  About
-                </Link>
-              </li>
-              <li class="nav-item">
-                <Link class="nav-link nav-link-name" to="#">
-                  Product
-                </Link>
-              </li>
-              <li class="nav-item">
-                <Link class="nav-link nav-link-name" to="#">
-                  Connectivity
-                </Link>
-              </li>
-              <li class="nav-item">
-                <Link class="nav-link nav-link-name" to="#">
-                  Contact
-                </Link>
-              </li>
-            </ul>
+      <nav className="navbar navbar-expand-lg navbar-head-main">
+        <div className="container">
+          <div className="header_inner">
+            <button
+              className="navbar-toggler"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarSupportedContent"
+              aria-controls="navbarSupportedContent"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <FaBars className="text-white" />
+            </button>
+            <img
+              src="https://impel.store/static/media/logo.4b7825a638146a1cdf28.png"
+              alt="logo"
+              height={70}
+            />
+
+            <div
+              className="collapse navbar-collapse"
+              id="navbarSupportedContent"
+            >
+              <ul className="navbar-nav mb-2 mb-lg-0 w-100">
+                <li className="nav-link-name">
+                  <Link aria-current="page" to="/">
+                    Home
+                  </Link>
+                </li>
+                <li className="nav-link-name">
+                  <Link aria-current="page" to="/">
+                    About
+                  </Link>
+                </li>
+                <li className="nav-link-name">
+                  <Link aria-current="page" to="/">
+                    Product
+                  </Link>
+                </li>
+                <li className="nav-link-name">
+                  <Link aria-current="page" to="/">
+                    Location
+                  </Link>
+                </li>
+                <li className="nav-link-name">
+                  <Link aria-current="page" to="/">
+                    Contact
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link aria-current="page" to="tel:9737392505">
+                    <button class="contact-us-btn">
+                      <FaPhoneAlt className="me-2" />
+                      9737392505
+                    </button>
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div className="header_icon">
+              <ul>
+                <li className="login_user">
+                  <button
+                    class="contact-us-btn"
+                    onClick={() => setShowEdit(!showEdit)}
+                  >
+                    <FaQuestionCircle className="me-2" />
+                    Inquiry
+                  </button>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </nav>
 
       {/* Banner Section Start */}
       <section>
-        <Carousel data-bs-theme="dark">
-          <Carousel.Item>
-            <img className="d-block w-100" src={banner_1} alt="First slide" />
-          </Carousel.Item>
-          <Carousel.Item>
-            <img className="d-block w-100" src={banner_2} alt="First slide" />
-          </Carousel.Item>
-          <Carousel.Item>
-            <img className="d-block w-100" src={banner_3} alt="First slide" />
-          </Carousel.Item>
-        </Carousel>
+        <img className="w-100" src={banner_1} alt="First_image" />
       </section>
       {/* Banner Section End */}
 
@@ -93,26 +165,26 @@ const LandingPage = () => {
       <section className="product-section">
         <div className="row justify-content-center">
           <div className="product-text product-info-text-name text-center">
-            <h5>IMPEL JEWELRY</h5>
+            <h1>IMPEL JEWELRY</h1>
           </div>
           <div className="col-md-8">
             <div className="text-center product-info-text">
-              <h4>
+              <p>
                 Impel is a jewelry store in Ahmadabad offering minimalist
                 jewelry collection. We craft minimal jewelry for women designed
                 to bring timeless elegance and effortless style to everyday
                 moments. Founded by Mr. Bakul Shah in 1975, Impel Jewelry blends
                 elegance and simplicity. With over 50,000 designs, it’s become a
                 symbol of timeless, premium, minimal luxury for everyday wear.
-              </h4>
+              </p>
             </div>
           </div>
         </div>
-        <div className="row mt-3">
+        <div className="row mt-1">
           <div className="col-md-3">
             <div className="product-card">
               <img src={product_1} alt="" className="w-100" />
-              <div className="product-card-name">
+              <div className="product-card-name" onClick={() => setShowEdit(!showEdit)}>
                 <h5>Rings</h5>
               </div>
             </div>
@@ -120,7 +192,7 @@ const LandingPage = () => {
           <div className="col-md-3">
             <div className="product-card">
               <img src={product_2} alt="" className="w-100" />
-              <div className="product-card-name">
+              <div className="product-card-name" onClick={() => setShowEdit(!showEdit)}>
                 <h5>Necklace</h5>
               </div>
             </div>
@@ -128,7 +200,7 @@ const LandingPage = () => {
           <div className="col-md-3">
             <div className="product-card">
               <img src={product_3} alt="" className="w-100" />
-              <div className="product-card-name">
+              <div className="product-card-name" onClick={() => setShowEdit(!showEdit)}>
                 <h5>Earring</h5>
               </div>
             </div>
@@ -136,7 +208,7 @@ const LandingPage = () => {
           <div className="col-md-3">
             <div className="product-card">
               <img src={product_4} alt="" className="w-100" />
-              <div className="product-card-name">
+              <div className="product-card-name" onClick={() => setShowEdit(!showEdit)}>
                 <h5>Bracelet</h5>
               </div>
             </div>
@@ -158,7 +230,7 @@ const LandingPage = () => {
               <div className="img-info text-center">
                 <h3>Your Daily Dose of Grace —</h3>
                 <p>Minimal Jewelry Crafted to Add Grace to Every Day</p>
-                <button>See Now</button>
+                <button onClick={() => setShowEdit(!showEdit)}>View More</button>
               </div>
             </div>
           </div>
@@ -174,7 +246,7 @@ const LandingPage = () => {
               <div className="img-info text-center">
                 <h3>Jewelry as Versatile as You —</h3>
                 <p>Minimal Jewelry for Every Style, Every Day, Every Moment.</p>
-                <button>See Now</button>
+                <button onClick={() => setShowEdit(!showEdit)}>View More</button>
               </div>
             </div>
           </div>
@@ -194,20 +266,18 @@ const LandingPage = () => {
             <h2>Trending Products</h2>
           </div>
           <div className="col-md-3">
-            <div class="product-card">
+            <div class="product-card" onClick={() => setShowEdit(!showEdit)}>
               <div class="badge">Hot</div>
               <div class="product-tumb">
                 <img src={trending_img_1} alt="" className="w-100" />
               </div>
               <div class="product-details">
-                <h4>
-                  <a href="">Gold Bracelet</a>
-                </h4>
+                <h4>Gold Bracelet</h4>
               </div>
             </div>
           </div>
           <div className="col-md-3">
-            <div class="product-card">
+            <div class="product-card" onClick={() => setShowEdit(!showEdit)}>
               <div class="badge">Hot</div>
               <div class="product-tumb">
                 <img src={trending_img_2} alt="" className="w-100" />
@@ -218,28 +288,24 @@ const LandingPage = () => {
             </div>
           </div>
           <div className="col-md-3">
-            <div class="product-card">
+            <div class="product-card" onClick={() => setShowEdit(!showEdit)}>
               <div class="badge">Hot</div>
               <div class="product-tumb">
                 <img src={trending_img_3} alt="" className="w-100" />
               </div>
               <div class="product-details">
-                <h4>
-                  <a href="">Ring</a>
-                </h4>
+                <h4>Ring</h4>
               </div>
             </div>
           </div>
           <div className="col-md-3">
-            <div class="product-card">
+            <div class="product-card" onClick={() => setShowEdit(!showEdit)}>
               <div class="badge">Hot</div>
               <div class="product-tumb">
                 <img src={trending_img_4} alt="" className="w-100" />
               </div>
               <div class="product-details">
-                <h4>
-                  <a href="">Silver Bracelet</a>
-                </h4>
+                <h4>Silver Bracelet</h4>
               </div>
             </div>
           </div>
@@ -303,23 +369,77 @@ const LandingPage = () => {
       {/* Instagram Post Section End */}
 
       {/* Latest News Section Start */}
-      <section className="latest-news mt-5 mb-5">
-        {/* <div className="row">
-          <div className="newsletter text-center">
-            <h3>Latest From Impel!</h3>
-          </div>
-        </div> */}
-        <div class="row justify-content-center">
-          <div class="col-md-8 col-lg-6">
-            <div class="latest_product_info newsletter">
-              <h3>latest From Impel!</h3>
-              <div class="form-group">
-                <input
-                  type="email"
-                  class="form-control"
-                  placeholder="Email address"
-                />
-                <button class="btn inq_btn">inquiry</button>
+      <section className="latest-news mt-5 mb-4">
+        <div className="container-fluid">
+          <div className="row">
+            <div className="col-md-8 col-12">
+              <div>
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3672.0495103014973!2d72.58762837484393!3d23.021954279174192!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395e85fa6dfce599%3A0x96f7a9db74c08a6b!2sImpel%20Store!5e0!3m2!1sen!2sin!4v1734934977423!5m2!1sen!2sin"
+                  height="440"
+                  style={{ border: "0", width: "100%" }}
+                  allowfullscreen=""
+                  loading="lazy"
+                  referrerpolicy="no-referrer-when-downgrade"
+                ></iframe>
+              </div>
+            </div>
+            <div className="col-md-4 col-12">
+              <div class="form-main">
+                <div class="main-wrapper">
+                  <h2 class="form-head">Contact From</h2>
+                  <form
+                    class="form-wrapper"
+                    ref={formRef}
+                    onSubmit={handleSubmit}
+                  >
+                    <div class="form-card">
+                      <input
+                        class="form-input"
+                        type="text"
+                        name="name"
+                        value={form.name}
+                        onChange={handleChange}
+                        required="required"
+                      />
+                      <label class="form-label" for="full_name">
+                        Full Name
+                      </label>
+                    </div>
+
+                    <div class="form-card">
+                      <input
+                        class="form-input"
+                        type="email"
+                        name="email"
+                        id="sender_email"
+                        value={form.email}
+                        onChange={handleChange}
+                        required="required"
+                      />
+                      <label class="form-label" for="email">
+                        Email
+                      </label>
+                    </div>
+
+                    <div class="form-card">
+                      <input
+                        class="form-input"
+                        type="number"
+                        name="phone"
+                        value={form.phone}
+                        onChange={handleChange}
+                        required="required"
+                      />
+                      <label class="form-label" for="phone">
+                        Phone number
+                      </label>
+                    </div>
+                    <div class="btn-wrap">
+                      <button> Submit </button>
+                    </div>
+                  </form>
+                </div>
               </div>
             </div>
           </div>
@@ -327,27 +447,75 @@ const LandingPage = () => {
       </section>
       {/* Latest News Section End */}
 
-      {/* Google Map Section Start */}
-      <div>
-        <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3672.0171989114215!2d72.5870875747427!3d23.023140716308067!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395e844a3ea592a9%3A0xd3f0a4b932c42678!2sManek%20Chowk%2C%20Old%20City%2C%20Khadia%2C%20Ahmedabad%2C%20Gujarat%20380001!5e0!3m2!1sen!2sin!4v1733912939870!5m2!1sen!2sin"
-          height="350"
-          style={{ border: "0", width: "100%" }}
-          allowfullscreen=""
-          loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade"
-        ></iframe>
-        <hr />
-      </div>
-      {/* Google Map Section End */}
-
       {/* Footer Section Start */}
-      <section className="footer-section">
+      <section
+        className="footer-section"
+        style={{ borderTop: "1px solid #000" }}
+      >
         <div className="footer_copyright">
           <h2>Copyright © {currentYear} Impel.store</h2>
         </div>
       </section>
       {/* Footer Section End */}
+
+      <Modal
+        className=""
+        centered
+        show={showEdit}
+        backdrop="static"
+        keyboard={false}
+        onHide={() => setShowEdit(false)}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Add Lead</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form onSubmit={handleSubmit}>
+            <div className="row edit-user-form">
+              <Form.Group as={Col} className="mb-2" controlId="formGridState">
+                <Form.Label>Full Name</Form.Label>
+                <Form.Control
+                  name="name"
+                  placeholder="Enter your name"
+                  className="form-control"
+                  value={form.name}
+                  onChange={handleChange}
+                  required
+                />
+              </Form.Group>
+            </div>
+            <div className="row edit-user-form">
+              <Form.Group as={Col} className="mb-2" controlId="formGridState">
+                <Form.Label>Email</Form.Label>
+                <Form.Control
+                  name="email"
+                  placeholder="Enter your email"
+                  className="form-control"
+                  value={form.email}
+                  onChange={handleChange}
+                  required
+                />
+              </Form.Group>
+            </div>
+            <div className="row edit-user-form">
+              <Form.Group as={Col} className="mb-2" controlId="formGridState">
+                <Form.Label>Phone Number</Form.Label>
+                <Form.Control
+                  name="phone"
+                  placeholder="Enter phone number"
+                  className="form-control"
+                  value={form.phone}
+                  onChange={handleChange}
+                  required
+                />
+              </Form.Group>
+            </div>
+            <div className="text-center mt-2">
+              <button className="update_order_btn">Save</button>
+            </div>
+          </Form>
+        </Modal.Body>
+      </Modal>
     </>
   );
 };

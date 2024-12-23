@@ -538,12 +538,12 @@ const CreatePDF = () => {
                             </div>
                             <div className="text-center">
                               <Link
-                                to="/shop"
+                                to="/ready-to-dispatch"
                                 className="view_all_btn px-4 py-2"
                                 style={{ borderRadius: "8px" }}
                               >
                                 <FaLongArrowAltLeft className="mr-2" />{" "}
-                                &nbsp;Back to Shop
+                                &nbsp;Back to Ready jewellery
                               </Link>
                             </div>
                           </div>

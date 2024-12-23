@@ -77,7 +77,7 @@ function App() {
       location.pathname.startsWith("/reset-password") ||
       location.pathname.startsWith("/dealer-login") ||
       location.pathname.startsWith("/order-tracking-details") ||
-      location.pathname.startsWith("/home")
+      location.pathname.startsWith("/jewelery-for-women")
     ) {
       return null;
     } else {
@@ -99,15 +99,15 @@ function App() {
                     <>
                       <Route path="/" element={renderLayout()}>
                         {/* COMMON COMPONENT */}
-                        <Route path="home" element={<LandingPage />} />
+                        <Route path="jewelery-for-women" element={<LandingPage />} />
                         <Route index element={<Home />} />
                         <Route path="shop" element={<Shop />} />
                         <Route
-                          path="ready-to-dispatch/:id"
+                          path="ready-to-dispatch"
                           element={<ReadytoDispatch />}
                         />
                         <Route
-                          path="ready-to-dispatch/:ids/:id"
+                          path="ready-to-dispatch/:id"
                           element={<ReadyDetails />}
                         />
 

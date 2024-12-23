@@ -7,7 +7,6 @@ import { FaPencilAlt } from "react-icons/fa";
 import { CgSpinner } from "react-icons/cg";
 import { ProfileSystem } from "../../context/ProfileContext";
 import Loader from "../../components/common/Loader";
-import ProfileModal from "./ProfileModal";
 
 const Profile = () => {
   const { dispatch: profilename, state: namestate } = useContext(ProfileSystem);

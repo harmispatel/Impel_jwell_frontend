@@ -360,12 +360,12 @@ const Navbar = () => {
                 <li className="nav-item">
                   <Link
                     className={
-                      currentRoute === "/ready-to-dispatch/1,4"
+                      currentRoute === "/ready-to-dispatch"
                         ? "nav-link active"
                         : "nav-link"
                     }
                     aria-current="page"
-                    to={`/ready-to-dispatch/${impelID}`}
+                    to={"/ready-to-dispatch"}
                     onClick={handleNavClick}
                   >
                     Ready Jewellery

@@ -13,7 +13,7 @@ import { useNavigation } from "../../context/NavigationContext";
 const imageURL = process.env.REACT_APP_API_KEY_IMAGE_;
 
 const ReadytoDispatch = () => {
-  const id = "1,4";
+  const id = "1,4,5";
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -69,9 +69,7 @@ const ReadytoDispatch = () => {
     }
 
     navigate(
-      `/ready-to-dispatch/${id}${
-        queryParams ? `?${queryParams.toString()}` : ""
-      }`
+      `/ready-to-dispatch${queryParams ? `?${queryParams.toString()}` : ""}`
     );
 
     setItems(selectedOption ? selectedOption.value : "");
@@ -89,9 +87,7 @@ const ReadytoDispatch = () => {
     }
 
     navigate(
-      `/ready-to-dispatch/${id}${
-        queryParams ? `?${queryParams.toString()}` : ""
-      }`
+      `/ready-to-dispatch${queryParams ? `?${queryParams.toString()}` : ""}`
     );
 
     setSubItems(selectedOption ? selectedOption.value : "");
@@ -114,20 +110,46 @@ const ReadytoDispatch = () => {
     }
 
     navigate(
-      `/ready-to-dispatch/${id}${
-        queryParams ? `?${queryParams.toString()}` : ""
-      }`
+      `/ready-to-dispatch${queryParams ? `?${queryParams.toString()}` : ""}`
     );
 
     setSizes(selectedOption ? selectedOption.value : "");
     setSelectedSizes(selectedOption);
   };
 
+  const scrollup = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
+  const totalPages = Math.ceil(totalItems / 20);
+
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    dataShowLength: 20,
+  });
+
+  
+
   useEffect(() => {
     profileService
-      .GetProductsFilterAPI({
+      .GetProductsPrices()
+      .then((res) => {
+        setAllPrices(res?.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [id]);
+
+  const getProductsFilterAndData = async () => {
+    try {
+      // Call the first API - GetProductsFilterAPI
+      const filterResponse = await profileService.GetProductsFilterAPI({
         PageNo: 1,
-        PageSize: 60,
+        PageSize: 20,
         DeviceID: 0,
         SortBy: "",
         SearchText: "",
@@ -151,25 +173,93 @@ const ReadytoDispatch = () => {
         DoNotShowInClientApp: 0,
         HasTagImage: 0,
         CommaSeperate_CompanyID: id,
-      })
-      .then((res) => {
-        setFilters(res?.Filters);
-      })
-      .catch((err) => {
-        console.log(err);
+        MaxNetWt: 1000,
       });
-  }, [itemGroups, items, subItems, styles, sizes, id]);
+
+      // Set filters after GetProductsFilterAPI is resolved
+      setFilters(filterResponse?.Filters);
+
+      // Then call GetProductsAPI
+      const productsResponse = await profileService.GetProductsAPI({
+        PageNo: pagination?.currentPage || 1,
+        PageSize: 20,
+        DeviceID: 0,
+        SortBy: "",
+        SearchText: tagNoChange || "",
+        TranType: "",
+        CommaSeperate_ItemGroupID: itemGroups?.value || "",
+        CommaSeperate_ItemID: items || "",
+        CommaSeperate_StyleID: styles?.value || "",
+        CommaSeperate_ProductID: "",
+        CommaSeperate_CompanyID: id || "",
+        CommaSeperate_SubItemID: subItems || "",
+        CommaSeperate_AppItemCategoryID: "",
+        CommaSeperate_ItemSubID: "",
+        CommaSeperate_KarigarID: "",
+        CommaSeperate_BranchID: "",
+        CommaSeperate_Size: sizes || "",
+        CommaSeperate_CounterID: "",
+        MaxNetWt: 0,
+        MinNetWt: 0,
+        OnlyCartItem: false,
+        OnlyWishlistItem: false,
+        StockStatus: "",
+        DoNotShowInClientApp: 0,
+        HasTagImage: 0,
+        MaxNetWt: 1000,
+      });
+
+      // Set products after GetProductsAPI is resolved
+      setProducts(productsResponse?.Tags);
+      setTotalItems(productsResponse?.TotalItems);
+      setIsLoading(false);
+    } catch (err) {
+      console.log(err);
+      setIsLoading(true);
+    }
+  };
 
   useEffect(() => {
-    profileService
-      .GetProductsPrices()
-      .then((res) => {
-        setAllPrices(res?.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [id]);
+    getProductsFilterAndData();
+  }, [
+    itemGroups,
+    items,
+    subItems,
+    styles,
+    sizes,
+    tagNoChange,
+    id,
+    pagination?.currentPage,
+  ]);
+
+  
+
+  const paginationPage = (page) => {
+    getProductsFilterAndData(page);
+    setPagination({ ...pagination, currentPage: page });
+    scrollup();
+    setIsLoading(true);
+  };
+
+  const paginationPrev = () => {
+    if (pagination.currentPage > 1) {
+      const prevPage = pagination.currentPage - 1;
+      setPagination({ ...pagination, currentPage: prevPage });
+      getProductsFilterAndData(prevPage);
+      scrollup();
+      setIsLoading(true);
+    }
+  };
+
+  const paginationNext = () => {
+    if (pagination.currentPage < totalPages) {
+      const nextPage = pagination.currentPage + 1;
+      setPagination({ ...pagination, currentPage: nextPage });
+      getProductsFilterAndData(nextPage);
+      scrollup();
+      setIsLoading(true);
+    }
+  };
 
   const numberFormat = (value) =>
     new Intl.NumberFormat("en-IN")?.format(Math?.round(value));
@@ -262,112 +352,7 @@ const ReadytoDispatch = () => {
 
   // <-------------------- PAGINATION FUNCTION HERE START -------------------->
 
-  const scrollup = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
-
-  const totalPages = Math.ceil(totalItems / 60);
-
-  const [pagination, setPagination] = useState({
-    currentPage: 1,
-    dataShowLength: 60,
-  });
-
-  const paginationPage = (page) => {
-    getProducts(page);
-    setPagination({ ...pagination, currentPage: page });
-    scrollup();
-    setIsLoading(true);
-  };
-
-  const paginationPrev = () => {
-    if (pagination.currentPage > 1) {
-      const prevPage = pagination.currentPage - 1;
-      setPagination({ ...pagination, currentPage: prevPage });
-      getProducts(prevPage);
-      scrollup();
-      setIsLoading(true);
-    }
-  };
-
-  const paginationNext = () => {
-    if (pagination.currentPage < totalPages) {
-      const nextPage = pagination.currentPage + 1;
-      setPagination({ ...pagination, currentPage: nextPage });
-      getProducts(nextPage);
-      scrollup();
-      setIsLoading(true);
-    }
-  };
-
   // <-------------------- PAGINATION FUNCTION HERE END -------------------->
-
-  const getProducts = (page) => {
-    profileService
-      .GetProductsAPI({
-        PageNo: page,
-        PageSize: 60,
-        DeviceID: 0,
-        SortBy: "",
-        SearchText: tagNoChange || "",
-        TranType: "",
-        CommaSeperate_ItemGroupID: itemGroups?.value || "",
-        CommaSeperate_ItemID: items || "",
-        CommaSeperate_StyleID: styles?.value || "",
-        CommaSeperate_ProductID: "",
-        CommaSeperate_CompanyID: id || "",
-        CommaSeperate_SubItemID: subItems || "",
-        CommaSeperate_AppItemCategoryID: "",
-        CommaSeperate_ItemSubID: "",
-        CommaSeperate_KarigarID: "",
-        CommaSeperate_BranchID: "",
-        CommaSeperate_Size: sizes || "",
-        CommaSeperate_CounterID: "",
-        MaxNetWt: 0,
-        MinNetWt: 0,
-        OnlyCartItem: false,
-        OnlyWishlistItem: false,
-        StockStatus: "",
-        DoNotShowInClientApp: 0,
-        HasTagImage: 0,
-      })
-      .then((res) => {
-        setProducts(res?.Tags);
-        setTotalItems(res?.TotalItems);
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setIsLoading(true);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  };
-
-  useEffect(() => {
-    getProducts(pagination?.currentPage || 1);
-  }, [
-    itemGroups,
-    items,
-    subItems,
-    styles,
-    sizes,
-    tagNoChange,
-    id,
-    pagination?.currentPage,
-  ]);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 5000);
-
-    return () => clearTimeout(timer);
-  }, []);
 
   const pdfTip = <Tooltip id="tooltip">My PDF share</Tooltip>;
 
@@ -587,7 +572,7 @@ const ReadytoDispatch = () => {
                           >
                             <div className="item-product text-center">
                               <Link
-                                to={`/ready-to-dispatch/${id}/${data?.TagNo}`}
+                                to={`/ready-to-dispatch/${data?.TagNo}`}
                                 onClick={() =>
                                   setPreviousPageUrl(
                                     location.pathname + location.search
@@ -595,11 +580,11 @@ const ReadytoDispatch = () => {
                                 }
                               >
                                 <div className="product-thumb">
-                                <img
-                                      src={`${imageURL}${data?.Images[0]?.ImageName}`}
-                                      alt=""
-                                      className="w-100"
-                                    />
+                                  <img
+                                    src={`${imageURL}${data?.Images[0]?.ImageName}`}
+                                    alt=""
+                                    className="w-100"
+                                  />
                                 </div>
                               </Link>
                               <div className="wishlist-top">

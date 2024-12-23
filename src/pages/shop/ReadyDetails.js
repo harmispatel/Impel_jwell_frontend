@@ -22,7 +22,7 @@ const ReadyDetails = () => {
   const navigate = useNavigate();
   const { previousUrl } = useNavigation();
   const phone = localStorage.getItem("phone");
-  const { id, ids } = useParams();
+  const { id } = useParams();
 
   const { dispatch: addtocartDispatch } = useContext(ReadyDesignCartSystem);
 
@@ -58,7 +58,7 @@ const ReadyDetails = () => {
 
     getDetails();
     GetUserCartList();
-  }, [ids]);
+  }, [id]);
 
   const GetUserCartList = async () => {
     axios
@@ -196,13 +196,11 @@ const ReadyDetails = () => {
     navigate("/login");
   };
 
-  const impelID = 4;
-
   const handleBackToShop = () => {
     if (previousUrl) {
       navigate(previousUrl);
     } else {
-      navigate(`/ready-to-dispatch/${impelID}`);
+      navigate("/ready-to-dispatch");
     }
   };
 
@@ -225,8 +223,7 @@ const ReadyDetails = () => {
                     firstName="Home"
                     firstUrl="/"
                     secondName="Ready to dispatch"
-                    secondUrl={`/ready-to-dispatch/${ids}`}
-                    thirdName={id}
+                    secondUrl="/ready-to-dispatch"
                   />
                   <button
                     className="btn btn-outline-dark d-flex align-items-center text-center"
