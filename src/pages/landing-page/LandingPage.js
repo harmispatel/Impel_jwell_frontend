@@ -26,6 +26,7 @@ import { Link } from "react-router-dom";
 import emailjs from "@emailjs/browser";
 
 import { Col, Form, Modal } from "react-bootstrap";
+import toast from "react-hot-toast";
 
 const LandingPage = () => {
   const formRef = useRef();
@@ -52,7 +53,7 @@ const LandingPage = () => {
         "template_4lhpngl",
         {
           to_name: "Impel store",
-          to_email: "baldhavansh2505@gmail.com",
+          to_email: "dharika@brightimpressions.in",
           from_name: form.name,
           from_email: document.querySelector('form input[name="email"]').value,
           from_phone: form.phone,
@@ -61,13 +62,15 @@ const LandingPage = () => {
       )
       .then(
         () => {
-          alert("Thank you. I will get back to you as soon as possible.");
+          toast.success(
+            "Thank you. I will get back to you as soon as possible."
+          );
           setForm({
             name: "",
             email: "",
             phone: "",
           });
-          setShowEdit(false)
+          setShowEdit(false);
         },
         (error) => {
           console.log(error);
@@ -128,10 +131,10 @@ const LandingPage = () => {
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link aria-current="page" to="tel:9737392505">
+                  <Link aria-current="page" to="tel:8799619939">
                     <button class="contact-us-btn">
                       <FaPhoneAlt className="me-2" />
-                      9737392505
+                      8799619939
                     </button>
                   </Link>
                 </li>
@@ -145,8 +148,7 @@ const LandingPage = () => {
                     class="contact-us-btn"
                     onClick={() => setShowEdit(!showEdit)}
                   >
-                    <FaQuestionCircle className="me-2" />
-                    Inquiry
+                    Inquire now
                   </button>
                 </li>
               </ul>
@@ -170,7 +172,7 @@ const LandingPage = () => {
           <div className="col-md-8">
             <div className="text-center product-info-text">
               <p>
-                Impel is a jewelry store in Ahmadabad offering minimalist
+                Impel is a jewelry store in Ahmedabad offering minimalist
                 jewelry collection. We craft minimal jewelry for women designed
                 to bring timeless elegance and effortless style to everyday
                 moments. Founded by Mr. Bakul Shah in 1975, Impel Jewelry blends
@@ -184,7 +186,10 @@ const LandingPage = () => {
           <div className="col-md-3">
             <div className="product-card">
               <img src={product_1} alt="" className="w-100" />
-              <div className="product-card-name" onClick={() => setShowEdit(!showEdit)}>
+              <div
+                className="product-card-name"
+                onClick={() => setShowEdit(!showEdit)}
+              >
                 <h5>Rings</h5>
               </div>
             </div>
@@ -192,7 +197,10 @@ const LandingPage = () => {
           <div className="col-md-3">
             <div className="product-card">
               <img src={product_2} alt="" className="w-100" />
-              <div className="product-card-name" onClick={() => setShowEdit(!showEdit)}>
+              <div
+                className="product-card-name"
+                onClick={() => setShowEdit(!showEdit)}
+              >
                 <h5>Necklace</h5>
               </div>
             </div>
@@ -200,7 +208,10 @@ const LandingPage = () => {
           <div className="col-md-3">
             <div className="product-card">
               <img src={product_3} alt="" className="w-100" />
-              <div className="product-card-name" onClick={() => setShowEdit(!showEdit)}>
+              <div
+                className="product-card-name"
+                onClick={() => setShowEdit(!showEdit)}
+              >
                 <h5>Earring</h5>
               </div>
             </div>
@@ -208,7 +219,10 @@ const LandingPage = () => {
           <div className="col-md-3">
             <div className="product-card">
               <img src={product_4} alt="" className="w-100" />
-              <div className="product-card-name" onClick={() => setShowEdit(!showEdit)}>
+              <div
+                className="product-card-name"
+                onClick={() => setShowEdit(!showEdit)}
+              >
                 <h5>Bracelet</h5>
               </div>
             </div>
@@ -218,8 +232,8 @@ const LandingPage = () => {
       {/* Product Section End */}
 
       {/* Bottom Banner Start */}
-      <section className="product-section mt-1">
-        <div className="row">
+      <section className="product-section middle-banner-sec">
+        <div className="row mb-3">
           <div className="col-md-6">
             <div className="banner-img">
               <img src={daily_wear} alt="" className="w-100" />
@@ -228,25 +242,24 @@ const LandingPage = () => {
           <div className="col-md-6 ">
             <div className="h-100 d-flex justify-content-center align-items-center">
               <div className="img-info text-center">
-                <h3>Your Daily Dose of Grace —</h3>
+                <h3>Your Daily Dose of Grace</h3>
                 <p>Minimal Jewelry Crafted to Add Grace to Every Day</p>
-                <button onClick={() => setShowEdit(!showEdit)}>View More</button>
+                <button onClick={() => setShowEdit(!showEdit)}>
+                  View More
+                </button>
               </div>
             </div>
           </div>
         </div>
-      </section>
-      {/* Bottom Banner End */}
-
-      {/* Last Banner Start */}
-      <section className="product-section mb-5">
         <div className="row">
           <div className="col-md-6">
             <div className="h-100 d-flex justify-content-center align-items-center">
               <div className="img-info text-center">
-                <h3>Jewelry as Versatile as You —</h3>
+                <h3>Jewelry as Versatile as You</h3>
                 <p>Minimal Jewelry for Every Style, Every Day, Every Moment.</p>
-                <button onClick={() => setShowEdit(!showEdit)}>View More</button>
+                <button onClick={() => setShowEdit(!showEdit)}>
+                  View More
+                </button>
               </div>
             </div>
           </div>
@@ -257,14 +270,14 @@ const LandingPage = () => {
           </div>
         </div>
       </section>
-      {/* Last Banner End */}
+      {/* Bottom Banner End */}
 
       {/* Trending Product Section Start */}
       <section className="trending-product">
+        <div className="text-center">
+          <h2>Trending Products</h2>
+        </div>
         <div className="row">
-          <div className="text-center mt-5">
-            <h2>Trending Products</h2>
-          </div>
           <div className="col-md-3">
             <div class="product-card" onClick={() => setShowEdit(!showEdit)}>
               <div class="badge">Hot</div>
@@ -314,11 +327,11 @@ const LandingPage = () => {
       {/* Trending Product Section End */}
 
       {/* Start-Love Section Start */}
-      <section className="product-section mt-5">
+      <section className="love-section product-section">
         <div className="row">
           <div className="col-md-6">
             <div className="h-100 d-flex align-items-center">
-              <div className="img-info">
+              <div className="">
                 <h2>It Started With Love</h2>
                 <p>
                   Our commitment to quality begins with meticulously inspected
@@ -344,23 +357,29 @@ const LandingPage = () => {
       {/* Start-Love Section End */}
 
       {/* Instagram Post Section Start */}
-      <section className="insta-section mt-4">
+      <section className="insta-section">
+        <div className="product-text text-center">
+          <FaInstagram className="instagram-icon" />
+          <h4>impel_store instagram</h4>
+        </div>
         <div className="row justify-content-center">
-          <div className="product-text text-center mt-4">
-            <FaInstagram className="instagram-icon" />
-            <h4>impel_store instagram</h4>
-          </div>
-          <div className="row mt-3 mb-5">
-            <div className="col-md-3">
+          <div className="col-md-3">
+            <div className="insta-image">
               <img src={trending_img_1} alt="" className="w-100" />
             </div>
-            <div className="col-md-3">
+          </div>
+          <div className="col-md-3">
+            <div className="insta-image">
               <img src={trending_img_2} alt="" className="w-100" />
             </div>
-            <div className="col-md-3">
+          </div>
+          <div className="col-md-3">
+            <div className="insta-image">
               <img src={trending_img_3} alt="" className="w-100" />
             </div>
-            <div className="col-md-3">
+          </div>
+          <div className="col-md-3">
+            <div className="insta-image">
               <img src={trending_img_4} alt="" className="w-100" />
             </div>
           </div>
@@ -369,77 +388,75 @@ const LandingPage = () => {
       {/* Instagram Post Section End */}
 
       {/* Latest News Section Start */}
-      <section className="latest-news mt-5 mb-4">
-        <div className="container-fluid">
-          <div className="row">
-            <div className="col-md-8 col-12">
-              <div>
-                <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3672.0495103014973!2d72.58762837484393!3d23.021954279174192!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395e85fa6dfce599%3A0x96f7a9db74c08a6b!2sImpel%20Store!5e0!3m2!1sen!2sin!4v1734934977423!5m2!1sen!2sin"
-                  height="440"
-                  style={{ border: "0", width: "100%" }}
-                  allowfullscreen=""
-                  loading="lazy"
-                  referrerpolicy="no-referrer-when-downgrade"
-                ></iframe>
-              </div>
+      <section className="latest-news">
+        <div className="row">
+          <div className="col-md-8 col-12">
+            <div className="location-map">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3672.0495103014973!2d72.58762837484393!3d23.021954279174192!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395e85fa6dfce599%3A0x96f7a9db74c08a6b!2sImpel%20Store!5e0!3m2!1sen!2sin!4v1734934977423!5m2!1sen!2sin"
+                height="440"
+                style={{ border: "0", width: "100%" }}
+                allowfullscreen=""
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+              ></iframe>
             </div>
-            <div className="col-md-4 col-12">
-              <div class="form-main">
-                <div class="main-wrapper">
-                  <h2 class="form-head">Contact From</h2>
-                  <form
-                    class="form-wrapper"
-                    ref={formRef}
-                    onSubmit={handleSubmit}
-                  >
-                    <div class="form-card">
-                      <input
-                        class="form-input"
-                        type="text"
-                        name="name"
-                        value={form.name}
-                        onChange={handleChange}
-                        required="required"
-                      />
-                      <label class="form-label" for="full_name">
-                        Full Name
-                      </label>
-                    </div>
+          </div>
+          <div className="col-md-4 col-12">
+            <div class="form-main">
+              <div class="main-wrapper">
+                <h2 class="form-head">Contact Form</h2>
+                <form
+                  class="form-wrapper"
+                  ref={formRef}
+                  onSubmit={handleSubmit}
+                >
+                  <div class="form-card">
+                    <input
+                      class="form-input"
+                      type="text"
+                      name="name"
+                      value={form.name}
+                      onChange={handleChange}
+                      required="required"
+                    />
+                    <label class="form-label" for="full_name">
+                      Full Name
+                    </label>
+                  </div>
 
-                    <div class="form-card">
-                      <input
-                        class="form-input"
-                        type="email"
-                        name="email"
-                        id="sender_email"
-                        value={form.email}
-                        onChange={handleChange}
-                        required="required"
-                      />
-                      <label class="form-label" for="email">
-                        Email
-                      </label>
-                    </div>
+                  <div class="form-card">
+                    <input
+                      class="form-input"
+                      type="email"
+                      name="email"
+                      id="sender_email"
+                      value={form.email}
+                      onChange={handleChange}
+                      required="required"
+                    />
+                    <label class="form-label" for="email">
+                      Email
+                    </label>
+                  </div>
 
-                    <div class="form-card">
-                      <input
-                        class="form-input"
-                        type="number"
-                        name="phone"
-                        value={form.phone}
-                        onChange={handleChange}
-                        required="required"
-                      />
-                      <label class="form-label" for="phone">
-                        Phone number
-                      </label>
-                    </div>
-                    <div class="btn-wrap">
-                      <button> Submit </button>
-                    </div>
-                  </form>
-                </div>
+                  <div class="form-card">
+                    <input
+                      class="form-input"
+                      type="number"
+                      name="phone"
+                      value={form.phone}
+                      onChange={handleChange}
+                      required="required"
+                    />
+                    <label class="form-label" for="phone">
+                      Phone number
+                    </label>
+                  </div>
+                  <div class="btn-wrap">
+                    <button> Submit </button>
+                  </div>
+                </form>
               </div>
             </div>
           </div>

@@ -5,7 +5,7 @@
   background-color: #cb7f61;
 }
 
-.navbar .navbar-nav .nav-link-name a{
+.navbar .navbar-nav .nav-link-name a {
   color: #fff;
   font-size: 15px;
   font-weight: 600;
@@ -41,7 +41,6 @@
   display: inline-block;
   font-size: 14px;
   font-weight: 500;
-  line-height: 20px;
   list-style: none;
   margin: 0;
   padding: 10px 12px;
@@ -52,14 +51,22 @@
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
+  letter-spacing: 1px;
 }
 
 .product-section .product-info-text-name h1 {
-  margin: 13px 0;
-  font-size: 34px;
+  margin: 35px 0;
+  font-size: 36px;
+  color: #000;
 }
 
 .product-section p {
+  color: #666;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.product-section .img-info p {
   color: hsl(18.11deg 50.48% 58.82%);
   font-weight: 600;
   font-size: 18px;
@@ -68,10 +75,8 @@
 /* Product Section Start */
 .product-section,
 .latest-news,
-.trending-product,
-.insta-section,
-.product-section {
-  padding: 10px 25px;
+.trending-product {
+  padding: 25px;
 }
 
 .footer-section {
@@ -87,9 +92,10 @@
 }
 
 .trending-product h2 {
-  color: rgb(203, 127, 97);
+  color: #000;
   font-weight: 600;
   font-size: 30px;
+  margin-bottom: 25px;
 }
 
 .insta-section {
@@ -100,7 +106,7 @@
 
 .product-card {
   position: relative;
-  margin: 35px auto;
+  /* margin: 35px auto; */
   background: #fafafa;
   cursor: pointer;
 }
@@ -130,6 +136,14 @@
   font-size: 26px;
 }
 
+.product-info-text {
+  margin-bottom: 35px;
+}
+
+.product-info-text p {
+  margin: 0;
+}
+
 .latest_product_info h3 {
   font-size: 30px;
   text-align: center;
@@ -142,15 +156,6 @@
 }
 
 .latest_product_info input {
-  border: none !important;
-  border-bottom: 2px solid #000 !important;
-  border-radius: 0 !important;
-  margin-right: 15px !important;
-  box-shadow: none !important;
-  background-color: transparent !important;
-}
-
-.form-group .form-control:focus {
   border: none !important;
   border-bottom: 2px solid #000 !important;
   border-radius: 0 !important;
@@ -277,15 +282,15 @@
 
 .instagram-icon {
   font-size: 45px;
-  color: rgb(203, 127, 97);
-  border: 2px solid rgb(203, 127, 97);
+  color: #000;
+  border: 2px solid #000;
   border-radius: 50%;
   padding: 5px;
   margin-bottom: 8px;
 }
 
 .product-text h4 {
-  color: rgb(203, 127, 97);
+  color: #000;
   font-weight: 600;
   font-size: 30px;
 }
@@ -311,22 +316,14 @@
   backdrop-filter: blur(5px);
   background-color: #ffffff85;
 }
-@media screen and (max-width: 991px) {
-  .form-main .main-wrapper {
-    width: 70%;
-  }
-}
-@media screen and (max-width: 767px) {
-  .form-main .main-wrapper {
-    width: 90%;
-  }
-}
+
 .form-main .main-wrapper .form-head {
   font-size: 30px;
   line-height: 40px;
   font-weight: 600;
   text-align: center;
   margin: 0px 0 25px;
+  color: #000;
 }
 .form-main .main-wrapper .form-wrapper {
   display: flex;
@@ -512,4 +509,69 @@
 .btn-wrap button:hover {
   border: 1px solid #000;
   background: transparent;
+}
+
+.middle-banner-sec,
+.love-section,
+.insta-section,
+.latest-news {
+  padding: 40px 25px;
+}
+
+.love-section h2 {
+  font-size: 35px;
+  padding-bottom: 15px;
+}
+
+.insta-section .product-text {
+  margin-bottom: 35px;
+}
+
+@media (max-width: 767px) {
+  .product-section,
+  .trending-product,
+  .insta-section {
+    padding: 15px 20px;
+  }
+
+  .product-section .product-card,
+  .trending-product .product-card,
+  .insta-section .insta-image {
+    margin-bottom: 20px;
+  }
+
+  .middle-banner-sec .row .col-md-6:first-child {
+    order: 2;
+  }
+
+  .middle-banner-sec .row:last-child .col-md-6:first-child {
+    order: 1;
+  }
+
+  .middle-banner-sec .row .col-md-6:last-child {
+    order: 1;
+  }
+
+  .middle-banner-sec .row:last-child .col-md-6:last-child {
+    order: 2;
+  }
+
+  .middle-banner-sec {
+    padding-bottom: 40px;
+  }
+
+  .img-info {
+    margin-bottom: 20px;
+  }
+
+  .img-info h3 {
+    font-size: 30px;
+  }
+
+  .location-map{
+    margin-bottom: 35px;
+  }
+  .form-main .main-wrapper{
+    padding: 20px;
+  }
 }

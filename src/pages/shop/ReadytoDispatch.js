@@ -3,7 +3,6 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import Loader from "../../components/common/Loader";
 import profileService from "../../services/Home";
 import Select from "react-select";
-import { Skeleton } from "antd";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { FaFilePdf, FaRegFilePdf } from "react-icons/fa";
 import toast from "react-hot-toast";
@@ -19,8 +18,6 @@ const ReadytoDispatch = () => {
 
   const userType = localStorage.getItem("user_type");
   const email = localStorage.getItem("email");
-
-  const [loading, setLoading] = useState(true);
 
   const [products, setProducts] = useState([]);
   const [filters, setFilters] = useState([]);
@@ -46,10 +43,17 @@ const ReadytoDispatch = () => {
 
   const [pdfItems, setPdfItems] = useState([]);
 
-  const handleCategory = (selectedOption) => {
-    setIsLoading(true);
-    setItemGroups(selectedOption);
-  };
+  const totalPages = Math.ceil(totalItems / 20);
+
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    dataShowLength: 20,
+  });
+
+  // const handleCategory = (selectedOption) => {
+  //   setIsLoading(true);
+  //   setItemGroups(selectedOption);
+  // };
 
   const handleSearchItems = (e) => {
     if (tagNoChange?.length < 0) {
@@ -94,10 +98,10 @@ const ReadytoDispatch = () => {
     setSelectedSubItems(selectedOption);
   };
 
-  const handleStylesTag = (selectedOption) => {
-    setIsLoading(true);
-    setStyles(selectedOption);
-  };
+  // const handleStylesTag = (selectedOption) => {
+  //   setIsLoading(true);
+  //   setStyles(selectedOption);
+  // };
 
   const handleSizeTag = (selectedOption) => {
     setIsLoading(true);
@@ -124,15 +128,6 @@ const ReadytoDispatch = () => {
     });
   };
 
-  const totalPages = Math.ceil(totalItems / 20);
-
-  const [pagination, setPagination] = useState({
-    currentPage: 1,
-    dataShowLength: 20,
-  });
-
-  
-
   useEffect(() => {
     profileService
       .GetProductsPrices()
@@ -146,7 +141,6 @@ const ReadytoDispatch = () => {
 
   const getProductsFilterAndData = async () => {
     try {
-      // Call the first API - GetProductsFilterAPI
       const filterResponse = await profileService.GetProductsFilterAPI({
         PageNo: 1,
         PageSize: 20,
@@ -176,10 +170,8 @@ const ReadytoDispatch = () => {
         MaxNetWt: 1000,
       });
 
-      // Set filters after GetProductsFilterAPI is resolved
       setFilters(filterResponse?.Filters);
 
-      // Then call GetProductsAPI
       const productsResponse = await profileService.GetProductsAPI({
         PageNo: pagination?.currentPage || 1,
         PageSize: 20,
@@ -209,7 +201,6 @@ const ReadytoDispatch = () => {
         MaxNetWt: 1000,
       });
 
-      // Set products after GetProductsAPI is resolved
       setProducts(productsResponse?.Tags);
       setTotalItems(productsResponse?.TotalItems);
       setIsLoading(false);
@@ -231,8 +222,6 @@ const ReadytoDispatch = () => {
     id,
     pagination?.currentPage,
   ]);
-
-  
 
   const paginationPage = (page) => {
     getProductsFilterAndData(page);
