@@ -3,13 +3,19 @@
   font-size: 15px;
   font-weight: 600;
   background-color: #cb7f61;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
 .navbar .navbar-nav .nav-link-name a {
   color: #fff;
   font-size: 15px;
   font-weight: 600;
-  border-bottom: 2px solid #cb7f61;
+}
+
+.impel-jewel-logo {
+  height: 60px;
 }
 
 .img-info h3 {
@@ -33,6 +39,28 @@
 }
 
 .contact-us-btn {
+  background-color: rgb(255 255 255 / 83%);
+  border-radius: 8px;
+  border-width: 0;
+  color: #333333;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 500;
+  list-style: none;
+  margin: 0;
+  padding: 10px 12px;
+  text-align: center;
+  transition: all 200ms;
+  vertical-align: baseline;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  letter-spacing: 1px;
+}
+
+.inquire-btn {
   background-color: rgb(255 255 255 / 83%);
   border-radius: 8px;
   border-width: 0;
@@ -302,14 +330,13 @@
 }
 
 .form-main {
-  /* background: linear-gradient(to bottom, #00000024, #00000024); */
   background-size: cover;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 .form-main .main-wrapper {
-  border-radius: 10px;
+  border-radius: 8px;
   padding: 30px;
   width: 100%;
   box-shadow: 0 0 5px 5px #00000020;
@@ -326,189 +353,7 @@
   color: #000;
 }
 .form-main .main-wrapper .form-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  gap: 15px;
-}
-.form-main .main-wrapper .form-wrapper .form-card {
-  position: relative;
   width: 100%;
-}
-.form-main .main-wrapper .form-wrapper .form-card .form-input {
-  padding: 20px 25px 15px;
-  width: 100%;
-  border: 1px solid #000;
-  border-radius: 5px;
-  background: transparent;
-  outline: none;
-  font-size: 20px;
-  line-height: 30px;
-  font-weight: 400;
-  box-sizing: border-box;
-}
-.form-main .main-wrapper .form-wrapper .form-card .form-input:valid,
-.form-main .main-wrapper .form-wrapper .form-card .form-input:focus {
-  border: 1px solid #515151;
-}
-.form-main
-  .main-wrapper
-  .form-wrapper
-  .form-card
-  .form-input:valid
-  ~ .form-label,
-.form-main
-  .main-wrapper
-  .form-wrapper
-  .form-card
-  .form-input:focus
-  ~ .form-label {
-  color: #515151;
-  top: 30%;
-  transform: translateY(-70%);
-  font-size: 13px;
-  line-height: 23px;
-}
-.form-main .main-wrapper .form-wrapper .form-card .form-input:-webkit-autofill,
-.form-main
-  .main-wrapper
-  .form-wrapper
-  .form-card
-  .form-input:-webkit-autofill:hover,
-.form-main
-  .main-wrapper
-  .form-wrapper
-  .form-card
-  .form-input:-webkit-autofill:focus,
-.form-main
-  .main-wrapper
-  .form-wrapper
-  .form-card
-  .form-input:-webkit-autofill:active {
-  transition: background-color 9999s ease-in-out 0s;
-}
-.form-main
-  .main-wrapper
-  .form-wrapper
-  .form-card
-  .form-input::-webkit-outer-spin-button,
-.form-main
-  .main-wrapper
-  .form-wrapper
-  .form-card
-  .form-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-.form-main .main-wrapper .form-wrapper .form-card .form-label {
-  position: absolute;
-  left: 25px;
-  top: 50%;
-  transform: translateY(-50%);
-  pointer-events: none;
-  transition: 0.3s;
-  margin: 0;
-  font-size: 18px;
-  line-height: 28px;
-  font-weight: 500;
-}
-.form-main .main-wrapper .form-wrapper .form-card .form-textarea {
-  padding: 20px 25px 15px;
-  width: 100%;
-  border: 1px solid #000;
-  border-radius: 5px;
-  background: transparent;
-  outline: none;
-  font-size: 20px;
-  line-height: 30px;
-  font-weight: 400;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  resize: none;
-  box-sizing: border-box;
-}
-.form-main .main-wrapper .form-wrapper .form-card .form-textarea:valid,
-.form-main .main-wrapper .form-wrapper .form-card .form-textarea:focus {
-  border: 1px solid #515151;
-}
-.form-main
-  .main-wrapper
-  .form-wrapper
-  .form-card
-  .form-textarea:valid
-  ~ .form-textarea-label,
-.form-main
-  .main-wrapper
-  .form-wrapper
-  .form-card
-  .form-textarea:focus
-  ~ .form-textarea-label {
-  color: #515151;
-  top: 18%;
-  transform: translateY(-82%);
-  font-size: 13px;
-  line-height: 23px;
-}
-.form-main
-  .main-wrapper
-  .form-wrapper
-  .form-card
-  .form-textarea:-webkit-autofill,
-.form-main
-  .main-wrapper
-  .form-wrapper
-  .form-card
-  .form-textarea:-webkit-autofill:hover,
-.form-main
-  .main-wrapper
-  .form-wrapper
-  .form-card
-  .form-textarea:-webkit-autofill:focus,
-.form-main
-  .main-wrapper
-  .form-wrapper
-  .form-card
-  .form-textarea:-webkit-autofill:active {
-  transition: background-color 9999s ease-in-out 0s;
-}
-.form-main .main-wrapper .form-wrapper .form-card .form-textarea-label {
-  position: absolute;
-  left: 25px;
-  top: 30%;
-  transform: translateY(-70%);
-  pointer-events: none;
-  transition: 0.3s;
-  margin: 0;
-  font-size: 18px;
-  line-height: 28px;
-  font-weight: 500;
-}
-
-.btn-wrap {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 16px 0 0;
-}
-
-.btn-wrap button {
-  padding: 0 32px;
-  font-size: 18px;
-  line-height: 48px;
-  border: 1px solid transparent;
-  font-weight: 600;
-  border-radius: 6px;
-  transition: all 0.5s ease;
-  cursor: pointer;
-  box-shadow: 0 0 5px 5px #00000020;
-}
-
-.btn-wrap button:hover {
-  border: 1px solid #000;
-  background: transparent;
 }
 
 .middle-banner-sec,
@@ -528,6 +373,31 @@
 }
 
 @media (max-width: 767px) {
+  .navbar .header_inner {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .navbar .navbar-nav .nav-link-name a {
+    color: #000;
+  }
+
+  .navbar-toggler:focus {
+    box-shadow: none !important;
+  }
+
+  .collapsing {
+    transition: none !important;
+  }
+
+  .impel-jewel-logo {
+    height: 40px;
+  }
+
+  .contact-us-btn {
+    padding: 0;
+  }
+
   .product-section,
   .trending-product,
   .insta-section {
@@ -568,10 +438,52 @@
     font-size: 30px;
   }
 
-  .location-map{
+  .location-map {
     margin-bottom: 35px;
   }
-  .form-main .main-wrapper{
+  .form-main .main-wrapper {
     padding: 20px;
   }
+}
+
+.form-wrapper-main .form-label {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 3px;
+  display: block;
+  color: gray;
+}
+
+/* Input Styling */
+.form-wrapper-main .custom-input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.form-wrapper-main .custom-input:focus {
+  border-color: hsl(18.11deg 50.48% 58.82%);
+  box-shadow: 0 0 4px rgba(63, 81, 181, 0.2);
+}
+
+.form-wrapper-main .custom-input.is-invalid {
+  border-color: #f44336;
+}
+
+/* Feedback Messages */
+.form-wrapper-main .invalid-feedback {
+  color: #e10f00;
+  margin-top: 0;
+}
+
+/* Submit Button */
+.form-wrapper-main .submit-button {
+  padding: 10px 38px;
+  background-color: hsl(18.11deg 50.48% 58.82%);
+  border: none;
+  color: #fff;
+  font-weight: 700;
+  border-radius: 5px;
 }

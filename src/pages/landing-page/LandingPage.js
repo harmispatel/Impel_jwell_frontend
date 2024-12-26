@@ -1,6 +1,7 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import "./index.css";
 import banner_1 from "./assets/Banner Images/Impel_Landing Page Banners_01.jpg";
+import impel_logo from "./assets/jewelery-logo-removebg-preview.png";
 
 import product_1 from "./assets/3rd Section/Rings.jpg";
 import product_2 from "./assets/3rd Section/Necklace.jpg";
@@ -12,74 +13,96 @@ import trending_img_2 from "./assets/Trending Products/Necklace.jpg";
 import trending_img_3 from "./assets/Trending Products/Rings_1.jpg";
 import trending_img_4 from "./assets/Trending Products/Silver Bracelet.jpg";
 
+import insta_1 from "./assets/insta_1.jpg";
+import insta_2 from "./assets/insta_2.jpg";
+import insta_3 from "./assets/insta_3.jpg";
+import insta_4 from "./assets/insta_4.jpg";
+
 import love_img from "./assets/silver ring for women.jpg";
 import daily_wear from "./assets/daily wear necklace for women.jpg";
 import modern_bracelet from "./assets/Bracelet_3.jpg";
-import {
-  FaBars,
-  FaInstagram,
-  FaPhoneAlt,
-  FaQuestionCircle,
-} from "react-icons/fa";
+import { FaBars, FaInstagram, FaPhoneAlt } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 import emailjs from "@emailjs/browser";
 
-import { Col, Form, Modal } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import toast from "react-hot-toast";
+import { Button, FormFeedback, Input, Label } from "reactstrap";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { Helmet } from "react-helmet-async";
 
 const LandingPage = () => {
-  const formRef = useRef();
   const currentYear = new Date().getFullYear();
   const [showEdit, setShowEdit] = useState(false);
 
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    phone: "",
+  const formik = useFormik({
+    enableReinitialize: true,
+    initialValues: {
+      fullName: "",
+      email: "",
+      phone: "",
+    },
+    validationSchema: Yup.object({
+      fullName: Yup.string().required("Please enter full name"),
+      email: Yup.string()
+        .email("Must be a valid Email")
+        .max(255)
+        .required("Email is required"),
+      phone: Yup.string()
+        .matches(/^\d{10}$/, "Phone number must be exactly 10 digits")
+        .required("Please enter mobile number"),
+    }),
+    onSubmit: (values) => {
+      emailjs
+        .send(
+          "service_cd8i9z8",
+          "template_4lhpngl",
+          {
+            to_name: "Impel store",
+            to_email: "dharika@brightimpressions.in",
+            from_name: values.fullName,
+            from_email: values.email,
+            from_phone: values.phone,
+          },
+          "gNvP3pb_uObggad1C"
+        )
+        .then(
+          () => {
+            toast.success(
+              "Thank you. I will get back to you as soon as possible."
+            );
+            formik.resetForm();
+            setShowEdit(false);
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+    },
   });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm({ ...form, [name]: value });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    emailjs
-      .send(
-        "service_cd8i9z8",
-        "template_4lhpngl",
-        {
-          to_name: "Impel store",
-          to_email: "dharika@brightimpressions.in",
-          from_name: form.name,
-          from_email: document.querySelector('form input[name="email"]').value,
-          from_phone: form.phone,
-        },
-        "gNvP3pb_uObggad1C"
-      )
-      .then(
-        () => {
-          toast.success(
-            "Thank you. I will get back to you as soon as possible."
-          );
-          setForm({
-            name: "",
-            email: "",
-            phone: "",
-          });
-          setShowEdit(false);
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-  };
 
   return (
     <>
+      <Helmet>
+        <title>Jewelery-for-women | impel.store</title>
+        <meta
+          name="description"
+          content="Explore a wide range of elegant jewelry for women. Shop necklaces, earrings, rings, and more on Impel Store."
+        />
+        <meta
+          name="keywords"
+          content="jewelry, women jewelry, necklaces, earrings, bracelets, rings, Impel Store"
+        />
+        <meta name="author" content="Impel Store" />
+        <meta name="robots" content="index, follow" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta charSet="UTF-8" />
+        <link rel="icon" href="%PUBLIC_URL%/IMPEL-FAV.png" />
+        <link rel="apple-touch-icon" href="%PUBLIC_URL%/IMPEL-FAV.png" />
+      </Helmet>
+
       <nav className="navbar navbar-expand-lg navbar-head-main">
         <div className="container">
           <div className="header_inner">
@@ -94,11 +117,16 @@ const LandingPage = () => {
             >
               <FaBars className="text-white" />
             </button>
-            <img
-              src="https://impel.store/static/media/logo.4b7825a638146a1cdf28.png"
-              alt="logo"
-              height={70}
-            />
+            <Link to="/jewelery-for-women">
+              <img
+                src={impel_logo}
+                alt="logo"
+                className="impel-jewel-logo"
+                onClick={() => {
+                  window.scrollTo(0, 0);
+                }}
+              />
+            </Link>
 
             <div
               className="collapse navbar-collapse"
@@ -106,32 +134,43 @@ const LandingPage = () => {
             >
               <ul className="navbar-nav mb-2 mb-lg-0 w-100">
                 <li className="nav-link-name">
-                  <Link aria-current="page" to="/">
+                  <Link
+                    aria-current="page"
+                    className="nav-link"
+                    to="/jewelery-for-women"
+                    onClick={() => {
+                      window.scrollTo(0, 0);
+                    }}
+                  >
                     Home
                   </Link>
                 </li>
                 <li className="nav-link-name">
-                  <Link aria-current="page" to="/">
+                  <a href="#about-us" className="nav-link">
                     About
-                  </Link>
+                  </a>
                 </li>
                 <li className="nav-link-name">
-                  <Link aria-current="page" to="/">
+                  <a href="#trending-products" className="nav-link">
                     Product
-                  </Link>
+                  </a>
                 </li>
                 <li className="nav-link-name">
-                  <Link aria-current="page" to="/">
+                  <a href="#location" className="nav-link">
                     Location
-                  </Link>
+                  </a>
                 </li>
                 <li className="nav-link-name">
-                  <Link aria-current="page" to="/">
+                  <a href="#contact-us" className="nav-link">
                     Contact
-                  </Link>
+                  </a>
                 </li>
                 <li className="nav-item">
-                  <Link aria-current="page" to="tel:8799619939">
+                  <Link
+                    aria-current="page"
+                    to="tel:8799619939"
+                    className="nav-link"
+                  >
                     <button class="contact-us-btn">
                       <FaPhoneAlt className="me-2" />
                       8799619939
@@ -145,7 +184,7 @@ const LandingPage = () => {
               <ul>
                 <li className="login_user">
                   <button
-                    class="contact-us-btn"
+                    class="inquire-btn"
                     onClick={() => setShowEdit(!showEdit)}
                   >
                     Inquire now
@@ -158,13 +197,13 @@ const LandingPage = () => {
       </nav>
 
       {/* Banner Section Start */}
-      <section>
+      <section id="home">
         <img className="w-100" src={banner_1} alt="First_image" />
       </section>
       {/* Banner Section End */}
 
       {/* Product Section Start */}
-      <section className="product-section">
+      <section className="product-section" id="about-us">
         <div className="row justify-content-center">
           <div className="product-text product-info-text-name text-center">
             <h1>IMPEL JEWELRY</h1>
@@ -273,7 +312,7 @@ const LandingPage = () => {
       {/* Bottom Banner End */}
 
       {/* Trending Product Section Start */}
-      <section className="trending-product">
+      <section className="trending-product" id="trending-products">
         <div className="text-center">
           <h2>Trending Products</h2>
         </div>
@@ -365,22 +404,22 @@ const LandingPage = () => {
         <div className="row justify-content-center">
           <div className="col-md-3">
             <div className="insta-image">
-              <img src={trending_img_1} alt="" className="w-100" />
+              <img src={insta_1} alt="" className="w-100" />
             </div>
           </div>
           <div className="col-md-3">
             <div className="insta-image">
-              <img src={trending_img_2} alt="" className="w-100" />
+              <img src={insta_2} alt="" className="w-100" />
             </div>
           </div>
           <div className="col-md-3">
             <div className="insta-image">
-              <img src={trending_img_3} alt="" className="w-100" />
+              <img src={insta_3} alt="" className="w-100" />
             </div>
           </div>
           <div className="col-md-3">
             <div className="insta-image">
-              <img src={trending_img_4} alt="" className="w-100" />
+              <img src={insta_4} alt="" className="w-100" />
             </div>
           </div>
         </div>
@@ -388,13 +427,13 @@ const LandingPage = () => {
       {/* Instagram Post Section End */}
 
       {/* Latest News Section Start */}
-      <section className="latest-news">
+      <section id="location" className="latest-news">
         <div className="row">
           <div className="col-md-8 col-12">
             <div className="location-map">
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3672.0495103014973!2d72.58762837484393!3d23.021954279174192!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395e85fa6dfce599%3A0x96f7a9db74c08a6b!2sImpel%20Store!5e0!3m2!1sen!2sin!4v1734934977423!5m2!1sen!2sin"
-                height="440"
+                height="480"
                 style={{ border: "0", width: "100%" }}
                 allowfullscreen=""
                 loading="lazy"
@@ -402,59 +441,94 @@ const LandingPage = () => {
               ></iframe>
             </div>
           </div>
-          <div className="col-md-4 col-12">
+          <div className="col-md-4 col-12" id="contact-us">
             <div class="form-main">
               <div class="main-wrapper">
                 <h2 class="form-head">Contact Form</h2>
-                <form
-                  class="form-wrapper"
-                  ref={formRef}
-                  onSubmit={handleSubmit}
-                >
-                  <div class="form-card">
-                    <input
-                      class="form-input"
+                <form class="form-wrapper-main" onSubmit={formik.handleSubmit}>
+                  <div className="mb-4 position-relative">
+                    <Label className="form-label">Full Name</Label>
+                    <Input
+                      name="fullName"
                       type="text"
-                      name="name"
-                      value={form.name}
-                      onChange={handleChange}
-                      required="required"
+                      className="custom-input"
+                      placeholder="Enter your name"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.fullName || ""}
+                      invalid={
+                        formik.touched.fullName && formik.errors.fullName
+                          ? true
+                          : false
+                      }
                     />
-                    <label class="form-label" for="full_name">
-                      Full Name
-                    </label>
+                    {formik.touched.fullName && formik.errors.fullName ? (
+                      <FormFeedback
+                        type="invalid"
+                        className="position-absolute"
+                      >
+                        {formik.errors.fullName}
+                      </FormFeedback>
+                    ) : null}
                   </div>
-
-                  <div class="form-card">
-                    <input
-                      class="form-input"
-                      type="email"
+                  <div className="mb-4 position-relative">
+                    <Label className="form-label">Email</Label>
+                    <Input
                       name="email"
-                      id="sender_email"
-                      value={form.email}
-                      onChange={handleChange}
-                      required="required"
+                      type="email"
+                      className="custom-input"
+                      placeholder="Enter your email"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.email || ""}
+                      invalid={
+                        formik.touched.email && formik.errors.email
+                          ? true
+                          : false
+                      }
                     />
-                    <label class="form-label" for="email">
-                      Email
-                    </label>
+                    {formik.touched.email && formik.errors.email ? (
+                      <FormFeedback
+                        type="invalid"
+                        className="position-absolute"
+                      >
+                        {formik.errors.email}
+                      </FormFeedback>
+                    ) : null}
                   </div>
-
-                  <div class="form-card">
-                    <input
-                      class="form-input"
-                      type="number"
+                  <div className="mb-5 position-relative">
+                    <Label className="form-label">Phone</Label>
+                    <Input
                       name="phone"
-                      value={form.phone}
-                      onChange={handleChange}
-                      required="required"
+                      className="custom-input"
+                      type="number"
+                      placeholder="Enter your phone number"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.phone || ""}
+                      invalid={
+                        formik.touched.phone && formik.errors.phone
+                          ? true
+                          : false
+                      }
                     />
-                    <label class="form-label" for="phone">
-                      Phone number
-                    </label>
+                    {formik.touched.phone && formik.errors.phone ? (
+                      <FormFeedback
+                        type="invalid"
+                        className="position-absolute"
+                      >
+                        {formik.errors.phone}
+                      </FormFeedback>
+                    ) : null}
                   </div>
-                  <div class="btn-wrap">
-                    <button> Submit </button>
+                  <div className="text-center">
+                    <Button
+                      type="submit"
+                      color="primary"
+                      className="submit-button"
+                    >
+                      Submit
+                    </Button>
                   </div>
                 </form>
               </div>
@@ -481,56 +555,84 @@ const LandingPage = () => {
         show={showEdit}
         backdrop="static"
         keyboard={false}
-        onHide={() => setShowEdit(false)}
+        onHide={() => {
+          setShowEdit(false);
+          formik.resetForm();
+        }}
       >
         <Modal.Header closeButton>
-          <Modal.Title>Add Lead</Modal.Title>
+          <Modal.Title>Add Inquire Now</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form onSubmit={handleSubmit}>
-            <div className="row edit-user-form">
-              <Form.Group as={Col} className="mb-2" controlId="formGridState">
-                <Form.Label>Full Name</Form.Label>
-                <Form.Control
-                  name="name"
-                  placeholder="Enter your name"
-                  className="form-control"
-                  value={form.name}
-                  onChange={handleChange}
-                  required
-                />
-              </Form.Group>
+          <form class="form-wrapper-main" onSubmit={formik.handleSubmit}>
+            <div className="mb-4 position-relative">
+              <Label className="form-label">Full Name</Label>
+              <Input
+                name="fullName"
+                type="text"
+                className="custom-input"
+                placeholder="Enter your name"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.fullName || ""}
+                invalid={
+                  formik.touched.fullName && formik.errors.fullName
+                    ? true
+                    : false
+                }
+              />
+              {formik.touched.fullName && formik.errors.fullName ? (
+                <FormFeedback type="invalid" className="position-absolute">
+                  {formik.errors.fullName}
+                </FormFeedback>
+              ) : null}
             </div>
-            <div className="row edit-user-form">
-              <Form.Group as={Col} className="mb-2" controlId="formGridState">
-                <Form.Label>Email</Form.Label>
-                <Form.Control
-                  name="email"
-                  placeholder="Enter your email"
-                  className="form-control"
-                  value={form.email}
-                  onChange={handleChange}
-                  required
-                />
-              </Form.Group>
+            <div className="mb-4 position-relative">
+              <Label className="form-label">Email</Label>
+              <Input
+                name="email"
+                type="email"
+                className="custom-input"
+                placeholder="Enter your email"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.email || ""}
+                invalid={
+                  formik.touched.email && formik.errors.email ? true : false
+                }
+              />
+              {formik.touched.email && formik.errors.email ? (
+                <FormFeedback type="invalid" className="position-absolute">
+                  {formik.errors.email}
+                </FormFeedback>
+              ) : null}
             </div>
-            <div className="row edit-user-form">
-              <Form.Group as={Col} className="mb-2" controlId="formGridState">
-                <Form.Label>Phone Number</Form.Label>
-                <Form.Control
-                  name="phone"
-                  placeholder="Enter phone number"
-                  className="form-control"
-                  value={form.phone}
-                  onChange={handleChange}
-                  required
-                />
-              </Form.Group>
+            <div className="mb-5 position-relative">
+              <Label className="form-label">Phone</Label>
+              <Input
+                name="phone"
+                className="custom-input"
+                type="number"
+                placeholder="Enter your phone number"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.phone || ""}
+                invalid={
+                  formik.touched.phone && formik.errors.phone ? true : false
+                }
+              />
+              {formik.touched.phone && formik.errors.phone ? (
+                <FormFeedback type="invalid" className="position-absolute">
+                  {formik.errors.phone}
+                </FormFeedback>
+              ) : null}
             </div>
-            <div className="text-center mt-2">
-              <button className="update_order_btn">Save</button>
+            <div className="text-center">
+              <Button type="submit" color="primary" className="submit-button">
+                Submit
+              </Button>
             </div>
-          </Form>
+          </form>
         </Modal.Body>
       </Modal>
     </>

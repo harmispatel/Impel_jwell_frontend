@@ -928,6 +928,10 @@ const Shop = () => {
   const [UsercartItems, setUserCartItems] = useState([]);
   const [pdfItems, setPdfItems] = useState([]);
 
+  const [pagination, setPagination] = useState({});
+
+  const totalPages = Math.ceil(paginate?.total_records / 40);
+
   const scrollup = () => {
     window.scrollTo({
       top: 0,
@@ -1182,6 +1186,50 @@ const Shop = () => {
       });
   };
 
+  const resetPagination = () => {
+    setPagination({
+      currentPage: 1,
+      dataShowLength: 40,
+    });
+  };
+
+  const paginationPage = (page) => {
+    const newOffset = (page - 1) * pagination.dataShowLength;
+    FilterData(newOffset);
+    setPagination({ ...pagination, currentPage: page });
+    scrollup();
+    setIsLoading(true);
+  };
+
+  const paginationPrev = (e) => {
+    e.preventDefault();
+    if (pagination.currentPage > 1) {
+      const prevPage = pagination.currentPage - 1;
+      const newOffset = (prevPage - 1) * pagination.dataShowLength;
+      FilterData(newOffset);
+      setPagination({ ...pagination, currentPage: prevPage });
+      scrollup();
+      setIsLoading(true);
+    }
+  };
+
+  const paginationNext = (e) => {
+    e.preventDefault();
+    if (pagination.currentPage < totalPages) {
+      const nextPage = pagination.currentPage + 1;
+      const newOffset = (nextPage - 1) * pagination.dataShowLength;
+      FilterData(newOffset);
+      setPagination({ ...pagination, currentPage: nextPage });
+      scrollup();
+      setIsLoading(true);
+    }
+  };
+
+  useEffect(() => {
+    resetPagination();
+    FilterData(0);
+  }, [category, tag, gender, searchInput, PriceRange, selectedOption]);
+
   useEffect(() => {
     if (Phone) {
       GetUserWishList();
@@ -1370,50 +1418,6 @@ const Shop = () => {
       });
   };
 
-  // PAGINATION FUNCTION
-  const totalPages = Math.ceil(paginate?.total_records / 40);
-
-  const [pagination, setPagination] = useState({});
-
-  const resetPagination = () => {
-    setPagination({
-      currentPage: 1,
-      dataShowLength: 40,
-    });
-  };
-
-  const paginationPage = (page) => {
-    const newOffset = (page - 1) * pagination.dataShowLength;
-    FilterData(newOffset);
-    setPagination({ ...pagination, currentPage: page });
-    scrollup();
-    setIsLoading(true);
-  };
-
-  const paginationPrev = (e) => {
-    e.preventDefault();
-    if (pagination.currentPage > 1) {
-      const prevPage = pagination.currentPage - 1;
-      const newOffset = (prevPage - 1) * pagination.dataShowLength;
-      FilterData(newOffset);
-      setPagination({ ...pagination, currentPage: prevPage });
-      scrollup();
-      setIsLoading(true);
-    }
-  };
-
-  const paginationNext = (e) => {
-    e.preventDefault();
-    if (pagination.currentPage < totalPages) {
-      const nextPage = pagination.currentPage + 1;
-      const newOffset = (nextPage - 1) * pagination.dataShowLength;
-      FilterData(newOffset);
-      setPagination({ ...pagination, currentPage: nextPage });
-      scrollup();
-      setIsLoading(true);
-    }
-  };
-
   const UserLogin = (e) => {
     e.preventDefault();
     localStorage.setItem("redirectPath", location.pathname);
@@ -1425,11 +1429,6 @@ const Shop = () => {
     localStorage.setItem("redirectPath", location.pathname);
     navigate("/dealer-login");
   };
-
-  useEffect(() => {
-    resetPagination();
-    FilterData(0);
-  }, [category, tag, gender, searchInput, PriceRange, selectedOption]);
 
   const wishlistTip = <Tooltip id="tooltip">wishlist</Tooltip>;
   const selectionTip = <Tooltip id="tooltip">My Selections</Tooltip>;
