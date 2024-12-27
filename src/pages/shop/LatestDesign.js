@@ -3,7 +3,8 @@ import homeService from "../../services/Home";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { FaLongArrowAltLeft } from "react-icons/fa";
-import Loader from "../../components/common/Loader";
+import { motion } from "framer-motion";
+import noImage from "../../assets/images/No_Image_Available.jpg";
 
 const LatestDesign = () => {
   const [designs, setDesigns] = useState([]);
@@ -29,6 +30,8 @@ const LatestDesign = () => {
   const numberFormat = (value) =>
     new Intl.NumberFormat("en-IN")?.format(Math?.round(value));
 
+  const shimmerItems = Array(20).fill(null);
+
   return (
     <>
       <Helmet>
@@ -40,36 +43,58 @@ const LatestDesign = () => {
             <h3>Latest Designs</h3>
           </div>
           <div className="categories_data">
-            <div className="row">
-              {isLoading ? (
-                <div className="animation-loading">
-                  <Loader />
+            {isLoading ? (
+              <>
+                <div className="row">
+                  {shimmerItems.map((_, index) => (
+                    <div className="col-lg-3 col-md-6 col-12">
+                      <div key={index} className="shimmer-product">
+                        <div className="shimmer-image"></div>
+                        <div className="shimmer-price"></div>
+                        <div className="shimmer-price"></div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              ) : (
-                <>
+              </>
+            ) : (
+              <>
+                <div className="row">
                   {designs?.length > 0 ? (
                     <>
                       {designs?.slice(0, 200)?.map((data) => {
                         return (
                           <>
                             <div className="col-md-3 col-sm-4 col-xs-6">
-                              <div className="item-product text-center">
+                              <motion.div
+                                className="item-product text-center"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ duration: 0.5 }}
+                              >
                                 <Link to={`/shopdetails/${data?.id}`}>
                                   <div className="product-thumb">
                                     {data?.image ? (
                                       <>
-                                        <img
+                                        <motion.img
                                           src={data?.image}
                                           alt={data?.name}
                                           className="w-100"
+                                          initial={{ opacity: 0 }}
+                                          animate={{ opacity: 1 }}
+                                          transition={{ duration: 0.5 }}
+                                          whileHover={{ scale: 1.05 }}
                                         />
                                       </>
                                     ) : (
                                       <>
-                                        <img
-                                          src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930"
-                                          alt=""
+                                        <motion.img
+                                          src={noImage}
                                           className="w-100"
+                                          initial={{ opacity: 0 }}
+                                          animate={{ opacity: 1 }}
+                                          transition={{ duration: 0.5 }}
+                                          whileHover={{ scale: 1.05 }}
                                         />
                                       </>
                                     )}
@@ -101,7 +126,7 @@ const LatestDesign = () => {
                                     )}
                                   </div>
                                 </Link>
-                              </div>
+                              </motion.div>
                             </div>
                           </>
                         );
@@ -134,9 +159,9 @@ const LatestDesign = () => {
                       </div>
                     </>
                   )}
-                </>
-              )}
-            </div>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </section>

@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import Loader from "../../components/common/Loader";
+import { motion } from "framer-motion";
 import profileService from "../../services/Home";
 import Select from "react-select";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
@@ -417,44 +417,40 @@ const ReadytoDispatch = () => {
       });
   };
 
+  const shimmerItems = Array(20).fill(null);
+
   return (
     <>
       <section className="ready-to-dispatch">
         <div className="container">
-          {isLoading ? (
-            <div className="animation-loading">
-              <Loader />
+          <div className="row">
+            <div className="col-md-3 mb-2 mb-md-4">
+              <div className="form-group d-flex align-items-center">
+                <input
+                  type="search"
+                  className="form-control"
+                  placeholder="Search with tag no"
+                  onChange={(e) => handleSearchItems(e)}
+                  isClearable={true}
+                />
+              </div>
             </div>
-          ) : (
-            <>
-              <div className="row">
-                <div className="col-md-3 mb-2 mb-md-4">
-                  <div className="form-group d-flex align-items-center">
-                    <input
-                      type="search"
-                      className="form-control"
-                      placeholder="Search with tag no"
-                      onChange={(e) => handleSearchItems(e)}
-                      isClearable={true}
-                    />
-                  </div>
-                </div>
-                <div className="col-md-3 mb-2 mb-md-4">
-                  <Select
-                    placeholder="Select Sizes"
-                    isClearable
-                    isSearchable={false}
-                    value={selectedSizes}
-                    onChange={handleSizeTag}
-                    options={filters?.Size?.map((data) => ({
-                      label: data?.Size1,
-                      value: data?.RowNumber,
-                    }))}
-                  />
-                </div>
+            <div className="col-md-3 mb-2 mb-md-4">
+              <Select
+                placeholder="Select Sizes"
+                isClearable
+                isSearchable={false}
+                value={selectedSizes}
+                onChange={handleSizeTag}
+                options={filters?.Size?.map((data) => ({
+                  label: data?.Size1,
+                  value: data?.RowNumber,
+                }))}
+              />
+            </div>
 
-                {/* Category Wise Filter */}
-                {/* <div className="col-md-3">
+            {/* Category Wise Filter */}
+            {/* <div className="col-md-3">
                   <Select
                     placeholder="Select Category"
                     isClearable
@@ -467,33 +463,33 @@ const ReadytoDispatch = () => {
                     }))}
                   />
                 </div> */}
-                <div className="col-md-3 my-2 my-md-0">
-                  <Select
-                    placeholder="Select Item"
-                    isClearable
-                    isSearchable={false}
-                    value={selectedItems}
-                    onChange={handleItems}
-                    options={filters?.Items?.map((data) => ({
-                      label: data?.ItemName,
-                      value: data?.ItemID,
-                    }))}
-                  />
-                </div>
-                <div className="col-md-3 mb-2 mb-md-0">
-                  <Select
-                    placeholder="Select Sub Item"
-                    isClearable
-                    isSearchable={false}
-                    value={selectedSubItems}
-                    onChange={handleSubItems}
-                    options={filters?.SubItems?.map((data) => ({
-                      label: data?.SubItemName,
-                      value: data?.SubItemID,
-                    }))}
-                  />
-                </div>
-                {/* <div className="col-md-3">
+            <div className="col-md-3 my-2 my-md-0">
+              <Select
+                placeholder="Select Item"
+                isClearable
+                isSearchable={false}
+                value={selectedItems}
+                onChange={handleItems}
+                options={filters?.Items?.map((data) => ({
+                  label: data?.ItemName,
+                  value: data?.ItemID,
+                }))}
+              />
+            </div>
+            <div className="col-md-3 mb-2 mb-md-0">
+              <Select
+                placeholder="Select Sub Item"
+                isClearable
+                isSearchable={false}
+                value={selectedSubItems}
+                onChange={handleSubItems}
+                options={filters?.SubItems?.map((data) => ({
+                  label: data?.SubItemName,
+                  value: data?.SubItemID,
+                }))}
+              />
+            </div>
+            {/* <div className="col-md-3">
                   <Select
                     placeholder="Select Style"
                     isClearable
@@ -506,7 +502,25 @@ const ReadytoDispatch = () => {
                     }))}
                   />
                 </div> */}
+          </div>
+          {isLoading ? (
+            <>
+              <div className="row">
+                {shimmerItems.map((_, index) => (
+                  <div className="col-lg-3 col-md-6 col-12">
+                    <div key={index} className="shimmer-product">
+                      <div className="shimmer-image">
+                        <img src="" />
+                      </div>
+                      <div className="shimmer-price"></div>
+                      <div className="shimmer-price"></div>
+                    </div>
+                  </div>
+                ))}
               </div>
+            </>
+          ) : (
+            <>
               <div className="row mt-4">
                 {products?.length > 0 ? (
                   <>
@@ -559,7 +573,12 @@ const ReadytoDispatch = () => {
                             className="col-md-3 col-sm-4 col-xs-6"
                             key={index}
                           >
-                            <div className="item-product text-center">
+                            <motion.div
+                              className="item-product text-center"
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              transition={{ duration: 0.5 }}
+                            >
                               <Link
                                 to={`/ready-to-dispatch/${data?.TagNo}`}
                                 onClick={() =>
@@ -569,10 +588,14 @@ const ReadytoDispatch = () => {
                                 }
                               >
                                 <div className="product-thumb">
-                                  <img
+                                  <motion.img
                                     src={`${imageURL}${data?.Images[0]?.ImageName}`}
                                     alt=""
                                     className="w-100"
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ duration: 0.5 }}
+                                    whileHover={{ scale: 1.05 }}
                                   />
                                 </div>
                               </Link>
@@ -658,7 +681,7 @@ const ReadytoDispatch = () => {
                                   </span>
                                 </div>
                               )}
-                            </div>
+                            </motion.div>
                           </div>
                         </>
                       );

@@ -4,7 +4,8 @@ import BreadCrumb from "../../components/common/BreadCrumb";
 import { FaLongArrowAltLeft } from "react-icons/fa";
 import homeService from "../../services/Home";
 import categoryDetail from "../../services/Shop";
-import Loader from "../../components/common/Loader";
+import { motion } from "framer-motion";
+import noImage from "../../assets/images/No_Image_Available.jpg";
 
 const CategoriesItems = () => {
   const paramId = useParams();
@@ -113,6 +114,8 @@ const CategoriesItems = () => {
   const numberFormat = (value) =>
     new Intl.NumberFormat("en-IN")?.format(Math?.round(value));
 
+  const shimmerItems = Array(20).fill(null);
+
   return (
     <section className="categories">
       <div className="container">
@@ -142,13 +145,23 @@ const CategoriesItems = () => {
         </div>
         <div>
           <div className="categories_data">
-            <div className="row">
-              {isLoading ? (
-                <div className="animation-loading">
-                  <Loader />
+            {isLoading ? (
+              <>
+                <div className="row">
+                  {shimmerItems.map((_, index) => (
+                    <div className="col-lg-3 col-md-6 col-12">
+                      <div key={index} className="shimmer-product">
+                        <div className="shimmer-image"></div>
+                        <div className="shimmer-price"></div>
+                        <div className="shimmer-price"></div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              ) : (
-                <>
+              </>
+            ) : (
+              <>
+                <div className="row">
                   {categoriesData.length > 0 ? (
                     <>
                       {categoriesData.map((data) => {
@@ -160,18 +173,25 @@ const CategoriesItems = () => {
                                   <div className="product-thumb">
                                     {data?.image ? (
                                       <>
-                                        <img
+                                        <motion.img
                                           src={data?.image}
                                           alt={data?.name}
                                           className="w-100"
+                                          initial={{ opacity: 0 }}
+                                          animate={{ opacity: 1 }}
+                                          transition={{ duration: 0.5 }}
+                                          whileHover={{ scale: 1.05 }}
                                         />
                                       </>
                                     ) : (
                                       <>
-                                        <img
-                                          src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930"
-                                          alt=""
+                                        <motion.img
+                                          src={noImage}
                                           className="w-100"
+                                          initial={{ opacity: 0 }}
+                                          animate={{ opacity: 1 }}
+                                          transition={{ duration: 0.5 }}
+                                          whileHover={{ scale: 1.05 }}
                                         />
                                       </>
                                     )}
@@ -361,9 +381,9 @@ const CategoriesItems = () => {
                       </div>
                     </>
                   )}
-                </>
-              )}
-            </div>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>

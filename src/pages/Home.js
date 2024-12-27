@@ -27,6 +27,8 @@ import Kada from "../assets/images/kada.jpg";
 import Gold_Ring from "../assets/images/gold_ring.png";
 import WomansClub from "../components/common/WomansClub";
 
+import { motion } from "framer-motion";
+
 const Home = () => {
   const firstbannerRef = useRef(null);
   const secondbannerRef = useRef(null);
@@ -186,10 +188,14 @@ const Home = () => {
                     }`}
                     onClick={(e) => handleTag(e)}
                   >
-                    <img
+                    <motion.img
                       className="img-fluid"
                       alt=""
-                      style={{ backgroundImage: `url(${image?.image})` }}
+                      src={image?.image}
+                      style={{ objectFit: "cover" }}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 1 }}
                     />
                   </Link>
                 </SwiperSlide>
@@ -198,18 +204,24 @@ const Home = () => {
           })}
         </Swiper>
         <div className="first_banner_button">
-          <button
+          <motion.button
             onClick={() => firstbannerRef?.current?.slidePrev()}
             className="prev-button-swiper"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            transition={{ type: "spring", stiffness: 300 }}
           >
             <MdKeyboardArrowLeft className="swiper-icon" />
-          </button>
-          <button
+          </motion.button>
+          <motion.button
             onClick={() => firstbannerRef?.current?.slideNext()}
             className="next-button-swiper"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            transition={{ type: "spring", stiffness: 300 }}
           >
             <MdKeyboardArrowRight className="swiper-icon" />
-          </button>
+          </motion.button>
         </div>
       </section>
 

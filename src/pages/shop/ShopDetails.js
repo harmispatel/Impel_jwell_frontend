@@ -18,11 +18,13 @@ import Userservice from "../../services/Auth";
 import productDetail from "../../services/Shop";
 import { CartSystem } from "../../context/CartContext";
 import { Accordion } from "react-bootstrap";
-import Loader from "../../components/common/Loader";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import profileService from "../../services/Home";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { useNavigation } from "../../context/NavigationContext";
+import { motion } from "framer-motion";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const ShopDetails = () => {
   const location = useLocation();
@@ -312,18 +314,25 @@ const ShopDetails = () => {
                     <FaArrowLeftLong />
                   </button>
                 </div>
-                {isLoading ? (
-                  <div className="animation-loading">
-                    <Loader />
-                  </div>
-                ) : (
-                  <>
-                    <div className="row">
-                      <div className="col-md-6">
+                <div className="row">
+                  <div className="col-md-6">
+                    {isLoading ? (
+                      <>
+                        <Skeleton style={{ height: "526px" }} width="100%" />
+                      </>
+                    ) : (
+                      <>
                         <div>
                           {productImages?.length === 0 ? (
                             <div id="imageMagnifyer">
-                              <img src={img} alt="" className="w-100" />
+                              <motion.img
+                                src={img}
+                                alt=""
+                                className="w-100"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ duration: 0.5 }}
+                              />
                             </div>
                           ) : (
                             <div className="detalis_slider">
@@ -338,9 +347,13 @@ const ShopDetails = () => {
                                     key={index}
                                     onClick={() => openLightbox(index)}
                                   >
-                                    <img
+                                    <motion.img
                                       src={image}
-                                      alt={`Product Image ${index}`}
+                                      alt=""
+                                      className="w-100"
+                                      initial={{ opacity: 0 }}
+                                      animate={{ opacity: 1 }}
+                                      transition={{ duration: 0.5 }}
                                     />
                                   </div>
                                 ))}
@@ -355,10 +368,13 @@ const ShopDetails = () => {
                                     >
                                       <RxCross1 />
                                     </span>
-                                    <img
-                                      className="w-50"
+                                    <motion.img
                                       src={productImages[currentImageIndex]}
-                                      alt={`Product Image ${currentImageIndex}`}
+                                      alt=""
+                                      className="w-50"
+                                      initial={{ opacity: 0 }}
+                                      animate={{ opacity: 1 }}
+                                      transition={{ duration: 0.5 }}
                                     />
                                     <div className="lightbox-navigation">
                                       <button
@@ -374,28 +390,27 @@ const ShopDetails = () => {
                                         <MdKeyboardArrowRight className="swiper-icon" />
                                       </button>
                                     </div>
-                                    {/* <div className="lightbox-navigation">
-                                      <button
-                                        className="btn"
-                                        onClick={() => navigateLightbox(-1)}
-                                      >
-                                        <MdKeyboardArrowLeft className="swiper-icon" />
-                                      </button>
-                                      <button
-                                        className="btn"
-                                        onClick={() => navigateLightbox(1)}
-                                      >
-                                        <MdKeyboardArrowRight className="swiper-icon" />
-                                      </button>
-                                    </div> */}
                                   </div>
                                 </div>
                               )}
                             </div>
                           )}
                         </div>
-                      </div>
-                      <div className="col-md-6 product-details-content">
+                      </>
+                    )}
+                  </div>
+                  <div className="col-md-6 product-details-content">
+                    {isLoading ? (
+                      <>
+                        <Skeleton height={30} width="60%" />
+                        <Skeleton height={20} width="40%" className="my-2" />
+                        <Skeleton height={20} width="50%" className="my-2" />
+                        <Skeleton height={20} width="70%" className="my-2" />
+                        <Skeleton height={150} width="100%" className="mt-3" />
+                        <Skeleton height={30} width="100%" className="mt-3" />
+                      </>
+                    ) : (
+                      <>
                         <div>
                           <h3>{product?.name}</h3>
                           <h5 className="mb-3">
@@ -698,7 +713,7 @@ const ShopDetails = () => {
                                                           <strong>
                                                             ₹
                                                             {numberFormat(
-                                                              product?.making_charge_discount_20k 
+                                                              product?.making_charge_discount_20k
                                                             )}
                                                           </strong>
                                                         </>
@@ -1153,10 +1168,10 @@ const ShopDetails = () => {
                             </>
                           )}
                         </div>
-                      </div>
-                    </div>
-                  </>
-                )}
+                      </>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
           </div>

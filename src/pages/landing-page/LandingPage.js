@@ -3,6 +3,8 @@ import "./index.css";
 import banner_1 from "./assets/Banner Images/Impel_Landing Page Banners_01.jpg";
 import impel_logo from "./assets/jewelery-logo-removebg-preview.png";
 
+import { motion } from "framer-motion";
+
 import product_1 from "./assets/3rd Section/Rings.jpg";
 import product_2 from "./assets/3rd Section/Necklace.jpg";
 import product_3 from "./assets/3rd Section/Earring.jpg";
@@ -36,6 +38,7 @@ import { Helmet } from "react-helmet-async";
 const LandingPage = () => {
   const currentYear = new Date().getFullYear();
   const [showEdit, setShowEdit] = useState(false);
+  const [loader, setLoader] = useState(false);
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -45,16 +48,17 @@ const LandingPage = () => {
       phone: "",
     },
     validationSchema: Yup.object({
-      fullName: Yup.string().required("Please enter full name"),
+      fullName: Yup.string().required("Full name is required"),
       email: Yup.string()
         .email("Must be a valid Email")
         .max(255)
         .required("Email is required"),
       phone: Yup.string()
         .matches(/^\d{10}$/, "Phone number must be exactly 10 digits")
-        .required("Please enter mobile number"),
+        .required("Phone number is required"),
     }),
     onSubmit: (values) => {
+      setLoader(true);
       emailjs
         .send(
           "service_cd8i9z8",
@@ -73,11 +77,13 @@ const LandingPage = () => {
             toast.success(
               "Thank you. I will get back to you as soon as possible."
             );
+            setLoader(false);
             formik.resetForm();
             setShowEdit(false);
           },
           (error) => {
             console.log(error);
+            setLoader(false);
           }
         );
     },
@@ -102,7 +108,6 @@ const LandingPage = () => {
         <link rel="icon" href="%PUBLIC_URL%/IMPEL-FAV.png" />
         <link rel="apple-touch-icon" href="%PUBLIC_URL%/IMPEL-FAV.png" />
       </Helmet>
-
       <nav className="navbar navbar-expand-lg navbar-head-main">
         <div className="container">
           <div className="header_inner">
@@ -198,16 +203,36 @@ const LandingPage = () => {
 
       {/* Banner Section Start */}
       <section id="home">
-        <img className="w-100" src={banner_1} alt="First_image" />
+        <motion.img
+          className="w-100"
+          src={banner_1}
+          alt="First_image"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        />
       </section>
       {/* Banner Section End */}
 
       {/* Product Section Start */}
       <section className="product-section" id="about-us">
-        <div className="row justify-content-center">
+        <motion.div
+          className="row justify-content-center"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
           <div className="product-text product-info-text-name text-center">
             <h1>IMPEL JEWELRY</h1>
           </div>
+        </motion.div>
+
+        <motion.div
+          className="row justify-content-center"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+        >
           <div className="col-md-8">
             <div className="text-center product-info-text">
               <p>
@@ -220,66 +245,62 @@ const LandingPage = () => {
               </p>
             </div>
           </div>
-        </div>
+        </motion.div>
+
         <div className="row mt-1">
-          <div className="col-md-3">
-            <div className="product-card">
-              <img src={product_1} alt="" className="w-100" />
-              <div
-                className="product-card-name"
-                onClick={() => setShowEdit(!showEdit)}
-              >
-                <h5>Rings</h5>
+          {[
+            { src: product_1, title: "Rings" },
+            { src: product_2, title: "Necklace" },
+            { src: product_3, title: "Earring" },
+            { src: product_4, title: "Bracelet" },
+          ].map((product, index) => (
+            <motion.div
+              className="col-md-3"
+              key={index}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: index * 0.2 }} // Staggered animations
+            >
+              <div className="product-card">
+                <img src={product.src} alt="" className="w-100" />
+                <div
+                  className="product-card-name"
+                  onClick={() => setShowEdit(!showEdit)}
+                >
+                  <h5>{product.title}</h5>
+                </div>
               </div>
-            </div>
-          </div>
-          <div className="col-md-3">
-            <div className="product-card">
-              <img src={product_2} alt="" className="w-100" />
-              <div
-                className="product-card-name"
-                onClick={() => setShowEdit(!showEdit)}
-              >
-                <h5>Necklace</h5>
-              </div>
-            </div>
-          </div>
-          <div className="col-md-3">
-            <div className="product-card">
-              <img src={product_3} alt="" className="w-100" />
-              <div
-                className="product-card-name"
-                onClick={() => setShowEdit(!showEdit)}
-              >
-                <h5>Earring</h5>
-              </div>
-            </div>
-          </div>
-          <div className="col-md-3">
-            <div className="product-card">
-              <img src={product_4} alt="" className="w-100" />
-              <div
-                className="product-card-name"
-                onClick={() => setShowEdit(!showEdit)}
-              >
-                <h5>Bracelet</h5>
-              </div>
-            </div>
-          </div>
+            </motion.div>
+          ))}
         </div>
       </section>
       {/* Product Section End */}
 
       {/* Bottom Banner Start */}
       <section className="product-section middle-banner-sec">
-        <div className="row mb-3">
+        <motion.div
+          className="row mb-3"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
           <div className="col-md-6">
-            <div className="banner-img">
+            <motion.div
+              className="banner-img"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5 }}
+            >
               <img src={daily_wear} alt="" className="w-100" />
-            </div>
+            </motion.div>
           </div>
-          <div className="col-md-6 ">
-            <div className="h-100 d-flex justify-content-center align-items-center">
+          <div className="col-md-6">
+            <motion.div
+              className="h-100 d-flex justify-content-center align-items-center"
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5 }}
+            >
               <div className="img-info text-center">
                 <h3>Your Daily Dose of Grace</h3>
                 <p>Minimal Jewelry Crafted to Add Grace to Every Day</p>
@@ -287,12 +308,23 @@ const LandingPage = () => {
                   View More
                 </button>
               </div>
-            </div>
+            </motion.div>
           </div>
-        </div>
-        <div className="row">
+        </motion.div>
+
+        <motion.div
+          className="row"
+          initial={{ opacity: 0, x: 50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
           <div className="col-md-6">
-            <div className="h-100 d-flex justify-content-center align-items-center">
+            <motion.div
+              className="h-100 d-flex justify-content-center align-items-center"
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
               <div className="img-info text-center">
                 <h3>Jewelry as Versatile as You</h3>
                 <p>Minimal Jewelry for Every Style, Every Day, Every Moment.</p>
@@ -300,68 +332,111 @@ const LandingPage = () => {
                   View More
                 </button>
               </div>
-            </div>
+            </motion.div>
           </div>
           <div className="col-md-6">
-            <div className="banner-img">
+            <motion.div
+              className="banner-img"
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
               <img src={modern_bracelet} alt="" className="w-100" />
-            </div>
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
       </section>
       {/* Bottom Banner End */}
 
       {/* Trending Product Section Start */}
       <section className="trending-product" id="trending-products">
-        <div className="text-center">
+        <motion.div
+          className="text-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
           <h2>Trending Products</h2>
-        </div>
-        <div className="row">
+        </motion.div>
+
+        <motion.div
+          className="row"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
           <div className="col-md-3">
-            <div class="product-card" onClick={() => setShowEdit(!showEdit)}>
-              <div class="badge">Hot</div>
-              <div class="product-tumb">
+            <motion.div
+              className="product-card"
+              onClick={() => setShowEdit(!showEdit)}
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <div className="badge">Hot</div>
+              <div className="product-tumb">
                 <img src={trending_img_1} alt="" className="w-100" />
               </div>
-              <div class="product-details">
+              <div className="product-details">
                 <h4>Gold Bracelet</h4>
               </div>
-            </div>
+            </motion.div>
           </div>
+
           <div className="col-md-3">
-            <div class="product-card" onClick={() => setShowEdit(!showEdit)}>
-              <div class="badge">Hot</div>
-              <div class="product-tumb">
+            <motion.div
+              className="product-card"
+              onClick={() => setShowEdit(!showEdit)}
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+            >
+              <div className="badge">Hot</div>
+              <div className="product-tumb">
                 <img src={trending_img_2} alt="" className="w-100" />
               </div>
-              <div class="product-details">
+              <div className="product-details">
                 <h4>Necklace</h4>
               </div>
-            </div>
+            </motion.div>
           </div>
+
           <div className="col-md-3">
-            <div class="product-card" onClick={() => setShowEdit(!showEdit)}>
-              <div class="badge">Hot</div>
-              <div class="product-tumb">
+            <motion.div
+              className="product-card"
+              onClick={() => setShowEdit(!showEdit)}
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              <div className="badge">Hot</div>
+              <div className="product-tumb">
                 <img src={trending_img_3} alt="" className="w-100" />
               </div>
-              <div class="product-details">
+              <div className="product-details">
                 <h4>Ring</h4>
               </div>
-            </div>
+            </motion.div>
           </div>
+
           <div className="col-md-3">
-            <div class="product-card" onClick={() => setShowEdit(!showEdit)}>
-              <div class="badge">Hot</div>
-              <div class="product-tumb">
+            <motion.div
+              className="product-card"
+              onClick={() => setShowEdit(!showEdit)}
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+            >
+              <div className="badge">Hot</div>
+              <div className="product-tumb">
                 <img src={trending_img_4} alt="" className="w-100" />
               </div>
-              <div class="product-details">
+              <div className="product-details">
                 <h4>Silver Bracelet</h4>
               </div>
-            </div>
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
       </section>
       {/* Trending Product Section End */}
 
@@ -397,32 +472,66 @@ const LandingPage = () => {
 
       {/* Instagram Post Section Start */}
       <section className="insta-section">
-        <div className="product-text text-center">
+        <motion.div
+          className="product-text text-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
           <FaInstagram className="instagram-icon" />
           <h4>impel_store instagram</h4>
-        </div>
-        <div className="row justify-content-center">
+        </motion.div>
+
+        <motion.div
+          className="row justify-content-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
           <div className="col-md-3">
-            <div className="insta-image">
+            <motion.div
+              className="insta-image"
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+            >
               <img src={insta_1} alt="" className="w-100" />
-            </div>
+            </motion.div>
           </div>
+
           <div className="col-md-3">
-            <div className="insta-image">
+            <motion.div
+              className="insta-image"
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+            >
               <img src={insta_2} alt="" className="w-100" />
-            </div>
+            </motion.div>
           </div>
+
           <div className="col-md-3">
-            <div className="insta-image">
+            <motion.div
+              className="insta-image"
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.5 }}
+            >
               <img src={insta_3} alt="" className="w-100" />
-            </div>
+            </motion.div>
           </div>
+
           <div className="col-md-3">
-            <div className="insta-image">
+            <motion.div
+              className="insta-image"
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.6 }}
+            >
               <img src={insta_4} alt="" className="w-100" />
-            </div>
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
       </section>
       {/* Instagram Post Section End */}
 
@@ -527,7 +636,7 @@ const LandingPage = () => {
                       color="primary"
                       className="submit-button"
                     >
-                      Submit
+                      {loader ? "Submit.." : "Submit"}
                     </Button>
                   </div>
                 </form>
@@ -561,7 +670,7 @@ const LandingPage = () => {
         }}
       >
         <Modal.Header closeButton>
-          <Modal.Title>Add Inquire Now</Modal.Title>
+          <Modal.Title>Inquire Now</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form class="form-wrapper-main" onSubmit={formik.handleSubmit}>
@@ -629,7 +738,7 @@ const LandingPage = () => {
             </div>
             <div className="text-center">
               <Button type="submit" color="primary" className="submit-button">
-                Submit
+                {loader ? "Submit.." : "Submit"}
               </Button>
             </div>
           </form>

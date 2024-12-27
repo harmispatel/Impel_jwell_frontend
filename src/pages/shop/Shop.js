@@ -869,6 +869,7 @@ import UserWishlist from "../../services/Auth";
 import { WishlistSystem } from "../../context/WishListContext";
 import Loader from "../../components/common/Loader";
 import { useNavigation } from "../../context/NavigationContext";
+import { motion } from "framer-motion";
 
 const Shop = () => {
   const { dispatch: wishlistDispatch } = useContext(WishlistSystem);
@@ -1437,6 +1438,8 @@ const Shop = () => {
     <Tooltip id="tooltip">Login to add wishlist products</Tooltip>
   );
 
+  const shimmerItems = Array(20).fill(null);
+
   const numberFormat = (value) =>
     new Intl.NumberFormat("en-IN")?.format(Math?.round(value));
 
@@ -1558,14 +1561,27 @@ const Shop = () => {
             </div>
 
             <hr />
-            <div className="row">
-              <div className="col-md-12">
-                {isLoading ? (
-                  <div className="animation-loading">
-                    <Loader />
-                  </div>
-                ) : (
-                  <>
+
+            {isLoading ? (
+              <>
+                <div className="row">
+                  {shimmerItems.map((_, index) => (
+                    <div className="col-lg-3 col-md-6 col-12">
+                      <div key={index} className="shimmer-product">
+                        <div className="shimmer-image">
+                          <img src="" />
+                        </div>
+                        <div className="shimmer-price"></div>
+                        <div className="shimmer-price"></div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="row">
+                  <div className="col-md-12">
                     {filterData?.length > 0 ? (
                       <>
                         <div className="row">
@@ -1573,7 +1589,12 @@ const Shop = () => {
                             return (
                               <>
                                 <div className="col-md-3 col-sm-4 col-xs-6">
-                                  <div className="item-product text-center">
+                                  <motion.div
+                                    className="item-product text-center"
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ duration: 0.5 }}
+                                  >
                                     <Link
                                       to={`/shopdetails/${data?.id}`}
                                       onClick={() =>
@@ -1585,10 +1606,14 @@ const Shop = () => {
                                       <div className="product-thumb">
                                         {data?.image ? (
                                           <>
-                                            <img
+                                            <motion.img
                                               src={data?.image}
-                                              alt={data?.name}
+                                              alt=""
                                               className="w-100"
+                                              initial={{ opacity: 0 }}
+                                              animate={{ opacity: 1 }}
+                                              transition={{ duration: 0.5 }}
+                                              whileHover={{ scale: 1.05 }}
                                             />
                                           </>
                                         ) : (
@@ -1784,7 +1809,9 @@ const Shop = () => {
                                                 onClick={(e) => UserLogin(e)}
                                               >
                                                 <FiHeart
-                                                  style={{ fontSize: "22px" }}
+                                                  style={{
+                                                    fontSize: "22px",
+                                                  }}
                                                 />
                                               </span>
                                             </OverlayTrigger>
@@ -1792,7 +1819,7 @@ const Shop = () => {
                                         </>
                                       )}
                                     </div>
-                                  </div>
+                                  </motion.div>
                                 </div>
                               </>
                             );
@@ -1932,10 +1959,10 @@ const Shop = () => {
                         <p>No products available.</p>
                       </div>
                     )}
-                  </>
-                )}
-              </div>
-            </div>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </section>

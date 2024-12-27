@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import BreadCrumb from "../../components/common/BreadCrumb";
-import Loader from "../../components/common/Loader";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import axios from "axios";
 import { BsCartDash, BsHandbagFill } from "react-icons/bs";
 import toast from "react-hot-toast";
@@ -13,6 +14,7 @@ import { Accordion } from "react-bootstrap";
 import { Helmet } from "react-helmet-async";
 import { useNavigation } from "../../context/NavigationContext";
 import { FaArrowLeftLong } from "react-icons/fa6";
+import { motion } from "framer-motion";
 
 const api = process.env.REACT_APP_API_KEY;
 const imageURL = process.env.REACT_APP_API_KEY_IMAGE;
@@ -233,31 +235,41 @@ const ReadyDetails = () => {
                   </button>
                 </div>
 
-                {isLoading ? (
-                  <div className="animation-loading">
-                    <Loader />
+                <div className="row">
+                  <div className="col-md-6">
+                    <div id="imageMagnifyer">
+                      {isLoading ? (
+                        <Skeleton style={{ height: "526px" }} width="100%" />
+                      ) : (
+                        <motion.img
+                          src={`${imageURL}${details?.Barcode}.jpg`}
+                          alt=""
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src =
+                              noImage?.No_Image_Available ||
+                              "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg";
+                          }}
+                          className="w-100"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{ duration: 0.5 }}
+                        />
+                      )}
+                    </div>
                   </div>
-                ) : (
-                  <>
-                    <div className="row">
-                      <div className="col-md-6">
-                        <div>
-                          <div id="imageMagnifyer">
-                            <img
-                              src={`${imageURL}${details?.Barcode}.jpg`}
-                              onError={(e) => {
-                                e.target.onerror = null;
-                                e.target.src =
-                                  noImage?.No_Image_Available ||
-                                  "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg";
-                              }}
-                              alt=""
-                              className="w-100"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                      <div className="col-md-6">
+                  <div className="col-md-6">
+                    {isLoading ? (
+                      <>
+                        <Skeleton height={30} width="60%" />
+                        <Skeleton height={20} width="40%" className="my-2" />
+                        <Skeleton height={20} width="50%" className="my-2" />
+                        <Skeleton height={20} width="70%" className="my-2" />
+                        <Skeleton height={150} width="100%" className="mt-3" />
+                        <Skeleton height={30} width="100%" className="mt-3" />
+                      </>
+                    ) : (
+                      <>
                         <div>
                           <h4>
                             <b>{details?.TagNo}</b>
@@ -444,90 +456,88 @@ const ReadyDetails = () => {
                             </>
                           )}
                         </div>
-                        <>
-                          {phone ? (
-                            <>
-                              {cartItems &&
-                              cartItems?.find(
-                                (item) => item?.tag_no === details?.TagNo
-                              ) ? (
-                                <>
-                                  <Link
+                        {phone ? (
+                          <>
+                            {cartItems &&
+                            cartItems?.find(
+                              (item) => item?.tag_no === details?.TagNo
+                            ) ? (
+                              <>
+                                <Link
+                                  className="btn btn-outline-dark"
+                                  to="/ready-design-cart"
+                                >
+                                  <BsCartDash
+                                    style={{
+                                      fontSize: "26px",
+                                      cursor: "pointer",
+                                    }}
+                                  />
+                                </Link>
+                              </>
+                            ) : (
+                              <>
+                                <div>
+                                  <button
                                     className="btn btn-outline-dark"
-                                    to="/ready-design-cart"
+                                    onClick={() => handleAddToCart(details)}
+                                    disabled={spinner}
                                   >
-                                    <BsCartDash
-                                      style={{
-                                        fontSize: "26px",
-                                        cursor: "pointer",
-                                      }}
-                                    />
-                                  </Link>
-                                </>
-                              ) : (
-                                <>
-                                  <div>
-                                    <button
-                                      className="btn btn-outline-dark"
-                                      onClick={() => handleAddToCart(details)}
-                                      disabled={spinner}
-                                    >
-                                      {spinner && (
-                                        <CgSpinner
-                                          size={20}
-                                          className="animate_spin"
-                                        />
-                                      )}
-                                      {!spinner && (
-                                        <BsHandbagFill
-                                          style={{
-                                            fontSize: "26px",
-                                            cursor: "pointer",
-                                          }}
-                                        />
-                                      )}
-                                    </button>
-                                  </div>
-                                </>
-                              )}
-                            </>
-                          ) : (
-                            <>
-                              <button
-                                className="btn btn-outline-dark"
-                                onClick={(e) => UserLogin(e)}
-                              >
-                                <BsHandbagFill
-                                  style={{
-                                    fontSize: "26px",
-                                    cursor: "pointer",
-                                  }}
-                                />
-                              </button>
-                            </>
-                          )}
-                          {phone && (
-                            <>
-                              {cartItems &&
-                              cartItems?.find(
-                                (item) => item?.tag_no === details?.TagNo
-                              ) ? (
-                                ""
-                              ) : (
-                                <div className="discount-info">
-                                  <span>
-                                    To get Maximum Discount apply coupon code in
-                                    cart.
-                                  </span>
+                                    {spinner && (
+                                      <CgSpinner
+                                        size={20}
+                                        className="animate_spin"
+                                      />
+                                    )}
+                                    {!spinner && (
+                                      <BsHandbagFill
+                                        style={{
+                                          fontSize: "26px",
+                                          cursor: "pointer",
+                                        }}
+                                      />
+                                    )}
+                                  </button>
                                 </div>
-                              )}
-                            </>
-                          )}
-                        </>
-                      </div>
-                    </div>
-                  </>
-                )}
+                              </>
+                            )}
+                          </>
+                        ) : (
+                          <>
+                            <button
+                              className="btn btn-outline-dark"
+                              onClick={(e) => UserLogin(e)}
+                            >
+                              <BsHandbagFill
+                                style={{
+                                  fontSize: "26px",
+                                  cursor: "pointer",
+                                }}
+                              />
+                            </button>
+                          </>
+                        )}
+                        {phone && (
+                          <>
+                            {cartItems &&
+                            cartItems?.find(
+                              (item) => item?.tag_no === details?.TagNo
+                            ) ? (
+                              ""
+                            ) : (
+                              <div className="discount-info">
+                                <span>
+                                  To get Maximum Discount apply coupon code in
+                                  cart.
+                                </span>
+                              </div>
+                            )}
+                          </>
+                        )}
+                      </>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
