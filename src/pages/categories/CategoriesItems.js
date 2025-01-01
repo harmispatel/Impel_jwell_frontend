@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import BreadCrumb from "../../components/common/BreadCrumb";
 import { FaLongArrowAltLeft } from "react-icons/fa";
 import homeService from "../../services/Home";
@@ -8,6 +8,8 @@ import { motion } from "framer-motion";
 import noImage from "../../assets/images/No_Image_Available.jpg";
 
 const CategoriesItems = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
   const paramId = useParams();
   const [category, SetCategory] = useState([]);
   const [selectedCategory, setselectedCategory] = useState(0);
@@ -33,7 +35,7 @@ const CategoriesItems = () => {
       });
   };
 
-  const CategoriesData = (offset = 0) => {
+  const CategoriesData = (offset) => {
     categoryDetail
       .related_products({ categoryId: paramId, offset: offset })
       .then((res) => {
@@ -48,8 +50,20 @@ const CategoriesItems = () => {
   };
 
   useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const currentPage = parseInt(queryParams.get("page")) || 1;
+
+    setPagination((prevState) => ({
+      ...prevState,
+      currentPage,
+    }));
+
+    const offset = (currentPage - 1) * pagination.dataShowLength;
+    CategoriesData(offset);
+  }, [location.search]);
+
+  useEffect(() => {
     Category();
-    CategoriesData();
   }, [selectedCategory]);
 
   const scrollup = () => {
@@ -69,45 +83,36 @@ const CategoriesItems = () => {
   const paginationPage = (page) => {
     const calculatedOffset = (page - 1) * pagination?.dataShowLength;
     CategoriesData(calculatedOffset);
+    navigate(`?page=${page}`);
     setPagination({ ...pagination, currentPage: page });
     scrollup();
     setIsLoading(true);
-    // if (page == 1) {
-    //   navigate(`/categories/${paramId?.id}`);
-    // } else {
-    //   navigate(`/categories/${paramId?.id}${page ? `?page_no=${page}` : ""}`);
-    // }
   };
 
-  const paginationPrev = () => {
+  const paginationPrev = (e) => {
     if (pagination.currentPage > 1) {
+      e.preventDefault();
       const prevPage = pagination.currentPage - 1;
       const calculatedOffset = (prevPage - 1) * pagination?.dataShowLength;
       setPagination({ ...pagination, currentPage: prevPage });
       CategoriesData(calculatedOffset);
+      navigate(`?page=${prevPage}`);
       scrollup();
       setIsLoading(true);
-      // if (prevPage == 1) {
-      //   navigate(`/categories/${paramId?.id}`);
-      // } else {
-      //   navigate(
-      //     `/categories/${paramId?.id}${prevPage ? `?page_no=${prevPage}` : ""}`
-      //   );
-      // }
     }
   };
 
-  const paginationNext = () => {
+  const paginationNext = (e) => {
     if (pagination.currentPage < totalPages) {
+      e.preventDefault();
       const nextPage = pagination.currentPage + 1;
+      console.log("nextPage", nextPage);
       const calculatedOffset = (nextPage - 1) * pagination?.dataShowLength;
       setPagination({ ...pagination, currentPage: nextPage });
       CategoriesData(calculatedOffset);
+      navigate(`?page=${nextPage}`);
       scrollup();
       setIsLoading(true);
-      // navigate(
-      //   `/categories/${paramId?.id}${nextPage ? `?page_no=${nextPage}` : ""}`
-      // );
     }
   };
 
@@ -290,7 +295,11 @@ const CategoriesItems = () => {
                                             paginationPage(pageNumber)
                                           }
                                         >
-                                          <Link to="#" className="page-link">
+                                          <Link
+                                            to="#"
+                                            className="page-link"
+                                            onClick={(e) => e.preventDefault()}
+                                          >
                                             {pageNumber}
                                           </Link>
                                         </li>

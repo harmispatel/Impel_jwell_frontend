@@ -92,10 +92,10 @@ const LandingPage = () => {
   return (
     <>
       <Helmet>
-        <title>Jewelery-for-women | impel.store</title>
+        <title>Jewelry for Women - Minimalist Jewelry Collection | Impel</title>
         <meta
           name="description"
-          content="Explore a wide range of elegant jewelry for women. Shop necklaces, earrings, rings, and more on Impel Store."
+          content="Impel is a jewelry store in Ahmedabad offering minimalist and daily wear jewelry for women. Explore trendy jewelry collection which will be used in routine activities."
         />
         <meta
           name="keywords"
@@ -105,9 +105,34 @@ const LandingPage = () => {
         <meta name="robots" content="index, follow" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta charSet="UTF-8" />
+
+        <link rel="canonical" href="https://impel.store/jewelery-for-women/" />
+
+        <meta
+          name="google-site-verification"
+          content="CgblWcrjk3yRwUDKib-eUlvbCW8E9gLmaEclP3t4h5Y"
+        />
+
         <link rel="icon" href="%PUBLIC_URL%/IMPEL-FAV.png" />
         <link rel="apple-touch-icon" href="%PUBLIC_URL%/IMPEL-FAV.png" />
+
+        <script>
+          {(function (w, d, s, l, i) {
+            w[l] = w[l] || [];
+            w[l].push({
+              "gtm.start": new Date().getTime(),
+              event: "gtm.js",
+            });
+            var f = d.getElementsByTagName(s)[0],
+              j = d.createElement(s),
+              dl = l != "dataLayer" ? "&l=" + l : "";
+            j.async = true;
+            j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+            f.parentNode.insertBefore(j, f);
+          })(window, document, "script", "dataLayer", "GTM-5K5FP56X")}
+        </script>
       </Helmet>
+
       <nav className="navbar navbar-expand-lg navbar-head-main">
         <div className="container">
           <div className="header_inner">

@@ -302,9 +302,7 @@ const ShopDetails = () => {
                 <div className="breadcumb-section-btn mb-4">
                   <BreadCrumb
                     firstName="Home"
-                    firstUrl="/"
                     secondName="Shop"
-                    secondUrl="/shop"
                     thirdName="Shopdetails"
                   />
                   <button
