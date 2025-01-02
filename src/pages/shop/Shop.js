@@ -1,13 +1,9 @@
 import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { BsSearch } from "react-icons/bs";
 import { FiHeart } from "react-icons/fi";
 import { FcLike } from "react-icons/fc";
 import { FaFilePdf, FaRegFilePdf, FaRegStar, FaStar } from "react-icons/fa";
 import toast from "react-hot-toast";
-import Select from "react-select";
-import Accordion from "react-bootstrap/Accordion";
-import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { Helmet } from "react-helmet-async";
@@ -17,8 +13,8 @@ import DealerWishlist from "../../services/Dealer/Collection";
 import DealerPdf from "../../services/Dealer/PdfShare";
 import UserWishlist from "../../services/Auth";
 import { WishlistSystem } from "../../context/WishListContext";
-import { useNavigation } from "../../context/NavigationContext";
 import { motion } from "framer-motion";
+import Select from "react-select";
 
 const Shop = () => {
   const { dispatch: wishlistDispatch } = useContext(WishlistSystem);
@@ -27,58 +23,30 @@ const Shop = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { setPreviousPageUrl } = useNavigation();
-
-  useEffect(() => {
-    setPreviousPageUrl(location.pathname + location.search);
-  }, [location, setPreviousPageUrl]);
-
   const userType = localStorage.getItem("user_type");
   const userId = localStorage.getItem("user_id");
   const email = localStorage.getItem("email");
   const Phone = localStorage.getItem("phone");
 
-  const [searchInput, setSearchInput] = useState(null);
-
-  const [selectedOption, setSelectedOption] = useState(null);
-
   const [categoryData, setCategoryData] = useState([]);
-  const [category, setCategory] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   const [genderData, setGenderData] = useState([]);
-  const [gender, setGender] = useState();
-  const [selectedGender, setSelectedGender] = useState(null);
-
   const [filterTag, setFilterTag] = useState([]);
-  const [tag, setTag] = useState();
-  const [selectedTag, setSelectedTag] = useState(null);
-
-  const [PriceRange, setPriceRange] = useState({
-    minprice: null,
-    maxprice: null,
-  });
-
   const [FilterPriceRange, setFilterPriceRange] = useState({
     minprice: 0,
     maxprice: 0,
   });
-
   const [isLoading, setIsLoading] = useState(true);
-
   const [filterData, setFilterData] = useState([]);
-  const [paginate, setPaginate] = useState();
-
-  const [collection_status, setCollectionStatus] = useState(false);
   const [DealerCollection, setDealerCollection] = useState([]);
-
-  const [userWishlist, setUserWishlist] = useState(false);
-  const [goldColor, setGoldColor] = useState("yellow_gold");
-  const [goldType, setGoldType] = useState("18k");
   const [UsercartItems, setUserCartItems] = useState([]);
   const [pdfItems, setPdfItems] = useState([]);
-
-  const [pagination, setPagination] = useState({});
+  const [paginate, setPaginate] = useState();
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    dataShowLength: 40,
+  });
 
   const totalPages = Math.ceil(paginate?.total_records / 40);
 
@@ -89,34 +57,6 @@ const Shop = () => {
     });
   };
 
-  // sort by searching
-  const searchbar = (e) => {
-    setSearchInput(e.target.value);
-  };
-
-  // sort by dropdown functions
-  const [options] = useState([
-    { value: "new_added", label: "New Added" },
-    { value: "low_to_high", label: "Price: low to high" },
-    { value: "high_to_low", label: "Price: high to low" },
-    { value: "highest_selling", label: "Top Seller" },
-  ]);
-
-  const handleSelectChange = (selectedSort) => {
-    setIsLoading(true);
-    const queryParams = new URLSearchParams(location.search);
-
-    if (selectedSort) {
-      queryParams.set("sort_by", selectedSort.value);
-    } else {
-      queryParams.delete("sort_by");
-    }
-
-    navigate(`/shop?${queryParams.toString()}`);
-    setSelectedOption(selectedSort);
-  };
-
-  // 4 Filter APIS call
   const CategoryFilter = () => {
     FilterServices.categoryFilter()
       .then((res) => {
@@ -132,266 +72,6 @@ const Shop = () => {
       })
       .catch((error) => console.log(error));
   };
-
-  const handleSelectCategory = (categoryId) => {
-    setIsLoading(true);
-
-    setSearchInput("");
-
-    setSelectedOption("");
-
-    setGender(null);
-    setSelectedGender(null);
-
-    setTag(null);
-    setSelectedTag(null);
-
-    setPriceRange("");
-    navigate(`/shop${categoryId ? `?category_id=${categoryId.value}` : ""}`);
-
-    setCategory(categoryId ? categoryId.value : null);
-    setSelectedCategory(categoryId);
-  };
-
-  const handleSelectGender = (genderId) => {
-    setIsLoading(true);
-    const queryParams = new URLSearchParams(location.search);
-    if (genderId) {
-      queryParams.set("gender_id", genderId.value);
-    } else {
-      queryParams.delete("gender_id");
-    }
-
-    navigate(`/shop?${queryParams.toString()}`);
-
-    setGender(genderId ? genderId?.value : null);
-    setSelectedGender(genderId);
-  };
-
-  const handleSelectTag = (selectedTags) => {
-    setIsLoading(true);
-
-    const queryParams = new URLSearchParams(location.search);
-
-    const selectedTagId = selectedTags ? parseFloat(selectedTags.value) : null;
-    if (selectedTagId !== null) {
-      queryParams.set("tag_id", selectedTagId);
-    } else {
-      queryParams.delete("tag_id");
-    }
-
-    navigate(`/shop?${queryParams.toString()}`);
-
-    setTag(selectedTagId);
-    setSelectedTag(selectedTags);
-  };
-
-  const handleSliderChange = (e) => {
-    setIsLoading(true);
-    const queryParams = new URLSearchParams(location.search);
-
-    queryParams.set("min_price", e[0]);
-    queryParams.set("max_price", e[1]);
-
-    navigate(`/shop?${queryParams.toString()}`);
-
-    setPriceRange({ minprice: e[0], maxprice: e[1] });
-  };
-
-  useEffect(() => {
-    const searchParams = new URLSearchParams(location.search);
-    const sortbyId = searchParams.get("sort_by");
-    const categoryId = searchParams.get("category_id");
-    const genderId = searchParams.get("gender_id");
-    const tagIds = searchParams.getAll("tag_id");
-    const lowPrice = searchParams.getAll("min_price");
-    const highPrice = searchParams.getAll("max_price");
-
-    if (lowPrice !== null || highPrice !== null) {
-      const selectedPrice = {
-        minprice:
-          lowPrice !== null ? parseFloat(lowPrice) : FilterPriceRange.minprice,
-        maxprice:
-          highPrice !== null
-            ? parseFloat(highPrice)
-            : FilterPriceRange.maxprice,
-      };
-      setPriceRange(selectedPrice);
-    } else {
-      setIsLoading(true);
-      setPriceRange({ minprice: null, maxprice: null });
-    }
-
-    if (sortbyId && sortbyId.length > 0) {
-      if (sortbyId) {
-        const selectedSort = options.find((item) => item.value === sortbyId);
-
-        if (selectedSort) {
-          setSelectedOption(selectedSort);
-        }
-      }
-    } else {
-      setIsLoading(true);
-      setSelectedOption(null);
-    }
-
-    if (categoryId && categoryId.length > 0) {
-      if (categoryId) {
-        const Category_ids = categoryData?.find(
-          (item) => item.id === Number(categoryId)
-        );
-
-        if (Category_ids) {
-          setCategory(Number(categoryId));
-          setSelectedCategory({
-            value: Category_ids.id,
-            label: Category_ids.name,
-          });
-        }
-      }
-    } else {
-      setIsLoading(true);
-      setCategory(null);
-      setSelectedCategory("");
-    }
-
-    if (genderId && genderId.length > 0) {
-      if (genderId) {
-        const Gender_ids = genderData?.find(
-          (item) => item.id === Number(genderId)
-        );
-
-        if (Gender_ids) {
-          setGender(Number(genderId));
-          setSelectedGender({
-            value: Gender_ids.id,
-            label: Gender_ids.name,
-          });
-        }
-      }
-    } else {
-      setIsLoading(true);
-      setGender(null);
-      setSelectedGender("");
-    }
-
-    if (tagIds && tagIds.length > 0) {
-      setIsLoading(true);
-
-      try {
-        const parsedTagIds = tagIds[0].split(",").map((id) => parseFloat(id));
-        setTag(parsedTagIds[0]);
-
-        if (parsedTagIds && parsedTagIds.length > 0) {
-          const selectedTagID = filterTag?.find(
-            (item) => item.id === parsedTagIds[0]
-          );
-
-          if (selectedTagID) {
-            setSelectedTag({
-              value: selectedTagID?.id,
-              label: selectedTagID?.name,
-            });
-          } else {
-            console.error("Tag not found with ID:", parsedTagIds[0]);
-          }
-        }
-      } catch (error) {
-        console.error("Error parsing tag IDs:", error);
-        setTag(null);
-      }
-    } else {
-      setIsLoading(true);
-      setTag(null);
-      setSelectedTag("");
-    }
-  }, [location.search, filterTag?.length]);
-
-  const FilterData = (offset) => {
-    ShopServices.allfilterdesigns({
-      category_id: category,
-      gender_id: gender,
-      tag_id: tag,
-      search: searchInput,
-      min_price: PriceRange?.minprice,
-      max_price: PriceRange?.maxprice,
-      sort_by: selectedOption?.value,
-      userType: userType,
-      userId: userId,
-      offset: offset,
-    })
-      .then((res) => {
-        setIsLoading(false);
-        setFilterData(res.data?.designs);
-        setFilterTag(res.data?.tags);
-        setPaginate(res.data);
-        setFilterPriceRange({
-          minprice: res.data.minprice,
-          maxprice: res.data.maxprice,
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-        setIsLoading(true);
-      });
-  };
-
-  const resetPagination = () => {
-    setPagination({
-      currentPage: 1,
-      dataShowLength: 40,
-    });
-  };
-
-  const paginationPage = (page) => {
-    const newOffset = (page - 1) * pagination.dataShowLength;
-    FilterData(newOffset);
-    setPagination({ ...pagination, currentPage: page });
-    scrollup();
-    setIsLoading(true);
-  };
-
-  const paginationPrev = (e) => {
-    e.preventDefault();
-    if (pagination.currentPage > 1) {
-      const prevPage = pagination.currentPage - 1;
-      const newOffset = (prevPage - 1) * pagination.dataShowLength;
-      FilterData(newOffset);
-      setPagination({ ...pagination, currentPage: prevPage });
-      scrollup();
-      setIsLoading(true);
-    }
-  };
-
-  const paginationNext = (e) => {
-    e.preventDefault();
-    if (pagination.currentPage < totalPages) {
-      const nextPage = pagination.currentPage + 1;
-      const newOffset = (nextPage - 1) * pagination.dataShowLength;
-      FilterData(newOffset);
-      setPagination({ ...pagination, currentPage: nextPage });
-      scrollup();
-      setIsLoading(true);
-    }
-  };
-
-  useEffect(() => {
-    resetPagination();
-    FilterData(0);
-  }, [category, tag, gender, searchInput, PriceRange, selectedOption]);
-
-  useEffect(() => {
-    if (Phone) {
-      GetUserWishList();
-    }
-
-    if (email) {
-      GetDealerSelection();
-    }
-
-    CategoryFilter();
-    GenderFilter();
-  }, []);
 
   // user wishlist API
   const GetUserWishList = async () => {
@@ -412,13 +92,12 @@ const Shop = () => {
       UserWishlist.addtoWishlist({
         phone: Phone,
         design_id: product.id,
-        gold_color: goldColor,
-        gold_type: goldType,
+        gold_color: "yellow_gold",
+        gold_type: "18k",
         design_name: product?.name,
       })
         .then((res) => {
           if (res.success === true) {
-            setUserWishlist(true);
             toast.success("Design has been Added to Your Wishlist");
             GetUserWishList();
             wishlistDispatch({
@@ -442,8 +121,8 @@ const Shop = () => {
     UserWishlist.removetoWishlist({
       phone: Phone,
       design_id: product.id,
-      gold_color: goldColor,
-      gold_type: goldType,
+      gold_color: "yellow_gold",
+      gold_type: "18k",
       design_name: product?.name,
     })
       .then((res) => {
@@ -482,11 +161,9 @@ const Shop = () => {
       })
         .then((res) => {
           if (res.success === true) {
-            setCollectionStatus(true);
             toast.success("Design has been Added to Your Collection.");
             FilterData();
             GetDealerSelection();
-            resetPagination();
           } else {
           }
         })
@@ -526,10 +203,6 @@ const Shop = () => {
         console.log(err);
       });
   };
-
-  useLayoutEffect(() => {
-    getPdfList();
-  }, []);
 
   // Dealder add product for PDF creation
   const addToPDF = async (e, product) => {
@@ -580,6 +253,148 @@ const Shop = () => {
     navigate("/dealer-login");
   };
 
+  const handleSelectCategory = (categoryID) => {
+    setIsLoading(true);
+    setSelectedCategory(categoryID);
+
+    const categoryId = categoryID?.value;
+    const currentPage = pagination.currentPage;
+    const offset = (currentPage - 1) * pagination.dataShowLength;
+    navigate(`/shop${categoryId ? `?category_id=${categoryId}` : ""}`);
+    // navigate(`?page=${currentPage}&category_id=${categoryId}`);
+    FilterData(offset, categoryId);
+  };
+
+  const FilterData = async (offset, categoryId) => {
+    setIsLoading(true);
+
+    try {
+      const res = await ShopServices.allfilterdesigns({
+        category_id: categoryId ? categoryId : null,
+        gender_id: null,
+        tag_id: null,
+        search: null,
+        min_price: null,
+        max_price: null,
+        sort_by: null,
+        userType: userType,
+        userId: userId,
+        offset: offset || 0,
+      });
+      setIsLoading(false);
+      setFilterData(res.data?.designs);
+      setFilterTag(res.data?.tags);
+      setPaginate(res.data);
+      setFilterPriceRange({
+        minprice: res.data.minprice,
+        maxprice: res.data.maxprice,
+      });
+    } catch (err) {
+      console.error(err);
+      setIsLoading(false);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useLayoutEffect(() => {
+    if (Phone) {
+      GetUserWishList();
+    }
+
+    if (email) {
+      GetDealerSelection();
+    }
+
+    if (email) {
+      getPdfList();
+    }
+
+    CategoryFilter();
+    GenderFilter();
+    FilterData();
+  }, []);
+
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const currentPage = parseInt(queryParams.get("page")) || 1;
+    const currentCategory = parseInt(queryParams.get("category_id"));
+
+    setPagination((prevState) => ({
+      ...prevState,
+      currentPage,
+    }));
+
+    const offset = (currentPage - 1) * pagination.dataShowLength;
+
+    if (
+      (offset !== 0 && pagination.currentPage !== currentPage) ||
+      currentCategory !== null
+    ) {
+      FilterData(offset, currentCategory);
+    }
+  }, [location.search, pagination.currentPage]);
+
+  const paginationPage = (page) => {
+    const calculatedOffset = (page - 1) * pagination?.dataShowLength;
+    FilterData(calculatedOffset, selectedCategory?.value);
+    const queryParams = new URLSearchParams(location.search);
+
+    const selectedPage = page ? parseFloat(page) : null;
+    if (selectedPage !== null) {
+      queryParams.set("page", selectedPage);
+    } else {
+      queryParams.delete("page");
+    }
+
+    navigate(`/shop?${queryParams.toString()}`);
+    setPagination({ ...pagination, currentPage: page });
+    scrollup();
+    setIsLoading(true);
+  };
+
+  const paginationPrev = (e) => {
+    if (pagination.currentPage > 1) {
+      e.preventDefault();
+      const prevPage = pagination.currentPage - 1;
+      const calculatedOffset = (prevPage - 1) * pagination?.dataShowLength;
+      setPagination({ ...pagination, currentPage: prevPage });
+      FilterData(calculatedOffset, selectedCategory?.value); 
+      const queryParams = new URLSearchParams(location.search);
+
+      const selectedPage = prevPage ? parseFloat(prevPage) : null;
+      if (selectedPage !== null) {
+        queryParams.set("page", selectedPage);
+      } else {
+        queryParams.delete("page");
+      }
+
+      navigate(`/shop?${queryParams.toString()}`);
+      scrollup();
+      setIsLoading(true);
+    }
+  };
+
+  const paginationNext = (e) => {
+    if (pagination.currentPage < totalPages) {
+      e.preventDefault();
+      const nextPage = pagination.currentPage + 1;
+      const calculatedOffset = (nextPage - 1) * pagination?.dataShowLength;
+      setPagination({ ...pagination, currentPage: nextPage });
+      FilterData(calculatedOffset, selectedCategory?.value); 
+      const queryParams = new URLSearchParams(location.search);
+
+      const selectedPage = nextPage ? parseFloat(nextPage) : null;
+      if (selectedPage !== null) {
+        queryParams.set("page", selectedPage);
+      } else {
+        queryParams.delete("page");
+      }
+      scrollup();
+      setIsLoading(true);
+    }
+  };
+
   const wishlistTip = <Tooltip id="tooltip">wishlist</Tooltip>;
   const selectionTip = <Tooltip id="tooltip">My Selections</Tooltip>;
   const pdfTip = <Tooltip id="tooltip">My PDF share</Tooltip>;
@@ -614,102 +429,17 @@ const Shop = () => {
                   onChange={handleSelectCategory}
                 />
               </div>
-              <div className="col-md-3 col-12">
-                <Select
-                  value={selectedOption}
-                  onChange={handleSelectChange}
-                  isClearable={true}
-                  isSearchable={false}
-                  options={options}
-                  placeholder="Sort By"
-                />
-              </div>
+              <div className="col-md-3 col-12"></div>
             </div>
 
             <div className="row">
               <div className="col-md-3 col-12 mt-2 mt-md-2">
-                <div className="search_bar">
-                  <input
-                    className="form-control"
-                    placeholder="Search by design code"
-                    onChange={(e) => searchbar(e)}
-                    type="search"
-                    isClearable={true}
-                  />
-                  {searchInput && searchInput.length >= 1 ? null : (
-                    <BsSearch className="search-icon cursor-pointer" />
-                  )}
-                </div>
+                <div className="search_bar"></div>
               </div>
-              <div className="col-md-3 col-12 mt-2 mt-md-2">
-                <Select
-                  placeholder="Shop by Gender"
-                  isClearable
-                  isSearchable={false}
-                  value={selectedGender}
-                  options={genderData?.map((data) => ({
-                    value: data?.id,
-                    label: data?.name,
-                  }))}
-                  onChange={handleSelectGender}
-                />
-              </div>
-              <div className="col-md-3 col-12 mt-2 mt-md-2">
-                <Select
-                  placeholder="Shop by Tag"
-                  isClearable
-                  isSearchable={false}
-                  value={selectedTag}
-                  options={filterTag?.map((data) => ({
-                    value: data?.id,
-                    label: data?.name,
-                  }))}
-                  onChange={handleSelectTag}
-                />
-              </div>
-              <div className="col-md-3 col-12 mt-md-0">
-                <Accordion className="accordian">
-                  <Accordion.Item eventKey="3" className="my-2">
-                    <Accordion.Header>Shop by price</Accordion.Header>
-                    <Accordion.Body className="p-4 mb-2">
-                      <div className="d-flex justify-content-between">
-                        <p>
-                          From :
-                          <strong>
-                            ₹
-                            {PriceRange?.minprice
-                              ? PriceRange?.minprice
-                              : FilterPriceRange.minprice}
-                          </strong>
-                        </p>
-                        <p>
-                          To :
-                          <strong>
-                            ₹
-                            {PriceRange?.maxprice
-                              ? PriceRange?.maxprice
-                              : FilterPriceRange.maxprice}
-                          </strong>
-                        </p>
-                      </div>
-                      <Slider
-                        range
-                        allowCross={false}
-                        min={FilterPriceRange.minprice}
-                        max={FilterPriceRange.maxprice}
-                        marks={{
-                          [FilterPriceRange?.minprice]: "Min",
-                          [FilterPriceRange?.maxprice]: "Max",
-                        }}
-                        onAfterChange={handleSliderChange}
-                      />
-                    </Accordion.Body>
-                  </Accordion.Item>
-                </Accordion>
-              </div>
+              <div className="col-md-3 col-12 mt-2 mt-md-2"></div>
+              <div className="col-md-3 col-12 mt-2 mt-md-2"></div>
+              <div className="col-md-3 col-12 mt-md-0"></div>
             </div>
-
-            <hr />
 
             {isLoading ? (
               <>
@@ -735,21 +465,14 @@ const Shop = () => {
                           {filterData?.map((data) => {
                             return (
                               <>
-                                <div className="col-md-3 col-sm-4 col-xs-6">
+                                <div className="col-lg-3 col-md-6 col-12">
                                   <motion.div
                                     className="item-product text-center"
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
                                     transition={{ duration: 0.5 }}
                                   >
-                                    <Link
-                                      to={`/shopdetails/${data?.id}`}
-                                      onClick={() =>
-                                        setPreviousPageUrl(
-                                          location.pathname + location.search
-                                        )
-                                      }
-                                    >
+                                    <Link to={`/shopdetails/${data?.id}`}>
                                       <div className="product-thumb">
                                         {data?.image ? (
                                           <>
@@ -974,130 +697,134 @@ const Shop = () => {
                         </div>
 
                         {totalPages > 1 && (
-                          <div className="pt-5">
-                            <div className="paginationArea">
-                              <nav aria-label="navigation">
-                                <ul className="pagination">
-                                  {/* Previous Page Button */}
-                                  <li
-                                    className={`page-item ${
+                          <div className="paginationArea">
+                            <nav aria-label="navigation">
+                              <ul className="pagination">
+                                {/* Previous Page Button */}
+                                <li
+                                  className={`page-item ${
+                                    pagination.currentPage === 1
+                                      ? "disabled"
+                                      : ""
+                                  }`}
+                                  style={{
+                                    display:
                                       pagination.currentPage === 1
-                                        ? "disabled"
-                                        : ""
-                                    }`}
-                                    style={{
-                                      display:
-                                        pagination.currentPage === 1
-                                          ? "none"
-                                          : "block",
-                                    }}
+                                        ? "none"
+                                        : "block",
+                                  }}
+                                >
+                                  <Link
+                                    to="#"
+                                    className="page-link"
+                                    onClick={paginationPrev}
                                   >
-                                    <Link
-                                      to="#"
-                                      className="page-link"
-                                      onClick={(e) => paginationPrev(e)}
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="24"
+                                      height="24"
+                                      viewBox="0 0 24 24"
                                     >
-                                      <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="24"
-                                        height="24"
-                                        viewBox="0 0 24 24"
-                                      >
-                                        <polyline points="15 18 9 12 15 6"></polyline>
-                                      </svg>
-                                      Prev
-                                    </Link>
-                                  </li>
+                                      <polyline points="15 18 9 12 15 6"></polyline>
+                                    </svg>
+                                    Prev
+                                  </Link>
+                                </li>
 
-                                  {/* Display pages with ellipses */}
-                                  {Array.from({ length: totalPages }).map(
-                                    (_, index) => {
-                                      const pageNumber = index + 1;
-                                      const isCurrentPage =
-                                        pagination.currentPage === pageNumber;
+                                {/* Display pages with ellipses */}
+                                {Array.from({ length: totalPages }).map(
+                                  (_, index) => {
+                                    const pageNumber = index + 1;
+                                    const isCurrentPage =
+                                      pagination.currentPage === pageNumber;
 
-                                      // Display first and last pages
-                                      if (
-                                        pageNumber === 1 ||
-                                        pageNumber === totalPages ||
-                                        (pageNumber >=
-                                          pagination.currentPage - 1 &&
-                                          pageNumber <=
-                                            pagination.currentPage + 1)
-                                      ) {
-                                        return (
-                                          <li
-                                            key={pageNumber}
-                                            className={`page-item ${
-                                              isCurrentPage ? "active" : ""
-                                            }`}
+                                    // Display first and last pages
+                                    if (
+                                      pageNumber === 1 ||
+                                      pageNumber === totalPages ||
+                                      (pageNumber >=
+                                        pagination.currentPage - 1 &&
+                                        pageNumber <=
+                                          pagination.currentPage + 1)
+                                    ) {
+                                      return (
+                                        <li
+                                          key={pageNumber}
+                                          className={`page-item ${
+                                            isCurrentPage ? "active" : ""
+                                          }`}
+                                          onClick={() =>
+                                            paginationPage(pageNumber)
+                                          }
+                                        >
+                                          <Link
+                                            to="#"
+                                            className="page-link"
+                                            onClick={(e) => e.preventDefault()}
                                           >
-                                            <button
-                                              className="page-link"
-                                              onClick={() =>
-                                                paginationPage(pageNumber)
-                                              }
-                                            >
-                                              {pageNumber}
-                                            </button>
-                                          </li>
-                                        );
-                                      }
-
-                                      // Display ellipses
-                                      if (
-                                        index === 1 ||
-                                        index === totalPages - 2
-                                      ) {
-                                        return (
-                                          <li
-                                            key={pageNumber}
-                                            className="page-item disabled"
-                                          >
-                                            <button className="page-link">
-                                              ...
-                                            </button>
-                                          </li>
-                                        );
-                                      }
-
-                                      return null;
+                                            {pageNumber}
+                                          </Link>
+                                        </li>
+                                      );
                                     }
-                                  )}
 
-                                  {/* Next Page Button */}
-                                  <li
-                                    className={`page-item ${
+                                    // Display ellipses
+                                    if (
+                                      index === 1 ||
+                                      index === totalPages - 2
+                                    ) {
+                                      return (
+                                        <li
+                                          key={pageNumber}
+                                          className="page-item disabled"
+                                        >
+                                          <Link
+                                            to="#"
+                                            className="page-link"
+                                            onClick={(e) => e.preventDefault()}
+                                          >
+                                            ...
+                                          </Link>
+                                        </li>
+                                      );
+                                    }
+
+                                    return null;
+                                  }
+                                )}
+
+                                {/* Next Page Button */}
+                                <li
+                                  className={`page-item ${
+                                    pagination.currentPage === totalPages
+                                      ? "disabled"
+                                      : ""
+                                  }`}
+                                  style={{
+                                    display:
                                       pagination.currentPage === totalPages
-                                        ? "disabled"
-                                        : ""
-                                    }`}
-                                    style={{
-                                      display:
-                                        pagination.currentPage === totalPages
-                                          ? "none"
-                                          : "block",
-                                    }}
+                                        ? "none"
+                                        : "block",
+                                  }}
+                                >
+                                  <Link
+                                    to="#"
+                                    className="page-link"
+                                    onClick={paginationNext}
                                   >
-                                    <Link
-                                      to="#"
-                                      className="page-link"
-                                      onClick={(e) => paginationNext(e)}
+                                    Next
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="24"
+                                      height="24"
+                                      viewBox="0 0 24 24"
                                     >
-                                      Next
-                                      <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="24"
-                                        height="24"
-                                        viewBox="0 0 24 24"
-                                      >
-                                        <polyline points="9 18 15 12 9 6"></polyline>
-                                      </svg>
-                                    </Link>
-                                  </li>
-                                </ul>
-                              </nav>
-                            </div>
+                                      <polyline points="9 18 15 12 9 6"></polyline>
+                                    </svg>
+                                  </Link>
+                                </li>
+                              </ul>
+                            </nav>
                           </div>
                         )}
                       </>
@@ -1118,4 +845,3 @@ const Shop = () => {
 };
 
 export default Shop;
-

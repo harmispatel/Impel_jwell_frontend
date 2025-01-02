@@ -7,7 +7,6 @@ import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { FaFilePdf, FaRegFilePdf } from "react-icons/fa";
 import toast from "react-hot-toast";
 import DealerPdf from "../../services/Dealer/PdfShare";
-import { useNavigation } from "../../context/NavigationContext";
 
 const imageURL = process.env.REACT_APP_API_KEY_IMAGE_;
 
@@ -264,12 +263,6 @@ const ReadytoDispatch = () => {
       sales_wastage_discount: allPrices?.sales_wastage_discount_rtd,
     },
   ];
-
-  const { setPreviousPageUrl } = useNavigation();
-
-  useEffect(() => {
-    setPreviousPageUrl(location.pathname + location.search);
-  }, [location, setPreviousPageUrl]);
 
   // useEffect(() => {
   //   const searchParams = new URLSearchParams(location.search);
@@ -579,14 +572,7 @@ const ReadytoDispatch = () => {
                               animate={{ opacity: 1 }}
                               transition={{ duration: 0.5 }}
                             >
-                              <Link
-                                to={`/ready-to-dispatch/${data?.TagNo}`}
-                                onClick={() =>
-                                  setPreviousPageUrl(
-                                    location.pathname + location.search
-                                  )
-                                }
-                              >
+                              <Link to={`/ready-to-dispatch/${data?.TagNo}`}>
                                 <div className="product-thumb">
                                   <motion.img
                                     src={`${imageURL}${data?.Images[0]?.ImageName}`}

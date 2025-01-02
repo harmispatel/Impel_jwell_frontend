@@ -23,7 +23,7 @@ import insta_4 from "./assets/insta_4.jpg";
 import love_img from "./assets/silver ring for women.jpg";
 import daily_wear from "./assets/daily wear necklace for women.jpg";
 import modern_bracelet from "./assets/Bracelet_3.jpg";
-import { FaBars, FaInstagram, FaPhoneAlt } from "react-icons/fa";
+import { FaBars, FaPhoneAlt } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 import emailjs from "@emailjs/browser";
@@ -496,7 +496,7 @@ const LandingPage = () => {
       {/* Start-Love Section End */}
 
       {/* Instagram Post Section Start */}
-      <section className="insta-section">
+      {/* <section className="insta-section">
         <motion.div
           className="product-text text-center"
           initial={{ opacity: 0 }}
@@ -557,7 +557,7 @@ const LandingPage = () => {
             </motion.div>
           </div>
         </motion.div>
-      </section>
+      </section> */}
       {/* Instagram Post Section End */}
 
       {/* Latest News Section Start */}

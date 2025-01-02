@@ -1,0 +1,39 @@
+{
+  "files": {
+    "main.css": "/static/css/main.3e116cba.css",
+    "main.js": "/static/js/main.317abdab.js",
+    "static/js/453.258b012d.chunk.js": "/static/js/453.258b012d.chunk.js",
+    "static/media/impel-bird-unscreen.gif": "/static/media/impel-bird-unscreen.6a73585a4d5183f7a00c.gif",
+    "static/media/Lato-Regular.ttf": "/static/media/Lato-Regular.80c07943565d91b976e1.ttf",
+    "static/media/Impel_Landing Page Banners_01.jpg": "/static/media/Impel_Landing Page Banners_01.0f5407809501cd145a40.jpg",
+    "static/media/bg-01.jpeg": "/static/media/bg-01.bf8cd203a9c6445ff403.jpeg",
+    "static/media/insta_4.jpg": "/static/media/insta_4.fe86699cbccc8c0b46ca.jpg",
+    "static/media/insta_3.jpg": "/static/media/insta_3.e5a3cc2c5466b4d65326.jpg",
+    "static/media/insta_1.jpg": "/static/media/insta_1.dc21f637390442f17bf8.jpg",
+    "static/media/Bracelet_3.jpg": "/static/media/Bracelet_3.0aaee28d073a2089bb05.jpg",
+    "static/media/jewelery-logo-removebg-preview.png": "/static/media/jewelery-logo-removebg-preview.3f2e024afce8e613e3e4.png",
+    "static/media/daily wear necklace for women.jpg": "/static/media/daily wear necklace for women.023b0b0b11a61e390aa9.jpg",
+    "static/media/404-page-removebg-preview.png": "/static/media/404-page-removebg-preview.d28480e3cf7109dd1f98.png",
+    "static/media/silver ring for women.jpg": "/static/media/silver ring for women.de2ab9cc87bb5465135a.jpg",
+    "static/media/insta_2.jpg": "/static/media/insta_2.6f6d9daf6487df64ad3c.jpg",
+    "static/media/Earring.jpg": "/static/media/Earring.7691fd25c5f076ac7824.jpg",
+    "static/media/Necklace.jpg": "/static/media/Necklace.cf00c0aae07f230a10f1.jpg",
+    "static/media/kada.jpg": "/static/media/kada.b79ea5404bef4b5f77f5.jpg",
+    "static/media/Bracelet.jpg": "/static/media/Bracelet.f182bcb58d59bf018bbd.jpg",
+    "static/media/Gold Bracelet.jpg": "/static/media/Gold Bracelet.acfdd66bff20fd9936c2.jpg",
+    "static/media/Rings.jpg": "/static/media/Rings.508b16376c35ba71dedf.jpg",
+    "static/media/Silver Bracelet.jpg": "/static/media/Silver Bracelet.59c2c3c72c81f9855c6e.jpg",
+    "static/media/Rings_1.jpg": "/static/media/Rings_1.cb9d9f2b9171f0397496.jpg",
+    "static/media/logo.png": "/static/media/logo.4b7825a638146a1cdf28.png",
+    "static/media/empty-cart.png": "/static/media/empty-cart.30d130f69377623f0ef9.png",
+    "static/media/No_Image_Available.jpg": "/static/media/No_Image_Available.e1ce751ef1b590f719f9.jpg",
+    "index.html": "/index.html",
+    "main.3e116cba.css.map": "/static/css/main.3e116cba.css.map",
+    "main.317abdab.js.map": "/static/js/main.317abdab.js.map",
+    "453.258b012d.chunk.js.map": "/static/js/453.258b012d.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.3e116cba.css",
+    "static/js/main.317abdab.js"
+  ]
+}

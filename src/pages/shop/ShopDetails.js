@@ -21,7 +21,6 @@ import { Accordion } from "react-bootstrap";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import profileService from "../../services/Home";
 import { FaArrowLeftLong } from "react-icons/fa6";
-import { useNavigation } from "../../context/NavigationContext";
 import { motion } from "framer-motion";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -29,8 +28,6 @@ import "react-loading-skeleton/dist/skeleton.css";
 const ShopDetails = () => {
   const location = useLocation();
   const navigate = useNavigate();
-
-  const { previousUrl } = useNavigation();
 
   const { dispatch: wishlistDispatch } = useContext(WishlistSystem);
   const { dispatch: removeWishlistDispatch } = useContext(WishlistSystem);
@@ -47,7 +44,7 @@ const ShopDetails = () => {
   const [productImages, setProduuctImages] = useState([]);
   const [ogImages, setOgImages] = useState([]);
   const [productQuantity, setProductQuantity] = useState(1);
-  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxOpen, setLightboxOpen] = useState(false);  
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [cartItems, setCartItems] = useState([]);
   const [userWishlist, setUserWishlist] = useState(false);
@@ -274,14 +271,6 @@ const ShopDetails = () => {
   const numberFormat = (value) =>
     new Intl.NumberFormat("en-IN")?.format(Math?.round(value));
 
-  const handleBackToShop = () => {
-    if (previousUrl) {
-      navigate(previousUrl);
-    } else {
-      navigate("/shop");
-    }
-  };
-
   return (
     <>
       <Helmet>
@@ -307,7 +296,7 @@ const ShopDetails = () => {
                   />
                   <button
                     className="btn btn-outline-dark d-flex align-items-center text-center"
-                    onClick={handleBackToShop}
+                    onClick={() => navigate(-1)}
                   >
                     <FaArrowLeftLong />
                   </button>

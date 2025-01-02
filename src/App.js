@@ -40,7 +40,6 @@ import MyReadyOrders from "./pages/user/MyReadyOrders";
 import ReadyOrderDetails from "./pages/user/ReadyOrderDetails";
 import CreatePDF from "./pages/Dealer/CreatePDF";
 import OrderTracking from "./pages/user/OrderTracking";
-import { NavigationProvider } from "./context/NavigationContext";
 import LandingPage from "./pages/landing-page/LandingPage";
 import { ShopProvider } from "./context/ShopContext";
 
@@ -90,7 +89,6 @@ function App() {
     <>
       <WishlistProvider>
         <ShopProvider>
-          <NavigationProvider>
             <ProfileProvider>
               <CartProvider>
                 <ReadyDesignCartProvider>
@@ -242,7 +240,7 @@ function App() {
                 </ReadyDesignCartProvider>
               </CartProvider>
             </ProfileProvider>
-          </NavigationProvider>
+          
         </ShopProvider>
       </WishlistProvider>
       <Toaster toastOptions={{ duration: 2000 }} />

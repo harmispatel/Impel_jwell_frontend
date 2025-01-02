@@ -106,7 +106,6 @@ const CategoriesItems = () => {
     if (pagination.currentPage < totalPages) {
       e.preventDefault();
       const nextPage = pagination.currentPage + 1;
-      console.log("nextPage", nextPage);
       const calculatedOffset = (nextPage - 1) * pagination?.dataShowLength;
       setPagination({ ...pagination, currentPage: nextPage });
       CategoriesData(calculatedOffset);
