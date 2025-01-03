@@ -48,7 +48,9 @@ const Shop = () => {
     dataShowLength: 40,
   });
 
-  const totalPages = Math.ceil(paginate?.total_records / 40);
+  const totalPages = Math.ceil(
+    paginate?.total_records / pagination.dataShowLength
+  );
 
   const scrollup = () => {
     window.scrollTo({
@@ -57,20 +59,16 @@ const Shop = () => {
     });
   };
 
-  const CategoryFilter = () => {
-    FilterServices.categoryFilter()
-      .then((res) => {
-        setCategoryData(res.data);
+  const fetchFilters = () => {
+    Promise.all([
+      FilterServices.categoryFilter(),
+      FilterServices.genderFilter(),
+    ])
+      .then(([categories, genders]) => {
+        setCategoryData(categories.data);
+        setGenderData(genders.data);
       })
-      .catch((error) => console.log(error));
-  };
-
-  const GenderFilter = () => {
-    FilterServices.genderFilter()
-      .then((res) => {
-        setGenderData(res.data);
-      })
-      .catch((error) => console.log(error));
+      .catch(console.error);
   };
 
   // user wishlist API
@@ -256,13 +254,9 @@ const Shop = () => {
   const handleSelectCategory = (categoryID) => {
     setIsLoading(true);
     setSelectedCategory(categoryID);
-
-    const categoryId = categoryID?.value;
-    const currentPage = pagination.currentPage;
-    const offset = (currentPage - 1) * pagination.dataShowLength;
-    navigate(`/shop${categoryId ? `?category_id=${categoryId}` : ""}`);
-    // navigate(`?page=${currentPage}&category_id=${categoryId}`);
-    FilterData(offset, categoryId);
+    const offset = (pagination.currentPage - 1) * pagination.dataShowLength;
+    navigate(`/shop${categoryID ? `?category_id=${categoryID.value}` : ""}`);
+    FilterData(offset, categoryID?.value);
   };
 
   const FilterData = async (offset, categoryId) => {
@@ -298,100 +292,65 @@ const Shop = () => {
   };
 
   useLayoutEffect(() => {
-    if (Phone) {
-      GetUserWishList();
+    const queryParams = new URLSearchParams(location.search);
+    const categoryId = queryParams.get("category_id");
+    if (Phone) GetUserWishList();
+    if (email) GetDealerSelection();
+    if (email) getPdfList();
+    fetchFilters();
+    if (!categoryId) {
+      FilterData(0);
     }
-
-    if (email) {
-      GetDealerSelection();
-    }
-
-    if (email) {
-      getPdfList();
-    }
-
-    CategoryFilter();
-    GenderFilter();
-    FilterData();
-  }, []);
+  }, [location.search]);
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const currentPage = parseInt(queryParams.get("page")) || 1;
     const currentCategory = parseInt(queryParams.get("category_id"));
 
-    setPagination((prevState) => ({
-      ...prevState,
-      currentPage,
-    }));
+    setPagination((prev) => ({ ...prev, currentPage }));
+
+    if (currentCategory) {
+      const selectedCategory = categoryData.find(
+        (item) => item.id === currentCategory
+      );
+      if (selectedCategory)
+        setSelectedCategory({
+          value: selectedCategory.id,
+          label: selectedCategory.name,
+        });
+    } else {
+      setSelectedCategory(null);
+    }
 
     const offset = (currentPage - 1) * pagination.dataShowLength;
+    FilterData(offset, currentCategory);
+  }, [location.search, pagination.currentPage, categoryData]);
 
-    if (
-      (offset !== 0 && pagination.currentPage !== currentPage) ||
-      currentCategory !== null
-    ) {
-      FilterData(offset, currentCategory);
-    }
-  }, [location.search, pagination.currentPage]);
-
-  const paginationPage = (page) => {
-    const calculatedOffset = (page - 1) * pagination?.dataShowLength;
-    FilterData(calculatedOffset, selectedCategory?.value);
+  const updatePagination = (page) => {
+    const offset = (page - 1) * pagination.dataShowLength;
+    FilterData(offset, selectedCategory?.value);
     const queryParams = new URLSearchParams(location.search);
-
-    const selectedPage = page ? parseFloat(page) : null;
-    if (selectedPage !== null) {
-      queryParams.set("page", selectedPage);
-    } else {
-      queryParams.delete("page");
-    }
-
+    queryParams.set("page", page);
     navigate(`/shop?${queryParams.toString()}`);
     setPagination({ ...pagination, currentPage: page });
-    scrollup();
     setIsLoading(true);
+    scrollup();
   };
 
   const paginationPrev = (e) => {
     if (pagination.currentPage > 1) {
       e.preventDefault();
-      const prevPage = pagination.currentPage - 1;
-      const calculatedOffset = (prevPage - 1) * pagination?.dataShowLength;
-      setPagination({ ...pagination, currentPage: prevPage });
-      FilterData(calculatedOffset, selectedCategory?.value); 
-      const queryParams = new URLSearchParams(location.search);
-
-      const selectedPage = prevPage ? parseFloat(prevPage) : null;
-      if (selectedPage !== null) {
-        queryParams.set("page", selectedPage);
-      } else {
-        queryParams.delete("page");
-      }
-
-      navigate(`/shop?${queryParams.toString()}`);
+      updatePagination(pagination.currentPage - 1);
       scrollup();
-      setIsLoading(true);
     }
   };
 
   const paginationNext = (e) => {
     if (pagination.currentPage < totalPages) {
       e.preventDefault();
-      const nextPage = pagination.currentPage + 1;
-      const calculatedOffset = (nextPage - 1) * pagination?.dataShowLength;
-      setPagination({ ...pagination, currentPage: nextPage });
-      FilterData(calculatedOffset, selectedCategory?.value); 
-      const queryParams = new URLSearchParams(location.search);
-
-      const selectedPage = nextPage ? parseFloat(nextPage) : null;
-      if (selectedPage !== null) {
-        queryParams.set("page", selectedPage);
-      } else {
-        queryParams.delete("page");
-      }
+      updatePagination(pagination.currentPage + 1);
       scrollup();
-      setIsLoading(true);
     }
   };
 
@@ -700,19 +659,12 @@ const Shop = () => {
                           <div className="paginationArea">
                             <nav aria-label="navigation">
                               <ul className="pagination">
-                                {/* Previous Page Button */}
                                 <li
                                   className={`page-item ${
                                     pagination.currentPage === 1
                                       ? "disabled"
                                       : ""
                                   }`}
-                                  style={{
-                                    display:
-                                      pagination.currentPage === 1
-                                        ? "none"
-                                        : "block",
-                                  }}
                                 >
                                   <Link
                                     to="#"
@@ -726,86 +678,64 @@ const Shop = () => {
                                       viewBox="0 0 24 24"
                                     >
                                       <polyline points="15 18 9 12 15 6"></polyline>
-                                    </svg>
+                                    </svg>{" "}
                                     Prev
                                   </Link>
                                 </li>
 
-                                {/* Display pages with ellipses */}
                                 {Array.from({ length: totalPages }).map(
                                   (_, index) => {
                                     const pageNumber = index + 1;
                                     const isCurrentPage =
                                       pagination.currentPage === pageNumber;
 
-                                    // Display first and last pages
-                                    if (
-                                      pageNumber === 1 ||
+                                    return pageNumber === 1 ||
                                       pageNumber === totalPages ||
                                       (pageNumber >=
                                         pagination.currentPage - 1 &&
                                         pageNumber <=
-                                          pagination.currentPage + 1)
-                                    ) {
-                                      return (
-                                        <li
-                                          key={pageNumber}
-                                          className={`page-item ${
-                                            isCurrentPage ? "active" : ""
-                                          }`}
-                                          onClick={() =>
-                                            paginationPage(pageNumber)
-                                          }
+                                          pagination.currentPage + 1) ? (
+                                      <li
+                                        key={pageNumber}
+                                        className={`page-item ${
+                                          isCurrentPage ? "active" : ""
+                                        }`}
+                                        onClick={() =>
+                                          updatePagination(pageNumber)
+                                        }
+                                      >
+                                        <Link
+                                          to="#"
+                                          className="page-link"
+                                          onClick={(e) => e.preventDefault()}
                                         >
-                                          <Link
-                                            to="#"
-                                            className="page-link"
-                                            onClick={(e) => e.preventDefault()}
-                                          >
-                                            {pageNumber}
-                                          </Link>
-                                        </li>
-                                      );
-                                    }
-
-                                    // Display ellipses
-                                    if (
-                                      index === 1 ||
-                                      index === totalPages - 2
-                                    ) {
-                                      return (
-                                        <li
-                                          key={pageNumber}
-                                          className="page-item disabled"
+                                          {pageNumber}
+                                        </Link>
+                                      </li>
+                                    ) : index === 1 ||
+                                      index === totalPages - 2 ? (
+                                      <li
+                                        key={pageNumber}
+                                        className="page-item disabled"
+                                      >
+                                        <Link
+                                          to="#"
+                                          className="page-link"
+                                          onClick={(e) => e.preventDefault()}
                                         >
-                                          <Link
-                                            to="#"
-                                            className="page-link"
-                                            onClick={(e) => e.preventDefault()}
-                                          >
-                                            ...
-                                          </Link>
-                                        </li>
-                                      );
-                                    }
-
-                                    return null;
+                                          ...
+                                        </Link>
+                                      </li>
+                                    ) : null;
                                   }
                                 )}
 
-                                {/* Next Page Button */}
                                 <li
                                   className={`page-item ${
                                     pagination.currentPage === totalPages
                                       ? "disabled"
                                       : ""
                                   }`}
-                                  style={{
-                                    display:
-                                      pagination.currentPage === totalPages
-                                        ? "none"
-                                        : "block",
-                                  }}
                                 >
                                   <Link
                                     to="#"

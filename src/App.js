@@ -41,7 +41,6 @@ import ReadyOrderDetails from "./pages/user/ReadyOrderDetails";
 import CreatePDF from "./pages/Dealer/CreatePDF";
 import OrderTracking from "./pages/user/OrderTracking";
 import LandingPage from "./pages/landing-page/LandingPage";
-import { ShopProvider } from "./context/ShopContext";
 
 function App() {
   const location = useLocation();
@@ -88,7 +87,6 @@ function App() {
   return (
     <>
       <WishlistProvider>
-        <ShopProvider>
             <ProfileProvider>
               <CartProvider>
                 <ReadyDesignCartProvider>
@@ -240,8 +238,6 @@ function App() {
                 </ReadyDesignCartProvider>
               </CartProvider>
             </ProfileProvider>
-          
-        </ShopProvider>
       </WishlistProvider>
       <Toaster toastOptions={{ duration: 2000 }} />
     </>

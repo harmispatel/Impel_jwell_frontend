@@ -116,7 +116,9 @@ const CreatePDF = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [pdfLists, setPdfList] = useState([]);
   const [readyPdfLists, setReadyPdfList] = useState([]);
-  const [removingItemId, setRemovingItemId] = useState(null);
+  const [removingItemId, setRemovingItemId] = useState([]);
+  const [selectedProducts, setSelectedProducts] = useState([]);
+  const [selectedReadyProducts, setSelectedReadyProducts] = useState([]);
 
   const DealerPdfList = () => {
     DealerPdf.pdfList({ email: DealerEmail })
@@ -130,9 +132,9 @@ const CreatePDF = () => {
       });
   };
 
-  const RemovePdf = (id) => {
-    setRemovingItemId(id);
-    DealerPdf.removePdf({ email: DealerEmail, design_id: id })
+  const RemovePdf = (designIds) => {
+    setRemovingItemId(designIds);
+    DealerPdf.removePdf({ email: DealerEmail, design_ids: designIds })
       .then((res) => {
         DealerPdfList();
         setIsLoading(false);
@@ -142,6 +144,23 @@ const CreatePDF = () => {
         console.log(err);
         setIsLoading(false);
       });
+  };
+
+  const handleCheckboxChange = (productId) => {
+    setSelectedProducts((prevSelected) =>
+      prevSelected.includes(productId)
+        ? prevSelected.filter((id) => id !== productId)
+        : [...prevSelected, productId]
+    );
+  };
+
+  const handleDeleteSelected = () => {
+    if (selectedProducts.length === 0) {
+      toast.error("Please select products to delete.");
+      return;
+    }
+    RemovePdf(selectedProducts);
+    setSelectedProducts([]);
   };
 
   const ReadyDealerPdfList = () => {
@@ -156,9 +175,10 @@ const CreatePDF = () => {
       });
   };
 
-  const ReadyRemovePdf = (id) => {
-    setRemovingItemId(id);
-    DealerPdf.readyRemovePdf({ ready_pdf_id: id })
+  const ReadyRemovePdf = (designIds) => {
+    console.log("designIds", designIds);
+    setRemovingItemId(designIds);
+    DealerPdf.readyRemovePdf({ design_ids: designIds })
       .then((res) => {
         ReadyDealerPdfList();
         setIsLoading(false);
@@ -168,6 +188,23 @@ const CreatePDF = () => {
         console.log(err);
         setIsLoading(false);
       });
+  };
+
+  const handleReadyCheckboxChange = (productId) => {
+    setSelectedReadyProducts((prevSelected) =>
+      prevSelected.includes(productId)
+        ? prevSelected.filter((id) => id !== productId)
+        : [...prevSelected, productId]
+    );
+  };
+
+  const handleDeleteReadySelected = () => {
+    if (selectedReadyProducts.length === 0) {
+      toast.error("Please select products to delete.");
+      return;
+    }
+    ReadyRemovePdf(selectedReadyProducts);
+    setSelectedReadyProducts([]);
   };
 
   useLayoutEffect(() => {
@@ -289,23 +326,33 @@ const CreatePDF = () => {
                                 padding: "12px",
                               }}
                             >
-                              <PDFDownloadLink
-                                document={pdfDataPrint()}
-                                filename="FORM.pdf"
-                                style={{ textDecoration: "none" }}
-                              >
-                                {({ loading }) =>
-                                  loading ? (
-                                    <button className="pdf-share-btn mt-2">
-                                      Loading Document...
-                                    </button>
-                                  ) : (
-                                    <button className="pdf-share-btn mt-2">
-                                      Share <IoShareSocial className="ms-2" />
-                                    </button>
-                                  )
-                                }
-                              </PDFDownloadLink>
+                              <div className="d-flex justify-content-between">
+                                <PDFDownloadLink
+                                  document={pdfDataPrint()}
+                                  filename="FORM.pdf"
+                                  style={{ textDecoration: "none" }}
+                                >
+                                  {({ loading }) =>
+                                    loading ? (
+                                      <button className="pdf-share-btn mt-2">
+                                        Loading Document...
+                                      </button>
+                                    ) : (
+                                      <button className="pdf-share-btn mt-2">
+                                        Share <IoShareSocial className="ms-2" />
+                                      </button>
+                                    )
+                                  }
+                                </PDFDownloadLink>
+                                <button
+                                  type="button"
+                                  className="btn btn-danger"
+                                  onClick={handleDeleteSelected}
+                                  disabled={selectedProducts.length === 0}
+                                >
+                                  Delete Selected
+                                </button>
+                              </div>
                               {pdfLists?.map((product) => {
                                 return (
                                   <>
@@ -318,7 +365,7 @@ const CreatePDF = () => {
                                               <div className="col-12 col-sm-12 col-md-6 col-lg-6">
                                                 <div className="d-flex mb-3">
                                                   <img
-                                                    className=""
+                                                    className="img-fluid"
                                                     style={{
                                                       width: "120px",
                                                       height: "auto",
@@ -341,16 +388,60 @@ const CreatePDF = () => {
                                                 </div>
                                               </div>
                                               <div className="col-12 col-sm-12 col-md-6 col-lg-6">
-                                                <div className="d-flex justify-content-end">
+                                                <div
+                                                  style={{
+                                                    display: "grid",
+                                                    justifyContent: "end",
+                                                    gap: "15px",
+                                                  }}
+                                                >
+                                                  <div className="pdf-checkbox-btn d-flex justify-content-end">
+                                                    <input
+                                                      type="checkbox"
+                                                      id={`checkbox-${product.id}`}
+                                                      className="address-checkbox"
+                                                      checked={selectedProducts.includes(
+                                                        product.id
+                                                      )}
+                                                      onChange={() =>
+                                                        handleCheckboxChange(
+                                                          product.id
+                                                        )
+                                                      }
+                                                      style={{
+                                                        cursor: "pointer",
+                                                      }}
+                                                    />
+                                                    <label
+                                                      htmlFor={`checkbox-${product.id}`}
+                                                      className="pdf-check-text"
+                                                      style={{
+                                                        cursor: "pointer",
+                                                      }}
+                                                    ></label>
+                                                  </div>
+                                                  {/* <input
+                                                    type="checkbox"
+                                                    checked={selectedProducts.includes(
+                                                      product.id
+                                                    )}
+                                                    onChange={() =>
+                                                      handleCheckboxChange(
+                                                        product.id
+                                                      )
+                                                    }
+                                                  /> */}
+
                                                   <button
                                                     type="button"
                                                     className="btn btn-danger"
                                                     onClick={() =>
-                                                      RemovePdf(product?.id)
+                                                      RemovePdf([product.id])
                                                     }
                                                   >
-                                                    {removingItemId ===
-                                                    product?.id ? (
+                                                    {removingItemId.includes(
+                                                      product?.id
+                                                    ) ? (
                                                       <CgSpinner
                                                         size={20}
                                                         className="animate_spin"
@@ -425,23 +516,33 @@ const CreatePDF = () => {
                                 padding: "12px",
                               }}
                             >
-                              <PDFDownloadLink
-                                document={pdfReadyDataPrint()}
-                                filename="FORM.pdf"
-                                style={{ textDecoration: "none" }}
-                              >
-                                {({ loading }) =>
-                                  loading ? (
-                                    <button className="pdf-share-btn mt-2">
-                                      Loading Document...
-                                    </button>
-                                  ) : (
-                                    <button className="pdf-share-btn mt-2">
-                                      Share <IoShareSocial className="ms-2" />
-                                    </button>
-                                  )
-                                }
-                              </PDFDownloadLink>
+                              <div className="d-flex justify-content-between">
+                                <PDFDownloadLink
+                                  document={pdfReadyDataPrint()}
+                                  filename="FORM.pdf"
+                                  style={{ textDecoration: "none" }}
+                                >
+                                  {({ loading }) =>
+                                    loading ? (
+                                      <button className="pdf-share-btn mt-2">
+                                        Loading Document...
+                                      </button>
+                                    ) : (
+                                      <button className="pdf-share-btn mt-2">
+                                        Share <IoShareSocial className="ms-2" />
+                                      </button>
+                                    )
+                                  }
+                                </PDFDownloadLink>
+                                <button
+                                  type="button"
+                                  className="btn btn-danger"
+                                  onClick={handleDeleteReadySelected}
+                                  disabled={selectedReadyProducts.length === 0}
+                                >
+                                  Delete Selected
+                                </button>
+                              </div>
                               {readyPdfLists?.map((product) => {
                                 return (
                                   <div key={product.id}>
@@ -458,11 +559,12 @@ const CreatePDF = () => {
                                                     width: "120px",
                                                     height: "auto",
                                                   }}
-                                                  src={product?.image}
+                                                  src={`${process.env.REACT_APP_API_KEY_IMAGE}${product?.barcode}.jpg`}
                                                   onError={(e) => {
                                                     e.target.onerror = null;
                                                   }}
                                                   alt=""
+                                                  loading="lazy"
                                                 />
                                                 <div className="mx-3">
                                                   <h5>{product?.name}</h5>
@@ -479,7 +581,64 @@ const CreatePDF = () => {
                                               </div>
                                             </div>
                                             <div className="col-12 col-sm-12 col-md-4 col-lg-4">
-                                              <div className="d-flex justify-content-end">
+                                              <div
+                                                style={{
+                                                  display: "grid",
+                                                  justifyContent: "end",
+                                                  gap: "15px",
+                                                }}
+                                              >
+                                                <div className="pdf-checkbox-btn d-flex justify-content-end">
+                                                  <input
+                                                    type="checkbox"
+                                                    id={`checkbox-${product.id}`}
+                                                    className="address-checkbox"
+                                                    checked={selectedReadyProducts.includes(
+                                                      product.id
+                                                    )}
+                                                    onChange={() =>
+                                                      handleReadyCheckboxChange(
+                                                        product.id
+                                                      )
+                                                    }
+                                                    style={{
+                                                      cursor: "pointer",
+                                                    }}
+                                                  />
+                                                  <label
+                                                    htmlFor={`checkbox-${product.id}`}
+                                                    className="pdf-check-text"
+                                                    style={{
+                                                      cursor: "pointer",
+                                                    }}
+                                                  ></label>
+                                                </div>
+                                                <button
+                                                  type="button"
+                                                  className="btn btn-danger"
+                                                  onClick={() =>
+                                                    ReadyRemovePdf([
+                                                      product?.id,
+                                                    ])
+                                                  }
+                                                >
+                                                  {removingItemId.includes(
+                                                    product?.id
+                                                  ) ? (
+                                                    <CgSpinner
+                                                      size={20}
+                                                      className="animate_spin"
+                                                    />
+                                                  ) : (
+                                                    <MdDeleteOutline
+                                                      style={{
+                                                        fontSize: "20px",
+                                                      }}
+                                                    />
+                                                  )}
+                                                </button>
+                                              </div>
+                                              {/* <div className="d-flex justify-content-end">
                                                 <button
                                                   type="button"
                                                   className="btn btn-danger"
@@ -501,7 +660,7 @@ const CreatePDF = () => {
                                                     />
                                                   )}
                                                 </button>
-                                              </div>
+                                              </div> */}
                                             </div>
                                           </div>
                                         </div>
