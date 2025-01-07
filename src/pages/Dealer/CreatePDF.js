@@ -176,7 +176,6 @@ const CreatePDF = () => {
   };
 
   const ReadyRemovePdf = (designIds) => {
-    console.log("designIds", designIds);
     setRemovingItemId(designIds);
     DealerPdf.readyRemovePdf({ design_ids: designIds })
       .then((res) => {
@@ -591,14 +590,14 @@ const CreatePDF = () => {
                                                 <div className="pdf-checkbox-btn d-flex justify-content-end">
                                                   <input
                                                     type="checkbox"
-                                                    id={`checkbox-${product.id}`}
+                                                    id={`checkbox-${product.barcode}`}
                                                     className="address-checkbox"
                                                     checked={selectedReadyProducts.includes(
-                                                      product.id
+                                                      product.barcode
                                                     )}
                                                     onChange={() =>
                                                       handleReadyCheckboxChange(
-                                                        product.id
+                                                        product.barcode
                                                       )
                                                     }
                                                     style={{
@@ -606,7 +605,7 @@ const CreatePDF = () => {
                                                     }}
                                                   />
                                                   <label
-                                                    htmlFor={`checkbox-${product.id}`}
+                                                    htmlFor={`checkbox-${product.barcode}`}
                                                     className="pdf-check-text"
                                                     style={{
                                                       cursor: "pointer",
@@ -618,12 +617,12 @@ const CreatePDF = () => {
                                                   className="btn btn-danger"
                                                   onClick={() =>
                                                     ReadyRemovePdf([
-                                                      product?.id,
+                                                      product?.barcode,
                                                     ])
                                                   }
                                                 >
                                                   {removingItemId.includes(
-                                                    product?.id
+                                                    product?.barcode
                                                   ) ? (
                                                     <CgSpinner
                                                       size={20}

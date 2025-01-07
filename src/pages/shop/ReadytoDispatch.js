@@ -42,12 +42,14 @@ const ReadytoDispatch = () => {
 
   const [pdfItems, setPdfItems] = useState([]);
 
-  const totalPages = Math.ceil(totalItems / 20);
+  // const totalPages = Math.ceil(totalItems / 20);
 
   const [pagination, setPagination] = useState({
     currentPage: 1,
     dataShowLength: 20,
   });
+
+  const totalPages = Math.ceil(totalItems / pagination.dataShowLength);
 
   // const handleCategory = (selectedOption) => {
   //   setIsLoading(true);
@@ -138,7 +140,7 @@ const ReadytoDispatch = () => {
       });
   }, [id]);
 
-  const getProductsFilterAndData = async () => {
+  const getProductsFilterAndData = async (offset) => {
     try {
       const filterResponse = await profileService.GetProductsFilterAPI({
         PageNo: 1,
@@ -172,7 +174,7 @@ const ReadytoDispatch = () => {
       setFilters(filterResponse?.Filters);
 
       const productsResponse = await profileService.GetProductsAPI({
-        PageNo: pagination?.currentPage || 1,
+        PageNo: offset || 1,
         PageSize: 20,
         DeviceID: 0,
         SortBy: "",
@@ -190,7 +192,6 @@ const ReadytoDispatch = () => {
         CommaSeperate_BranchID: "",
         CommaSeperate_Size: sizes || "",
         CommaSeperate_CounterID: "",
-        MaxNetWt: 0,
         MinNetWt: 0,
         OnlyCartItem: false,
         OnlyWishlistItem: false,
@@ -210,6 +211,68 @@ const ReadytoDispatch = () => {
   };
 
   useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const currentPage = parseInt(queryParams.get("page")) || 1;
+    setPagination((prev) => ({ ...prev, currentPage }));
+
+    getProductsFilterAndData(currentPage);
+  }, [location.search, pagination.currentPage]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const url = "/api/Tag/GetAll";
+      const requestBody = {
+        PageNo: 1,
+        PageSize: 20,
+        DeviceID: 0,
+        SortBy: "",
+        SearchText: "",
+        TranType: "",
+        CommaSeperate_ItemGroupID: "",
+        CommaSeperate_ItemID: "",
+        CommaSeperate_StyleID: "",
+        CommaSeperate_ProductID: "",
+        CommaSeperate_SubItemID: "",
+        CommaSeperate_AppItemCategoryID: "",
+        CommaSeperate_ItemSubID: "",
+        CommaSeperate_KarigarID: "",
+        CommaSeperate_BranchID: "",
+        CommaSeperate_Size: "",
+        CommaSeperate_CounterID: "",
+        MaxNetWt: 1000,
+        MinNetWt: 0,
+        OnlyCartItem: false,
+        OnlyWishlistItem: false,
+        StockStatus: "",
+        DoNotShowInClientApp: 0,
+        HasTagImage: 0,
+        CommaSeperate_CompanyID: "1, 4, 5",
+      };
+
+      try {
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestBody),
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
     getProductsFilterAndData();
   }, [
     itemGroups,
@@ -222,30 +285,29 @@ const ReadytoDispatch = () => {
     pagination?.currentPage,
   ]);
 
-  const paginationPage = (page) => {
+  const updatePagination = (page) => {
     getProductsFilterAndData(page);
+    const queryParams = new URLSearchParams(location.search);
+    queryParams.set("page", page);
+    navigate(`/ready-to-dispatch?${queryParams.toString()}`);
     setPagination({ ...pagination, currentPage: page });
-    scrollup();
     setIsLoading(true);
+    scrollup();
   };
 
-  const paginationPrev = () => {
+  const paginationPrev = (e) => {
     if (pagination.currentPage > 1) {
-      const prevPage = pagination.currentPage - 1;
-      setPagination({ ...pagination, currentPage: prevPage });
-      getProductsFilterAndData(prevPage);
+      e.preventDefault();
+      updatePagination(pagination.currentPage - 1);
       scrollup();
-      setIsLoading(true);
     }
   };
 
-  const paginationNext = () => {
+  const paginationNext = (e) => {
     if (pagination.currentPage < totalPages) {
-      const nextPage = pagination.currentPage + 1;
-      setPagination({ ...pagination, currentPage: nextPage });
-      getProductsFilterAndData(nextPage);
+      e.preventDefault();
+      updatePagination(pagination.currentPage + 1);
       scrollup();
-      setIsLoading(true);
     }
   };
 
@@ -264,73 +326,72 @@ const ReadytoDispatch = () => {
     },
   ];
 
-  // useEffect(() => {
-  //   const searchParams = new URLSearchParams(location.search);
-  //   const sortbyItems = searchParams.get("items");
-  //   const sortbySizes = searchParams.get("sizes");
-  //   const sortbySubItems = searchParams.get("sub-items");
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const sortbyItems = searchParams.get("items");
+    const sortbySizes = searchParams.get("sizes");
+    const sortbySubItems = searchParams.get("sub-items");
 
-  //   if (sortbySizes && sortbySizes.length > 0) {
-  //     if (sortbySizes) {
+    if (sortbySizes && sortbySizes.length > 0) {
+      if (sortbySizes) {
+        const selectedSort = filters?.Size?.find(
+          (item) => item.RowNumber === Number(sortbySizes)
+        );
 
-  //       const selectedSort = filters?.Size?.find(
-  //         (item) => item.RowNumber === Number(sortbySizes)
-  //       );
+        if (selectedSort) {
+          setSizes(Number(sortbySizes));
+          setSelectedSizes({
+            value: selectedSort?.RowNumber,
+            label: selectedSort?.Size1,
+          });
+        }
+      }
+    } else {
+      setIsLoading(true);
+      setSelectedSizes("");
+      setSizes("");
+    }
 
-  //       if (selectedSort) {
-  //         setSizes(Number(sortbySizes));
-  //         setSelectedSizes({
-  //           value: selectedSort?.RowNumber,
-  //           label: selectedSort?.Size1,
-  //         });
-  //       }
-  //     }
-  //   } else {
-  //     setIsLoading(true);
-  //     setSelectedSizes("");
-  //     setSizes("");
-  //   }
+    // if (sortbyItems && sortbyItems?.length > 0) {
+    //   if (sortbyItems) {
+    //     const selectedSort = filters?.Items?.find(
+    //       (item) => item.ItemID === Number(sortbyItems)
+    //     );
 
-  //   // if (sortbyItems && sortbyItems?.length > 0) {
-  //   //   if (sortbyItems) {
-  //   //     const selectedSort = filters?.Items?.find(
-  //   //       (item) => item.ItemID === Number(sortbyItems)
-  //   //     );
+    //     if (selectedSort) {
+    //       setItems(Number(sortbyItems));
+    //       setSelectedItems({
+    //         value: selectedSort?.ItemID,
+    //         label: selectedSort?.ItemName,
+    //       });
+    //     }
+    //   }
+    // } else {
+    //   setIsLoading(true);
+    //   setSelectedItems("");
+    //   setItems("");
+    // }
 
-  //   //     if (selectedSort) {
-  //   //       setItems(Number(sortbyItems));
-  //   //       setSelectedItems({
-  //   //         value: selectedSort?.ItemID,
-  //   //         label: selectedSort?.ItemName,
-  //   //       });
-  //   //     }
-  //   //   }
-  //   // } else {
-  //   //   setIsLoading(true);
-  //   //   setSelectedItems("");
-  //   //   setItems("");
-  //   // }
+    // if (sortbySubItems && sortbySubItems?.length > 0) {
+    //   if (sortbySubItems) {
+    //     const selectedSort = filters?.SubItems?.find(
+    //       (item) => item.SubItemID === Number(sortbySubItems)
+    //     );
 
-  //   // if (sortbySubItems && sortbySubItems?.length > 0) {
-  //   //   if (sortbySubItems) {
-  //   //     const selectedSort = filters?.SubItems?.find(
-  //   //       (item) => item.SubItemID === Number(sortbySubItems)
-  //   //     );
-
-  //   //     if (selectedSort) {
-  //   //       setSubItems(Number(sortbySubItems));
-  //   //       setSelectedSubItems({
-  //   //         value: selectedSort?.SubItemID,
-  //   //         label: selectedSort?.SubItemName,
-  //   //       });
-  //   //     }
-  //   //   }
-  //   // } else {
-  //   //   setIsLoading(true);
-  //   //   setSelectedSubItems("");
-  //   //   setSubItems("");
-  //   // }
-  // }, [location.search, filters?.length]);
+    //     if (selectedSort) {
+    //       setSubItems(Number(sortbySubItems));
+    //       setSelectedSubItems({
+    //         value: selectedSort?.SubItemID,
+    //         label: selectedSort?.SubItemName,
+    //       });
+    //     }
+    //   }
+    // } else {
+    //   setIsLoading(true);
+    //   setSelectedSubItems("");
+    //   setSubItems("");
+    // }
+  }, [location.search, filters?.length]);
 
   // <-------------------- PAGINATION FUNCTION HERE START -------------------->
 
@@ -362,7 +423,7 @@ const ReadytoDispatch = () => {
   // Dealder add product for PDF creation
   const addToPDF = async (e, product, allPrices) => {
     e.preventDefault();
-    if (!pdfItems.some((item) => item.Barcode === product.Barcode)) {
+    if (!pdfItems.some((item) => item.barcode === product.Barcode)) {
       DealerPdf.readytAddToPdf({
         email: email,
         company_id: 4,
@@ -397,7 +458,7 @@ const ReadytoDispatch = () => {
   const removeToPDF = (e, product) => {
     e.preventDefault();
     DealerPdf.readyRemovePdf({
-      ready_pdf_id: product.id,
+      design_ids: [product.Barcode],
     })
       .then((res) => {
         if (res.success === true) {
@@ -503,7 +564,6 @@ const ReadytoDispatch = () => {
                   <div className="col-lg-3 col-md-6 col-12">
                     <div key={index} className="shimmer-product">
                       <div className="shimmer-image">
-                        <img src="" />
                       </div>
                       <div className="shimmer-price"></div>
                       <div className="shimmer-price"></div>
@@ -601,7 +661,7 @@ const ReadytoDispatch = () => {
                                               if (
                                                 pdfItems?.find(
                                                   (item) =>
-                                                    item?.Barcode ===
+                                                    item?.barcode ===
                                                     data?.Barcode
                                                 )
                                               ) {
@@ -613,7 +673,7 @@ const ReadytoDispatch = () => {
                                           >
                                             {pdfItems?.find(
                                               (item) =>
-                                                item?.Barcode === data?.Barcode
+                                                item?.barcode === data?.Barcode
                                             ) ? (
                                               <FaFilePdf />
                                             ) : (
@@ -679,17 +739,10 @@ const ReadytoDispatch = () => {
                         <div className="paginationArea">
                           <nav aria-label="navigation">
                             <ul className="pagination">
-                              {/* Previous Page Button */}
                               <li
                                 className={`page-item ${
                                   pagination.currentPage === 1 ? "disabled" : ""
                                 }`}
-                                style={{
-                                  display:
-                                    pagination.currentPage === 1
-                                      ? "none"
-                                      : "block",
-                                }}
                               >
                                 <Link
                                   to="#"
@@ -703,73 +756,63 @@ const ReadytoDispatch = () => {
                                     viewBox="0 0 24 24"
                                   >
                                     <polyline points="15 18 9 12 15 6"></polyline>
-                                  </svg>
+                                  </svg>{" "}
                                   Prev
                                 </Link>
                               </li>
 
-                              {/* Display pages with ellipses */}
                               {Array.from({ length: totalPages }).map(
                                 (_, index) => {
                                   const pageNumber = index + 1;
                                   const isCurrentPage =
                                     pagination.currentPage === pageNumber;
 
-                                  // Display first and last pages
-                                  if (
-                                    pageNumber === 1 ||
+                                  return pageNumber === 1 ||
                                     pageNumber === totalPages ||
                                     (pageNumber >= pagination.currentPage - 1 &&
-                                      pageNumber <= pagination.currentPage + 1)
-                                  ) {
-                                    return (
-                                      <li
-                                        key={pageNumber}
-                                        className={`page-item ${
-                                          isCurrentPage ? "active" : ""
-                                        }`}
-                                        onClick={() =>
-                                          paginationPage(pageNumber)
-                                        }
+                                      pageNumber <=
+                                        pagination.currentPage + 1) ? (
+                                    <li
+                                      key={pageNumber}
+                                      className={`page-item ${
+                                        isCurrentPage ? "active" : ""
+                                      }`}
+                                      onClick={() =>
+                                        updatePagination(pageNumber)
+                                      }
+                                    >
+                                      <Link
+                                        to="#"
+                                        className="page-link"
+                                        onClick={(e) => e.preventDefault()}
                                       >
-                                        <Link to="#" className="page-link">
-                                          {pageNumber}
-                                        </Link>
-                                      </li>
-                                    );
-                                  }
-
-                                  // Display ellipses
-                                  if (index === 1 || index === totalPages - 2) {
-                                    return (
-                                      <li
-                                        key={pageNumber}
-                                        className="page-item disabled"
+                                        {pageNumber}
+                                      </Link>
+                                    </li>
+                                  ) : index === 1 ||
+                                    index === totalPages - 2 ? (
+                                    <li
+                                      key={pageNumber}
+                                      className="page-item disabled"
+                                    >
+                                      <Link
+                                        to="#"
+                                        className="page-link"
+                                        onClick={(e) => e.preventDefault()}
                                       >
-                                        <Link to="#" className="page-link">
-                                          ...
-                                        </Link>
-                                      </li>
-                                    );
-                                  }
-
-                                  return null;
+                                        ...
+                                      </Link>
+                                    </li>
+                                  ) : null;
                                 }
                               )}
 
-                              {/* Next Page Button */}
                               <li
                                 className={`page-item ${
                                   pagination.currentPage === totalPages
                                     ? "disabled"
                                     : ""
                                 }`}
-                                style={{
-                                  display:
-                                    pagination.currentPage === totalPages
-                                      ? "none"
-                                      : "block",
-                                }}
                               >
                                 <Link
                                   to="#"

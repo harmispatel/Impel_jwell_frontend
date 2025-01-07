@@ -31,6 +31,8 @@ const Shop = () => {
   const [categoryData, setCategoryData] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
 
+  const [selectedOption, setSelectedOption] = useState(null);
+
   const [genderData, setGenderData] = useState([]);
   const [filterTag, setFilterTag] = useState([]);
   const [FilterPriceRange, setFilterPriceRange] = useState({
@@ -47,6 +49,13 @@ const Shop = () => {
     currentPage: 1,
     dataShowLength: 40,
   });
+
+  const [options] = useState([
+    { value: "new_added", label: "New Added" },
+    { value: "low_to_high", label: "Price: low to high" },
+    { value: "high_to_low", label: "Price: high to low" },
+    { value: "highest_selling", label: "Top Seller" },
+  ]);
 
   const totalPages = Math.ceil(
     paginate?.total_records / pagination.dataShowLength
@@ -65,8 +74,8 @@ const Shop = () => {
       FilterServices.genderFilter(),
     ])
       .then(([categories, genders]) => {
-        setCategoryData(categories.data);
-        setGenderData(genders.data);
+        setCategoryData(categories?.data);
+        setGenderData(genders?.data);
       })
       .catch(console.error);
   };
@@ -226,7 +235,7 @@ const Shop = () => {
     e.preventDefault();
     DealerPdf.removePdf({
       email: email,
-      design_id: product.id,
+      design_ids: [product.id],
     })
       .then((res) => {
         if (res.success === true) {
@@ -259,7 +268,15 @@ const Shop = () => {
     FilterData(offset, categoryID?.value);
   };
 
-  const FilterData = async (offset, categoryId) => {
+  const handleSelectChange = (selectedSort) => {
+    setIsLoading(true);
+    setSelectedOption(selectedSort);
+    const offset = (pagination.currentPage - 1) * pagination.dataShowLength;
+    navigate(`/shop${selectedSort ? `?sort_by=${selectedSort?.value}` : ""}`);
+    FilterData(offset, selectedSort?.value);
+  };
+
+  const FilterData = async (offset, categoryId, sortById) => {
     setIsLoading(true);
 
     try {
@@ -270,7 +287,7 @@ const Shop = () => {
         search: null,
         min_price: null,
         max_price: null,
-        sort_by: null,
+        sort_by: sortById ? sortById?.value : null,
         userType: userType,
         userId: userId,
         offset: offset || 0,
@@ -307,6 +324,7 @@ const Shop = () => {
     const queryParams = new URLSearchParams(location.search);
     const currentPage = parseInt(queryParams.get("page")) || 1;
     const currentCategory = parseInt(queryParams.get("category_id"));
+    const currentSort = parseInt(queryParams.get("sort_by"));
 
     setPagination((prev) => ({ ...prev, currentPage }));
 
@@ -323,9 +341,16 @@ const Shop = () => {
       setSelectedCategory(null);
     }
 
+    if (currentSort) {
+      const selectedSortBy = options.find((item) => item.value === currentSort);
+      if (selectedSortBy) setSelectedOption(selectedSortBy);
+    } else {
+      setSelectedOption(null);
+    }
+
     const offset = (currentPage - 1) * pagination.dataShowLength;
-    FilterData(offset, currentCategory);
-  }, [location.search, pagination.currentPage, categoryData]);
+    FilterData(offset, currentCategory, currentSort);
+  }, [location.search, pagination.currentPage, categoryData, options]);
 
   const updatePagination = (page) => {
     const offset = (page - 1) * pagination.dataShowLength;
@@ -388,7 +413,16 @@ const Shop = () => {
                   onChange={handleSelectCategory}
                 />
               </div>
-              <div className="col-md-3 col-12"></div>
+              <div className="col-md-3 col-12">
+                <Select
+                  placeholder="Sort By"
+                  isClearable={true}
+                  isSearchable={false}
+                  value={selectedOption}
+                  options={options}
+                  onChange={handleSelectChange}
+                />
+              </div>
             </div>
 
             <div className="row">
