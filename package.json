@@ -21,13 +21,11 @@
     "formik": "^2.4.6",
     "framer-motion": "^11.15.0",
     "html2canvas": "^1.4.1",
-    "http-proxy-middleware": "^3.0.3",
     "i": "^0.3.7",
     "jspdf": "^2.5.2",
     "jspdf-autotable": "^3.8.4",
     "lodash": "^4.17.21",
     "moment": "^2.30.1",
-    "npm": "^10.4.0",
     "otp-input-react": "^0.3.0",
     "rc-slider": "^10.2.1",
     "react": "^18.2.0",
@@ -59,7 +57,7 @@
     "web-vitals": "^2.1.4",
     "yup": "^1.6.1"
   },
-  "proxy": "https://api.indianjewelcast.com",
+  
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -83,5 +81,13 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "-": "^0.0.1",
+    "http-proxy-middleware": "^3.0.3",
+    "install": "^0.13.0",
+    "npm": "^11.0.0",
+    "or": "^0.2.0",
+    "save-dev": "^0.0.1-security"
   }
 }
