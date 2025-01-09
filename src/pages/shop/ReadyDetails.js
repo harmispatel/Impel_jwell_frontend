@@ -16,7 +16,7 @@ import { FaArrowLeftLong } from "react-icons/fa6";
 import { motion } from "framer-motion";
 
 const api = process.env.REACT_APP_API_KEY;
-const imageURL = process.env.REACT_APP_API_KEY_IMAGE;
+const imageURL = process.env.REACT_APP_API_KEY_IMAGE_;
 
 const ReadyDetails = () => {
   const location = useLocation();
@@ -232,7 +232,8 @@ const ReadyDetails = () => {
                         <Skeleton style={{ height: "526px" }} width="100%" />
                       ) : (
                         <motion.img
-                          src={`${imageURL}${details?.Barcode}.jpg`}
+                          // src={`${imageURL}${details?.Barcode}.jpg`}
+                          src={`https://api.indianjewelcast.com/TagImage/${details?.Barcode}.jpg`}
                           alt=""
                           onError={(e) => {
                             e.target.onerror = null;

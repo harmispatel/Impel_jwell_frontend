@@ -130,102 +130,69 @@ const ReadytoDispatch = () => {
   // };
 
   const getProductsFilterAndData = async (offset) => {
+    setIsLoading(true)
     try {
-      const sizeToPass = sizes || "";
+      const filterResponse = await profileService.GetProductsFilterAPI({
+        PageNo: 1,
+        PageSize: 20,
+        DeviceID: 0,
+        SortBy: "",
+        SearchText: "",
+        TranType: "",
+        CommaSeperate_ItemGroupID: itemGroups?.value || "",
+        CommaSeperate_ItemID: items || "",
+        CommaSeperate_StyleID: styles?.value || "",
+        CommaSeperate_ProductID: "",
+        CommaSeperate_SubItemID: subItems || "",
+        CommaSeperate_AppItemCategoryID: "",
+        CommaSeperate_ItemSubID: "",
+        CommaSeperate_KarigarID: "",
+        CommaSeperate_BranchID: "",
+        CommaSeperate_Size: sizes || "",
+        CommaSeperate_CounterID: "",
+        MinNetWt: 0,
+        OnlyCartItem: false,
+        OnlyWishlistItem: false,
+        StockStatus: "",
+        DoNotShowInClientApp: 0,
+        HasTagImage: 0,
+        CommaSeperate_CompanyID: id,
+        MaxNetWt: 1000,
+      });
+      setFilters(filterResponse?.Filters);
 
-      // Fetch filter data
-      const filterResponse = await fetch(
-        "https://cors-anywhere.herokuapp.com/https://api.indianjewelcast.com/api/Tag/GetFilters",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            PageNo: 1,
-            PageSize: 20,
-            DeviceID: 0,
-            SortBy: "",
-            SearchText: "",
-            TranType: "",
-            CommaSeperate_ItemGroupID: itemGroups?.value || "",
-            CommaSeperate_ItemID: items || "",
-            CommaSeperate_StyleID: styles?.value || "",
-            CommaSeperate_ProductID: "",
-            CommaSeperate_SubItemID: subItems || "",
-            CommaSeperate_AppItemCategoryID: "",
-            CommaSeperate_ItemSubID: "",
-            CommaSeperate_KarigarID: "",
-            CommaSeperate_BranchID: "",
-            CommaSeperate_Size: sizeToPass,
-            CommaSeperate_CounterID: "",
-            MinNetWt: 0,
-            OnlyCartItem: false,
-            OnlyWishlistItem: false,
-            StockStatus: "",
-            DoNotShowInClientApp: 0,
-            HasTagImage: 0,
-            CommaSeperate_CompanyID: id,
-            MaxNetWt: 1000,
-          }),
-        }
-      );
-
-      if (!filterResponse.ok) {
-        throw new Error(`Failed to fetch filters: ${filterResponse.status}`);
-      }
-
-      const filterData = await filterResponse.json();
-      setFilters(filterData?.Filters);
-
-      // Fetch product data
-      const productsResponse = await fetch(
-        "https://cors-anywhere.herokuapp.com/https://api.indianjewelcast.com/api/Tag/GetAll",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            PageNo: offset || 1,
-            PageSize: 20,
-            DeviceID: 0,
-            SortBy: "",
-            SearchText: tagNoChange || "",
-            TranType: "",
-            CommaSeperate_ItemGroupID: itemGroups?.value || "",
-            CommaSeperate_ItemID: items || "",
-            CommaSeperate_StyleID: styles?.value || "",
-            CommaSeperate_ProductID: "",
-            CommaSeperate_CompanyID: id || "",
-            CommaSeperate_SubItemID: subItems || "",
-            CommaSeperate_AppItemCategoryID: "",
-            CommaSeperate_ItemSubID: "",
-            CommaSeperate_KarigarID: "",
-            CommaSeperate_BranchID: "",
-            CommaSeperate_Size: sizeToPass,
-            CommaSeperate_CounterID: "",
-            MinNetWt: 0,
-            OnlyCartItem: false,
-            OnlyWishlistItem: false,
-            StockStatus: "",
-            DoNotShowInClientApp: 0,
-            HasTagImage: 0,
-            MaxNetWt: 1000,
-          }),
-        }
-      );
-
-      if (!productsResponse.ok) {
-        throw new Error(`Failed to fetch products: ${productsResponse.status}`);
-      }
-
-      const productsData = await productsResponse.json();
-      setProducts(productsData?.Tags);
-      setTotalItems(productsData?.TotalItems);
+      const productsResponse = await profileService.GetProductsAPI({
+        PageNo: offset || 1,
+        PageSize: 20,
+        DeviceID: 0,
+        SortBy: "",
+        SearchText: tagNoChange || "",
+        TranType: "",
+        CommaSeperate_ItemGroupID: itemGroups?.value || "",
+        CommaSeperate_ItemID: items || "",
+        CommaSeperate_StyleID: styles?.value || "",
+        CommaSeperate_ProductID: "",
+        CommaSeperate_CompanyID: id || "",
+        CommaSeperate_SubItemID: subItems || "",
+        CommaSeperate_AppItemCategoryID: "",
+        CommaSeperate_ItemSubID: "",
+        CommaSeperate_KarigarID: "",
+        CommaSeperate_BranchID: "",
+        CommaSeperate_Size: sizes || "",
+        CommaSeperate_CounterID: "",
+        MinNetWt: 0,
+        OnlyCartItem: false,
+        OnlyWishlistItem: false,
+        StockStatus: "",
+        DoNotShowInClientApp: 0,
+        HasTagImage: 0,
+        MaxNetWt: 1000,
+      });
+      setProducts(productsResponse?.Tags);
+      setTotalItems(productsResponse?.TotalItems);
       setIsLoading(false);
     } catch (err) {
-      console.error("Error fetching data:", err);
+      console.log(err);
       setIsLoading(true);
     }
   };
@@ -246,67 +213,65 @@ const ReadytoDispatch = () => {
         value: selectedSort?.RowNumber,
         label: selectedSort?.Size1,
       });
-
-      getProductsFilterAndData(currentPage);
     }
 
     getProductsFilterAndData(currentPage);
   }, [location.search, filters?.length, pagination.currentPage, sizes]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const url =
-        "https://cors-anywhere.herokuapp.com/https://api.indianjewelcast.com/api/Tag/GetAll";
-      const requestBody = {
-        PageNo: 1,
-        PageSize: 20,
-        DeviceID: 0,
-        SortBy: "",
-        SearchText: "",
-        TranType: "",
-        CommaSeperate_ItemGroupID: "",
-        CommaSeperate_ItemID: "",
-        CommaSeperate_StyleID: "",
-        CommaSeperate_ProductID: "",
-        CommaSeperate_SubItemID: "",
-        CommaSeperate_AppItemCategoryID: "",
-        CommaSeperate_ItemSubID: "",
-        CommaSeperate_KarigarID: "",
-        CommaSeperate_BranchID: "",
-        CommaSeperate_Size: "",
-        CommaSeperate_CounterID: "",
-        MaxNetWt: 1000,
-        MinNetWt: 0,
-        OnlyCartItem: false,
-        OnlyWishlistItem: false,
-        StockStatus: "",
-        DoNotShowInClientApp: 0,
-        HasTagImage: 0,
-        CommaSeperate_CompanyID: "1, 4, 5",
-      };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const url =
+  //       "https://cors-anywhere.herokuapp.com/https://api.indianjewelcast.com/api/Tag/GetAll";
+  //     const requestBody = {
+  //       PageNo: 1,
+  //       PageSize: 20,
+  //       DeviceID: 0,
+  //       SortBy: "",
+  //       SearchText: "",
+  //       TranType: "",
+  //       CommaSeperate_ItemGroupID: "",
+  //       CommaSeperate_ItemID: "",
+  //       CommaSeperate_StyleID: "",
+  //       CommaSeperate_ProductID: "",
+  //       CommaSeperate_SubItemID: "",
+  //       CommaSeperate_AppItemCategoryID: "",
+  //       CommaSeperate_ItemSubID: "",
+  //       CommaSeperate_KarigarID: "",
+  //       CommaSeperate_BranchID: "",
+  //       CommaSeperate_Size: "",
+  //       CommaSeperate_CounterID: "",
+  //       MaxNetWt: 1000,
+  //       MinNetWt: 0,
+  //       OnlyCartItem: false,
+  //       OnlyWishlistItem: false,
+  //       StockStatus: "",
+  //       DoNotShowInClientApp: 0,
+  //       HasTagImage: 0,
+  //       CommaSeperate_CompanyID: "1, 4, 5",
+  //     };
 
-      try {
-        const response = await fetch(url, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(requestBody),
-        });
+  //     try {
+  //       const response = await fetch(url, {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify(requestBody),
+  //       });
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
+  //       if (!response.ok) {
+  //         throw new Error(`HTTP error! Status: ${response.status}`);
+  //       }
 
-        const data = await response.json();
-        console.log(data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
+  //       const data = await response.json();
+  //       console.log(data);
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   };
 
-    fetchData();
-  }, []);
+  //   fetchData();
+  // }, []);
 
   const updatePagination = (page) => {
     getProductsFilterAndData(page);
@@ -597,15 +562,26 @@ const ReadytoDispatch = () => {
                               transition={{ duration: 0.5 }}
                             >
                               <Link to={`/ready-to-dispatch/${data?.TagNo}`}>
-                                <div className="product-thumb">
+                                <div
+                                  className="product-thumb"
+                                  width="100%"
+                                  height="100%"
+                                >
                                   <motion.img
-                                    src={`${imageURL}${data?.Images[0]?.ImageName}`}
+                                    src={
+                                      data?.Images && data.Images[0]?.ImageName
+                                        ? `${imageURL}${data.Images[0].ImageName}`
+                                        : "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg"
+                                    }
                                     alt=""
                                     className="w-100"
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
                                     transition={{ duration: 0.5 }}
                                     whileHover={{ scale: 1.05 }}
+                                    width="100%"
+                                    height="100%"
+                                    loading="lazy"
                                   />
                                 </div>
                               </Link>

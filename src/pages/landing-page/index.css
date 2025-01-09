@@ -487,3 +487,75 @@
   font-weight: 700;
   border-radius: 5px;
 }
+
+.thank-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(2px);
+}
+
+.thank-modal .modal-content {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 24px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.thank-modal .icon-wrapper {
+  margin: 0 auto 16px;
+}
+
+.thank-modal .icon {
+  height: 48px;
+  width: 48px;
+  color: #22c55e; 
+}
+
+.thank-modal .modal-title {
+  font-size: 2rem; /* Tailwind's text-lg equivalent */
+  font-weight: 500; /* Tailwind's font-medium equivalent */
+  color: #111827; /* Tailwind's gray-900 equivalent */
+  margin-bottom: 8px;
+}
+
+.thank-modal .modal-message {
+  font-size: 1rem; /* Tailwind's text-sm equivalent */
+  color: #6b7280; /* Tailwind's gray-500 equivalent */
+  margin-bottom: 24px;
+}
+
+/* Close Button */
+.thank-modal .modal-close-btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 16px;
+  font-size: 1rem; /* Tailwind's text-sm equivalent */
+  font-weight: 500; /* Tailwind's font-medium equivalent */
+  color: #ffffff;
+  background-color: #22c55e; /* Tailwind's green-600 equivalent */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.thank-modal .modal-close-btn:hover {
+  background-color: #15803d; /* Tailwind's green-700 equivalent */
+}
+
+.thank-modal .modal-close-btn:focus {
+  outline: 2px solid #10b981; /* Tailwind's green-500 equivalent */
+  outline-offset: 2px;
+}

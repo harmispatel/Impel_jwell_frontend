@@ -15,29 +15,33 @@ import trending_img_2 from "./assets/Trending Products/Necklace.jpg";
 import trending_img_3 from "./assets/Trending Products/Rings_1.jpg";
 import trending_img_4 from "./assets/Trending Products/Silver Bracelet.jpg";
 
-import insta_1 from "./assets/insta_1.jpg";
-import insta_2 from "./assets/insta_2.jpg";
-import insta_3 from "./assets/insta_3.jpg";
-import insta_4 from "./assets/insta_4.jpg";
+// import insta_1 from "./assets/insta_1.jpg";
+// import insta_2 from "./assets/insta_2.jpg";
+// import insta_3 from "./assets/insta_3.jpg";
+// import insta_4 from "./assets/insta_4.jpg";
 
 import love_img from "./assets/silver ring for women.jpg";
 import daily_wear from "./assets/daily wear necklace for women.jpg";
 import modern_bracelet from "./assets/Bracelet_3.jpg";
-import { FaBars, FaPhoneAlt } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { FaBars, FaLongArrowAltLeft, FaPhoneAlt } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
+
+import { IoMdMail } from "react-icons/io";
 
 import emailjs from "@emailjs/browser";
 
 import { Modal } from "react-bootstrap";
-import toast from "react-hot-toast";
+// import toast from "react-hot-toast";
 import { Button, FormFeedback, Input, Label } from "reactstrap";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Helmet } from "react-helmet-async";
 
 const LandingPage = () => {
+  const navigate = useNavigate();
   const currentYear = new Date().getFullYear();
   const [showEdit, setShowEdit] = useState(false);
+
   const [loader, setLoader] = useState(false);
 
   const formik = useFormik({
@@ -74,12 +78,13 @@ const LandingPage = () => {
         )
         .then(
           () => {
-            toast.success(
-              "Thank you. I will get back to you as soon as possible."
-            );
+            // toast.success(
+            //   "Thank you. I will get back to you as soon as possible."
+            // );
             setLoader(false);
             formik.resetForm();
             setShowEdit(false);
+            navigate("/thank-you");
           },
           (error) => {
             console.log(error);

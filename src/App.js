@@ -41,6 +41,7 @@ import ReadyOrderDetails from "./pages/user/ReadyOrderDetails";
 import CreatePDF from "./pages/Dealer/CreatePDF";
 import OrderTracking from "./pages/user/OrderTracking";
 import LandingPage from "./pages/landing-page/LandingPage";
+import ThankYou from "./pages/landing-page/ThankYou";
 
 function App() {
   const location = useLocation();
@@ -87,157 +88,149 @@ function App() {
   return (
     <>
       <WishlistProvider>
-            <ProfileProvider>
-              <CartProvider>
-                <ReadyDesignCartProvider>
-                  <ScrollToTop />
-                  <HelmetProvider context={helmetContext}>
-                    {/* {shouldShowPopup && popupshow == null ? <Popup /> : <></>} */}
-                    <Routes>
-                      <>
-                        <Route path="/" element={renderLayout()}>
-                          {/* COMMON COMPONENT */}
-                          <Route
-                            path="jewelery-for-women"
-                            element={<LandingPage />}
-                          />
-                          <Route index element={<Home />} />
-                          <Route path="shop" element={<Shop />} />
-                          <Route
-                            path="ready-to-dispatch"
-                            element={<ReadytoDispatch />}
-                          />
-                          <Route
-                            path="ready-to-dispatch/:id"
-                            element={<ReadyDetails />}
-                          />
+        <ProfileProvider>
+          <CartProvider>
+            <ReadyDesignCartProvider>
+              <ScrollToTop />
+              <HelmetProvider context={helmetContext}>
+                {/* {shouldShowPopup && popupshow == null ? <Popup /> : <></>} */}
+                <Routes>
+                  <>
+                    <Route path="/" element={renderLayout()}>
+                      {/* COMMON COMPONENT */}
+                      <Route
+                        path="jewelery-for-women"
+                        element={<LandingPage />}
+                      />
+                      <Route index element={<Home />} />
+                      <Route path="shop" element={<Shop />} />
+                      <Route
+                        path="ready-to-dispatch"
+                        element={<ReadytoDispatch />}
+                      />
+                      <Route
+                        path="ready-to-dispatch/:id"
+                        element={<ReadyDetails />}
+                      />
 
-                          <Route path=":id" element={<CustomPage />} />
+                      <Route path=":id" element={<CustomPage />} />
 
-                          <Route
-                            path="shopdetails/:id"
-                            element={<ShopDetails />}
-                          />
-                          <Route path="categories" element={<Categories />} />
-                          <Route
-                            path="categories/:id"
-                            element={<CategoriesItems />}
-                          />
-                          <Route
-                            path="top-selling-designs"
-                            element={<Topseller />}
-                          />
-                          <Route
-                            path="latest-designs"
-                            element={<LatestDesign />}
-                          />
+                      <Route path="shopdetails/:id" element={<ShopDetails />} />
+                      <Route path="categories" element={<Categories />} />
+                      <Route
+                        path="categories/:id"
+                        element={<CategoriesItems />}
+                      />
+                      <Route
+                        path="top-selling-designs"
+                        element={<Topseller />}
+                      />
+                      <Route path="latest-designs" element={<LatestDesign />} />
 
-                          {/* USER PROTECTED */}
-                          <Route
-                            path="wishlist"
-                            element={
-                              <ProtectedRoute>
-                                <WishList />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="cart"
-                            element={
-                              <ProtectedRoute>
-                                <Cart active={active} />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="ready-design-cart"
-                            element={
-                              <ProtectedRoute>
-                                <ReadyDesignCart active={active} />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="profile"
-                            element={
-                              <ProtectedRoute>
-                                <Profile />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route path="my-orders" element={<MyOrders />} />
-                          <Route
-                            path="my-ready-orders"
-                            element={<MyReadyOrders />}
-                          />
+                      {/* USER PROTECTED */}
+                      <Route
+                        path="wishlist"
+                        element={
+                          <ProtectedRoute>
+                            <WishList />
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path="cart"
+                        element={
+                          <ProtectedRoute>
+                            <Cart active={active} />
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path="ready-design-cart"
+                        element={
+                          <ProtectedRoute>
+                            <ReadyDesignCart active={active} />
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path="profile"
+                        element={
+                          <ProtectedRoute>
+                            <Profile />
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route path="my-orders" element={<MyOrders />} />
+                      <Route
+                        path="my-ready-orders"
+                        element={<MyReadyOrders />}
+                      />
 
-                          <Route path="/processing-order" element={<Cart />} />
-                          <Route
-                            path="/ready-processing-order"
-                            element={<ReadyDesignCart />}
-                          />
-                          <Route
-                            path="order-details/:id"
-                            element={<OrderDetails />}
-                          />
-                          <Route
-                            path="ready-order-details"
-                            element={<ReadyOrderDetails />}
-                          />
+                      <Route path="/processing-order" element={<Cart />} />
+                      <Route
+                        path="/ready-processing-order"
+                        element={<ReadyDesignCart />}
+                      />
+                      <Route
+                        path="order-details/:id"
+                        element={<OrderDetails />}
+                      />
+                      <Route
+                        path="ready-order-details"
+                        element={<ReadyOrderDetails />}
+                      />
 
-                          {/* DEALER PROTECTED */}
-                          <Route
-                            path="dealer-wishlist"
-                            element={
-                              <DealerProtectedRoute>
-                                <DealerWishList />
-                              </DealerProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="dealer-profile"
-                            element={
-                              <DealerProtectedRoute>
-                                <DealerProfile />
-                              </DealerProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="create-pdf"
-                            element={
-                              <DealerProtectedRoute>
-                                <CreatePDF />
-                              </DealerProtectedRoute>
-                            }
-                          />
+                      {/* DEALER PROTECTED */}
+                      <Route
+                        path="dealer-wishlist"
+                        element={
+                          <DealerProtectedRoute>
+                            <DealerWishList />
+                          </DealerProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path="dealer-profile"
+                        element={
+                          <DealerProtectedRoute>
+                            <DealerProfile />
+                          </DealerProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path="create-pdf"
+                        element={
+                          <DealerProtectedRoute>
+                            <CreatePDF />
+                          </DealerProtectedRoute>
+                        }
+                      />
 
-                          {/* AUTH */}
-                          <Route path="/login" element={<Login />} />
-                          <Route
-                            path="/dealer-login"
-                            element={<DealerLogin />}
-                          />
-                          <Route
-                            path="/forget-password"
-                            element={<ForgetPassword />}
-                          />
-                          <Route
-                            path="/reset-password/:token"
-                            element={<Resetpassword />}
-                          />
-                          <Route
-                            path="/order-tracking-details"
-                            element={<OrderTracking />}
-                          />
-                        </Route>
-                      </>
+                      {/* AUTH */}
+                      <Route path="/login" element={<Login />} />
+                      <Route path="/dealer-login" element={<DealerLogin />} />
+                      <Route
+                        path="/forget-password"
+                        element={<ForgetPassword />}
+                      />
+                      <Route
+                        path="/reset-password/:token"
+                        element={<Resetpassword />}
+                      />
+                      <Route
+                        path="/order-tracking-details"
+                        element={<OrderTracking />}
+                      />
+                    </Route>
+                  </>
 
-                      <Route path="*" element={<Errorpage />} />
-                    </Routes>
-                  </HelmetProvider>
-                </ReadyDesignCartProvider>
-              </CartProvider>
-            </ProfileProvider>
+                  <Route path="*" element={<Errorpage />} />
+                  <Route path="/thank-you" element={<ThankYou />} />
+                </Routes>
+              </HelmetProvider>
+            </ReadyDesignCartProvider>
+          </CartProvider>
+        </ProfileProvider>
       </WishlistProvider>
       <Toaster toastOptions={{ duration: 2000 }} />
     </>
