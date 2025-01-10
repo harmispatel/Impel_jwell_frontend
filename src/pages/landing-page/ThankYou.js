@@ -1,8 +1,8 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
 import { FaLongArrowAltLeft } from "react-icons/fa";
-import { IoMdMail } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
+import Logo from "../../assets/images/logo.png";
 
 const ThankYou = () => {
   const navigate = useNavigate();
@@ -15,7 +15,7 @@ const ThankYou = () => {
         <div className="modal-content">
           <div className="text-center">
             <div className="icon-wrapper">
-              <IoMdMail className="icon" />
+              <img src={Logo} alt="logo" height={70} />
             </div>
             <h3 className="modal-title">Thank You!</h3>
             <p className="modal-message">

@@ -20,7 +20,7 @@
 
 .img-info h3 {
   font-size: 35px;
-  color: hsl(18.11deg 50.48% 58.82%);
+  color: #000;
   font-weight: 600;
 }
 
@@ -95,7 +95,7 @@
 }
 
 .product-section .img-info p {
-  color: hsl(18.11deg 50.48% 58.82%);
+  color: #000;
   font-weight: 600;
   font-size: 18px;
 }
@@ -495,6 +495,10 @@
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.5);
+  background-image: url('../../assets/images/bg-01.jpeg'); 
+  background-size: cover; 
+  background-position: center center; 
+  background-repeat: no-repeat;
   display: flex;
   justify-content: center;
   align-items: center;

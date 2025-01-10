@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./index.css";
 import banner_1 from "./assets/Banner Images/Impel_Landing Page Banners_01.jpg";
 import impel_logo from "./assets/jewelery-logo-removebg-preview.png";
@@ -15,23 +15,15 @@ import trending_img_2 from "./assets/Trending Products/Necklace.jpg";
 import trending_img_3 from "./assets/Trending Products/Rings_1.jpg";
 import trending_img_4 from "./assets/Trending Products/Silver Bracelet.jpg";
 
-// import insta_1 from "./assets/insta_1.jpg";
-// import insta_2 from "./assets/insta_2.jpg";
-// import insta_3 from "./assets/insta_3.jpg";
-// import insta_4 from "./assets/insta_4.jpg";
-
 import love_img from "./assets/silver ring for women.jpg";
 import daily_wear from "./assets/daily wear necklace for women.jpg";
 import modern_bracelet from "./assets/Bracelet_3.jpg";
-import { FaBars, FaLongArrowAltLeft, FaPhoneAlt } from "react-icons/fa";
+import { FaBars, FaPhoneAlt } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-
-import { IoMdMail } from "react-icons/io";
 
 import emailjs from "@emailjs/browser";
 
 import { Modal } from "react-bootstrap";
-// import toast from "react-hot-toast";
 import { Button, FormFeedback, Input, Label } from "reactstrap";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -41,8 +33,34 @@ const LandingPage = () => {
   const navigate = useNavigate();
   const currentYear = new Date().getFullYear();
   const [showEdit, setShowEdit] = useState(false);
-
   const [loader, setLoader] = useState(false);
+  const [currentUrl, setCurrentUrl] = useState("");
+  const [googleAdsLink, setGoogleAdsLink] = useState("");
+
+  const getUrlParams = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    let googleAdsParams = "";
+
+    const utmSource = urlParams.get("utm_source");
+    const utmMedium = urlParams.get("utm_medium");
+    const utmCampaign = urlParams.get("utm_campaign");
+
+    if (utmSource && utmMedium && utmCampaign) {
+      googleAdsParams = `?utm_source=${utmSource}&utm_medium=${utmMedium}&utm_campaign=${utmCampaign}`;
+    }
+
+    return googleAdsParams;
+  };
+
+  useEffect(() => {
+    const adsLink = getUrlParams();
+    setGoogleAdsLink(adsLink);
+    const fullUrl = window.location.href.includes("?")
+      ? `${window.location.href}&${adsLink.slice(1)}`
+      : `${window.location.href}${adsLink}`;
+
+    setCurrentUrl(fullUrl);
+  }, []);
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -73,18 +91,16 @@ const LandingPage = () => {
             from_name: values.fullName,
             from_email: values.email,
             from_phone: values.phone,
+            message: currentUrl,
           },
           "gNvP3pb_uObggad1C"
         )
         .then(
           () => {
-            // toast.success(
-            //   "Thank you. I will get back to you as soon as possible."
-            // );
             setLoader(false);
             formik.resetForm();
             setShowEdit(false);
-            navigate("/thank-you");
+            navigate("/jewelery-for-women/thank-you");
           },
           (error) => {
             console.log(error);
@@ -483,71 +499,6 @@ const LandingPage = () => {
         </div>
       </section>
       {/* Start-Love Section End */}
-
-      {/* Instagram Post Section Start */}
-      {/* <section className="insta-section">
-        <motion.div
-          className="product-text text-center"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-        >
-          <FaInstagram className="instagram-icon" />
-          <h4>impel_store instagram</h4>
-        </motion.div>
-
-        <motion.div
-          className="row justify-content-center"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-          <div className="col-md-3">
-            <motion.div
-              className="insta-image"
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-            >
-              <img src={insta_1} alt="" className="w-100" />
-            </motion.div>
-          </div>
-
-          <div className="col-md-3">
-            <motion.div
-              className="insta-image"
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-            >
-              <img src={insta_2} alt="" className="w-100" />
-            </motion.div>
-          </div>
-
-          <div className="col-md-3">
-            <motion.div
-              className="insta-image"
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.5 }}
-            >
-              <img src={insta_3} alt="" className="w-100" />
-            </motion.div>
-          </div>
-
-          <div className="col-md-3">
-            <motion.div
-              className="insta-image"
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.6 }}
-            >
-              <img src={insta_4} alt="" className="w-100" />
-            </motion.div>
-          </div>
-        </motion.div>
-      </section> */}
-      {/* Instagram Post Section End */}
 
       {/* Latest News Section Start */}
       <section id="location" className="latest-news">

@@ -225,7 +225,7 @@ function App() {
                   </>
 
                   <Route path="*" element={<Errorpage />} />
-                  <Route path="/thank-you" element={<ThankYou />} />
+                  <Route path="/jewelery-for-women/thank-you" element={<ThankYou />} />
                 </Routes>
               </HelmetProvider>
             </ReadyDesignCartProvider>
