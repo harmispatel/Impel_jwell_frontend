@@ -55,10 +55,22 @@ const ReadytoDispatch = () => {
   const totalPages = Math.ceil(totalItems / pagination?.dataShowLength);
 
   const handleSearchItems = (e) => {
-    if (tagNoChange?.length < 0) {
-      setIsLoading(true);
+    setIsLoading(true);
+    const searchedText = e.target.value.toUpperCase();
+    setTagNoChange(searchedText);
+    const queryParams = new URLSearchParams(location.search);
+    if (searchedText?.length > 0) {
+      queryParams.delete("page");
+      queryParams.set("search", searchedText);
+      setPagination((prev) => ({ ...prev, currentPage: 1 }));
+    } else {
+      queryParams.delete("search");
     }
-    setTagNoChange(e.target.value);
+    navigate(
+      `/ready-to-dispatch${
+        queryParams.toString() ? `?${queryParams.toString()}` : ""
+      }`
+    );
   };
 
   const handleSizeTag = (selectedOption) => {
@@ -92,6 +104,8 @@ const ReadytoDispatch = () => {
     setIsLoading(true);
     const queryParams = new URLSearchParams(location.search);
 
+    queryParams.delete("page");
+
     if (selectedOption) {
       queryParams.set("items", selectedOption.value);
     } else {
@@ -104,11 +118,14 @@ const ReadytoDispatch = () => {
 
     setItems(selectedOption ? selectedOption.value : "");
     setSelectedItems(selectedOption);
+    setPagination((prev) => ({ ...prev, currentPage: 1 }));
   };
 
   const handleSubItems = (selectedOption) => {
     setIsLoading(true);
     const queryParams = new URLSearchParams(location.search);
+
+    queryParams.delete("page");
 
     if (selectedOption) {
       queryParams.set("sub-items", selectedOption.value);
@@ -129,56 +146,35 @@ const ReadytoDispatch = () => {
   //   setStyles(selectedOption);
   // };
 
-  const getProductsFilterAndData = async (offset) => {
-    setIsLoading(true)
-    try {
-      const filterResponse = await profileService.GetProductsFilterAPI({
-        PageNo: 1,
-        PageSize: 20,
-        DeviceID: 0,
-        SortBy: "",
-        SearchText: "",
-        TranType: "",
-        CommaSeperate_ItemGroupID: itemGroups?.value || "",
-        CommaSeperate_ItemID: items || "",
-        CommaSeperate_StyleID: styles?.value || "",
-        CommaSeperate_ProductID: "",
-        CommaSeperate_SubItemID: subItems || "",
-        CommaSeperate_AppItemCategoryID: "",
-        CommaSeperate_ItemSubID: "",
-        CommaSeperate_KarigarID: "",
-        CommaSeperate_BranchID: "",
-        CommaSeperate_Size: sizes || "",
-        CommaSeperate_CounterID: "",
-        MinNetWt: 0,
-        OnlyCartItem: false,
-        OnlyWishlistItem: false,
-        StockStatus: "",
-        DoNotShowInClientApp: 0,
-        HasTagImage: 0,
-        CommaSeperate_CompanyID: id,
-        MaxNetWt: 1000,
-      });
-      setFilters(filterResponse?.Filters);
+  const getProductsFilterAndData = async () => {
+    setIsLoading(true);
+    const queryParams = new URLSearchParams(location.search);
+    const currentPage = parseInt(queryParams.get("page")) || 1;
+    const currentSearch = queryParams.get("search");
+    const sizeFromURL = queryParams.get("sizes");
+    const itemsFromURL = queryParams.get("items");
+    const subItemsFromURL = queryParams.get("sub-items");
+    setPagination((prev) => ({ ...prev, currentPage: currentPage }));
 
+    try {
       const productsResponse = await profileService.GetProductsAPI({
-        PageNo: offset || 1,
+        PageNo: currentPage || 1,
         PageSize: 20,
         DeviceID: 0,
         SortBy: "",
-        SearchText: tagNoChange || "",
+        SearchText: currentSearch || "",
         TranType: "",
         CommaSeperate_ItemGroupID: itemGroups?.value || "",
-        CommaSeperate_ItemID: items || "",
+        CommaSeperate_ItemID: itemsFromURL || items || "",
         CommaSeperate_StyleID: styles?.value || "",
         CommaSeperate_ProductID: "",
         CommaSeperate_CompanyID: id || "",
-        CommaSeperate_SubItemID: subItems || "",
+        CommaSeperate_SubItemID: subItemsFromURL || subItems || "",
         CommaSeperate_AppItemCategoryID: "",
         CommaSeperate_ItemSubID: "",
         CommaSeperate_KarigarID: "",
         CommaSeperate_BranchID: "",
-        CommaSeperate_Size: sizes || "",
+        CommaSeperate_Size: sizeFromURL || sizes || "",
         CommaSeperate_CounterID: "",
         MinNetWt: 0,
         OnlyCartItem: false,
@@ -191,6 +187,78 @@ const ReadytoDispatch = () => {
       setProducts(productsResponse?.Tags);
       setTotalItems(productsResponse?.TotalItems);
       setIsLoading(false);
+
+      const filterResponse = await profileService.GetProductsFilterAPI({
+        PageNo: 1,
+        PageSize: 20,
+        DeviceID: 0,
+        SortBy: "",
+        SearchText: currentSearch || "",
+        TranType: "",
+        CommaSeperate_ItemGroupID: itemGroups?.value || "",
+        CommaSeperate_ItemID: itemsFromURL || items || "",
+        CommaSeperate_StyleID: styles?.value || "",
+        CommaSeperate_ProductID: "",
+        CommaSeperate_SubItemID: subItemsFromURL || subItems || "",
+        CommaSeperate_AppItemCategoryID: "",
+        CommaSeperate_ItemSubID: "",
+        CommaSeperate_KarigarID: "",
+        CommaSeperate_BranchID: "",
+        CommaSeperate_Size: sizeFromURL || sizes || "",
+        CommaSeperate_CounterID: "",
+        MinNetWt: 0,
+        OnlyCartItem: false,
+        OnlyWishlistItem: false,
+        StockStatus: "",
+        DoNotShowInClientApp: 0,
+        HasTagImage: 0,
+        CommaSeperate_CompanyID: id,
+        MaxNetWt: 1000,
+      });
+      setFilters(filterResponse?.Filters);
+
+      if (currentSearch) {
+        setTagNoChange(currentSearch);
+      } else {
+        setTagNoChange(null);
+      }
+
+      if (filterResponse?.Filters && sizeFromURL) {
+        const selectedSize = filterResponse?.Filters?.Size?.find(
+          (item) => item?.RowNumber === Number(sizeFromURL)
+        );
+        setSelectedSizes({
+          value: selectedSize?.RowNumber,
+          label: selectedSize?.Size1,
+        });
+      } else {
+        setSelectedSizes(null);
+      }
+
+      if (filterResponse?.Filters && itemsFromURL) {
+        const selectedItem = filterResponse?.Filters?.Items?.find(
+          (item) => item?.ItemID === Number(itemsFromURL)
+        );
+        setSelectedItems({
+          value: selectedItem?.ItemID,
+          label: selectedItem?.ItemName,
+        });
+      } else {
+        setSelectedItems(null);
+      }
+
+      if (filterResponse?.Filters && subItemsFromURL) {
+        const selectedSubItem = filterResponse?.Filters?.SubItems?.find(
+          (item) => item?.SubItemID === Number(subItemsFromURL)
+        );
+
+        setSelectedSubItems({
+          value: selectedSubItem?.SubItemID,
+          label: selectedSubItem?.SubItemName,
+        });
+      } else {
+        setSelectedSubItems(null);
+      }
     } catch (err) {
       console.log(err);
       setIsLoading(true);
@@ -198,30 +266,12 @@ const ReadytoDispatch = () => {
   };
 
   useLayoutEffect(() => {
-    const queryParams = new URLSearchParams(location.search);
-    const currentPage = parseInt(queryParams.get("page")) || 1;
-    const sizeFromURL = queryParams.get("sizes");
-
-    setPagination((prev) => ({ ...prev, currentPage }));
-
-    const selectedSort = filters?.Size?.find(
-      (item) => item?.RowNumber === Number(sizeFromURL)
-    );
-
-    if (selectedSort) {
-      setSelectedSizes({
-        value: selectedSort?.RowNumber,
-        label: selectedSort?.Size1,
-      });
-    }
-
-    getProductsFilterAndData(currentPage);
-  }, [location.search, filters?.length, pagination.currentPage, sizes]);
+    getProductsFilterAndData();
+  }, [location.search]);
 
   // useEffect(() => {
   //   const fetchData = async () => {
-  //     const url =
-  //       "https://cors-anywhere.herokuapp.com/https://api.indianjewelcast.com/api/Tag/GetAll";
+  //     const url = "https://api.indianjewelcast.com/api/Tag/GetAll";
   //     const requestBody = {
   //       PageNo: 1,
   //       PageSize: 20,
@@ -274,7 +324,6 @@ const ReadytoDispatch = () => {
   // }, []);
 
   const updatePagination = (page) => {
-    getProductsFilterAndData(page);
     const queryParams = new URLSearchParams(location.search);
     queryParams.set("page", page);
     navigate(`/ready-to-dispatch?${queryParams.toString()}`);
@@ -419,6 +468,7 @@ const ReadytoDispatch = () => {
                   type="search"
                   className="form-control"
                   placeholder="Search with tag no"
+                  value={tagNoChange}
                   onChange={(e) => handleSearchItems(e)}
                   isClearable={true}
                 />

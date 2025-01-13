@@ -60,7 +60,6 @@ const Navbar = () => {
   const Phone = localStorage.getItem("phone");
 
   const [colorChange, setColorchange] = useState(false);
-  const [isLoggedOut, setIsLoggedOut] = useState(false);
 
   const [profileData, setProfileData] = useState([]);
   const [image, setImage] = useState([]);
@@ -74,10 +73,7 @@ const Navbar = () => {
 
   const [dealerData, setDealerData] = useState([]);
 
-  const [companyTags, setCompanyTags] = useState([]);
-
   const [tags, setTags] = useState([]);
-  const [tag, setTag] = useState([]);
   const [TagDropdown, setTagDropdown] = useState(false);
   const tagRef = useRef(null);
 
@@ -86,30 +82,10 @@ const Navbar = () => {
 
   const [isCollapsed, setIsCollapsed] = useState(true);
 
-  const searchParams = new URLSearchParams(location.search);
-
-  let tagIds = searchParams.getAll("tag_id");
-
-  tagIds =
-    Array.isArray(tagIds) && tagIds.length > 0 ? tagIds[0].split(",") : [];
-
-  tagIds = tagIds.map((i) => parseFloat(i));
-
-  const handleTag = (tagId) => {
-    if (tag.includes(tagId)) {
-      setTag(tag.filter((id) => id !== tagId));
-      setIsCollapsed(!isCollapsed);
-    } else {
-      setTag([...tag, tagId]);
-      setIsCollapsed(!isCollapsed);
-    }
-  };
-
   const Tags = () => {
     FilterServices.headerTags()
       .then((res) => {
         setTags(res?.data?.header_tags);
-        setCompanyTags(res?.data?.company_masters_data);
       })
       .catch((err) => {
         console.log(err);
@@ -208,7 +184,6 @@ const Navbar = () => {
       localStorage.removeItem("user_type");
       localStorage.removeItem("user_id");
       localStorage.removeItem("total_quantity");
-      setIsLoggedOut(true);
       navigate("/dealer-login");
     } else {
       localStorage.removeItem("_grecaptcha");
@@ -220,7 +195,6 @@ const Navbar = () => {
       localStorage.removeItem("savedDiscount");
       localStorage.removeItem("message");
       localStorage.removeItem("isChecked");
-      setIsLoggedOut(true);
       navigate("/login");
     }
   };
@@ -315,8 +289,6 @@ const Navbar = () => {
   const cartTip = <Tooltip id="tooltip">cart</Tooltip>;
   const readyCartTip = <Tooltip id="tooltip">Ready design cart</Tooltip>;
 
-  const impelID = "1,4";
-
   return (
     <header
       className={`${colorChange === true ? "header sticky_header" : "header"}`}
@@ -371,46 +343,6 @@ const Navbar = () => {
                     Ready Jewellery
                   </Link>
                 </li>
-                {/* <li className="nav-item">
-                  <div onClick={DispatchLink} ref={DispatchRef}>
-                    <div
-                      className={`dispatch-dropdown ${
-                        dispatch ? "active" : ""
-                      }`}
-                    >
-                      <ul>
-                        {companyTags?.length && (
-                          <>
-                            {companyTags?.map((tags, index) => (
-                              <li>
-                                <Link
-                                  to={`/ready-to-dispatch/${tags?.company_tag_id}`}
-                                  key={index}
-                                >
-                                  <AiOutlineGold style={{ fontSize: "20px" }} />
-                                  {tags?.company_name}
-                                </Link>
-                              </li>
-                            ))}
-                          </>
-                        )}
-                      </ul>
-                    </div>
-
-                    <span
-                      className="nav-link dropdown-toggle"
-                      style={{
-                        fontWeight: "500",
-                        color: "#000",
-                        textTransform: "uppercase",
-                        fontSize: "14px",
-                        cursor: "pointer",
-                      }}
-                    >
-                      Ready Jewellery
-                    </span>
-                  </div>
-                </li> */}
 
                 <li className="nav-item">
                   <div onClick={TagsDropdown} ref={tagRef}>
@@ -449,15 +381,8 @@ const Navbar = () => {
                               <div className="col-md-2" key={index}>
                                 <div className="tags-links">
                                   <Link
-                                    to={`/shop?tag_id=${
-                                      tagIds.includes(multitags.id)
-                                        ? tagIds
-                                        : multitags.id
-                                    }`}
+                                    to={`/shop?tag_id=${multitags.id}`}
                                     className="nav-link"
-                                    onClick={() => {
-                                      handleTag(multitags.id);
-                                    }}
                                   >
                                     {multitags.name}
                                   </Link>
