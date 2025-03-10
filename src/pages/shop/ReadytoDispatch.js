@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import {
@@ -20,15 +20,28 @@ const ReadytoDispatch = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const JewelleryType = [
+    {
+      id: "4",
+      name: "Silver",
+    },
+    {
+      id: "1,5",
+      name: "Gold",
+    },
+  ];
+
   const userType = localStorage.getItem("user_type");
   const email = localStorage.getItem("email");
-
+  const debounceTimeout = useRef(null);
   const [products, setProducts] = useState([]);
   const [filters, setFilters] = useState([]);
   const [totalItems, setTotalItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const [tagNoChange, setTagNoChange] = useState(null);
+
+  const [companyId, setCompanyId] = useState(null);
 
   const [selectedSizes, setSelectedSizes] = useState(null);
 
@@ -52,24 +65,30 @@ const ReadytoDispatch = () => {
 
   const totalPages = Math.ceil(totalItems / pagination?.dataShowLength);
 
-  const handleSearchItems = (e) => {
-    setIsLoading(true);
-    const searchedText = e.target.value.toUpperCase();
+  const handleSearchItems = useCallback((e) => {
     setTagNoChange(e.target.value);
-    // const queryParams = new URLSearchParams(location.search);
-    // if (searchedText?.length > 0) {
-    //   queryParams.delete("page");
-    //   queryParams.set("search", searchedText);
-    //   setPagination((prev) => ({ ...prev, currentPage: 1 }));
-    // } else {
-    //   queryParams.delete("search");
-    // }
-    // navigate(
-    //   `/ready-to-dispatch${
-    //     queryParams.toString() ? `?${queryParams.toString()}` : ""
-    //   }`
-    // );
-  };
+    clearTimeout(debounceTimeout.current);
+
+    debounceTimeout.current = setTimeout(() => {
+      setIsLoading(true);
+      const searchedText = e.target.value.toUpperCase();
+      const queryParams = new URLSearchParams(location.search);
+
+      if (searchedText?.length > 0) {
+        queryParams.delete("page");
+        queryParams.set("search", searchedText);
+        setPagination((prev) => ({ ...prev, currentPage: 1 }));
+      } else {
+        queryParams.delete("search");
+      }
+
+      navigate(
+        `/ready-to-dispatch${
+          queryParams.toString() ? `?${queryParams.toString()}` : ""
+        }`
+      );
+    }, 1000);
+  }, []);
 
   const handleItems = (selectedOption) => {
     setIsLoading(true);
@@ -130,6 +149,24 @@ const ReadytoDispatch = () => {
     setPagination((prev) => ({ ...prev, currentPage: 1 }));
   };
 
+  const handleCompanyId = (selectedOption) => {
+    setIsLoading(true);
+    const queryParams = new URLSearchParams(location.search);
+
+    queryParams.delete("page");
+    if (selectedOption) {
+      queryParams.set("companyId", selectedOption.value);
+    } else {
+      queryParams.delete("companyId");
+    }
+
+    let queryString = queryParams.toString().replace(/%2C/g, ",");
+
+    navigate(`/ready-to-dispatch${queryString ? `?${queryString}` : ""}`);
+    setCompanyId(selectedOption);
+    setPagination((prev) => ({ ...prev, currentPage: 1 }));
+  };
+
   const handleSelectedStyle = (selectedOption) => {
     setIsLoading(true);
     const queryParams = new URLSearchParams(location.search);
@@ -172,12 +209,13 @@ const ReadytoDispatch = () => {
     setIsLoading(true);
     const queryParams = new URLSearchParams(location.search);
     const currentPage = parseInt(queryParams.get("page")) || 1;
-    // const currentSearch = queryParams.get("search");
+    const currentSearch = queryParams.get("search");
     const itemsFromURL = queryParams.get("items");
     const subItemsFromURL = queryParams.get("sub-items");
     const sizeFromURL = queryParams.get("sizes");
     const stylesFromURL = queryParams.get("styles");
     const itemGroupFromURL = queryParams.get("item-group");
+    const companyIdFromURL = queryParams.get("companyId");
     setPagination((prev) => ({ ...prev, currentPage: currentPage }));
 
     const companyTagRes = await profileService.GetCompanyTag();
@@ -198,13 +236,15 @@ const ReadytoDispatch = () => {
             PageSize: 20,
             DeviceID: 0,
             SortBy: "",
-            SearchText: tagNoChange || "",
+            SearchText: currentSearch || "",
             TranType: "",
             CommaSeperate_ItemGroupID: itemGroupFromURL || "",
             CommaSeperate_ItemID: itemsFromURL || "",
             CommaSeperate_StyleID: stylesFromURL || "",
             CommaSeperate_ProductID: "",
-            CommaSeperate_CompanyID: companyData || "",
+            CommaSeperate_CompanyID: companyIdFromURL
+              ? companyIdFromURL
+              : companyData,
             CommaSeperate_SubItemID: subItemsFromURL || "",
             CommaSeperate_AppItemCategoryID: "",
             CommaSeperate_ItemSubID: "",
@@ -239,7 +279,7 @@ const ReadytoDispatch = () => {
             PageSize: 20,
             DeviceID: 0,
             SortBy: "",
-            SearchText: tagNoChange || "",
+            SearchText: currentSearch || "",
             TranType: "",
             CommaSeperate_ItemGroupID: itemGroupFromURL || "",
             CommaSeperate_ItemID: itemsFromURL || "",
@@ -258,7 +298,9 @@ const ReadytoDispatch = () => {
             StockStatus: "",
             DoNotShowInClientApp: 0,
             HasTagImage: 0,
-            CommaSeperate_CompanyID: companyData || "",
+            CommaSeperate_CompanyID: companyIdFromURL
+              ? companyIdFromURL
+              : companyData,
             MaxNetWt: 1000,
           }),
         }
@@ -266,11 +308,11 @@ const ReadytoDispatch = () => {
       const filterData = await filterResponse.json();
       setFilters(filterData?.Filters);
 
-      // if (currentSearch) {
-      //   setTagNoChange(currentSearch);
-      // } else {
-      //   setTagNoChange(null);
-      // }
+      if (currentSearch) {
+        setTagNoChange(currentSearch);
+      } else {
+        setTagNoChange(null);
+      }
 
       if (filterData?.Filters && itemsFromURL) {
         const selectedItem = filterData?.Filters?.Items?.find(
@@ -331,6 +373,18 @@ const ReadytoDispatch = () => {
         });
       } else {
         setSelectedItemGroups(null);
+      }
+
+      if (filterData?.Filters && companyIdFromURL) {
+        const selectedCompanyIds = JewelleryType.find(
+          (item) => item?.id === companyIdFromURL
+        );
+        setCompanyId({
+          label: selectedCompanyIds?.name,
+          value: selectedCompanyIds?.id,
+        });
+      } else {
+        setCompanyId(null);
       }
     } catch (err) {
       console.log(err);
@@ -494,6 +548,19 @@ const ReadytoDispatch = () => {
       <section className="ready-to-dispatch">
         <div className="container">
           <div className="row">
+            <div className="col-lg-12 col-md-6 col-12 mb-md-3 mb-2">
+              <Select
+                placeholder="Select Jewellery"
+                isClearable
+                isSearchable={false}
+                value={companyId}
+                onChange={handleCompanyId}
+                options={JewelleryType?.map((data) => ({
+                  label: data?.name,
+                  value: data?.id,
+                }))}
+              />
+            </div>
             <div className="col-lg-3 col-md-6 col-12 mb-md-3 mb-2">
               <div className="form-group d-flex align-items-center">
                 <input
