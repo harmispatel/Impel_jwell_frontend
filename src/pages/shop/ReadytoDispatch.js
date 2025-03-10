@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import {
@@ -33,6 +39,7 @@ const ReadytoDispatch = () => {
 
   const userType = localStorage.getItem("user_type");
   const email = localStorage.getItem("email");
+  const user_id = localStorage.getItem("user_id");
   const debounceTimeout = useRef(null);
   const [products, setProducts] = useState([]);
   const [filters, setFilters] = useState([]);
@@ -788,7 +795,7 @@ const ReadytoDispatch = () => {
                               </div>
 
                               <div className="product-info d-grid">
-                                {labour_charge_discount > 0 ? (
+                                {labour_charge_discount > 0 && user_id ? (
                                   <>
                                     <del>
                                       ₹{numberFormat(finalPriceWithoutDis)}

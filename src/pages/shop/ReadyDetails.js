@@ -22,6 +22,7 @@ const ReadyDetails = () => {
   const navigate = useNavigate();
   const phone = localStorage.getItem("phone");
   const { id } = useParams();
+  const user_id = localStorage.getItem("user_id");
 
   const { dispatch: addtocartDispatch } = useContext(ReadyDesignCartSystem);
 
@@ -308,7 +309,8 @@ const ReadyDetails = () => {
                                           </tr>
                                           <tr>
                                             <th>Making charge</th>
-                                            {labour_charge_discount > 0 ? (
+                                            {labour_charge_discount > 0 &&
+                                            user_id ? (
                                               <td>
                                                 <del>
                                                   ₹{numberFormat(labour_charge)}
@@ -336,7 +338,8 @@ const ReadyDetails = () => {
                                           </tr>
                                           <tr>
                                             <th>Total Amount</th>
-                                            {labour_charge_discount > 0 ? (
+                                            {labour_charge_discount > 0 &&
+                                            user_id ? (
                                               <td>
                                                 <strong className="text-success">
                                                   ₹
@@ -371,7 +374,8 @@ const ReadyDetails = () => {
                                       <tbody>
                                         <tr>
                                           <th>Total Amount</th>
-                                          {labour_charge_discount > 0 ? (
+                                          {labour_charge_discount > 0 &&
+                                          user_id ? (
                                             <td>
                                               <del>
                                                 ₹
@@ -415,7 +419,8 @@ const ReadyDetails = () => {
                                     <tbody>
                                       <tr>
                                         <th>Total Amount</th>
-                                        {labour_charge_discount > 0 ? (
+                                        {labour_charge_discount > 0 &&
+                                        user_id ? (
                                           <td>
                                             <del>
                                               ₹
