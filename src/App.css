@@ -3904,3 +3904,30 @@ input[type="file"] {
 .select-all-btn-pdf input[type="checkbox"]:checked + label:before {
   border-color: #fff !important;
 }
+
+/* Model for login should */
+
+.block-newsletter {
+  /* padding: 56px 15px; */
+}
+
+.block-newsletter .model_login_button {
+  cursor: pointer;
+  border: 0;
+  border-radius: 4px;
+  font-weight: 600;
+  margin: 0 10px;
+  letter-spacing: 1.5px;
+  padding: 10px 0;
+  transition: 0.4s;
+  width: 75%;
+  background-color: #fff;
+  color: #000;
+  border: 1px solid #000;
+}
+
+.block-newsletter .model_login_button:hover {
+  color: #fff;
+  background-color: #db9662;
+  border: 1px solid #db9662;
+}
