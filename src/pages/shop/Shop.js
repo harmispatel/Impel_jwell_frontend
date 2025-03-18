@@ -704,8 +704,10 @@ const Shop = () => {
                                         </h4> */}
 
                                         <div className="product-info d-grid">
-                                          {data?.making_charge_discount_18k >
-                                          0 ? (
+                                          {(data?.making_charge_discount_18k >
+                                            0 &&
+                                            Phone) ||
+                                          (email && userId) ? (
                                             <>
                                               <del style={{ color: "#000" }}>
                                                 ₹
@@ -727,8 +729,19 @@ const Shop = () => {
                                           ) : (
                                             <strong className="text-success">
                                               ₹
-                                              {numberFormat(
-                                                data?.total_amount_18k
+                                              {Phone && userId ? (
+                                                <>
+                                                  {numberFormat(
+                                                    data?.total_amount_18k
+                                                  )}
+                                                </>
+                                              ) : (
+                                                <>
+                                                  {numberFormat(
+                                                    data?.making_charge_18k +
+                                                      data?.metal_value_18k
+                                                  )}
+                                                </>
                                               )}
                                             </strong>
                                           )}

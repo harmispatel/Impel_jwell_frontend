@@ -1,61 +1,58 @@
-// import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 // import Modal from "react-modal";
-// import { Link, useLocation } from "react-router-dom";
-// import images from "../../assets/images/download.png";
+import { useLocation } from "react-router-dom";
+import images from "../../assets/images/download.png";
 
-// const Popup = () => {
-//   const location = useLocation();
-//   const [showPopup, setShowPopup] = useState(() => {
-//     const storedState = localStorage.getItem("showPopup");
-//     return storedState ? JSON.parse(storedState) : false;
-//   });
+const Popup = () => {
+  const location = useLocation();
+  const [showPopup, setShowPopup] = useState(() => {
+    const storedState = localStorage.getItem("showPopup");
+    return storedState ? JSON.parse(storedState) : false;
+  });
 
-//   useEffect(() => {
-//     localStorage.setItem("showPopup", JSON.stringify(showPopup));
-//     localStorage.setItem("redirectPath", location.pathname);
-//   }, [showPopup, location.pathname]);
+  useEffect(() => {
+    localStorage.setItem("showPopup", JSON.stringify(showPopup));
+    localStorage.setItem("redirectPath", location.pathname);
+  }, [showPopup, location.pathname]);
 
-//   useEffect(() => {
-//     if (window.location.reload && !showPopup) {
-//       const timeout = setTimeout(() => {
-//         setShowPopup(true);
-//       }, 600000);
+  useEffect(() => {
+    if (window.location.reload && !showPopup) {
+      const timeout = setTimeout(() => {
+        setShowPopup(true);
+      }, 3000);
 
-//       return () => clearTimeout(timeout);
-//     }
-//   }, [showPopup]);
+      return () => clearTimeout(timeout);
+    }
+  }, [showPopup]);
 
-//   useEffect(() => {
-//     if (window.location.reload && showPopup) {
-//       setShowPopup(true);
-//     }
-//   }, []);
+  useEffect(() => {
+    if (window.location.reload && showPopup) {
+      setShowPopup(true);
+    }
+  }, []);
 
-//   return (
-//     <>
-//       <Modal
-//         isOpen={showPopup}
-//         overlayClassName={{
-//           base: "overlay-base",
-//           afterOpen: "overlay-after",
-//           beforeClose: "overlay-before",
-//         }}
-//         className={{
-//           base: "content-base",
-//           afterOpen: "content-after",
-//           beforeClose: "content-before",
-//         }}
-//         closeTimeoutMS={500}
-//       >
-//         <div className="position-relative modal_content">
-//           <img src={images} alt="image" />
-//           <Link to="login" className="model_banner_button">
-//             Login
-//           </Link>
-//         </div>
-//       </Modal>
-//     </>
-//   );
-// };
+  return (
+    <>
+      {/* <Modal
+        isOpen={showPopup}
+        overlayClassName={{
+          base: "overlay-base",
+          afterOpen: "overlay-after",
+          beforeClose: "overlay-before",
+        }}
+        className={{
+          base: "content-base",
+          afterOpen: "content-after",
+          beforeClose: "content-before",
+        }}
+        closeTimeoutMS={500}
+      >
+        <div className="position-relative modal_content">
+          <img src={images} alt="image" />
+        </div>
+      </Modal> */}
+    </>
+  );
+};
 
-// export default Popup;
+export default Popup;

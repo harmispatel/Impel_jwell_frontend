@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./index.css";
-import banner_1 from "./assets/valentine.jpg";
+import banner_1 from "./assets/NewBanner/Impel_banner.jpg";
 import impel_logo from "./assets/jewelery-logo-removebg-preview.png";
 
 import { motion } from "framer-motion";
@@ -15,9 +15,9 @@ import trending_img_2 from "./assets/Trending Products/Necklace.jpg";
 import trending_img_3 from "./assets/Trending Products/Rings_1.jpg";
 import trending_img_4 from "./assets/Trending Products/Silver Bracelet.jpg";
 
-import love_img from "./assets/silver ring for women.jpg";
-import daily_wear from "./assets/daily wear necklace for women.jpg";
-import modern_bracelet from "./assets/Bracelet_3.jpg";
+import love_img from "./assets/NewBanner/banner-3.JPEG";
+import daily_wear from "./assets/NewBanner/DSC00928.JPG";
+import modern_bracelet from "./assets/NewBanner/DSC00910.JPG";
 import { FaBars, FaPhoneAlt } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -285,9 +285,9 @@ const LandingPage = () => {
       </nav>
 
       {/* Banner Section Start */}
-      <section id="home">
+      <section id="home" className="banner-main">
         <motion.img
-          className="w-100"
+          className="w-100 h-100"
           src={banner_1}
           alt="First_image"
           initial={{ opacity: 0, y: 50 }}
@@ -374,7 +374,7 @@ const LandingPage = () => {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5 }}
             >
-              <img src={daily_wear} alt="" className="w-100" />
+              <img src={daily_wear} alt="" className="w-100 h-100" />
             </motion.div>
           </div>
           <div className="col-md-6">
@@ -424,7 +424,7 @@ const LandingPage = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <img src={modern_bracelet} alt="" className="w-100" />
+              <img src={modern_bracelet} alt="" className="w-100 h-100" />
             </motion.div>
           </div>
         </motion.div>
@@ -546,7 +546,7 @@ const LandingPage = () => {
           </div>
           <div className="col-md-6">
             <div className="banner-img">
-              <img src={love_img} alt="" className="w-100" />
+              <img src={love_img} alt="" className="w-100 h-100" />
             </div>
           </div>
         </div>

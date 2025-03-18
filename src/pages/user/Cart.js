@@ -19,7 +19,7 @@ import { LoadingOutlined } from "@ant-design/icons";
 
 const api = process.env.REACT_APP_API_KEY;
 
-const Cart = ({ active }) => {
+const Cart = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { dispatch: profilename, state: namestate } = useContext(ProfileSystem);

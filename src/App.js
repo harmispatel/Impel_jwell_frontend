@@ -28,7 +28,7 @@ import Resetpassword from "./pages/auth/Resetpassword";
 import CartProvider from "./context/CartContext";
 import WishlistProvider from "./context/WishListContext";
 import ProfileProvider from "./context/ProfileContext";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import CustomPage from "./components/CustomPage";
 import Topseller from "./pages/shop/Topseller";
 import LatestDesign from "./pages/shop/LatestDesign";
@@ -42,6 +42,7 @@ import CreatePDF from "./pages/Dealer/CreatePDF";
 import OrderTracking from "./pages/user/OrderTracking";
 import LandingPage from "./pages/landing-page/LandingPage";
 import ThankYou from "./pages/landing-page/ThankYou";
+import Popup from "./components/common/Popup";
 
 function App() {
   const location = useLocation();
@@ -49,23 +50,24 @@ function App() {
   const userType = localStorage.getItem("user_type");
   const helmetContext = {};
 
-  const [active, setActive] = useState(false);
-
-  // const shouldShowPopup =
-  //   !["/login", "/dealer-login", "/forget-password"].some((path) =>
-  //     location.pathname.startsWith(path)
-  //   ) && !location.pathname.startsWith("/reset-password/");
+  const shouldShowPopup =
+    !["/login", "/dealer-login", "/forget-password", "/jewelery-for-women"].some((path) =>
+      location.pathname.startsWith(path)
+    ) && !location.pathname.startsWith("/reset-password/");
 
   useEffect(() => {
-    if (userType == 1 && location.pathname === "/login") {
+    if (userType === Number(1) && location.pathname === "/login") {
       navigate("/");
-    } else if (userType == 2 && location.pathname === "/login") {
+    } else if (userType === Number(2) && location.pathname === "/login") {
       navigate("/");
     }
 
-    if (userType == 2 && location.pathname === "/dealer-login") {
+    if (userType === Number(2) && location.pathname === "/dealer-login") {
       navigate("/");
-    } else if (userType == 1 && location.pathname === "/dealer-login") {
+    } else if (
+      userType === Number(1) &&
+      location.pathname === "/dealer-login"
+    ) {
       navigate("/");
     }
   }, [userType, location.pathname, navigate]);
@@ -93,7 +95,7 @@ function App() {
             <ReadyDesignCartProvider>
               <ScrollToTop />
               <HelmetProvider context={helmetContext}>
-                {/* {shouldShowPopup && popupshow == null ? <Popup /> : <></>} */}
+                {shouldShowPopup && userType === null ? <Popup /> : <></>}
                 <Routes>
                   <>
                     <Route path="/" element={renderLayout()}>
@@ -140,7 +142,7 @@ function App() {
                         path="cart"
                         element={
                           <ProtectedRoute>
-                            <Cart active={active} />
+                            <Cart />
                           </ProtectedRoute>
                         }
                       />
@@ -148,7 +150,7 @@ function App() {
                         path="ready-design-cart"
                         element={
                           <ProtectedRoute>
-                            <ReadyDesignCart active={active} />
+                            <ReadyDesignCart />
                           </ProtectedRoute>
                         }
                       />

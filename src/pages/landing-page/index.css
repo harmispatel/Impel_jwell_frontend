@@ -82,6 +82,28 @@
   letter-spacing: 1px;
 }
 
+.banner-main {
+  height: calc(100vh - 81px);
+}
+
+@media (max-width: 767px) {
+  .banner-main {
+    height: 100%;
+  }
+}
+
+@media (max-width: 991px) {
+  .banner-main {
+    height: 100%;
+  }
+}
+
+@media (max-width: 1024px) {
+  .banner-main {
+    height: 100%;
+  }
+}
+
 .product-section .product-info-text-name h1 {
   margin: 35px 0;
   font-size: 36px;

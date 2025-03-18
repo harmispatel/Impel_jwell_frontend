@@ -11,6 +11,9 @@ const CategoriesItems = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const paramId = useParams();
+  const userId = localStorage.getItem("user_id");
+  const email = localStorage.getItem("email");
+  const Phone = localStorage.getItem("phone");
 
   const [pagination, setPagination] = useState({
     currentPage: 1,
@@ -146,7 +149,9 @@ const CategoriesItems = () => {
                                     )}
                                   </div>
                                   <div className="product-info d-grid">
-                                    {data?.making_charge_discount_18k > 0 ? (
+                                    {(data?.making_charge_discount_18k > 0 &&
+                                      Phone) ||
+                                    email ? (
                                       <>
                                         <del style={{ color: "#000" }}>
                                           ₹
@@ -167,7 +172,22 @@ const CategoriesItems = () => {
                                       </>
                                     ) : (
                                       <strong className="text-success">
-                                        ₹{numberFormat(data?.total_amount_18k)}
+                                        {Phone || email ? (
+                                          <>
+                                            ₹
+                                            {numberFormat(
+                                              data?.total_amount_18k
+                                            )}
+                                          </>
+                                        ) : (
+                                          <>
+                                            ₹
+                                            {numberFormat(
+                                              data?.making_charge_18k +
+                                                data?.metal_value_18k
+                                            )}
+                                          </>
+                                        )}
                                       </strong>
                                     )}
                                   </div>

@@ -7,13 +7,7 @@ import axios from "axios";
 import profileService from "../../services/Home";
 import Userservice from "../../services/Cart";
 import noImage from "../../assets/images/No_Image_Available.jpg";
-import {
-  FaBox,
-  FaCheck,
-  FaChevronLeft,
-  FaRegUser,
-  FaTruck,
-} from "react-icons/fa";
+
 
 const api = process.env.REACT_APP_API_KEY;
 
@@ -463,6 +457,7 @@ const ReadyOrderDetails = () => {
                                       <strong>GST (3%) :</strong>
                                     </th>
                                     <td>₹{numberFormat(Items?.gst_amount)}</td>
+                                    {/* <td>₹{numberFormat(Items?.sub_total * 0.03)}</td> */}
                                   </tr>
                                   {Items?.dealer_code &&
                                     Items?.dealer_discount_type &&

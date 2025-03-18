@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import categoriesService from "../../services/Home";
@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 
 const Categories = () => {
+
   const { data: allCategories, isLoading } = useQuery({
     queryKey: ["categories"],
     queryFn: () => categoriesService.category(),
