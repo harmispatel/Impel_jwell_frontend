@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Modal } from "reactstrap";
 import ringJewelley from "../../assets/images/engagement-ring_7354745.png";
-import leftImage from "../../pages/landing-page/assets/NewBanner/banner-3.JPEG";
 
 const Popup = () => {
   const location = useLocation();
@@ -21,7 +20,7 @@ const Popup = () => {
     if (window.location.reload && !showPopup) {
       const timeout = setTimeout(() => {
         setShowPopup(true);
-      }, 300000);
+      }, 60000);
 
       return () => clearTimeout(timeout);
     }
@@ -46,7 +45,7 @@ const Popup = () => {
         keyboard={false}
         scrollable={true}
         centered={true}
-        style={{ maxWidth: "750px", width: "80%" }}
+        className="login_model_main"
       >
         <div className="row">
           <div className="col-md-6 p-0 d-none d-md-block">
@@ -63,7 +62,7 @@ const Popup = () => {
               <img src={ringJewelley} alt="image" className="w-25 mb-4" />
               <h5 className="block__title">
                 Connect with Direct Manufacturer & Get Lifetime Plating on All
-                Our Jewelry!
+                Our Jewellery!
               </h5>
               <p className="my-4">
                 Unlock exclusive discounts by logging in to your account. Don't

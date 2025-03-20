@@ -15,6 +15,10 @@ import { Helmet } from "react-helmet-async";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { motion } from "framer-motion";
 
+import easyReturn from "../../assets/images/Tags/Warranty.png";
+import plating from "../../assets/images/Tags/Jewellery.png";
+import auth925 from "../../assets/images/Tags/Auth925.png";
+
 const api = process.env.REACT_APP_API_KEY;
 
 const ReadyDetails = () => {
@@ -539,6 +543,21 @@ const ReadyDetails = () => {
                             )}
                           </>
                         )}
+
+                        <div className="design_details_spec">
+                          <div className="design_details_spec_box">
+                            <img src={easyReturn} alt="easy_return" />
+                            <span>Easy 30 Day Return</span>
+                          </div>
+                          <div className="design_details_spec_box">
+                            <img src={plating} alt="Lifetime Plating" />
+                            <span>Lifetime Plating</span>
+                          </div>
+                          <div className="design_details_spec_box">
+                            <img src={auth925} alt="easy_return" />
+                            <span>Authentic 925 Silver</span>
+                          </div>
+                        </div>
                       </>
                     )}
                   </div>

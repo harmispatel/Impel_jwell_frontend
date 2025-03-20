@@ -3907,8 +3907,9 @@ input[type="file"] {
 
 /* Model for login should */
 
-.block-newsletter {
-  /* padding: 56px 15px; */
+.login_model_main {
+  width: 80% !important;
+  max-width: 750px !important;
 }
 
 .block-newsletter .model_login_button {
@@ -3920,7 +3921,7 @@ input[type="file"] {
   letter-spacing: 1.5px;
   padding: 10px 0;
   transition: 0.4s;
-  width: 75%;
+  width: 90%;
   background-color: #fff;
   color: #000;
   border: 1px solid #000;
@@ -3930,4 +3931,42 @@ input[type="file"] {
   color: #fff;
   background-color: #db9662;
   border: 1px solid #db9662;
+}
+
+.design_details_spec {
+  margin-top: 30px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.design_details_spec .design_details_spec_box {
+  display: flex;
+  align-items: center;
+}
+
+.design_details_spec .design_details_spec_box img {
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+}
+
+.design_details_spec .design_details_spec_box span {
+  font-size: 16px;
+  font-weight: 500;
+  margin-left: 10px;
+}
+
+@media only screen and (max-width: 767px) {
+  .design_details_spec {
+    grid-template-columns: repeat(1, 1fr);
+    gap: 15px;
+  }
+}
+
+@media only screen and (max-width: 1024px) {
+  .design_details_spec {
+    grid-template-columns: repeat(1, 1fr);
+    gap: 15px;
+  }
 }
