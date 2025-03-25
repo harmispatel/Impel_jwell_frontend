@@ -26,8 +26,8 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 import easyReturn from "../../assets/images/Tags/Warranty.png";
-import plating from "../../assets/images/Tags/Jewellery.png"
-import auth925 from "../../assets/images/Tags/Auth925.png"
+import plating from "../../assets/images/Tags/Jewellery.png";
+import auth925 from "../../assets/images/Tags/Auth925.png";
 
 const ShopDetails = () => {
   const location = useLocation();
@@ -1219,7 +1219,7 @@ const ShopDetails = () => {
                           <div className="design_details_spec">
                             <div className="design_details_spec_box">
                               <img src={easyReturn} alt="easy_return" />
-                              <span>Easy 30 Day Return</span>
+                              <span>Easy 15 Day Exchange</span>
                             </div>
                             <div className="design_details_spec_box">
                               <img src={plating} alt="Lifetime Plating" />
@@ -1228,6 +1228,58 @@ const ShopDetails = () => {
                             <div className="design_details_spec_box">
                               <img src={auth925} alt="easy_return" />
                               <span>Authentic 925 Silver</span>
+                            </div>
+                            <div className="design_details_spec_box">
+                              <svg
+                                width="30"
+                                height="30"
+                                viewBox="0 0 33 27"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  d="M10.7222 1H31.5555V19.0556H10.7222V1Z"
+                                  stroke="currentColor"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                ></path>
+                                <path
+                                  d="M10.7222 7.94446H5.16667L1.00001 12.1111V19.0556H10.7222V7.94446Z"
+                                  stroke="currentColor"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                ></path>
+                                <path
+                                  d="M25.3055 26C23.3879 26 21.8333 24.4454 21.8333 22.5278C21.8333 20.6101 23.3879 19.0555 25.3055 19.0555C27.2232 19.0555 28.7778 20.6101 28.7778 22.5278C28.7778 24.4454 27.2232 26 25.3055 26Z"
+                                  stroke="currentColor"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                ></path>
+                                <path
+                                  d="M7.25001 26C5.33235 26 3.77778 24.4454 3.77778 22.5278C3.77778 20.6101 5.33235 19.0555 7.25001 19.0555C9.16766 19.0555 10.7222 20.6101 10.7222 22.5278C10.7222 24.4454 9.16766 26 7.25001 26Z"
+                                  stroke="currentColor"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                ></path>
+                              </svg>
+                              <span>Free Shipping on All Orders</span>
+                            </div>
+                            <div className="design_details_spec_box">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="30"
+                                height="30"
+                                fill="currentColor"
+                                class="bi bi-currency-rupee"
+                                viewBox="0 0 16 16"
+                              >
+                                <path d="M4 3.06h2.726c1.22 0 2.12.575 2.325 1.724H4v1.051h5.051C8.855 7.001 8 7.558 6.788 7.558H4v1.317L8.437 14h2.11L6.095 8.884h.855c2.316-.018 3.465-1.476 3.688-3.049H12V4.784h-1.345c-.08-.778-.357-1.335-.793-1.732H12V2H4z" />
+                              </svg>
+                              <span>Cash on Delivery on All Orders</span>
                             </div>
                           </div>
                         </div>
