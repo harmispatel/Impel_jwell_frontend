@@ -2,13 +2,14 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Modal } from "reactstrap";
 import ringJewelley from "../../assets/images/engagement-ring_7354745.png";
+import { FaTimes } from "react-icons/fa";
 
 const Popup = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [showPopup, setShowPopup] = useState(() => {
     const storedState = localStorage.getItem("showPopup");
-    return storedState ? JSON.parse(storedState) : false;
+    return storedState ? JSON.parse(storedState) : true; // Default to true if not set
   });
 
   useEffect(() => {
@@ -17,24 +18,23 @@ const Popup = () => {
   }, [showPopup, location.pathname]);
 
   useEffect(() => {
-    if (window.location.reload && !showPopup) {
-      const timeout = setTimeout(() => {
-        setShowPopup(true);
-      }, 60000);
+    if (!showPopup) return; // Do nothing if popup is closed manually
 
-      return () => clearTimeout(timeout);
-    }
-  }, [showPopup]);
-
-  useEffect(() => {
-    if (window.location.reload && showPopup) {
+    const timeout = setTimeout(() => {
       setShowPopup(true);
-    }
+    }, 60000);
+
+    return () => clearTimeout(timeout);
   }, []);
+
+  const handleClose = () => {
+    setShowPopup(false);
+    localStorage.setItem("showPopup", JSON.stringify(false));
+  };
 
   const handleLogin = () => {
     navigate("/login");
-    setShowPopup(false);
+    handleClose();
   };
 
   return (
@@ -47,6 +47,20 @@ const Popup = () => {
         centered={true}
         className="login_model_main"
       >
+        <div className="position-relative">
+          <button
+            className="position-absolute bg-white"
+            style={{
+              top: "5px",
+              right: "10px",
+              border: "none",
+              fontSize: "1.5rem",
+            }}
+            onClick={handleClose}
+          >
+            <FaTimes />
+          </button>
+        </div>
         <div className="row">
           <div className="col-md-6 p-0 d-none d-md-block">
             <div className="newsletter-popup__bg">
