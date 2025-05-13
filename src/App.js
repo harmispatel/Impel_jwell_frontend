@@ -95,7 +95,7 @@ function App() {
             <ReadyDesignCartProvider>
               <ScrollToTop />
               <HelmetProvider context={helmetContext}>
-                {shouldShowPopup && userType === null ? <Popup /> : <></>}
+                {/* {shouldShowPopup && userType === null ? <Popup /> : <></>} */}
                 <Routes>
                   <>
                     <Route path="/" element={renderLayout()}>

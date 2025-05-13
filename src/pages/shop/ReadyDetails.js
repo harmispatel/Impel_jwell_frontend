@@ -510,19 +510,21 @@ const ReadyDetails = () => {
                         ) : (
                           <>
                             {phone ? (
-                              <button
-                                className="btn btn-outline-dark"
-                                onClick={(e) => UserLogin(e)}
-                              >
-                                <BsHandbagFill
-                                  style={{
-                                    fontSize: "26px",
-                                    cursor: "pointer",
-                                  }}
-                                />
-                              </button>
-                            ) : (
                               <></>
+                            ) : (
+                              <>
+                                <button
+                                  className="btn btn-outline-dark"
+                                  onClick={(e) => UserLogin(e)}
+                                >
+                                  <BsHandbagFill
+                                    style={{
+                                      fontSize: "26px",
+                                      cursor: "pointer",
+                                    }}
+                                  />
+                                </button>
+                              </>
                             )}
                           </>
                         )}
